@@ -976,8 +976,9 @@ class Codebase
     {
         if (strpos($symbol, '::')) {
             $symbol = substr($symbol, 0, -2);
+            [$class, $method] = explode('::', $symbol);
             /** @psalm-suppress ArgumentTypeCoercion */
-            $method_id = new MethodIdentifier(...explode('::', $symbol));
+            $method_id = new MethodIdentifier($class, $method);
 
             $declaring_method_id = $this->methods->getDeclaringMethodId($method_id);
 
@@ -1017,9 +1018,9 @@ class Codebase
             if (strpos($symbol, '::')) {
                 if (strpos($symbol, '()')) {
                     $symbol = substr($symbol, 0, -2);
-
+                    [$class, $method] = explode('::', $symbol);
                     /** @psalm-suppress ArgumentTypeCoercion */
-                    $method_id = new MethodIdentifier(...explode('::', $symbol));
+                    $method_id = new MethodIdentifier($class, $method);
 
                     $declaring_method_id = $this->methods->getDeclaringMethodId($method_id);
 
@@ -1156,9 +1157,9 @@ class Codebase
             if (strpos($symbol, '::')) {
                 if (strpos($symbol, '()')) {
                     $symbol = substr($symbol, 0, -2);
-
+                    [$class, $method] = explode('::', $symbol);
                     /** @psalm-suppress ArgumentTypeCoercion */
-                    $method_id = new MethodIdentifier(...explode('::', $symbol));
+                    $method_id = new MethodIdentifier($class, $method);
 
                     $declaring_method_id = $this->methods->getDeclaringMethodId($method_id);
 
@@ -1334,8 +1335,9 @@ class Codebase
         $signature_label = '';
         $signature_documentation = null;
         if (strpos($function_symbol, '::') !== false) {
+            [$class, $method] = explode('::', $function_symbol);
             /** @psalm-suppress ArgumentTypeCoercion */
-            $method_id = new MethodIdentifier(...explode('::', $function_symbol));
+            $method_id = new MethodIdentifier($class, $method);
 
             $declaring_method_id = $this->methods->getDeclaringMethodId($method_id);
 

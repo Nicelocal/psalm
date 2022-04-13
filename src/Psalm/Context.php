@@ -398,12 +398,12 @@ class Context
 
     public function __clone()
     {
-        foreach ($this->clauses as &$clause) {
-            $clause = clone $clause;
+        foreach ($this->clauses as $key => $clause) {
+            $this->clauses[$key] = clone $clause;
         }
 
-        foreach ($this->constants as &$constant) {
-            $constant = clone $constant;
+        foreach ($this->constants as $key => $constant) {
+            $this->constants[$key] = clone $constant;
         }
     }
 
@@ -602,6 +602,7 @@ class Context
                         break;
                     }
 
+                    $failed_reconciliation = null;
                     $result_type = AssertionReconciler::reconcile(
                         $type,
                         clone $new_type,

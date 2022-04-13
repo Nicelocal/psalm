@@ -24,6 +24,7 @@ use function str_replace;
 use function stripos;
 use function strpos;
 use function strtolower;
+use function substr;
 
 use const DIRECTORY_SEPARATOR;
 use const E_WARNING;
@@ -114,7 +115,7 @@ class FileFilter
                 $ignore_type_stats = (bool) ($directory['ignoreTypeStats'] ?? false);
                 $declare_strict_types = (bool) ($directory['useStrictTypes'] ?? false);
 
-                if ($directory_path[0] === '/' && DIRECTORY_SEPARATOR === '/') {
+                if (substr($directory_path, 0, 1) === '/' && DIRECTORY_SEPARATOR === '/') {
                     $prospective_directory_path = $directory_path;
                 } else {
                     $prospective_directory_path = $base_dir . DIRECTORY_SEPARATOR . $directory_path;
@@ -181,13 +182,12 @@ class FileFilter
                     );
                 }
 
-                /** @var RecursiveDirectoryIterator */
-                $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory_path));
+                $iterator = new RecursiveIteratorIterator($real = new RecursiveDirectoryIterator($directory_path));
                 $iterator->rewind();
 
                 while ($iterator->valid()) {
-                    if (!$iterator->isDot() && $iterator->isLink()) {
-                        $linked_path = readlink($iterator->getPathname());
+                    if (!$real->isDot() && $real->isLink()) {
+                        $linked_path = readlink($real->getPathname());
 
                         if (stripos($linked_path, $directory_path) !== 0) {
                             if ($ignore_type_stats && $filter instanceof ProjectFileFilter) {
@@ -224,7 +224,7 @@ class FileFilter
             foreach ($config['file'] as $file) {
                 $file_path = (string) ($file['name'] ?? '');
 
-                if ($file_path[0] === '/' && DIRECTORY_SEPARATOR === '/') {
+                if (substr($file_path, 0, 1) === '/' && DIRECTORY_SEPARATOR === '/') {
                     $prospective_file_path = $file_path;
                 } else {
                     $prospective_file_path = $base_dir . DIRECTORY_SEPARATOR . $file_path;
@@ -354,7 +354,7 @@ class FileFilter
             $config['file'] = [];
             /** @var SimpleXMLElement $file */
             foreach ($e->file as $file) {
-                $config['file'][]['name'] = (string) $file['name'];
+                $config['file'][] = ['name' => (string) $file['name']];
             }
         }
 
@@ -362,7 +362,7 @@ class FileFilter
             $config['referencedClass'] = [];
             /** @var SimpleXMLElement $referenced_class */
             foreach ($e->referencedClass as $referenced_class) {
-                $config['referencedClass'][]['name'] = strtolower((string)$referenced_class['name']);
+                $config['referencedClass'][] = ['name' => strtolower((string)$referenced_class['name'])];
             }
         }
 
@@ -370,7 +370,7 @@ class FileFilter
             $config['referencedMethod'] = [];
             /** @var SimpleXMLElement $referenced_method */
             foreach ($e->referencedMethod as $referenced_method) {
-                $config['referencedMethod'][]['name'] = (string)$referenced_method['name'];
+                $config['referencedMethod'][] = ['name' => (string)$referenced_method['name']];
             }
         }
 
@@ -378,7 +378,7 @@ class FileFilter
             $config['referencedFunction'] = [];
             /** @var SimpleXMLElement $referenced_function */
             foreach ($e->referencedFunction as $referenced_function) {
-                $config['referencedFunction'][]['name'] = strtolower((string)$referenced_function['name']);
+                $config['referencedFunction'][] = ['name' => strtolower((string)$referenced_function['name'])];
             }
         }
 
@@ -386,7 +386,7 @@ class FileFilter
             $config['referencedProperty'] = [];
             /** @var SimpleXMLElement $referenced_property */
             foreach ($e->referencedProperty as $referenced_property) {
-                $config['referencedProperty'][]['name'] = strtolower((string)$referenced_property['name']);
+                $config['referencedProperty'][] = ['name' => strtolower((string)$referenced_property['name'])];
             }
         }
 
@@ -395,7 +395,7 @@ class FileFilter
 
             /** @var SimpleXMLElement $referenced_variable */
             foreach ($e->referencedVariable as $referenced_variable) {
-                $config['referencedVariable'][]['name'] = strtolower((string)$referenced_variable['name']);
+                $config['referencedVariable'][] = ['name' => strtolower((string)$referenced_variable['name'])];
             }
         }
 
