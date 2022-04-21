@@ -54,7 +54,6 @@ class DocComment
      * @return array Array of the main comment and specials
      *
      * @psalm-return array{description:string, specials:array<string, array<int, string>>}
-     * @psalm-suppress PossiblyUnusedMethod
      *
      * @deprecated use parsePreservingLength instead, going to be removed in Psalm 5
      *

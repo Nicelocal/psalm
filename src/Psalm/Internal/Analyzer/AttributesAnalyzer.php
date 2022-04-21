@@ -295,15 +295,15 @@ class AttributesAnalyzer
     /**
      * @param iterable<AttributeGroup> $attribute_groups
      *
-     * @return Generator<int, Attribute>
+     * @return array<int, Attribute>
      */
-    private static function iterateAttributeNodes(iterable $attribute_groups): Generator
+    private static function iterateAttributeNodes(iterable $attribute_groups): array
     {
+        $result = [];
         foreach ($attribute_groups as $attribute_group) {
-            foreach ($attribute_group->attrs as $attribute) {
-                yield $attribute;
-            }
+            $result = array_merge($result, array_values($attribute_group->attrs));
         }
+        return $result;
     }
 
     /**

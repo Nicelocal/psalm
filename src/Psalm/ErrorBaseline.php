@@ -231,7 +231,8 @@ class ErrorBaseline
         ksort($groupedIssues);
 
         foreach ($groupedIssues as $k => $issues) {
-            $groupedIssues[$k] = ksort($issues);
+            ksort($issues);
+            $groupedIssues[$k] = $issues;
         }
 
         return $groupedIssues;

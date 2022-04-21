@@ -23,7 +23,6 @@ class TypeAnalyzer
      * Does the input param type match the given param type
      *
      * @deprecated in favour of UnionTypeComparator, going to be removed in Psalm 5
-     * @psalm-suppress PossiblyUnusedMethod
      */
     public static function isContainedBy(
         Codebase $codebase,
@@ -49,7 +48,6 @@ class TypeAnalyzer
      * Does the input param atomic type match the given param atomic type
      *
      * @deprecated in favour of AtomicTypeComparator, going to be removed in Psalm 5
-     * @psalm-suppress PossiblyUnusedMethod
      */
     public static function isAtomicContainedBy(
         Codebase $codebase,

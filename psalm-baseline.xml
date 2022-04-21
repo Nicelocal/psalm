@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.x-dev@603714518b3894a57b464920b906a13332f23c02">
+<files psalm-version="4.x-dev@e1df2eca160b4db08e6a693dd3a10d8865eab3dc">
   <file src="examples/TemplateChecker.php">
     <PossiblyUndefinedIntArrayOffset occurrences="2">
       <code>$comment_block-&gt;tags['variablesfrom'][0]</code>
@@ -17,13 +17,9 @@
       <code>$this-&gt;php_major_version</code>
       <code>$this-&gt;php_minor_version</code>
     </DeprecatedProperty>
-    <PossiblyUndefinedIntArrayOffset occurrences="2">
-      <code>$matches[0]</code>
+    <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$symbol_parts[1]</code>
     </PossiblyUndefinedIntArrayOffset>
-    <PossiblyUnusedProperty occurrences="1">
-      <code>$analysis_php_version_id</code>
-    </PossiblyUnusedProperty>
   </file>
   <file src="src/Psalm/Config.php">
     <DeprecatedMethod occurrences="3">
@@ -47,11 +43,22 @@
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/ErrorBaseline.php">
+    <LessSpecificReturnStatement occurrences="1">
+      <code>$groupedIssues</code>
+    </LessSpecificReturnStatement>
+    <MoreSpecificReturnType occurrences="1">
+      <code>array&lt;string, array&lt;string, array{o: int, s: list&lt;string&gt;}&gt;&gt;</code>
+    </MoreSpecificReturnType>
     <PossiblyUndefinedIntArrayOffset occurrences="3">
       <code>$matches[1]</code>
       <code>$matches[2]</code>
       <code>$matches[3]</code>
     </PossiblyUndefinedIntArrayOffset>
+  </file>
+  <file src="src/Psalm/Exception/UnanalyzedFileException.php">
+    <UnusedClass occurrences="1">
+      <code>UnanalyzedFileException</code>
+    </UnusedClass>
   </file>
   <file src="src/Psalm/Internal/Analyzer/ClassAnalyzer.php">
     <DeprecatedProperty occurrences="9">
@@ -88,8 +95,8 @@
   <file src="src/Psalm/Internal/Analyzer/FunctionLikeAnalyzer.php">
     <DeprecatedProperty occurrences="3">
       <code>$codebase-&gt;php_major_version</code>
-      <code>$project_analyzer-&gt;getCodebase()-&gt;php_major_version</code>
-      <code>$project_analyzer-&gt;getCodebase()-&gt;php_minor_version</code>
+      <code>$codebase-&gt;php_major_version</code>
+      <code>$codebase-&gt;php_minor_version</code>
     </DeprecatedProperty>
   </file>
   <file src="src/Psalm/Internal/Analyzer/MethodComparator.php">
@@ -414,6 +421,11 @@
       <code>$config-&gt;load_xdebug_stub</code>
     </DeprecatedProperty>
   </file>
+  <file src="src/Psalm/Internal/Codebase/ClassLikes.php">
+    <PossiblyUndefinedIntArrayOffset occurrences="1">
+      <code>$source_parts[1]</code>
+    </PossiblyUndefinedIntArrayOffset>
+  </file>
   <file src="src/Psalm/Internal/Codebase/ConstantTypeResolver.php">
     <DeprecatedClass occurrences="2">
       <code>new TEmpty()</code>
@@ -438,6 +450,9 @@
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$function_callables[0]</code>
     </PossiblyUndefinedIntArrayOffset>
+    <PropertyTypeCoercion occurrences="1">
+      <code>$atomic_type-&gt;type_params</code>
+    </PropertyTypeCoercion>
   </file>
   <file src="src/Psalm/Internal/Diff/ClassStatementsDiffer.php">
     <PossiblyUndefinedIntArrayOffset occurrences="6">
@@ -452,28 +467,6 @@
   <file src="src/Psalm/Internal/FileManipulation/PropertyDocblockManipulator.php">
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$stmt-&gt;props[0]</code>
-    </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/Internal/LanguageServer/LanguageClient.php">
-    <DocblockTypeContradiction occurrences="3">
-      <code>$type &lt; 1</code>
-      <code>$type &lt; 1 || $type &gt; 4</code>
-      <code>$type &gt; 4</code>
-    </DocblockTypeContradiction>
-  </file>
-  <file src="src/Psalm/Internal/LanguageServer/Message.php">
-    <PossiblyUndefinedIntArrayOffset occurrences="1">
-      <code>$pair[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/Internal/LanguageServer/ProtocolStreamReader.php">
-    <PossiblyUndefinedIntArrayOffset occurrences="1">
-      <code>$parts[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/Internal/LanguageServer/Server/TextDocument.php">
-    <PossiblyUndefinedIntArrayOffset occurrences="1">
-      <code>$contentChanges[0]</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/MethodIdentifier.php">
@@ -645,6 +638,12 @@
       <code>$combination-&gt;array_type_params[1]</code>
       <code>$combination-&gt;array_type_params[1]</code>
     </PossiblyUndefinedIntArrayOffset>
+  </file>
+  <file src="src/Psalm/Internal/Type/TypeExpander.php">
+    <PropertyTypeCoercion occurrences="2">
+      <code>$return_type-&gt;extra_types</code>
+      <code>array_merge($return_type-&gt;extra_types, $new_intersection_types)</code>
+    </PropertyTypeCoercion>
   </file>
   <file src="src/Psalm/Internal/Type/TypeParser.php">
     <DeprecatedClass occurrences="1">

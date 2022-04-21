@@ -31,7 +31,6 @@
             <file name="vendor/symfony/console/Command/Command.php"/>
             <file name="src/spl_object_id.php"/>
             <directory name="tests/fixtures"/>
-            <file name="vendor/felixfbecker/advanced-json-rpc/lib/Dispatcher.php" />
             <directory name="vendor/netresearch/jsonmapper" />
             <directory name="vendor/phpunit" />
         </ignoreFiles>
@@ -106,31 +105,8 @@
 
         <MissingThrowsDocblock errorLevel="info"/>
 
-        <PossiblyUnusedProperty>
-            <errorLevel type="suppress">
-                <file name="src/Psalm/Report.php"/>
-            </errorLevel>
-        </PossiblyUnusedProperty>
-
-        <PossiblyUnusedMethod>
-            <errorLevel type="suppress">
-                <directory name="src/Psalm/Plugin"/>
-                <directory name="src/Psalm/SourceControl/Git/"/>
-                <file name="src/Psalm/Internal/LanguageServer/Client/TextDocument.php"/>
-                <file name="src/Psalm/Internal/LanguageServer/Server/TextDocument.php"/>
-                <referencedMethod name="Psalm\Codebase::getParentInterfaces"/>
-                <referencedMethod name="Psalm\Codebase::getMethodParams"/>
-                <referencedMethod name="Psalm\Codebase::getMethodReturnType"/>
-                <referencedMethod name="Psalm\Codebase::getMethodReturnTypeLocation"/>
-                <referencedMethod name="Psalm\Codebase::getDeclaringMethodId"/>
-                <referencedMethod name="Psalm\Codebase::getAppearingMethodId"/>
-                <referencedMethod name="Psalm\Codebase::getOverriddenMethodIds"/>
-                <referencedMethod name="Psalm\Codebase::getCasedMethodId"/>
-                <referencedMethod name="Psalm\Codebase::createClassLikeStorage"/>
-                <referencedMethod name="Psalm\Codebase::isVariadic"/>
-                <referencedMethod name="Psalm\Codebase::getMethodReturnsByRef"/>
-            </errorLevel>
-        </PossiblyUnusedMethod>
+        <PossiblyUnusedProperty errorLevel="suppress" />
+        <PossiblyUnusedMethod errorLevel="suppress" />
 
         <InternalMethod>
             <errorLevel type="suppress">

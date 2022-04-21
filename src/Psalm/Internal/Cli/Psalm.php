@@ -932,12 +932,6 @@ final class Psalm
             exit;
         }
 
-        if (isset($options['language-server'])) {
-            require_once __DIR__ . '/LanguageServer.php';
-            LanguageServer::run($argv);
-            exit;
-        }
-
         if (isset($options['refactor'])) {
             require_once __DIR__ . '/Refactor.php';
             Refactor::run($argv);
