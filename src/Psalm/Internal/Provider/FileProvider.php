@@ -122,7 +122,7 @@ class FileProvider
      *
      * @return list<string>
      */
-    public function getFilesInDir(string $dir_path, array $file_extensions, callable $filter = null): array
+    public function getFilesInDir(string $dir_path, array $file_extensions, ?callable $filter = null): array
     {
         $file_paths = [];
 
