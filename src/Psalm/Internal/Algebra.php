@@ -608,7 +608,7 @@ class Algebra
             $clauses_with_impossibilities[] = $clause->calculateNegation();
         }
 
-        unset($clauses);
+        $clauses = null;
 
         $impossible_clauses = self::groupImpossibilities($clauses_with_impossibilities);
 
