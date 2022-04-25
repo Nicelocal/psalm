@@ -352,8 +352,9 @@ class Algebra
 
             foreach ($clause->impossibilities as $var => $impossible_types) {
                 foreach ($impossible_types as $impossible_type) {
+                    $temp = [$impossible_type];
                     $seed_clause = new Clause(
-                        [$var => [$impossible_type]],
+                        [$var => $temp],
                         $clause->creating_conditional_id,
                         $clause->creating_object_id
                     );
