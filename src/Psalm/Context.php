@@ -823,8 +823,9 @@ class Context
         if ($suppressed_issue_position !== false) {
             if (is_int($suppressed_issue_position)) {
                 $file = $statements_analyzer->getFileAnalyzer()->getFilePath();
+                $temp = [$suppressed_issue_position => true];
                 IssueBuffer::addUsedSuppressions([
-                    $file => [$suppressed_issue_position => true],
+                    $file => $temp,
                 ]);
             }
             return true;
