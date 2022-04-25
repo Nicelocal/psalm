@@ -768,7 +768,7 @@ class AssignmentAnalyzer
             $new_parent_node->specialization_key = $parent_node->specialization_key;
 
             $data_flow_graph->addNode($new_parent_node);
-            $new_parent_nodes += [$new_parent_node->id => $new_parent_node];
+            $new_parent_nodes = array_merge($new_parent_nodes, [$new_parent_node->id => $new_parent_node]);
             $data_flow_graph->addPath(
                 $parent_node,
                 $new_parent_node,
@@ -781,7 +781,7 @@ class AssignmentAnalyzer
         if ($unspecialized_parent_nodes) {
             $new_parent_node = DataFlowNode::getForAssignment($var_id, $var_location);
             $data_flow_graph->addNode($new_parent_node);
-            $new_parent_nodes += [$new_parent_node->id => $new_parent_node];
+            $new_parent_nodes = array_merge($new_parent_nodes, [$new_parent_node->id => $new_parent_node]);
 
             foreach ($unspecialized_parent_nodes as $parent_node) {
                 $data_flow_graph->addPath(
@@ -1691,8 +1691,9 @@ class AssignmentAnalyzer
                         $right_clauses
                     );
 
+                    $temp = ['falsy'];
                     $assignment_clauses = Algebra::combineOredClauses(
-                        [new Clause([$var_id => ['falsy']], $var_object_id, $var_object_id)],
+                        [new Clause([$var_id => $temp], $var_object_id, $var_object_id)],
                         $right_clauses,
                         $cond_object_id
                     );

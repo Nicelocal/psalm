@@ -295,7 +295,7 @@ class IfAnalyzer
             $post_if_context->removeVarFromConflictingClauses($changed_var_id);
         }
 
-        $newly_reconciled_var_ids += $new_assigned_var_ids;
+        $newly_reconciled_var_ids = array_merge($newly_reconciled_var_ids, $new_assigned_var_ids);
 
         foreach ($newly_reconciled_var_ids as $var_id => $_) {
             $if_scope->negated_clauses = Context::filterClauses(

@@ -545,20 +545,22 @@ class ArrayAssignmentAnalyzer
                      */
                     $offset_type_part = $key_type->getSingleAtomic();
 
+                    $temp = new Union([
+                        new TTemplateParam(
+                            $class_string_map->param_name,
+                            $offset_type_part->as_type
+                                ? new Union([$offset_type_part->as_type])
+                                : Type::getObject(),
+                            'class-string-map'
+                        )
+                    ]);
+                    $temp = [
+                        $offset_type_part->defining_class => $temp
+                    ];
                     $template_result = new TemplateResult(
                         [],
                         [
-                            $offset_type_part->param_name => [
-                                $offset_type_part->defining_class => new Union([
-                                    new TTemplateParam(
-                                        $class_string_map->param_name,
-                                        $offset_type_part->as_type
-                                            ? new Union([$offset_type_part->as_type])
-                                            : Type::getObject(),
-                                        'class-string-map'
-                                    )
-                                ])
-                            ]
+                            $offset_type_part->param_name => $temp
                         ]
                     );
 

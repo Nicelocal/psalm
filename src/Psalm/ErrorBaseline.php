@@ -43,7 +43,7 @@ class ErrorBaseline
         $totalIssues = 0;
 
         foreach ($existingIssues as $existingIssue) {
-            $totalIssues += array_reduce(
+            $totalIssues = array_merge($totalIssues, array_reduce(
                 $existingIssue,
                 /**
                  * @param array{o:int, s:array<int, string>} $existingIssue
@@ -52,7 +52,7 @@ class ErrorBaseline
                     return $carry + $existingIssue['o'];
                 },
                 0
-            );
+            ));
         }
 
         return $totalIssues;
