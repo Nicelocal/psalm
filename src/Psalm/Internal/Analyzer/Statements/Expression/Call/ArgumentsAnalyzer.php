@@ -915,7 +915,7 @@ class ArgumentsAnalyzer
             return null;
         }
 
-        if ($method_id === 'get_class' && $args === []) {
+        if ($method_id === 'get_class' && !$args) {
             //get_class without args only works when inside a class
             if (!$context->self) {
                 IssueBuffer::maybeAdd(

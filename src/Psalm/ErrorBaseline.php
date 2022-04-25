@@ -189,7 +189,7 @@ class ErrorBaseline
      */
     private static function countIssueTypesByFile(array $issues): array
     {
-        if ($issues === []) {
+        if (!$issues) {
             return [];
         }
         $groupedIssues = array_reduce(

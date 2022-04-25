@@ -31,7 +31,7 @@ class TemplateAnalyzer extends Psalm\Internal\Analyzer\FileAnalyzer
         $codebase = $this->project_analyzer->getCodebase();
         $stmts = $codebase->getStatementsForFile($this->file_path);
 
-        if ($stmts === []) {
+        if (!$stmts) {
             return;
         }
 

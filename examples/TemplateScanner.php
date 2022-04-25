@@ -29,7 +29,7 @@ class TemplateScanner extends Psalm\Internal\Scanner\FileScanner
             $progress
         );
 
-        if ($stmts === []) {
+        if (!$stmts) {
             return;
         }
 

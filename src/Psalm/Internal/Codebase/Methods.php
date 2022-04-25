@@ -721,7 +721,7 @@ class Methods
             && $original_class_storage->is_enum
         ) {
             if ($original_method_name === 'cases') {
-                if ($original_class_storage->enum_cases === []) {
+                if (!$original_class_storage->enum_cases) {
                     return Type::getEmptyArray();
                 }
                 $types = [];

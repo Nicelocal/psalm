@@ -2544,7 +2544,7 @@ class SimpleAssertionReconciler extends Reconciler
             return $existing_type;
         }
 
-        if ($matched_class_constant_types === []) {
+        if (!$matched_class_constant_types) {
             $failed_reconciliation = Reconciler::RECONCILIATION_EMPTY;
             return Type::getMixed();
         }
