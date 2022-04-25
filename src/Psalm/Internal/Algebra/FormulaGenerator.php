@@ -452,6 +452,7 @@ class FormulaGenerator
         $conditional_ref = '*' . $conditional->getAttribute('startFilePos')
             . ':' . $conditional->getAttribute('endFilePos');
 
-        return [new Clause([$conditional_ref => ['!falsy']], $conditional_object_id, $creating_object_id)];
+        $temp = ['!falsy'];
+        return [new Clause([$conditional_ref => $temp], $conditional_object_id, $creating_object_id)];
     }
 }

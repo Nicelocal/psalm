@@ -473,24 +473,16 @@ class FileAnalyzer extends SourceAnalyzer
     /**
      * @return array<lowercase-string, string>
      */
-    public function getAliasedClassesFlipped(?string $namespace_name = null): array
+    public function getAliasedClassesFlipped(): array
     {
-        if ($namespace_name && isset($this->namespace_aliased_classes_flipped[$namespace_name])) {
-            return $this->namespace_aliased_classes_flipped[$namespace_name];
-        }
-
         return $this->aliased_classes_flipped;
     }
 
     /**
      * @return array<string, string>
      */
-    public function getAliasedClassesFlippedReplaceable(?string $namespace_name = null): array
+    public function getAliasedClassesFlippedReplaceable(): array
     {
-        if ($namespace_name && isset($this->namespace_aliased_classes_flipped_replaceable[$namespace_name])) {
-            return $this->namespace_aliased_classes_flipped_replaceable[$namespace_name];
-        }
-
         return $this->aliased_classes_flipped_replaceable;
     }
 
