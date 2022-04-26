@@ -390,7 +390,7 @@ class UnionTypeComparator
             }
         }
 
-        return (bool)$matching_input_keys;
+        return count($matching_input_keys) > 0;
     }
 
     /**

@@ -33,20 +33,18 @@ class CustomTraverser extends NodeTraverser
     protected function traverseNode(Node $node): Node
     {
         foreach ($node->getSubNodeNames() as $name) {
-            $subNode = &$node->$name;
-
-            if (is_array($subNode)) {
-                $subNode = $this->traverseArray($subNode);
+            if (is_array($node->$name)) {
+                $node->$name = $this->traverseArray($node->$name);
                 if ($this->stopTraversal) {
                     break;
                 }
-            } elseif ($subNode instanceof Node) {
+            } elseif ($node->$name instanceof Node) {
                 $traverseChildren = true;
                 foreach ($this->visitors as $visitor) {
-                    $return = $visitor->enterNode($subNode, $traverseChildren);
+                    $return = $visitor->enterNode($node->$name, $traverseChildren);
                     if (null !== $return) {
                         if ($return instanceof Node) {
-                            $subNode = $return;
+                            $node->$name = $return;
                         } elseif (self::DONT_TRAVERSE_CHILDREN === $return) {
                             $traverseChildren = false;
                         } elseif (self::STOP_TRAVERSAL === $return) {
@@ -61,17 +59,17 @@ class CustomTraverser extends NodeTraverser
                 }
 
                 if ($traverseChildren) {
-                    $subNode = $this->traverseNode($subNode);
+                    $node->$name = $this->traverseNode($node->$name);
                     if ($this->stopTraversal) {
                         break;
                     }
                 }
 
                 foreach ($this->visitors as $visitor) {
-                    $return = $visitor->leaveNode($subNode);
+                    $return = $visitor->leaveNode($node->$name);
                     if (null !== $return) {
                         if ($return instanceof Node) {
-                            $subNode = $return;
+                            $node->$name = $return;
                         } elseif (self::STOP_TRAVERSAL === $return) {
                             $this->stopTraversal = true;
                             break 2;

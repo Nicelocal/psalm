@@ -1271,7 +1271,7 @@ class TypeParser
                     $template_type_map,
                     $type_aliases
                 );
-                $property_maybe_undefined = $property_branch->possibly_undefined;
+                $property_maybe_undefined = (bool)$property_branch->possibly_undefined;
                 if (strpos($property_branch->value, '::')) {
                     [$fq_classlike_name, $const_name] = explode('::', $property_branch->value);
                     if ($const_name === 'class') {
