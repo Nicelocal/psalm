@@ -2,7 +2,6 @@
 
 namespace Psalm\Internal\Analyzer;
 
-use Generator;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
@@ -23,6 +22,7 @@ use Psalm\Storage\HasAttributesInterface;
 use Psalm\Type\Atomic\TLiteralString;
 use Psalm\Type\Union;
 
+use function array_merge;
 use function array_shift;
 use function array_values;
 use function assert;
@@ -349,7 +349,8 @@ class AttributesAnalyzer
         $arg = $args[0];
         if ($arg->name !== null) {
             for (; !empty($args) && ($arg->name->name ?? null) !== "name"; $arg = array_shift($args));
-            if ($arg->name->name ?? null !== "name") {
+            $temp = $arg->name->name ?? null;
+            if ($temp !== "name") {
                 // No named argument for "name" parameter
                 return;
             }

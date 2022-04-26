@@ -341,7 +341,7 @@ class AtomicStaticCallAnalyzer
                 if ($codebase->methods->methodExists($intersection_method_id)) {
                     $method_id = $intersection_method_id;
                     $cased_method_id = $intersection_type->value . '::' . $stmt_name->name;
-                    $fq_class_name = $intersection_type->value;
+                    $fq_class_name = (string)$intersection_type->value;
                     break;
                 }
             }
@@ -708,7 +708,7 @@ class AtomicStaticCallAnalyzer
                     return false;
                 }
 
-                unset($tmp_context);
+                $tmp_context = null;
 
                 // Resolve actual static return type according to caller (i.e. $this) static type
                 if (isset($context->vars_in_scope['$this'])

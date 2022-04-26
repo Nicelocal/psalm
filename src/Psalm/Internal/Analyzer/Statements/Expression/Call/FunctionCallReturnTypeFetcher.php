@@ -795,7 +795,7 @@ class FunctionCallReturnTypeFetcher
 
         for ($i = 0; $i < $str_length; $i++) {
             $current = $pattern[$i];
-            $next = $pattern[$i + 1] ?? null;
+            $next = strlen($pattern) > $i+1 ? $pattern[$i + 1] : null;
 
             if ($current === '\\') {
                 if ($next === null
@@ -840,7 +840,7 @@ class FunctionCallReturnTypeFetcher
                 return false;
             }
 
-            if (!isset($pattern[$i + 2])) {
+            if ($i + 2 > strlen($pattern)) {
                 return false;
             }
 

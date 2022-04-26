@@ -362,7 +362,7 @@ class Analyzer
                 $file_analyzer->analyze();
                 $file_analyzer->context = null;
                 $file_analyzer->clearSourceBeforeDestruction();
-                unset($file_analyzer);
+                $file_analyzer = null;
 
                 return IssueBuffer::getIssuesDataForFile($file_path);
             };
@@ -418,7 +418,7 @@ class Analyzer
             $i = 0;
 
             foreach ($new_file_paths as $file_path) {
-                $process_file_paths[$i % $pool_size][] = $file_path;
+                $process_file_paths[(int)($i % $pool_size)][] = $file_path;
                 ++$i;
             }
 

@@ -42,7 +42,7 @@ class GetObjectVarsReturnTypeProvider implements FunctionReturnTypeProviderInter
             $object_type = reset($atomics);
 
             if ($object_type instanceof TObjectWithProperties) {
-                if ([] === $object_type->properties) {
+                if (!$object_type->properties) {
                     return Type::parseString('array<string, mixed>');
                 }
                 return new Union([
@@ -61,7 +61,7 @@ class GetObjectVarsReturnTypeProvider implements FunctionReturnTypeProviderInter
                     return Type::parseString('array<string, mixed>');
                 }
 
-                if ([] === $class_storage->appearing_property_ids) {
+                if (!$class_storage->appearing_property_ids) {
                     if ($class_storage->final) {
                         return Type::getEmptyArray();
                     }
@@ -89,7 +89,7 @@ class GetObjectVarsReturnTypeProvider implements FunctionReturnTypeProviderInter
                     }
                 }
 
-                if ([] === $properties) {
+                if (!$properties) {
                     if ($class_storage->final) {
                         return Type::getEmptyArray();
                     }

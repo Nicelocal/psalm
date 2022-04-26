@@ -162,7 +162,7 @@ class CallAnalyzer
 
                         foreach ($atomic_type->extra_types as $intersection_type) {
                             if ($intersection_type instanceof TNamedObject) {
-                                $fq_class_name = $intersection_type->value;
+                                $fq_class_name = (string)$intersection_type->value;
                                 $method_id = new MethodIdentifier(
                                     $fq_class_name,
                                     $method_name_lc

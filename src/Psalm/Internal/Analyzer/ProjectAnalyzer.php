@@ -2,7 +2,6 @@
 
 namespace Psalm\Internal\Analyzer;
 
-use Amp\Loop;
 use InvalidArgumentException;
 use LogicException;
 use Psalm\Codebase;
@@ -60,7 +59,6 @@ use function array_keys;
 use function array_map;
 use function array_merge;
 use function array_shift;
-use function cli_set_process_title;
 use function count;
 use function defined;
 use function dirname;
@@ -83,14 +81,9 @@ use function is_string;
 use function microtime;
 use function mkdir;
 use function number_format;
-use function pcntl_fork;
 use function preg_match;
 use function rename;
 use function shell_exec;
-use function stream_set_blocking;
-use function stream_socket_accept;
-use function stream_socket_client;
-use function stream_socket_server;
 use function strlen;
 use function strpos;
 use function strtolower;
@@ -106,8 +99,6 @@ use const PHP_OS;
 use const PHP_VERSION;
 use const PSALM_VERSION;
 use const STDERR;
-use const STDIN;
-use const STDOUT;
 
 /**
  * @internal

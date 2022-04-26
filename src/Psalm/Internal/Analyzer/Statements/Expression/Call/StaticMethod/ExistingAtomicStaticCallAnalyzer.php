@@ -550,7 +550,7 @@ class ExistingAtomicStaticCallAnalyzer
                 && $context->self
             ) {
                 $static_type = $context->self;
-                $context_final = $codebase->classlike_storage_provider->get($context->self)->final;
+                $context_final = (bool)$codebase->classlike_storage_provider->get($context->self)->final;
             } else {
                 $static_type = $fq_class_name;
             }

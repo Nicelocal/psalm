@@ -1028,7 +1028,7 @@ class AtomicPropertyFetchAnalyzer
                 if ($intersection_type instanceof TNamedObject
                     && $codebase->classExists($intersection_type->value)
                 ) {
-                    $fq_class_name = $intersection_type->value;
+                    $fq_class_name = (string)$intersection_type->value;
                     $class_exists = true;
                     return;
                 }

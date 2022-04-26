@@ -2167,12 +2167,12 @@ class ClassLikes
                         }
                     }
                 } elseif (!isset($classlike_storage->declaring_method_ids['__get'])) {
-                    $has_variable_calls = $codebase->analyzer->hasMixedMemberName('$' . $property_name);
+                    $has_variable_calls_temp = $codebase->analyzer->hasMixedMemberName('$' . $property_name);
 
                     $issue = new UnusedProperty(
-                        'Cannot find ' . ($has_variable_calls ? 'explicit' : 'any')
+                        'Cannot find ' . ($has_variable_calls_temp ? 'explicit' : 'any')
                             . ' references to private property ' . $property_id
-                            . ($has_variable_calls ? ' (but did find some potential references)' : ''),
+                            . ($has_variable_calls_temp ? ' (but did find some potential references)' : ''),
                         $property_storage->location
                     );
 
@@ -2180,7 +2180,7 @@ class ClassLikes
                         if (!$property_constructor_referenced
                             && $property_storage->stmt_location
                             && isset($project_analyzer->getIssuesToFix()['UnusedProperty'])
-                            && !$has_variable_calls
+                            && !$has_variable_calls_temp
                             && !IssueBuffer::isSuppressed($issue, $classlike_storage->suppressed_issues)
                         ) {
                             FileManipulationBuffer::addForCodeLocation(

@@ -46,8 +46,10 @@ use function array_merge;
 use function array_values;
 use function count;
 use function in_array;
+use function intval;
 use function is_string;
 use function preg_match;
+use function strval;
 
 use const PHP_INT_MAX;
 
