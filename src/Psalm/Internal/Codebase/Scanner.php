@@ -352,7 +352,7 @@ class Scanner
             $i = 0;
 
             foreach ($files_to_scan as $file_path) {
-                $process_file_paths[$i % $pool_size][] = $file_path;
+                $process_file_paths[(int) ($i % $pool_size)][] = $file_path;
                 ++$i;
             }
 

@@ -499,7 +499,7 @@ class Populator
         try {
             $parent_storage = $storage_provider->get($parent_storage_class);
         } catch (InvalidArgumentException $e) {
-            $this->progress->debug('Populator could not find dependency (' . __LINE__ . ")\n");
+            $this->progress->debug("Populator could not find dependency (1)\n");
 
             $storage->invalid_dependencies[] = $parent_storage_class;
 
@@ -626,7 +626,7 @@ class Populator
                 );
                 $parent_interface_storage = $storage_provider->get($parent_interface_lc);
             } catch (InvalidArgumentException $e) {
-                $this->progress->debug('Populator could not find dependency (' . __LINE__ . ")\n");
+                $this->progress->debug("Populator could not find dependency (2)\n");
 
                 $storage->invalid_dependencies[] = $parent_interface_lc;
                 continue;
@@ -733,7 +733,7 @@ class Populator
                 );
                 $implemented_interface_storage = $storage_provider->get($implemented_interface_lc);
             } catch (InvalidArgumentException $e) {
-                $this->progress->debug('Populator could not find dependency (' . __LINE__ . ")\n");
+                $this->progress->debug("Populator could not find dependency (3)\n");
 
                 $storage->invalid_dependencies[] = $implemented_interface_lc;
                 continue;

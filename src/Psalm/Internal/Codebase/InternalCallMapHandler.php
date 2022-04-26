@@ -364,7 +364,7 @@ class InternalCallMapHandler
         }
 
         /** @var array<string, array<int|string, string>> */
-        $call_map = require(dirname(__DIR__, 4) . '/dictionaries/CallMap.php');
+        $call_map = (array) require(dirname(__DIR__, 4) . '/dictionaries/CallMap.php');
 
         self::$call_map = [];
 
@@ -376,7 +376,7 @@ class InternalCallMapHandler
         /**
          * @var array<string, list<list<TaintKind::*>>>
          */
-        $taint_map = require(dirname(__DIR__, 4) . '/dictionaries/InternalTaintSinkMap.php');
+        $taint_map = (array) require(dirname(__DIR__, 4) . '/dictionaries/InternalTaintSinkMap.php');
 
         foreach ($taint_map as $key => $value) {
             $cased_key = strtolower($key);
@@ -400,7 +400,7 @@ class InternalCallMapHandler
                  *     removed: array<string, array<int|string, string>>
                  * }
                  */
-                $diff_call_map = require($delta_file);
+                $diff_call_map = (array) require($delta_file);
 
                 foreach ($diff_call_map['added'] as $key => $_) {
                     $cased_key = strtolower($key);
