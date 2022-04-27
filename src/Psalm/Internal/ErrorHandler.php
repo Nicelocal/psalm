@@ -19,7 +19,7 @@ use const STDERR;
 final class ErrorHandler
 {
     /** @var bool */
-    private static $exceptions_enabled = true;
+    public static $exceptions_enabled = true;
 
     public static function install(): void
     {
