@@ -31,11 +31,7 @@ class Json
      */
     public static function encode($data, ?int $options = null): string
     {
-        if ($options === null) {
-            $options = self::DEFAULT;
-        }
-
-        $result = json_encode($data, $options);
+        $result = json_encode($data, $options ?? self::DEFAULT);
         if ($result === false) {
             /** @psalm-suppress ImpureFunctionCall */
             throw new RuntimeException('Cannot create JSON string: '.json_last_error_msg());
