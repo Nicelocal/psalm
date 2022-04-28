@@ -25,14 +25,11 @@ use Psalm\Report\EmacsReport;
 use Psalm\Report\GithubActionsReport;
 use Psalm\Report\JsonReport;
 use Psalm\Report\JsonSummaryReport;
-use Psalm\Report\JunitReport;
 use Psalm\Report\PhpStormReport;
 use Psalm\Report\PylintReport;
 use Psalm\Report\ReportOptions;
-use Psalm\Report\SarifReport;
 use Psalm\Report\SonarqubeReport;
 use Psalm\Report\TextReport;
-use Psalm\Report\XmlReport;
 use RuntimeException;
 use UnexpectedValueException;
 
@@ -877,14 +874,6 @@ class IssueBuffer
                 $output = new CheckstyleReport($normalized_data, self::$fixable_issue_counts, $report_options);
                 break;
 
-            case Report::TYPE_XML:
-                $output = new XmlReport($normalized_data, self::$fixable_issue_counts, $report_options);
-                break;
-
-            case Report::TYPE_JUNIT:
-                $output = new JunitReport($normalized_data, self::$fixable_issue_counts, $report_options);
-                break;
-
             case Report::TYPE_CONSOLE:
                 $output = new ConsoleReport($normalized_data, self::$fixable_issue_counts, $report_options);
                 break;
@@ -895,10 +884,6 @@ class IssueBuffer
 
             case Report::TYPE_PHP_STORM:
                 $output = new PhpStormReport($normalized_data, self::$fixable_issue_counts, $report_options);
-                break;
-
-            case Report::TYPE_SARIF:
-                $output = new SarifReport($normalized_data, self::$fixable_issue_counts, $report_options);
                 break;
 
             case Report::TYPE_CODECLIMATE:

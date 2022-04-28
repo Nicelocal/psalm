@@ -7,10 +7,7 @@ use PhpParser\ErrorHandler\Collecting;
 use PhpParser\Node\Stmt;
 use Psalm\CodeLocation\ParseErrorLocation;
 use Psalm\Config;
-use Psalm\Internal\Diff\FileDiffer;
-use Psalm\Internal\Diff\FileStatementsDiffer;
 use Psalm\Internal\PhpTraverser\CustomTraverser;
-use Psalm\Internal\PhpVisitor\CloningVisitor;
 use Psalm\Internal\PhpVisitor\PartialParserVisitor;
 use Psalm\Internal\PhpVisitor\SimpleNameResolver;
 use Psalm\Issue\ParseError;
@@ -19,16 +16,8 @@ use Psalm\Progress\Progress;
 use Psalm\Progress\VoidProgress;
 use Throwable;
 
-use function abs;
-use function array_flip;
-use function array_intersect_key;
-use function array_map;
 use function array_merge;
-use function count;
 use function filemtime;
-use function md5;
-use function strlen;
-use function strpos;
 
 /**
  * @internal
