@@ -151,8 +151,7 @@ final class CliUtils
             exit(1);
         }
 
-        define('PSALM_VERSION', Versions::getVersion('vimeo/psalm'));
-        define('PHP_PARSER_VERSION', Versions::getVersion('nikic/php-parser'));
+        define('PSALM_VERSION', '4.23.0');
 
         return $first_autoloader;
     }
