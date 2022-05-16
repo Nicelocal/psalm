@@ -149,9 +149,15 @@ class ScopeAnalyzer
             }
 
             if ($stmt instanceof PhpParser\Node\Stmt\Continue_) {
-                $count = !$stmt->num
-                    ? 1
-                    : ($stmt->num instanceof PhpParser\Node\Scalar\LNumber ? $stmt->num->value : null);
+                if ($stmt->num) {
+                    if ($stmt->num instanceof PhpParser\Node\Scalar\LNumber) {
+                        $count = $stmt->num->value;
+                    } else {
+                        $count = null;
+                    }
+                } else {
+                    $count = 1;
+                }
 
                 if ($break_types && $count !== null && count($break_types) >= $count) {
                     if ($break_types[count($break_types) - $count] === 'switch') {
