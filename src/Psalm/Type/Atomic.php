@@ -81,7 +81,7 @@ use function strtolower;
 
 abstract class Atomic implements TypeNode
 {
-    public const KEY = 'atomic';
+    public static function getKeyConst(): string { return 'atomic'; }
 
     /**
      * Whether or not the type has been checked yet

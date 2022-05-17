@@ -31,7 +31,7 @@ class TList extends Atomic
      */
     public $type_param;
 
-    public const KEY = 'list';
+    public static function getKeyConst(): string { return 'list'; }
 
     /**
      * Constructs a new instance of a list
@@ -44,13 +44,13 @@ class TList extends Atomic
     public function __toString(): string
     {
         /** @psalm-suppress MixedOperand */
-        return static::KEY . '<' . $this->type_param . '>';
+        return static::getKeyConst() . '<' . $this->type_param . '>';
     }
 
     public function getId(bool $nested = false): string
     {
         /** @psalm-suppress MixedOperand */
-        return static::KEY . '<' . $this->type_param->getId() . '>';
+        return static::getKeyConst() . '<' . $this->type_param->getId() . '>';
     }
 
     public function __clone()
@@ -79,7 +79,7 @@ class TList extends Atomic
         }
 
         /** @psalm-suppress MixedOperand */
-        return static::KEY
+        return static::getKeyConst()
             . '<'
             . $this->type_param->toNamespacedString(
                 $namespace,

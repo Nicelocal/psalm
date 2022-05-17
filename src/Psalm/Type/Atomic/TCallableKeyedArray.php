@@ -7,7 +7,7 @@ namespace Psalm\Type\Atomic;
  */
 class TCallableKeyedArray extends TKeyedArray
 {
-    public const KEY = 'callable-array';
+    public static function getKeyConst(): string { return 'callable-array'; }
 
     public function getKey(bool $include_extra = true): string
     {

@@ -71,7 +71,7 @@ class TKeyedArray extends Atomic
      */
     public $is_list = false;
 
-    public const KEY = 'array';
+    public static function getKeyConst(): string { return 'array'; }
 
     /**
      * Constructs a new instance of a generic type
@@ -111,7 +111,7 @@ class TKeyedArray extends Atomic
         }
 
         /** @psalm-suppress MixedOperand */
-        return static::KEY . '{' . implode(', ', $property_strings) . '}';
+        return static::getKeyConst() . '{' . implode(', ', $property_strings) . '}';
     }
 
     public function getId(bool $nested = false): string
@@ -140,7 +140,7 @@ class TKeyedArray extends Atomic
         }
 
         /** @psalm-suppress MixedOperand */
-        return static::KEY . '{' .
+        return static::getKeyConst() . '{' .
                 implode(', ', $property_strings) .
                 '}'
                 . ($this->previous_value_type
@@ -171,7 +171,7 @@ class TKeyedArray extends Atomic
         }
 
         /** @psalm-suppress MixedOperand */
-        return static::KEY . '{' .
+        return static::getKeyConst() . '{' .
                 implode(
                     ', ',
                     array_map(
@@ -320,7 +320,7 @@ class TKeyedArray extends Atomic
     public function getKey(bool $include_extra = true): string
     {
         /** @var string */
-        return static::KEY;
+        return static::getKeyConst();
     }
 
     public function replaceTemplateTypesWithStandins(

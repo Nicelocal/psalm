@@ -7,5 +7,5 @@ namespace Psalm\Type\Atomic;
  */
 class TCallableList extends TNonEmptyList
 {
-    public const KEY = 'callable-list';
+    public static function getKeyConst(): string { return 'callable-list'; }
 }

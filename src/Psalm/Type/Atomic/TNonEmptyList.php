@@ -12,7 +12,7 @@ class TNonEmptyList extends TList
      */
     public $count;
 
-    public const KEY = 'non-empty-list';
+    public static function getKeyConst(): string { return 'non-empty-list'; }
 
     public function getAssertionString(bool $exact = false): string
     {
