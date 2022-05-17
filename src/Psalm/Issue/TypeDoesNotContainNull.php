@@ -6,8 +6,8 @@ use Psalm\CodeLocation;
 
 class TypeDoesNotContainNull extends CodeIssue
 {
-    public static $ERROR_LEVEL = 4;
-    public static $SHORTCODE = 90;
+    public static function getErrorLevel() { return 4; }
+    public static function getShortCode() { return 90; }
 
     public function __construct(string $message, CodeLocation $code_location, ?string $dupe_key)
     {

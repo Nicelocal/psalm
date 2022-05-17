@@ -4,5 +4,5 @@ namespace Psalm\Issue;
 
 class TaintedUnserialize extends TaintedInput
 {
-    public static $SHORTCODE = 250;
+    public static function getShortCode() { return 250; }
 }

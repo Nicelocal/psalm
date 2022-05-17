@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class ConstructorSignatureMismatch extends CodeIssue
 {
-    public static $ERROR_LEVEL = 5;
-    public static $SHORTCODE = 231;
+    public static function getErrorLevel() { return 5; }
+    public static function getShortCode() { return 231; }
 }

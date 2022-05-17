@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class UnusedFunctionCall extends FunctionIssue
 {
-    public static $ERROR_LEVEL = -1;
-    public static $SHORTCODE = 206;
+    public static function getErrorLevel() { return -1; }
+    public static function getShortCode() { return 206; }
 }

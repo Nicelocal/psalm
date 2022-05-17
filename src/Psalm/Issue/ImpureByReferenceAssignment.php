@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class ImpureByReferenceAssignment extends CodeIssue
 {
-    public static $ERROR_LEVEL = -1;
-    public static $SHORTCODE = 220;
+    public static function getErrorLevel() { return -1; }
+    public static function getShortCode() { return 220; }
 }

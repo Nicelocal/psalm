@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class NullArrayOffset extends CodeIssue
 {
-    public static $ERROR_LEVEL = 6;
-    public static $SHORTCODE = 124;
+    public static function getErrorLevel() { return 6; }
+    public static function getShortCode() { return 124; }
 }

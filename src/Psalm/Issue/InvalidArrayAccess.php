@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class InvalidArrayAccess extends CodeIssue
 {
-    public static $ERROR_LEVEL = 6;
-    public static $SHORTCODE = 5;
+    public static function getErrorLevel() { return 6; }
+    public static function getShortCode() { return 5; }
 }

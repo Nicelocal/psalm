@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class InvalidEnumCaseValue extends ClassIssue
 {
-    public static $ERROR_LEVEL = -1;
-    public static $SHORTCODE = 278;
+    public static function getErrorLevel() { return -1; }
+    public static function getShortCode() { return 278; }
 }

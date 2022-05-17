@@ -4,5 +4,5 @@ namespace Psalm\Issue;
 
 class MissingDependency extends ClassIssue
 {
-    public static $SHORTCODE = 157;
+    public static function getShortCode() { return 157; }
 }

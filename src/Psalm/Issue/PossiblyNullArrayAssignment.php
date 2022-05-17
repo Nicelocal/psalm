@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class PossiblyNullArrayAssignment extends CodeIssue
 {
-    public static $ERROR_LEVEL = 3;
-    public static $SHORTCODE = 120;
+    public static function getErrorLevel() { return 3; }
+    public static function getShortCode() { return 120; }
 }

@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class InternalClass extends ClassIssue
 {
-    public static $ERROR_LEVEL = 4;
-    public static $SHORTCODE = 174;
+    public static function getErrorLevel() { return 4; }
+    public static function getShortCode() { return 174; }
 }

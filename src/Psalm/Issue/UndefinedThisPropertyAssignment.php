@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class UndefinedThisPropertyAssignment extends PropertyIssue
 {
-    public static $ERROR_LEVEL = 5;
-    public static $SHORTCODE = 40;
+    public static function getErrorLevel() { return 5; }
+    public static function getShortCode() { return 40; }
 }

@@ -6,6 +6,6 @@ namespace Psalm\Issue;
 
 final class NonInvariantPropertyType extends CodeIssue
 {
-    public static $ERROR_LEVEL = -1;
-    public static $SHORTCODE = 265;
+    public static function getErrorLevel() { return -1; }
+    public static function getShortCode() { return 265; }
 }

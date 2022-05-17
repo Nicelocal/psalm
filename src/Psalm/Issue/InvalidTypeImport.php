@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class InvalidTypeImport extends CodeIssue
 {
-    public static $ERROR_LEVEL = 7;
-    public static $SHORTCODE = 233;
+    public static function getErrorLevel() { return 7; }
+    public static function getShortCode() { return 233; }
 }

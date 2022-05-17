@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class InvalidScalarArgument extends ArgumentIssue
 {
-    public static $ERROR_LEVEL = 4;
-    public static $SHORTCODE = 12;
+    public static function getErrorLevel() { return 4; }
+    public static function getShortCode() { return 12; }
 }

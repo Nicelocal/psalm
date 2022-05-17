@@ -4,5 +4,5 @@ namespace Psalm\Issue;
 
 class TaintedHeader extends TaintedInput
 {
-    public static $SHORTCODE = 256;
+    public static function getShortCode() { return 256; }
 }

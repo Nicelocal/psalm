@@ -4,5 +4,5 @@ namespace Psalm\Issue;
 
 class MissingImmutableAnnotation extends CodeIssue
 {
-    public static $SHORTCODE = 213;
+    public static function getShortCode() { return 213; }
 }

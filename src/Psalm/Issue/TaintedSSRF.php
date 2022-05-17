@@ -4,5 +4,5 @@ namespace Psalm\Issue;
 
 class TaintedSSRF extends TaintedInput
 {
-    public static $SHORTCODE = 253;
+    public static function getShortCode() { return 253; }
 }

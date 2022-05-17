@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class ParamNameMismatch extends CodeIssue
 {
-    public static $ERROR_LEVEL = 7;
-    public static $SHORTCODE = 230;
+    public static function getErrorLevel() { return 7; }
+    public static function getShortCode() { return 230; }
 }

@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class UndefinedGlobalVariable extends VariableIssue
 {
-    public static $ERROR_LEVEL = -1;
-    public static $SHORTCODE = 127;
+    public static function getErrorLevel() { return -1; }
+    public static function getShortCode() { return 127; }
 }

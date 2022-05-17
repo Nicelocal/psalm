@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class UndefinedInterfaceMethod extends MethodIssue
 {
-    public static $ERROR_LEVEL = 5;
-    public static $SHORTCODE = 181;
+    public static function getErrorLevel() { return 5; }
+    public static function getShortCode() { return 181; }
 }

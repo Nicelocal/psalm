@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class PossiblyUndefinedGlobalVariable extends VariableIssue
 {
-    public static $ERROR_LEVEL = 3;
-    public static $SHORTCODE = 126;
+    public static function getErrorLevel() { return 3; }
+    public static function getShortCode() { return 126; }
 }

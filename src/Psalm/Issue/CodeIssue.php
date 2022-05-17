@@ -10,8 +10,8 @@ use function explode;
 
 abstract class CodeIssue
 {
-    public static $ERROR_LEVEL = -1;
-    public static $SHORTCODE = 0;
+    public static function getErrorLevel() { return -1; }
+    public static function getShortCode() { return 0; }
 
     /**
      * @var CodeLocation
@@ -112,8 +112,8 @@ abstract class CodeIssue
             $snippet_bounds[1],
             $location->getColumn(),
             $location->getEndColumn(),
-            (int) static::$SHORTCODE,
-            (int) static::$ERROR_LEVEL,
+            (int) static::getShortCode(),
+            (int) static::getErrorLevel(),
             $this instanceof TaintedInput
                 ? $this->getTaintTrace()
                 : null,

@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class MismatchingDocblockReturnType extends CodeIssue
 {
-    public static $ERROR_LEVEL = 4;
-    public static $SHORTCODE = 142;
+    public static function getErrorLevel() { return 4; }
+    public static function getShortCode() { return 142; }
 }

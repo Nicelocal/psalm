@@ -4,8 +4,8 @@ namespace Psalm\Issue;
 
 class MixedReturnStatement extends CodeIssue implements MixedIssue
 {
-    public static $ERROR_LEVEL = 1;
-    public static $SHORTCODE = 138;
+    public static function getErrorLevel() { return 1; }
+    public static function getShortCode() { return 138; }
 
     use MixedIssueTrait;
 }

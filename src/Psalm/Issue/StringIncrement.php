@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class StringIncrement extends CodeIssue
 {
-    public static $ERROR_LEVEL = 4;
-    public static $SHORTCODE = 211;
+    public static function getErrorLevel() { return 4; }
+    public static function getShortCode() { return 211; }
 }

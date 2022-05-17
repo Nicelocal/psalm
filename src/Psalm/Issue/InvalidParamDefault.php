@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class InvalidParamDefault extends CodeIssue
 {
-    public static $ERROR_LEVEL = -1;
-    public static $SHORTCODE = 62;
+    public static function getErrorLevel() { return -1; }
+    public static function getShortCode() { return 62; }
 }

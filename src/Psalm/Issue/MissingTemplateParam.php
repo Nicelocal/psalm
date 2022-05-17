@@ -4,5 +4,5 @@ namespace Psalm\Issue;
 
 class MissingTemplateParam extends CodeIssue
 {
-    public static $SHORTCODE = 182;
+    public static function getShortCode() { return 182; }
 }

@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class NamedArgumentNotAllowed extends ArgumentIssue
 {
-    public static $ERROR_LEVEL = 7;
-    public static $SHORTCODE = 268;
+    public static function getErrorLevel() { return 7; }
+    public static function getShortCode() { return 268; }
 }

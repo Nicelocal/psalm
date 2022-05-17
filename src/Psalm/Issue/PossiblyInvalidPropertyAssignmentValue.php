@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class PossiblyInvalidPropertyAssignmentValue extends PropertyIssue
 {
-    public static $ERROR_LEVEL = 3;
-    public static $SHORTCODE = 147;
+    public static function getErrorLevel() { return 3; }
+    public static function getShortCode() { return 147; }
 }

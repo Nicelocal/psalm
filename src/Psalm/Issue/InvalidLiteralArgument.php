@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class InvalidLiteralArgument extends ArgumentIssue
 {
-    public static $ERROR_LEVEL = 4;
-    public static $SHORTCODE = 237;
+    public static function getErrorLevel() { return 4; }
+    public static function getShortCode() { return 237; }
 }

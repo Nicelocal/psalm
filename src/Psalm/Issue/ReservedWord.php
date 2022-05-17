@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class ReservedWord extends ClassIssue
 {
-    public static $ERROR_LEVEL = 7;
-    public static $SHORTCODE = 95;
+    public static function getErrorLevel() { return 7; }
+    public static function getShortCode() { return 95; }
 }

@@ -6,8 +6,8 @@ use Psalm\CodeLocation;
 
 class PropertyNotSetInConstructor extends PropertyIssue
 {
-    public static $ERROR_LEVEL = 2;
-    public static $SHORTCODE = 74;
+    public static function getErrorLevel() { return 2; }
+    public static function getShortCode() { return 74; }
 
     public function __construct(
         string $message,

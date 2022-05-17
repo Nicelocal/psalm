@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class InvalidNullableReturnType extends CodeIssue
 {
-    public static $ERROR_LEVEL = 5;
-    public static $SHORTCODE = 144;
+    public static function getErrorLevel() { return 5; }
+    public static function getShortCode() { return 144; }
 }

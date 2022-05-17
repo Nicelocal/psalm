@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class ArgumentTypeCoercion extends ArgumentIssue
 {
-    public static $ERROR_LEVEL = 3;
-    public static $SHORTCODE = 193;
+    public static function getErrorLevel() { return 3; }
+    public static function getShortCode() { return 193; }
 }

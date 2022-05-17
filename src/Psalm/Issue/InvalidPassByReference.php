@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class InvalidPassByReference extends CodeIssue
 {
-    public static $ERROR_LEVEL = -1;
-    public static $SHORTCODE = 102;
+    public static function getErrorLevel() { return -1; }
+    public static function getShortCode() { return 102; }
 }

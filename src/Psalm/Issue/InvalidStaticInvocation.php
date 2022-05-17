@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class InvalidStaticInvocation extends CodeIssue
 {
-    public static $ERROR_LEVEL = -1;
-    public static $SHORTCODE = 14;
+    public static function getErrorLevel() { return -1; }
+    public static function getShortCode() { return 14; }
 }

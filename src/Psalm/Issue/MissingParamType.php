@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class MissingParamType extends CodeIssue
 {
-    public static $ERROR_LEVEL = 2;
-    public static $SHORTCODE = 154;
+    public static function getErrorLevel() { return 2; }
+    public static function getShortCode() { return 154; }
 }

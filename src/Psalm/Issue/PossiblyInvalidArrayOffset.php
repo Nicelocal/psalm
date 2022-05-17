@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class PossiblyInvalidArrayOffset extends CodeIssue
 {
-    public static $ERROR_LEVEL = 3;
-    public static $SHORTCODE = 116;
+    public static function getErrorLevel() { return 3; }
+    public static function getShortCode() { return 116; }
 }

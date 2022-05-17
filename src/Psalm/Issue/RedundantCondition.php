@@ -6,8 +6,8 @@ use Psalm\CodeLocation;
 
 class RedundantCondition extends CodeIssue
 {
-    public static $ERROR_LEVEL = 4;
-    public static $SHORTCODE = 122;
+    public static function getErrorLevel() { return 4; }
+    public static function getShortCode() { return 122; }
 
     public function __construct(string $message, CodeLocation $code_location, ?string $dupe_key)
     {

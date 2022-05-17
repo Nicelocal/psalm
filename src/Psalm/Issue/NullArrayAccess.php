@@ -8,6 +8,6 @@ namespace Psalm\Issue;
  */
 class NullArrayAccess extends CodeIssue
 {
-    public static $ERROR_LEVEL = -1;
-    public static $SHORTCODE = 52;
+    public static function getErrorLevel() { return -1; }
+    public static function getShortCode() { return 52; }
 }

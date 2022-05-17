@@ -7,8 +7,8 @@ use Psalm\Internal\Analyzer\DataFlowNodeData;
 
 abstract class TaintedInput extends CodeIssue
 {
-    public static $ERROR_LEVEL = -2;
-    public static $SHORTCODE = 205;
+    public static function getErrorLevel() { return -2; }
+    public static function getShortCode() { return 205; }
 
     /**
      * @var string
