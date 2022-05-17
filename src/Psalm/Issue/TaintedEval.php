@@ -4,5 +4,5 @@ namespace Psalm\Issue;
 
 class TaintedEval extends TaintedInput
 {
-    public const SHORTCODE = 252;
+    public static $SHORTCODE = 252;
 }

@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class MoreSpecificImplementedParamType extends CodeIssue
 {
-    public const ERROR_LEVEL = 5;
-    public const SHORTCODE = 140;
+    public static $ERROR_LEVEL = 5;
+    public static $SHORTCODE = 140;
 }

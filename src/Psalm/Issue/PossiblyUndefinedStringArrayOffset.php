@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class PossiblyUndefinedStringArrayOffset extends CodeIssue
 {
-    public const ERROR_LEVEL = -2;
-    public const SHORTCODE = 216;
+    public static $ERROR_LEVEL = -2;
+    public static $SHORTCODE = 216;
 }

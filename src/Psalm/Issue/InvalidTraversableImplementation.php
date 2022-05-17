@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class InvalidTraversableImplementation extends ClassIssue
 {
-    public const ERROR_LEVEL = 7;
-    public const SHORTCODE = 266;
+    public static $ERROR_LEVEL = 7;
+    public static $SHORTCODE = 266;
 }

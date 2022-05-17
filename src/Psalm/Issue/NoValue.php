@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class NoValue extends CodeIssue
 {
-    public const ERROR_LEVEL = -1;
-    public const SHORTCODE = 179;
+    public static $ERROR_LEVEL = -1;
+    public static $SHORTCODE = 179;
 }

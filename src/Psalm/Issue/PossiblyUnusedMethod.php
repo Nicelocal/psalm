@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class PossiblyUnusedMethod extends MethodIssue
 {
-    public const ERROR_LEVEL = -2;
-    public const SHORTCODE = 87;
+    public static $ERROR_LEVEL = -2;
+    public static $SHORTCODE = 87;
 }

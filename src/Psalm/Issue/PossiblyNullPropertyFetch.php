@@ -8,6 +8,6 @@ namespace Psalm\Issue;
  */
 class PossiblyNullPropertyFetch extends CodeIssue
 {
-    public const ERROR_LEVEL = 3;
-    public const SHORTCODE = 82;
+    public static $ERROR_LEVEL = 3;
+    public static $SHORTCODE = 82;
 }

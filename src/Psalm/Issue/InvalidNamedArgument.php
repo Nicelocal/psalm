@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class InvalidNamedArgument extends ArgumentIssue
 {
-    public const ERROR_LEVEL = 6;
-    public const SHORTCODE = 238;
+    public static $ERROR_LEVEL = 6;
+    public static $SHORTCODE = 238;
 }

@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class TooManyTemplateParams extends CodeIssue
 {
-    public const ERROR_LEVEL = 6;
-    public const SHORTCODE = 184;
+    public static $ERROR_LEVEL = 6;
+    public static $SHORTCODE = 184;
 }

@@ -6,8 +6,8 @@ use Psalm\CodeLocation;
 
 class MixedPropertyTypeCoercion extends PropertyIssue implements MixedIssue
 {
-    public const ERROR_LEVEL = 1;
-    public const SHORTCODE = 196;
+    public static $ERROR_LEVEL = 1;
+    public static $SHORTCODE = 196;
 
     use MixedIssueTrait;
 

@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class InvalidFalsableReturnType extends CodeIssue
 {
-    public const ERROR_LEVEL = 2;
-    public const SHORTCODE = 143;
+    public static $ERROR_LEVEL = 2;
+    public static $SHORTCODE = 143;
 }

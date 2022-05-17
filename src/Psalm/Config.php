@@ -1777,7 +1777,7 @@ class Config
         }
 
         /** @var int */
-        $issue_level = $issue_class::ERROR_LEVEL;
+        $issue_level = $issue_class::$ERROR_LEVEL;
 
         if ($issue_level > 0 && $issue_level < $this->level) {
             return self::REPORT_INFO;

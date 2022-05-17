@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class DuplicateEnumCase extends ClassIssue
 {
-    public const ERROR_LEVEL = -1;
-    public const SHORTCODE = 277;
+    public static $ERROR_LEVEL = -1;
+    public static $SHORTCODE = 277;
 }

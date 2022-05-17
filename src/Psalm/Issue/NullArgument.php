@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class NullArgument extends ArgumentIssue
 {
-    public const ERROR_LEVEL = 6;
-    public const SHORTCODE = 57;
+    public static $ERROR_LEVEL = 6;
+    public static $SHORTCODE = 57;
 }

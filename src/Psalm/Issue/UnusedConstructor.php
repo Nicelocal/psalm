@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class UnusedConstructor extends MethodIssue
 {
-    public const ERROR_LEVEL = -2;
-    public const SHORTCODE = 258;
+    public static $ERROR_LEVEL = -2;
+    public static $SHORTCODE = 258;
 }

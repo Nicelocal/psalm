@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class MoreSpecificReturnType extends CodeIssue
 {
-    public const ERROR_LEVEL = 3;
-    public const SHORTCODE = 70;
+    public static $ERROR_LEVEL = 3;
+    public static $SHORTCODE = 70;
 }

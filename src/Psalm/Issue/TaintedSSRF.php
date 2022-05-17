@@ -4,5 +4,5 @@ namespace Psalm\Issue;
 
 class TaintedSSRF extends TaintedInput
 {
-    public const SHORTCODE = 253;
+    public static $SHORTCODE = 253;
 }

@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class DuplicateMethod extends CodeIssue
 {
-    public const ERROR_LEVEL = -1;
-    public const SHORTCODE = 178;
+    public static $ERROR_LEVEL = -1;
+    public static $SHORTCODE = 178;
 }

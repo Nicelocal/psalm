@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class OverriddenMethodAccess extends CodeIssue
 {
-    public const ERROR_LEVEL = 7;
-    public const SHORTCODE = 66;
+    public static $ERROR_LEVEL = 7;
+    public static $SHORTCODE = 66;
 }

@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class PossiblyNullArgument extends ArgumentIssue
 {
-    public const ERROR_LEVEL = 3;
-    public const SHORTCODE = 78;
+    public static $ERROR_LEVEL = 3;
+    public static $SHORTCODE = 78;
 }

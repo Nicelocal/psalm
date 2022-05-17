@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class InterfaceInstantiation extends CodeIssue
 {
-    public const ERROR_LEVEL = -1;
-    public const SHORTCODE = 158;
+    public static $ERROR_LEVEL = -1;
+    public static $SHORTCODE = 158;
 }

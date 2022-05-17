@@ -4,5 +4,5 @@ namespace Psalm\Issue;
 
 class TaintedCookie extends TaintedInput
 {
-    public const SHORTCODE = 257;
+    public static $SHORTCODE = 257;
 }

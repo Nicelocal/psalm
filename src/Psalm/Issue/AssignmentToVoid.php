@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class AssignmentToVoid extends CodeIssue
 {
-    public const ERROR_LEVEL = 7;
-    public const SHORTCODE = 121;
+    public static $ERROR_LEVEL = 7;
+    public static $SHORTCODE = 121;
 }

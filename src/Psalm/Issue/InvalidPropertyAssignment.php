@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class InvalidPropertyAssignment extends CodeIssue
 {
-    public const ERROR_LEVEL = 6;
-    public const SHORTCODE = 10;
+    public static $ERROR_LEVEL = 6;
+    public static $SHORTCODE = 10;
 }

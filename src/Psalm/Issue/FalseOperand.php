@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class FalseOperand extends CodeIssue
 {
-    public const ERROR_LEVEL = 4;
-    public const SHORTCODE = 161;
+    public static $ERROR_LEVEL = 4;
+    public static $SHORTCODE = 161;
 }

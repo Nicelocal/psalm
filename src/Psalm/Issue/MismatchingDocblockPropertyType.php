@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class MismatchingDocblockPropertyType extends CodeIssue
 {
-    public const ERROR_LEVEL = 2;
-    public const SHORTCODE = 264;
+    public static $ERROR_LEVEL = 2;
+    public static $SHORTCODE = 264;
 }

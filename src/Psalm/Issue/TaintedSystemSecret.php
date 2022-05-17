@@ -4,5 +4,5 @@ namespace Psalm\Issue;
 
 class TaintedSystemSecret extends TaintedInput
 {
-    public const SHORTCODE = 248;
+    public static $SHORTCODE = 248;
 }

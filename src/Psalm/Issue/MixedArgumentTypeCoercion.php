@@ -8,8 +8,8 @@ use function strtolower;
 
 class MixedArgumentTypeCoercion extends ArgumentIssue implements MixedIssue
 {
-    public const ERROR_LEVEL = 1;
-    public const SHORTCODE = 194;
+    public static $ERROR_LEVEL = 1;
+    public static $SHORTCODE = 194;
 
     use MixedIssueTrait;
 

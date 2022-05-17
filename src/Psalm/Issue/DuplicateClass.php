@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class DuplicateClass extends CodeIssue
 {
-    public const ERROR_LEVEL = -1;
-    public const SHORTCODE = 71;
+    public static $ERROR_LEVEL = -1;
+    public static $SHORTCODE = 71;
 }

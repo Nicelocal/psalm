@@ -6,8 +6,8 @@ use Psalm\CodeLocation;
 
 class DocblockTypeContradiction extends CodeIssue
 {
-    public const ERROR_LEVEL = 2;
-    public const SHORTCODE = 155;
+    public static $ERROR_LEVEL = 2;
+    public static $SHORTCODE = 155;
 
     public function __construct(string $message, CodeLocation $code_location, ?string $dupe_key)
     {

@@ -4,5 +4,5 @@ namespace Psalm\Issue;
 
 class TaintedTextWithQuotes extends TaintedInput
 {
-    public const SHORTCODE = 274;
+    public static $SHORTCODE = 274;
 }

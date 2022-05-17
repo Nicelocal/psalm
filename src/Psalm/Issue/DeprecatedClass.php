@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class DeprecatedClass extends ClassIssue
 {
-    public const ERROR_LEVEL = 2;
-    public const SHORTCODE = 98;
+    public static $ERROR_LEVEL = 2;
+    public static $SHORTCODE = 98;
 }

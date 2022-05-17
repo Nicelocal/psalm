@@ -6,6 +6,6 @@ namespace Psalm\Issue;
 
 final class NonInvariantDocblockPropertyType extends CodeIssue
 {
-    public const ERROR_LEVEL = 3;
-    public const SHORTCODE = 267;
+    public static $ERROR_LEVEL = 3;
+    public static $SHORTCODE = 267;
 }

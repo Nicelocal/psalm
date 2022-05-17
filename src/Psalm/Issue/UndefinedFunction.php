@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class UndefinedFunction extends FunctionIssue
 {
-    public const ERROR_LEVEL = -1;
-    public const SHORTCODE = 21;
+    public static $ERROR_LEVEL = -1;
+    public static $SHORTCODE = 21;
 }

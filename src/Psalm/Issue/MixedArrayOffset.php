@@ -4,8 +4,8 @@ namespace Psalm\Issue;
 
 class MixedArrayOffset extends CodeIssue implements MixedIssue
 {
-    public const ERROR_LEVEL = 1;
-    public const SHORTCODE = 31;
+    public static $ERROR_LEVEL = 1;
+    public static $SHORTCODE = 31;
 
     use MixedIssueTrait;
 }

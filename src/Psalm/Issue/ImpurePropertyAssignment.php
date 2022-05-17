@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class ImpurePropertyAssignment extends CodeIssue
 {
-    public const ERROR_LEVEL = -1;
-    public const SHORTCODE = 204;
+    public static $ERROR_LEVEL = -1;
+    public static $SHORTCODE = 204;
 }

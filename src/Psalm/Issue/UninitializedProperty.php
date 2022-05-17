@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class UninitializedProperty extends PropertyIssue
 {
-    public const ERROR_LEVEL = 7;
-    public const SHORTCODE = 186;
+    public static $ERROR_LEVEL = 7;
+    public static $SHORTCODE = 186;
 }

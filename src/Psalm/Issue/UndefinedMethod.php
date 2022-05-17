@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class UndefinedMethod extends MethodIssue
 {
-    public const ERROR_LEVEL = 6;
-    public const SHORTCODE = 22;
+    public static $ERROR_LEVEL = 6;
+    public static $SHORTCODE = 22;
 }

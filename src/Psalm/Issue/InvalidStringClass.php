@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class InvalidStringClass extends CodeIssue
 {
-    public const ERROR_LEVEL = 2;
-    public const SHORTCODE = 160;
+    public static $ERROR_LEVEL = 2;
+    public static $SHORTCODE = 160;
 }

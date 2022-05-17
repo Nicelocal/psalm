@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class UnusedReturnValue extends CodeIssue
 {
-    public const ERROR_LEVEL = -2;
-    public const SHORTCODE = 272;
+    public static $ERROR_LEVEL = -2;
+    public static $SHORTCODE = 272;
 }

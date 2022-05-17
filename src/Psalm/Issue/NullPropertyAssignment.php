@@ -8,6 +8,6 @@ namespace Psalm\Issue;
  */
 class NullPropertyAssignment extends CodeIssue
 {
-    public const ERROR_LEVEL = -1;
-    public const SHORTCODE = 36;
+    public static $ERROR_LEVEL = -1;
+    public static $SHORTCODE = 36;
 }
