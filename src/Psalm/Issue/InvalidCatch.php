@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class InvalidCatch extends ClassIssue
 {
-    public static function getErrorLevel() { return 6; }
-    public static function getShortCode() { return 132; }
+    public static function getErrorLevel(): int { return 6; }
+    public static function getShortCode(): int { return 132; }
 }

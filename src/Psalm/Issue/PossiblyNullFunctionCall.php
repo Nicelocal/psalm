@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class PossiblyNullFunctionCall extends CodeIssue
 {
-    public static function getErrorLevel() { return 3; }
-    public static function getShortCode() { return 94; }
+    public static function getErrorLevel(): int { return 3; }
+    public static function getShortCode(): int { return 94; }
 }

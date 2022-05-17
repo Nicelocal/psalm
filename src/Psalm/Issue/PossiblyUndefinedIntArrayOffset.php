@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class PossiblyUndefinedIntArrayOffset extends CodeIssue
 {
-    public static function getErrorLevel() { return -2; }
-    public static function getShortCode() { return 215; }
+    public static function getErrorLevel(): int { return -2; }
+    public static function getShortCode(): int { return 215; }
 }

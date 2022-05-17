@@ -10,8 +10,8 @@ use function explode;
 
 abstract class CodeIssue
 {
-    public static function getErrorLevel() { return -1; }
-    public static function getShortCode() { return 0; }
+    public static function getErrorLevel(): int { return -1; }
+    public static function getShortCode(): int { return 0; }
 
     /**
      * @var CodeLocation

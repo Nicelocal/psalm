@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class UndefinedPropertyFetch extends PropertyIssue
 {
-    public static function getErrorLevel() { return 6; }
-    public static function getShortCode() { return 39; }
+    public static function getErrorLevel(): int { return 6; }
+    public static function getShortCode(): int { return 39; }
 }

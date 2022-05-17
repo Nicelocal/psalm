@@ -6,8 +6,8 @@ use Psalm\CodeLocation;
 
 class MissingConstructor extends CodeIssue
 {
-    public static function getErrorLevel() { return 2; }
-    public static function getShortCode() { return 73; }
+    public static function getErrorLevel(): int { return 2; }
+    public static function getShortCode(): int { return 73; }
 
     public function __construct(string $message, CodeLocation $code_location, ?string $dupe_key)
     {

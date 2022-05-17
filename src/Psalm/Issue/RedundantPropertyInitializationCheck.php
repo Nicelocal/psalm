@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class RedundantPropertyInitializationCheck extends CodeIssue
 {
-    public static function getErrorLevel() { return 4; }
-    public static function getShortCode() { return 261; }
+    public static function getErrorLevel(): int { return 4; }
+    public static function getShortCode(): int { return 261; }
 }

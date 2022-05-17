@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class UnusedMethod extends MethodIssue
 {
-    public static function getErrorLevel() { return -2; }
-    public static function getShortCode() { return 76; }
+    public static function getErrorLevel(): int { return -2; }
+    public static function getShortCode(): int { return 76; }
 }

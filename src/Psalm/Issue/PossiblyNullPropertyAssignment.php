@@ -8,6 +8,6 @@ namespace Psalm\Issue;
  */
 class PossiblyNullPropertyAssignment extends CodeIssue
 {
-    public static function getErrorLevel() { return 3; }
-    public static function getShortCode() { return 81; }
+    public static function getErrorLevel(): int { return 3; }
+    public static function getShortCode(): int { return 81; }
 }

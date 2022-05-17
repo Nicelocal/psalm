@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class InvalidDocblock extends CodeIssue
 {
-    public static function getErrorLevel() { return 4; }
-    public static function getShortCode() { return 8; }
+    public static function getErrorLevel(): int { return 4; }
+    public static function getShortCode(): int { return 8; }
 }

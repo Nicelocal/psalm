@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class DuplicateClass extends CodeIssue
 {
-    public static function getErrorLevel() { return -1; }
-    public static function getShortCode() { return 71; }
+    public static function getErrorLevel(): int { return -1; }
+    public static function getShortCode(): int { return 71; }
 }

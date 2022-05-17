@@ -4,5 +4,5 @@ namespace Psalm\Issue;
 
 class TaintedCustom extends TaintedInput
 {
-    public static function getShortCode() { return 249; }
+    public static function getShortCode(): int { return 249; }
 }

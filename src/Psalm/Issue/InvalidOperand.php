@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class InvalidOperand extends CodeIssue
 {
-    public static function getErrorLevel() { return 4; }
-    public static function getShortCode() { return 58; }
+    public static function getErrorLevel(): int { return 4; }
+    public static function getShortCode(): int { return 58; }
 }

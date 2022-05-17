@@ -4,6 +4,6 @@ namespace Psalm\Issue;
 
 class DeprecatedClass extends ClassIssue
 {
-    public static function getErrorLevel() { return 2; }
-    public static function getShortCode() { return 98; }
+    public static function getErrorLevel(): int { return 2; }
+    public static function getShortCode(): int { return 98; }
 }

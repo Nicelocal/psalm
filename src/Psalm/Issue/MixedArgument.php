@@ -8,8 +8,8 @@ use function strtolower;
 
 class MixedArgument extends ArgumentIssue implements MixedIssue
 {
-    public static function getErrorLevel() { return 1; }
-    public static function getShortCode() { return 30; }
+    public static function getErrorLevel(): int { return 1; }
+    public static function getShortCode(): int { return 30; }
 
     use MixedIssueTrait;
 
