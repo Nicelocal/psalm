@@ -353,27 +353,11 @@ class Analyzer
 
         $task_done_closure =
             /**
-             * @param array{0: list<IssueData>, 1: float, 2: string} $issues
+             * @param array{0: float, 1: string} $issues
              */
             function (array $issues) use (&$times): void
             {
-                $has_error = false;
-                $has_info = false;
-
-                foreach ($issues[0] as $issue) {
-                    if ($issue->severity === 'error') {
-                        $has_error = true;
-                        break;
-                    }
-
-                    if ($issue->severity === 'info') {
-                        $has_info = true;
-                    }
-                }
-
-                $times[$issues[2]] = $issues[1];
-
-                $this->progress->taskDone($has_error ? 2 : ($has_info ? 1 : 0));
+                $times[$issues[1]] = $issues[0];
             }
         ;
 
@@ -562,12 +546,8 @@ class Analyzer
             $i = 0;
 
             foreach ($this->files_to_analyze as $file_path => $_) {
-                [$issues, $t] = $analysis_worker($i, $file_path);
+                $task_done_closure($analysis_worker($i, $file_path));
                 ++$i;
-
-                $times[$file_path] = $t;
-
-                $task_done_closure($issues);
             }
         }
 
@@ -1597,7 +1577,7 @@ class Analyzer
     }
 
     /**
-     * @return array{0: list<IssueData>, 1: float, 2: string}
+     * @return array{0: float, 1: string}
      */
     private function analysisWorker(int $_, string $file_path): array
     {
@@ -1616,7 +1596,7 @@ class Analyzer
         unset($file_analyzer);
         $t = microtime(true)-$t;
 
-        return [IssueBuffer::getIssuesDataForFile($file_path), $t, $file_path];
+        return [$t, $file_path];
     }
 
     /** @return WorkerData */
