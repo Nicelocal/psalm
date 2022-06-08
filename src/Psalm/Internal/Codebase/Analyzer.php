@@ -345,11 +345,37 @@ class Analyzer
 
         ksort($this->files_to_analyze);
 
+        $times = [];
+
         $codebase = $project_analyzer->getCodebase();
 
         $analysis_worker = Closure::fromCallable([$this, 'analysisWorker']);
 
-        $task_done_closure = Closure::fromCallable([$this, 'taskDoneClosure']);
+        $task_done_closure =
+            /**
+             * @param array{0: list<IssueData>, 1: float, 2: string} $issues
+             */
+            function (array $issues) use (&$times): void
+            {
+                $has_error = false;
+                $has_info = false;
+
+                foreach ($issues[0] as $issue) {
+                    if ($issue->severity === 'error') {
+                        $has_error = true;
+                        break;
+                    }
+
+                    if ($issue->severity === 'info') {
+                        $has_info = true;
+                    }
+                }
+
+                $times[$issues[2]] = $issues[1];
+
+                $this->progress->taskDone($has_error ? 2 : ($has_info ? 1 : 0));
+            }
+        ;
 
         if ($pool_size > 1 && count($this->files_to_analyze) > $pool_size) {
             $shuffle_count = $pool_size + 1;
@@ -536,11 +562,19 @@ class Analyzer
             $i = 0;
 
             foreach ($this->files_to_analyze as $file_path => $_) {
-                $analysis_worker($i, $file_path);
+                [$issues, $t] = $analysis_worker($i, $file_path);
                 ++$i;
 
-                $issues = IssueBuffer::getIssuesDataForFile($file_path);
+                $times[$file_path] = $t;
+
                 $task_done_closure($issues);
+            }
+        }
+
+        arsort($times);
+        foreach ($times as $file => $time) {
+            if ($time > 1) {
+                $this->progress->write("Analyzed $file in $time\n");
             }
         }
     }
@@ -1563,29 +1597,7 @@ class Analyzer
     }
 
     /**
-     * @param list<IssueData> $issues
-     */
-    private function taskDoneClosure(array $issues): void
-    {
-        $has_error = false;
-        $has_info = false;
-
-        foreach ($issues as $issue) {
-            if ($issue->severity === 'error') {
-                $has_error = true;
-                break;
-            }
-
-            if ($issue->severity === 'info') {
-                $has_info = true;
-            }
-        }
-
-        $this->progress->taskDone($has_error ? 2 : ($has_info ? 1 : 0));
-    }
-
-    /**
-     * @return list<IssueData>
+     * @return array{0: list<IssueData>, 1: float, 2: string}
      */
     private function analysisWorker(int $_, string $file_path): array
     {
@@ -1597,12 +1609,14 @@ class Analyzer
 
         $this->progress->debug('Analyzing ' . $file_analyzer->getFilePath() . "\n");
 
+        $t = microtime(true);
         $file_analyzer->analyze();
         $file_analyzer->context = null;
         $file_analyzer->clearSourceBeforeDestruction();
         unset($file_analyzer);
+        $t = microtime(true)-$t;
 
-        return IssueBuffer::getIssuesDataForFile($file_path);
+        return [IssueBuffer::getIssuesDataForFile($file_path), $t, $file_path];
     }
 
     /** @return WorkerData */
