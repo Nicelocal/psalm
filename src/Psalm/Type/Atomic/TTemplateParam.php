@@ -28,7 +28,7 @@ final class TTemplateParam extends Atomic
     /**
      * @var Union
      */
-    public $as;
+    public readonly Union $as;
 
     /**
      * @var string

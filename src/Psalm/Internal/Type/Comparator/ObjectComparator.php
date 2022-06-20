@@ -92,7 +92,7 @@ class ObjectComparator
      */
     private static function getIntersectionTypes(Atomic $type_part): array
     {
-        if (!$type_part->extra_types) {
+        if (!$type_part->getIntersectionTypes()) {
             if ($type_part instanceof TTemplateParam) {
                 $intersection_types = [];
 
@@ -114,8 +114,8 @@ class ObjectComparator
 
         $type_part = clone $type_part;
 
-        $extra_types = $type_part->extra_types;
-        $type_part->extra_types = null;
+        $extra_types = $type_part->getIntersectionTypes();
+        $type_part->clearIntersectionTypes();
 
         $extra_types[$type_part->getKey()] = $type_part;
 

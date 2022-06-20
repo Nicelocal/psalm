@@ -63,10 +63,10 @@ class AtomicTypeComparator
 
         if (($container_type_part instanceof TTemplateParam
                 || ($container_type_part instanceof TNamedObject
-                    && isset($container_type_part->extra_types)))
+                    && $container_type_part->getIntersectionTypes() !== null))
             && ($input_type_part instanceof TTemplateParam
                 || ($input_type_part instanceof TNamedObject
-                    && isset($input_type_part->extra_types)))
+                    && $input_type_part->getIntersectionTypes() !== null))
         ) {
             return ObjectComparator::isShallowlyContainedBy(
                 $codebase,
@@ -80,7 +80,7 @@ class AtomicTypeComparator
         if ($container_type_part instanceof TMixed
             || ($container_type_part instanceof TTemplateParam
                 && $container_type_part->as->isMixed()
-                && !$container_type_part->extra_types
+                && !$container_type_part->getIntersectionTypes()
                 && $input_type_part instanceof TMixed)
         ) {
             if (get_class($container_type_part) === TEmptyMixed::class
@@ -104,7 +104,7 @@ class AtomicTypeComparator
         if ($input_type_part instanceof TMixed
             || ($input_type_part instanceof TTemplateParam
                 && $input_type_part->as->isMixed()
-                && !$input_type_part->extra_types)
+                && !$input_type_part->getIntersectionTypes())
         ) {
             if ($atomic_comparison_result) {
                 $atomic_comparison_result->type_coerced = true;
@@ -450,8 +450,8 @@ class AtomicTypeComparator
         }
 
         if ($input_type_part instanceof TTemplateParam) {
-            if ($input_type_part->extra_types) {
-                foreach ($input_type_part->extra_types as $extra_type) {
+            if ($input_type_part->getIntersectionTypes()) {
+                foreach ($input_type_part->getIntersectionTypes() as $extra_type) {
                     if (self::isContainedBy(
                         $codebase,
                         $extra_type,

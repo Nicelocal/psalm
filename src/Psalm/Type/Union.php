@@ -926,9 +926,8 @@ final class Union implements TypeNode
             $this->types,
             static fn(Atomic $type): bool => $type instanceof TTemplateParam
                 || ($type instanceof TNamedObject
-                    && $type->extra_types
                     && array_filter(
-                        $type->extra_types,
+                        $type->getExtraTypes() ?? [],
                         static fn($t): bool => $t instanceof TTemplateParam
                     )
                 )
@@ -950,11 +949,9 @@ final class Union implements TypeNode
             static fn(Atomic $type): bool => $type instanceof TTemplateParam
                 || ($type instanceof TNamedObject
                     && ($type->is_static
-                        || ($type->extra_types
-                            && array_filter(
-                                $type->extra_types,
-                                static fn($t): bool => $t instanceof TTemplateParam
-                            )
+                        || array_filter(
+                            $type->getIntersectionTypes() ?? [],
+                            static fn($t): bool => $t instanceof TTemplateParam
                         )
                     )
                 )

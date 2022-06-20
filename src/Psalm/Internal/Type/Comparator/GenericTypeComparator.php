@@ -33,7 +33,7 @@ class GenericTypeComparator
         $container_was_iterable = false;
 
         if ($container_type_part instanceof TIterable
-            && !$container_type_part->extra_types
+            && !$container_type_part->getIntersectionTypes()
             && !$input_type_part instanceof TIterable
         ) {
             $container_type_part = new TGenericObject(

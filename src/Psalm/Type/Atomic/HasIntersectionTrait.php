@@ -15,7 +15,12 @@ trait HasIntersectionTrait
     /**
      * @var array<string, TNamedObject|TTemplateParam|TIterable|TObjectWithProperties>|null
      */
-    public $extra_types;
+    private $extra_types;
+
+    /**
+     * @var boolean
+     */
+    private $immutable = false;
 
     /**
      * @param  array<lowercase-string, string> $aliased_classes
@@ -52,6 +57,9 @@ trait HasIntersectionTrait
      */
     public function addIntersectionType(Atomic $type): void
     {
+        if ($this->immutable) {
+            throw new \RuntimeException('Cannot add type to immutable intersection type!');
+        }
         $this->extra_types[$type->getKey()] = $type;
     }
 
@@ -62,6 +70,12 @@ trait HasIntersectionTrait
     {
         return $this->extra_types;
     }
+
+    public function clearIntersectionTypes(): void
+    {
+        $this->extra_types = null;
+    }
+
 
     public function replaceIntersectionTemplateTypesWithArgTypes(
         TemplateResult $template_result,
@@ -99,6 +113,7 @@ trait HasIntersectionTrait
     }
 
     public function __clone() {
+        $this->immutable = false;
         if ($this->extra_types) {
             foreach ($this->extra_types as &$type) {
                 $type = clone $type;
@@ -107,6 +122,7 @@ trait HasIntersectionTrait
     }
 
     public function makeImmutable(): void {
+        $this->immutable = true;
         if ($this->extra_types) {
             foreach ($this->extra_types as $type) {
                 $type->makeImmutable();

@@ -77,7 +77,7 @@ class UnionTypeComparator
 
             if ($input_type_part instanceof TTemplateParam
                 && !$container_has_template
-                && !$input_type_part->extra_types
+                && !$input_type_part->getExtraTypes()
             ) {
                 $input_atomic_types = array_merge($input_type_part->as->getAtomicTypes(), $input_atomic_types);
                 continue;
