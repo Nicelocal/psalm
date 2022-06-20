@@ -40,6 +40,13 @@ final class TGenericObject extends TNamedObject
         $this->type_params = $type_params;
     }
 
+    final public function makeImmutable(): void
+    {
+        foreach ($this->type_params as $union) {
+            $union->makeImmutable();
+        }
+    }
+
     public function getKey(bool $include_extra = true): string
     {
         $s = '';

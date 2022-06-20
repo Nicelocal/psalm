@@ -44,6 +44,11 @@ final class TClassStringMap extends Atomic
         $this->as_type = $as_type;
     }
 
+    final public function makeImmutable(): void
+    {
+        $this->value_param->makeImmutable();
+    }
+
     public function getId(bool $exact = true, bool $nested = false): string
     {
         return 'class-string-map'

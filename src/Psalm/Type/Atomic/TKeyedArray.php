@@ -83,6 +83,13 @@ class TKeyedArray extends Atomic
         $this->class_strings = $class_strings;
     }
 
+    final public function makeImmutable(): void
+    {
+        foreach ($this->properties as $property) {
+            $property->makeImmutable();
+        }
+    }
+
     public function getId(bool $exact = true, bool $nested = false): string
     {
         $property_strings = [];

@@ -38,6 +38,11 @@ final class TTemplateKeyOf extends Atomic
         $this->as = $as;
     }
 
+    final public function makeImmutable(): void
+    {
+        $this->as->makeImmutable();
+    }
+
     public function getKey(bool $include_extra = true): string
     {
         return 'key-of<' . $this->param_name . '>';

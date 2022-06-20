@@ -281,6 +281,9 @@ final class Union implements TypeNode
     public function makeImmutable(): void
     {
         $this->immutable = true;
+        foreach ($this->types as $type) {
+            $type->makeImmutable();
+        }
     }
 
     /**

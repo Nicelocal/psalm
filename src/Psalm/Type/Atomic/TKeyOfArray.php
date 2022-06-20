@@ -21,6 +21,11 @@ final class TKeyOfArray extends TArrayKey
         $this->type = $type;
     }
 
+    final public function makeImmutable(): void
+    {
+        $this->type->makeImmutable();
+    }
+
     public function getKey(bool $include_extra = true): string
     {
         return 'key-of<' . $this->type . '>';

@@ -31,6 +31,11 @@ final class TDependentGetClass extends TString implements DependentType
         $this->as_type = $as_type;
     }
 
+    final public function makeImmutable(): void
+    {
+        $this->as_type->makeImmutable();
+    }
+
     public function getId(bool $exact = true, bool $nested = false): string
     {
         return $this->as_type->isMixed()

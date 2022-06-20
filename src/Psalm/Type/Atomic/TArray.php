@@ -35,6 +35,12 @@ class TArray extends Atomic
         $this->type_params = $type_params;
     }
 
+    final public function makeImmutable(): void
+    {
+        $this->type_params[0]->makeImmutable();
+        $this->type_params[1]->makeImmutable();
+    }
+
     public function getKey(bool $include_extra = true): string
     {
         return 'array';

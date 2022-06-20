@@ -32,6 +32,15 @@ trait CallableTrait
      */
     public $is_pure;
 
+    final public function makeImmutable(): void {
+        foreach ($this->params ?? [] as $param) {
+            $param->consolidate();
+        }
+        if ($this->return_type) {
+            $this->return_type->makeImmutable();
+        }
+    }
+
     /**
      * Constructs a new instance of a generic type
      *

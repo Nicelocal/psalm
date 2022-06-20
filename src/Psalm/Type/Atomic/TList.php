@@ -37,6 +37,11 @@ class TList extends Atomic
         $this->type_param = $type_param;
     }
 
+    final public function makeImmutable(): void
+    {
+        $this->type_param->makeImmutable();
+    }
+
     public function getId(bool $exact = true, bool $nested = false): string
     {
         return static::KEY . '<' . $this->type_param->getId($exact) . '>';

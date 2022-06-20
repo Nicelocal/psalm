@@ -47,6 +47,12 @@ final class TIterable extends Atomic
         }
     }
 
+    final public function makeImmutable(): void
+    {
+        $this->type_params[0]->makeImmutable();
+        $this->type_params[1]->makeImmutable();
+    }
+
     public function getKey(bool $include_extra = true): string
     {
         if ($include_extra && $this->extra_types) {

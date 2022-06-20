@@ -39,6 +39,11 @@ final class TTemplateParam extends Atomic
         $this->defining_class = $defining_class;
     }
 
+    final public function makeImmutable(): void
+    {
+        $this->as->makeImmutable();
+    }
+
     public function getKey(bool $include_extra = true): string
     {
         if ($include_extra && $this->extra_types) {

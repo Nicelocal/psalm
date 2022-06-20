@@ -46,6 +46,13 @@ final class TObjectWithProperties extends TObject
         $this->methods = $methods;
     }
 
+    final public function makeImmutable(): void
+    {
+        foreach ($this->properties as $property) {
+            $property->makeImmutable();
+        }
+    }
+
     public function getId(bool $exact = true, bool $nested = false): string
     {
         $extra_types = '';
