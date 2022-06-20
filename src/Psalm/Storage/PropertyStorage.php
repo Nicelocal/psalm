@@ -132,4 +132,18 @@ final class PropertyStorage implements HasAttributesInterface
     {
         return $this->attributes;
     }
+    public function consolidate(): void {
+        foreach ($this->attributes as $attribute) {
+            $attribute->consolidate();
+        }
+        if ($this->type) {
+            $this->type->makeImmutable();
+        }
+        if ($this->suggested_type) {
+            $this->suggested_type->makeImmutable();
+        }
+        if ($this->signature_type) {
+            $this->signature_type->makeImmutable();
+        }
+    }
 }

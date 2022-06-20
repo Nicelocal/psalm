@@ -470,4 +470,46 @@ final class ClassLikeStorage implements HasAttributesInterface
     {
         return $this->attributes;
     }
+
+    public function consolidate(): void {
+        foreach ($this->constants as $constant) {
+            $constant->consolidate();
+        }
+        foreach ($this->properties as $property) {
+            $property->consolidate();
+        }
+        foreach ($this->methods as $method) {
+            $method->consolidate();
+        }
+        foreach ($this->pseudo_methods as $method) {
+            $method->consolidate();
+        }
+        foreach ($this->attributes as $attribute) {
+            $attribute->consolidate();
+        }
+        if ($this->yield) {
+            $this->yield->makeImmutable();
+        }
+        foreach ($this->pseudo_property_get_types as $union) {
+            $union->makeImmutable();
+        }
+        foreach ($this->pseudo_property_set_types as $union) {
+            $union->makeImmutable();
+        }
+        foreach ($this->template_types ?? [] as $unions) {
+            foreach ($unions as $union) {
+                $union->makeImmutable();
+            }
+        }
+        foreach ($this->template_extended_offsets ?? [] as $unions) {
+            foreach ($unions as $union) {
+                $union->makeImmutable();
+            }
+        }
+        foreach ($this->template_extended_params ?? [] as $unions) {
+            foreach ($unions as $union) {
+                $union->makeImmutable();
+            }
+        }
+    }
 }

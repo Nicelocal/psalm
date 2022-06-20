@@ -158,4 +158,22 @@ final class FunctionLikeParameter implements HasAttributesInterface
     {
         return $this->attributes;
     }
+
+    public function consolidate(): void {
+        foreach ($this->attributes as $attribute) {
+            $attribute->consolidate();
+        }
+        if ($this->type) {
+            $this->type->makeImmutable();
+        }
+        if ($this->signature_type) {
+            $this->signature_type->makeImmutable();
+        }
+        if ($this->out_type) {
+            $this->out_type->makeImmutable();
+        }
+        if ($this->default_type instanceof Union) {
+            $this->default_type->makeImmutable();
+        }
+    }
 }

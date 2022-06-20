@@ -178,6 +178,9 @@ class ClassLikes
         $this->collectPredefinedClassLikes();
     }
 
+    public function consolidate(): void {
+        $this->classlike_storage_provider->consolidate();
+    }
     private function collectPredefinedClassLikes(): void
     {
         /** @var array<int, string> */

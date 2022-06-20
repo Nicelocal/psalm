@@ -104,4 +104,15 @@ final class MethodStorage extends FunctionLikeStorage
      * @var bool
      */
     public $probably_fluent = false;
+
+    public function consolidate(): void
+    {
+        parent::consolidate();
+        if ($this->self_out_type) {
+            $this->self_out_type->makeImmutable();
+        }
+        if ($this->if_this_is_type) {
+            $this->if_this_is_type->makeImmutable();
+        }
+    }
 }

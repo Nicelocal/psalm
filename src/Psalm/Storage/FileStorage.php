@@ -100,4 +100,13 @@ final class FileStorage
     {
         $this->file_path = $file_path;
     }
+
+    public function consolidate(): void {
+        foreach ($this->functions as $function) {
+            $function->consolidate();
+        }
+        foreach ($this->constants as $constant) {
+            $constant->makeImmutable();
+        }
+    }
 }

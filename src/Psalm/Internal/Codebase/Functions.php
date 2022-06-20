@@ -76,6 +76,11 @@ class Functions
         self::$stubbed_functions = [];
     }
 
+    public function consolidate(): void {
+        foreach (self::$stubbed_functions as $func) {
+            $func->consolidate();
+        }
+    }
     /**
      * @param non-empty-lowercase-string $function_id
      */

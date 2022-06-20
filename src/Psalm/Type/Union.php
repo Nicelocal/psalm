@@ -62,6 +62,13 @@ final class Union implements TypeNode
     private $types;
 
     /**
+     * Whether the type is immutable
+     *
+     * @var bool
+     */
+    private $immutable = false;
+
+    /**
      * Whether the type originated in a docblock
      *
      * @var bool
@@ -271,11 +278,19 @@ final class Union implements TypeNode
         $this->from_docblock = $from_docblock;
     }
 
+    public function makeImmutable(): void
+    {
+        $this->immutable = true;
+    }
+
     /**
      * @param non-empty-array<string, Atomic>  $types
      */
     public function replaceTypes(array $types): void
     {
+        if ($this->immutable) {
+            throw new \RuntimeException("Cannot replace types in immutable type!");
+        }
         $this->types = $types;
     }
 
@@ -289,6 +304,9 @@ final class Union implements TypeNode
 
     public function addType(Atomic $type): void
     {
+        if ($this->immutable) {
+            throw new \RuntimeException("Cannot add type to immutable type!");
+        }
         $this->types[$type->getKey()] = $type;
 
         if ($type instanceof TLiteralString) {
@@ -327,6 +345,7 @@ final class Union implements TypeNode
 
     public function __clone()
     {
+        $this->immutable = false;
         $this->literal_string_types = [];
         $this->literal_int_types = [];
         $this->literal_float_types = [];
@@ -604,6 +623,9 @@ final class Union implements TypeNode
 
     public function removeType(string $type_string): bool
     {
+        if ($this->immutable) {
+            throw new \RuntimeException("Cannot remove type from immutable type!");
+        }
         if (isset($this->types[$type_string])) {
             unset($this->types[$type_string]);
 
@@ -1026,6 +1048,9 @@ final class Union implements TypeNode
 
     public function substitute(Union $old_type, ?Union $new_type = null): void
     {
+        if ($this->immutable) {
+            throw new \RuntimeException("Cannot substitute types in immutable type!");
+        }
         if ($this->hasMixed() && !$this->isEmptyMixed()) {
             return;
         }
@@ -1423,6 +1448,9 @@ final class Union implements TypeNode
 
     public function replaceClassLike(string $old, string $new): void
     {
+        if ($this->immutable) {
+            throw new \RuntimeException("Cannot replace classlikes in immutable type!");
+        }
         foreach ($this->types as $key => $atomic_type) {
             $atomic_type->replaceClassLike($old, $new);
 

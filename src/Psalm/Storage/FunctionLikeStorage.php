@@ -307,4 +307,29 @@ abstract class FunctionLikeStorage implements HasAttributesInterface
     {
         return $this->attributes;
     }
+    public function consolidate(): void {
+        foreach ($this->attributes as $attribute) {
+            $attribute->consolidate();
+        }
+        foreach ($this->params as $param) {
+            $param->consolidate();
+        }
+        if ($this->return_type) {
+            $this->return_type->makeImmutable();
+        }
+        if ($this->signature_return_type) {
+            $this->signature_return_type->makeImmutable();
+        }
+        foreach ($this->defined_constants as $union) {
+            $union->makeImmutable();
+        }
+        foreach ($this->global_types as $union) {
+            $union->makeImmutable();
+        }
+        foreach ($this->template_types ?? [] as $unions) {
+            foreach ($unions as $union) {
+                $union->makeImmutable();
+            }
+        }
+    }
 }

@@ -88,4 +88,16 @@ final class ClassConstantStorage
         $this->type = $type;
         $this->inferred_type = $inferred_type;
     }
+
+    public function consolidate(): void {
+        foreach ($this->attributes as $attribute) {
+            $attribute->consolidate();
+        }
+        if ($this->type) {
+            $this->type->makeImmutable();
+        }
+        if ($this->inferred_type) {
+            $this->inferred_type->makeImmutable();
+        }
+    }
 }

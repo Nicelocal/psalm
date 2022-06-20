@@ -508,6 +508,17 @@ final class Codebase
         }
     }
 
+    /**
+     * Consolidates storage, making all Unions immutable.
+     *
+     * @return void
+     */
+    public function consolidateStorage(): void {
+        $this->functions->consolidate();
+        $this->classlikes->consolidate();
+        $this->file_storage_provider->consolidate();
+    }
+
     public function getFileContents(string $file_path): string
     {
         return $this->file_provider->getContents($file_path);

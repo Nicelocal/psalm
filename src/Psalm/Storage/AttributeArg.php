@@ -37,4 +37,10 @@ final class AttributeArg
         $this->type = $type;
         $this->location = $location;
     }
+
+    public function consolidate(): void {
+        if ($this->type instanceof Union) {
+            $this->type->makeImmutable();
+        }
+    }
 }

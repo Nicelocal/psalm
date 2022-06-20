@@ -44,4 +44,10 @@ final class AttributeStorage
         $this->location = $location;
         $this->name_location = $name_location;
     }
+
+    public function consolidate(): void {
+        foreach ($this->args as $arg) {
+            $arg->consolidate();
+        }
+    }
 }

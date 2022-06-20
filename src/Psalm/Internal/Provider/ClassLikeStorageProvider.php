@@ -36,6 +36,14 @@ class ClassLikeStorageProvider
         $this->cache = $cache;
     }
 
+    public function consolidate(): void {
+        foreach ($this->getAll() as $class) {
+            $class->consolidate();
+        }
+        foreach ($this->getNew() as $class) {
+            $class->consolidate();
+        }
+    }
     /**
      * @throws InvalidArgumentException when class does not exist
      */

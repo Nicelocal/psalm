@@ -680,6 +680,8 @@ class ProjectAnalyzer
             $this->config->eventDispatcher->dispatchAfterCodebasePopulated($event);
         }
 
+        $this->codebase->consolidateStorage();
+
         $this->progress->startAnalyzingFiles();
 
         $this->codebase->analyzer->analyzeFiles(

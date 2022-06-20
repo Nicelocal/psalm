@@ -39,6 +39,14 @@ class FileStorageProvider
         $this->cache = $cache;
     }
 
+    public function consolidate(): void {
+        foreach ($this->getAll() as $storage) {
+            $storage->consolidate();
+        }
+        foreach ($this->getNew() as $storage) {
+            $storage->consolidate();
+        }
+    }
     public function get(string $file_path): FileStorage
     {
         $file_path = strtolower($file_path);
