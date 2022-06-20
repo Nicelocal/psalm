@@ -106,7 +106,7 @@ trait HasIntersectionTrait
         }
     }
 
-    final public function makeImmutable(): void {
+    public function makeImmutable(): void {
         if ($this->extra_types) {
             foreach ($this->extra_types as $type) {
                 $type->makeImmutable();

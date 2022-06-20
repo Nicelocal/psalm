@@ -44,7 +44,7 @@ final class TClassStringMap extends Atomic
         $this->as_type = $as_type;
     }
 
-    final public function makeImmutable(): void
+    public function makeImmutable(): void
     {
         $this->value_param->makeImmutable();
     }

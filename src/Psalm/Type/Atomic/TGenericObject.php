@@ -47,7 +47,7 @@ final class TGenericObject extends TNamedObject
         }
     }
 
-    final public function makeImmutable(): void
+    public function makeImmutable(): void
     {
         foreach ($this->type_params as $union) {
             $union->makeImmutable();

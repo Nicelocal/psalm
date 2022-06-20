@@ -49,7 +49,7 @@ final class TObjectWithProperties extends TObject
         $this->methods = $methods;
     }
 
-    final public function makeImmutable(): void
+    public function makeImmutable(): void
     {
         $this->makeImmutableIntersection();
         foreach ($this->properties as $property) {

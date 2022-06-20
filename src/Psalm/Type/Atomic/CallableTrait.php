@@ -32,7 +32,7 @@ trait CallableTrait
      */
     public $is_pure;
 
-    final public function makeImmutable(): void {
+    public function makeImmutable(): void {
         foreach ($this->params ?? [] as $param) {
             $param->consolidate();
         }

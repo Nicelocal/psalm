@@ -36,7 +36,7 @@ final class TDependentGetClass extends TString implements DependentType
         $this->as_type = clone $this->as_type;
     }
 
-    final public function makeImmutable(): void
+    public function makeImmutable(): void
     {
         $this->as_type->makeImmutable();
     }

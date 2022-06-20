@@ -43,7 +43,7 @@ final class TTemplateValueOf extends Atomic
         $this->as = clone $this->as;
     }
 
-    final public function makeImmutable(): void
+    public function makeImmutable(): void
     {
         $this->as->makeImmutable();
     }

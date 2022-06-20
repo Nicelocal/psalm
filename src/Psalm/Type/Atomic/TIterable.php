@@ -58,7 +58,7 @@ final class TIterable extends Atomic
     }
 
 
-    final public function makeImmutable(): void
+    public function makeImmutable(): void
     {
         $this->makeImmutableIntersection();
         $this->type_params[0]->makeImmutable();

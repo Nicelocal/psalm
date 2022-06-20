@@ -41,7 +41,7 @@ class TArray extends Atomic
         $this->type_params[1] = clone $this->type_params[1];
     }
 
-    final public function makeImmutable(): void
+    public function makeImmutable(): void
     {
         $this->type_params[0]->makeImmutable();
         $this->type_params[1]->makeImmutable();

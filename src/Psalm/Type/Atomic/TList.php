@@ -37,7 +37,7 @@ class TList extends Atomic
         $this->type_param = $type_param;
     }
 
-    final public function makeImmutable(): void
+    public function makeImmutable(): void
     {
         $this->type_param->makeImmutable();
     }

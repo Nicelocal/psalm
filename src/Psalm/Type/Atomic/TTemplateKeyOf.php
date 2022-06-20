@@ -44,7 +44,7 @@ final class TTemplateKeyOf extends Atomic
         $this->as = clone $this->as;
     }
 
-    final public function makeImmutable(): void
+    public function makeImmutable(): void
     {
         $this->as->makeImmutable();
     }

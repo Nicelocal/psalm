@@ -59,7 +59,7 @@ final class TConditional extends Atomic
         $this->else_type = $else_type;
     }
 
-    final public function makeImmutable(): void
+    public function makeImmutable(): void
     {
         $this->as_type->makeImmutable();
         $this->conditional_type->makeImmutable();
