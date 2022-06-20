@@ -1046,6 +1046,8 @@ class ProjectAnalyzer
 
         $this->config->visitStubFiles($this->codebase, $this->progress);
 
+        $this->codebase->consolidateStorage();
+
         $this->progress->startAnalyzingFiles();
 
         $this->codebase->analyzer->analyzeFiles(
@@ -1157,6 +1159,8 @@ class ProjectAnalyzer
 
         $this->config->visitStubFiles($this->codebase, $this->progress);
 
+        $this->codebase->consolidateStorage();
+
         $this->progress->startAnalyzingFiles();
 
         $this->codebase->analyzer->analyzeFiles(
@@ -1199,6 +1203,8 @@ class ProjectAnalyzer
         $this->codebase->scanFiles($this->threads);
 
         $this->config->visitStubFiles($this->codebase, $this->progress);
+
+        $this->codebase->consolidateStorage();
 
         $this->progress->startAnalyzingFiles();
 
