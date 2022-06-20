@@ -115,7 +115,7 @@ class ObjectComparator
         $type_part = clone $type_part;
 
         $extra_types = $type_part->getIntersectionTypes();
-        $type_part->clearIntersectionTypes();
+        $type_part->setIntersectionTypes(null);
 
         $extra_types[$type_part->getKey()] = $type_part;
 

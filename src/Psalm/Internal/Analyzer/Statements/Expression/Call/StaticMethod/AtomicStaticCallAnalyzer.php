@@ -105,7 +105,7 @@ class AtomicStaticCallAnalyzer
                 return;
             }
 
-            $intersection_types = $lhs_type_part->extra_types;
+            $intersection_types = $lhs_type_part->getIntersectionTypes();
         } elseif ($lhs_type_part instanceof TClassString
             && $lhs_type_part->as_type
         ) {
@@ -122,7 +122,7 @@ class AtomicStaticCallAnalyzer
                 return;
             }
 
-            $intersection_types = $lhs_type_part->as_type->extra_types;
+            $intersection_types = $lhs_type_part->as_type->getIntersectionTypes();
         } elseif ($lhs_type_part instanceof TDependentGetClass
             && !$lhs_type_part->as_type->hasObject()
         ) {

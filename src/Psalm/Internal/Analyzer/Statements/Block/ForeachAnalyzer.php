@@ -549,13 +549,13 @@ class ForeachAnalyzer
                     );
                 }
             } elseif ($iterator_atomic_type instanceof TIterable) {
-                if ($iterator_atomic_type->extra_types) {
+                if ($iterator_atomic_type->getIntersectionTypes()) {
                     $iterator_atomic_type_copy = clone $iterator_atomic_type;
-                    $iterator_atomic_type_copy->extra_types = [];
+                    $iterator_atomic_type_copy->setIntersectionTypes([]);
                     $iterator_atomic_types = [$iterator_atomic_type_copy];
                     $iterator_atomic_types = array_merge(
                         $iterator_atomic_types,
-                        $iterator_atomic_type->extra_types
+                        $iterator_atomic_type->getIntersectionTypes()
                     );
                 } else {
                     $iterator_atomic_types = [$iterator_atomic_type];
@@ -735,11 +735,11 @@ class ForeachAnalyzer
         ?Union &$value_type,
         bool &$has_valid_iterator
     ): void {
-        if ($iterator_atomic_type->extra_types) {
+        if ($iterator_atomic_type->getIntersectionTypes()) {
             $iterator_atomic_type_copy = clone $iterator_atomic_type;
-            $iterator_atomic_type_copy->extra_types = [];
+            $iterator_atomic_type_copy->setIntersectionTypes([]);
             $iterator_atomic_types = [$iterator_atomic_type_copy];
-            $iterator_atomic_types = array_merge($iterator_atomic_types, $iterator_atomic_type->extra_types);
+            $iterator_atomic_types = array_merge($iterator_atomic_types, $iterator_atomic_type->getIntersectionTypes());
         } else {
             $iterator_atomic_types = [$iterator_atomic_type];
         }

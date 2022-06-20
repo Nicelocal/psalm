@@ -355,7 +355,7 @@ abstract class Atomic implements TypeNode
             || ($this instanceof TTemplateParam
                 && ($this->as->hasNamedObjectType()
                     || array_filter(
-                        $this->extra_types ?: [],
+                        $this->getIntersectionTypes() ?: [],
                         static fn($extra_type): bool => $extra_type->isNamedObjectType()
                     )
                 )
@@ -404,9 +404,9 @@ abstract class Atomic implements TypeNode
                         'Traversable'
                     )))
                 || (
-                    $this->extra_types
+                    $this->getIntersectionTypes()
                     && array_filter(
-                        $this->extra_types,
+                        $this->getIntersectionTypes(),
                         static fn(Atomic $a): bool => $a->hasTraversableInterface($codebase)
                     )
                 )
@@ -427,9 +427,9 @@ abstract class Atomic implements TypeNode
                         'Countable'
                     )))
                 || (
-                    $this->extra_types
+                    $this->getIntersectionTypes()
                     && array_filter(
-                        $this->extra_types,
+                        $this->getIntersectionTypes(),
                         static fn(Atomic $a): bool => $a->hasCountableInterface($codebase)
                     )
                 )
@@ -466,9 +466,9 @@ abstract class Atomic implements TypeNode
                         'ArrayAccess'
                     )))
                 || (
-                    $this->extra_types
+                    $this->getIntersectionTypes()
                     && array_filter(
-                        $this->extra_types,
+                        $this->getIntersectionTypes(),
                         static fn(Atomic $a): bool => $a->hasArrayAccessInterface($codebase)
                     )
                 )
@@ -492,8 +492,8 @@ abstract class Atomic implements TypeNode
             || $this instanceof TIterable
             || $this instanceof TTemplateParam
         ) {
-            if ($this->extra_types) {
-                foreach ($this->extra_types as $extra_type) {
+            if ($this->getIntersectionTypes()) {
+                foreach ($this->getIntersectionTypes() as $extra_type) {
                     $extra_type->replaceClassLike($old, $new);
                 }
             }

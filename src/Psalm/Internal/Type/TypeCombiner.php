@@ -256,7 +256,7 @@ class TypeCombiner
                 $generic_object = new TGenericObject($generic_type, $generic_type_params);
 
                 /** @psalm-suppress PropertyTypeCoercion */
-                $generic_object->extra_types = $combination->extra_types;
+                $generic_object->setIntersectionTypes($combination->extra_types);
                 $new_types[] = $generic_object;
 
                 if ($combination->named_object_types) {
@@ -275,7 +275,7 @@ class TypeCombiner
             }
 
             /** @psalm-suppress PropertyTypeCoercion */
-            $generic_object->extra_types = $combination->extra_types;
+            $generic_object->setIntersectionTypes($combination->extra_types);
             $new_types[] = $generic_object;
         }
 
@@ -509,10 +509,10 @@ class TypeCombiner
             || $type instanceof TIterable
             || $type instanceof TObjectWithProperties
         ) {
-            if ($type->extra_types) {
+            if ($type->getIntersectionTypes()) {
                 $combination->extra_types = array_merge(
                     $combination->extra_types ?: [],
-                    $type->extra_types
+                    $type->getIntersectionTypes()
                 );
             }
         }

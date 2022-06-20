@@ -622,7 +622,7 @@ class AssertionReconciler extends Reconciler
                 || $codebase->interfaceExists($type_2_atomic->value))
         ) {
             $matching_atomic_type = clone $type_2_atomic;
-            $matching_atomic_type->extra_types[$type_1_atomic->getKey()] = $type_1_atomic;
+            $matching_atomic_type->getIntersectionTypes()[$type_1_atomic->getKey()] = $type_1_atomic;
 
             return $matching_atomic_type;
         }
@@ -687,7 +687,7 @@ class AssertionReconciler extends Reconciler
         ) {
             $matching_atomic_type = clone $type_2_atomic;
 
-            $matching_atomic_type->extra_types[$type_1_atomic->getKey()] = $type_1_atomic;
+            $matching_atomic_type->getIntersectionTypes()[$type_1_atomic->getKey()] = $type_1_atomic;
 
             return $matching_atomic_type;
         }

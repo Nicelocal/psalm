@@ -374,8 +374,8 @@ class CastAnalyzer
             ) {
                 $intersection_types = [$atomic_type];
 
-                if ($atomic_type->extra_types) {
-                    $intersection_types = array_merge($intersection_types, $atomic_type->extra_types);
+                if ($atomic_type->getIntersectionTypes()) {
+                    $intersection_types = array_merge($intersection_types, $atomic_type->getIntersectionTypes());
                 }
 
                 foreach ($intersection_types as $intersection_type) {

@@ -734,8 +734,8 @@ class SimpleAssertionReconciler extends Reconciler
                 if (!$codebase->methodExists($type->value . '::' . $method_name)) {
                     $match_found = false;
 
-                    if ($type->extra_types) {
-                        foreach ($type->extra_types as $extra_type) {
+                    if ($type->getIntersectionTypes()) {
+                        foreach ($type->getIntersectionTypes() as $extra_type) {
                             if ($extra_type instanceof TNamedObject
                                 && $codebase->classOrInterfaceExists($extra_type->value)
                                 && $codebase->methodExists($extra_type->value . '::' . $method_name)
@@ -757,7 +757,7 @@ class SimpleAssertionReconciler extends Reconciler
                             [],
                             [$method_name => $type->value . '::' . $method_name]
                         );
-                        $type->extra_types[$obj->getKey()] = $obj;
+                        $type->getIntersectionTypes()[$obj->getKey()] = $obj;
                         $did_remove_type = true;
                     }
                 }
@@ -1445,7 +1445,7 @@ class SimpleAssertionReconciler extends Reconciler
                 $did_remove_type = true;
             } elseif ($type instanceof TNamedObject || $type instanceof TIterable) {
                 $countable = new TNamedObject('Countable');
-                $type->extra_types[$countable->getKey()] = $countable;
+                $type->getIntersectionTypes()[$countable->getKey()] = $countable;
                 $iterable_types[] = $type;
                 $did_remove_type = true;
             } else {
@@ -1863,7 +1863,7 @@ class SimpleAssertionReconciler extends Reconciler
                 $did_remove_type = true;
             } elseif ($type instanceof TNamedObject) {
                 $traversable = new TNamedObject('Traversable');
-                $type->extra_types[$traversable->getKey()] = $traversable;
+                $type->getIntersectionTypes()[$traversable->getKey()] = $traversable;
                 $traversable_types[] = $type;
                 $did_remove_type = true;
             } else {

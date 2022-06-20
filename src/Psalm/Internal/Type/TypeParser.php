@@ -1090,7 +1090,7 @@ class TypeParser
             $first_type = array_shift($keyed_intersection_types);
 
             if ($keyed_intersection_types) {
-                $first_type->extra_types = $keyed_intersection_types;
+                $first_type->setIntersectionTypes($keyed_intersection_types);
             }
         } else {
             foreach ($intersection_types as $intersection_type) {
@@ -1130,7 +1130,7 @@ class TypeParser
             }
 
             if ($keyed_intersection_types) {
-                $first_type->extra_types = $keyed_intersection_types;
+                $first_type->setIntersectionTypes($keyed_intersection_types);
             }
         }
 

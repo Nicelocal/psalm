@@ -15,7 +15,7 @@ trait HasIntersectionTrait
     /**
      * @var array<string, TNamedObject|TTemplateParam|TIterable|TObjectWithProperties>|null
      */
-    private $extra_types;
+    protected $extra_types;
 
     /**
      * @var boolean
@@ -71,9 +71,15 @@ trait HasIntersectionTrait
         return $this->extra_types;
     }
 
-    public function clearIntersectionTypes(): void
+    /**
+     * @param array<string, TNamedObject|TTemplateParam|TIterable|TObjectWithProperties>|null $extra
+     */
+    public function setIntersectionTypes(?array $extra): void
     {
-        $this->extra_types = null;
+        if ($this->immutable) {
+            throw new \RuntimeException('Cannot replace types in immutable intersection type!');
+        }
+        $this->extra_types = $extra;
     }
 
 

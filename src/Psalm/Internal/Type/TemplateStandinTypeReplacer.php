@@ -604,8 +604,8 @@ class TemplateStandinTypeReplacer
 
         $extra_types = [];
 
-        if ($atomic_type->extra_types) {
-            foreach ($atomic_type->extra_types as $extra_type) {
+        if ($atomic_type->getIntersectionTypes()) {
+            foreach ($atomic_type->getIntersectionTypes() as $extra_type) {
                 $extra_type = self::replace(
                     new Union([$extra_type]),
                     $template_result,
@@ -837,10 +837,10 @@ class TemplateStandinTypeReplacer
                     || $atomic_type instanceof TIterable
                     || $atomic_type instanceof TObjectWithProperties
                 ) {
-                    $atomic_type->extra_types = $extra_types;
+                    $atomic_type->setIntersectionTypes($extra_types);
                 } elseif ($atomic_type instanceof TObject && $extra_types) {
                     $atomic_type = reset($extra_types);
-                    $atomic_type->extra_types = array_slice($extra_types, 1);
+                    $atomic_type->setIntersectionTypes(array_slice($extra_types, 1));
                 }
             }
 

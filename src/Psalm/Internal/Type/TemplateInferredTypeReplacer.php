@@ -266,22 +266,22 @@ class TemplateInferredTypeReplacer
                 $template_type = clone $template_type;
             }
 
-            if ($atomic_type->extra_types) {
+            if ($atomic_type->getIntersectionTypes()) {
                 foreach ($template_type->getAtomicTypes() as $template_type_key => $atomic_template_type) {
                     if ($atomic_template_type instanceof TNamedObject
                         || $atomic_template_type instanceof TTemplateParam
                         || $atomic_template_type instanceof TIterable
                         || $atomic_template_type instanceof TObjectWithProperties
                     ) {
-                        $atomic_template_type->extra_types = array_merge(
-                            $atomic_type->extra_types,
-                            $atomic_template_type->extra_types ?: []
-                        );
+                        $atomic_template_type->setIntersectionTypes(array_merge(
+                            $atomic_type->getIntersectionTypes(),
+                            $atomic_template_type->getIntersectionTypes() ?: []
+                        ));
                     } elseif ($atomic_template_type instanceof TObject) {
-                        $first_atomic_type = array_shift($atomic_type->extra_types);
+                        $first_atomic_type = array_shift($atomic_type->getIntersectionTypes());
 
-                        if ($atomic_type->extra_types) {
-                            $first_atomic_type->extra_types = $atomic_type->extra_types;
+                        if ($atomic_type->getIntersectionTypes()) {
+                            $first_atomic_type->setIntersectionTypes($atomic_type->getIntersectionTypes());
                         }
 
                         $template_type->removeType($template_type_key);

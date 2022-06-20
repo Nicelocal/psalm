@@ -155,11 +155,11 @@ class CallAnalyzer
                             break;
                         }
 
-                        if (!$atomic_type->extra_types) {
+                        if (!$atomic_type->getIntersectionTypes()) {
                             continue;
                         }
 
-                        foreach ($atomic_type->extra_types as $intersection_type) {
+                        foreach ($atomic_type->getIntersectionTypes() as $intersection_type) {
                             if ($intersection_type instanceof TNamedObject) {
                                 $fq_class_name = $intersection_type->value;
                                 $method_id = new MethodIdentifier(
@@ -578,8 +578,8 @@ class CallAnalyzer
             if ($type_part instanceof TNamedObject) {
                 $method_id = $type_part->value . '::' . $method_name_arg->value;
 
-                if ($type_part->extra_types) {
-                    foreach ($type_part->extra_types as $extra_type) {
+                if ($type_part->getIntersectionTypes()) {
+                    foreach ($type_part->getIntersectionTypes() as $extra_type) {
                         if ($extra_type instanceof TTemplateParam
                             || $extra_type instanceof TObjectWithProperties
                         ) {
@@ -925,9 +925,9 @@ class CallAnalyzer
                         $changed_atomic_type->from_docblock = true;
 
                         if ($changed_atomic_type instanceof TNamedObject
-                            && $changed_atomic_type->extra_types
+                            && $changed_atomic_type->getIntersectionTypes()
                         ) {
-                            foreach ($changed_atomic_type->extra_types as $extra_type) {
+                            foreach ($changed_atomic_type->getIntersectionTypes() as $extra_type) {
                                 $extra_type->from_docblock = true;
                             }
                         }
