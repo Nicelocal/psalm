@@ -15,7 +15,10 @@ use function implode;
  */
 final class TTemplateParam extends Atomic
 {
-    use HasIntersectionTrait;
+    use HasIntersectionTrait {
+        HasIntersectionTrait::__clone as private cloneIntersection;
+        HasIntersectionTrait::makeImmutable as private makeImmutableIntersection;
+    }
 
     /**
      * @var string
@@ -39,8 +42,15 @@ final class TTemplateParam extends Atomic
         $this->defining_class = $defining_class;
     }
 
+    public function __clone()
+    {
+        $this->cloneIntersection();
+        $this->as = clone $this->as;
+    }
+
     final public function makeImmutable(): void
     {
+        $this->makeImmutableIntersection();
         $this->as->makeImmutable();
     }
 

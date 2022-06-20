@@ -38,6 +38,11 @@ final class AttributeArg
         $this->location = $location;
     }
 
+    public function __clone()
+    {
+        $this->type = clone $this->type;
+    }
+
     public function consolidate(): void {
         if ($this->type instanceof Union) {
             $this->type->makeImmutable();

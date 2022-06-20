@@ -45,6 +45,13 @@ final class AttributeStorage
         $this->name_location = $name_location;
     }
 
+    public function __clone()
+    {
+        foreach ($this->args as &$arg) {
+            $arg = clone $arg;
+        }
+    }
+
     public function consolidate(): void {
         foreach ($this->args as $arg) {
             $arg->consolidate();

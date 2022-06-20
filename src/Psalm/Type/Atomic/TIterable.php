@@ -16,7 +16,10 @@ use function substr;
  */
 final class TIterable extends Atomic
 {
-    use HasIntersectionTrait;
+    use HasIntersectionTrait {
+        HasIntersectionTrait::__clone as private cloneIntersection;
+        HasIntersectionTrait::makeImmutable as private makeImmutableIntersection;
+    }
     use GenericTrait;
 
     /**
@@ -47,8 +50,17 @@ final class TIterable extends Atomic
         }
     }
 
+    public function __clone()
+    {
+        $this->cloneIntersection();
+        $this->type_params[0] = clone $this->type_params[0];
+        $this->type_params[1] = clone $this->type_params[1];
+    }
+
+
     final public function makeImmutable(): void
     {
+        $this->makeImmutableIntersection();
         $this->type_params[0]->makeImmutable();
         $this->type_params[1]->makeImmutable();
     }

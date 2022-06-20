@@ -21,6 +21,11 @@ final class TValueOfArray extends Atomic
         $this->type = $type;
     }
 
+    public function __clone()
+    {
+        $this->type = clone $this->type;
+    }
+
     final public function makeImmutable(): void
     {
         $this->type->makeImmutable();
