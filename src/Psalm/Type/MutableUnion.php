@@ -284,30 +284,6 @@ final class MutableUnion implements TypeNode
         $this->bustCache();
     }
 
-    public function __clone()
-    {
-        $this->literal_string_types = [];
-        $this->literal_int_types = [];
-        $this->literal_float_types = [];
-        $this->typed_class_strings = [];
-
-        foreach ($this->types as $key => &$type) {
-            $type = clone $type;
-
-            if ($type instanceof TLiteralInt) {
-                $this->literal_int_types[$key] = $type;
-            } elseif ($type instanceof TLiteralString) {
-                $this->literal_string_types[$key] = $type;
-            } elseif ($type instanceof TLiteralFloat) {
-                $this->literal_float_types[$key] = $type;
-            } elseif ($type instanceof TClassString
-                && ($type->as_type || $type instanceof TTemplateParamClass)
-            ) {
-                $this->typed_class_strings[$key] = $type;
-            }
-        }
-    }
-
     public function removeType(string $type_string): bool
     {
         if (isset($this->types[$type_string])) {

@@ -22,7 +22,7 @@ final class TIterable extends Atomic
     /**
      * @var array{Union, Union}
      */
-    public $type_params;
+    public readonly array $type_params;
 
     /**
      * @var string
@@ -45,13 +45,6 @@ final class TIterable extends Atomic
         } else {
             $this->type_params = [Type::getMixed(), Type::getMixed()];
         }
-    }
-
-    public function __clone()
-    {
-        $this->cloneIntersection();
-        $this->type_params[0] = clone $this->type_params[0];
-        $this->type_params[1] = clone $this->type_params[1];
     }
 
     public function getKey(bool $include_extra = true): string

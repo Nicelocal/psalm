@@ -37,12 +37,12 @@ class TKeyedArray extends Atomic
     /**
      * @var non-empty-array<string|int, Union>
      */
-    public $properties;
+    public readonly array $properties;
 
     /**
      * @var array<string, bool>|null
      */
-    public $class_strings;
+    public readonly array $class_strings;
 
     /**
      * @var bool - whether or not the objectlike has been created from an explicit array
@@ -261,13 +261,6 @@ class TKeyedArray extends Atomic
         }
 
         return false;
-    }
-
-    public function __clone()
-    {
-        foreach ($this->properties as &$property) {
-            $property = clone $property;
-        }
     }
 
     public function getKey(bool $include_extra = true): string

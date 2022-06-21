@@ -15,7 +15,7 @@ trait HasIntersectionTrait
     /**
      * @var array<string, TNamedObject|TTemplateParam|TIterable|TObjectWithProperties>|null
      */
-    public $extra_types;
+    public readonly ?array $extra_types;
 
     /**
      * @param  array<lowercase-string, string> $aliased_classes
@@ -96,14 +96,5 @@ trait HasIntersectionTrait
         }
 
         $this->extra_types = $new_types;
-    }
-
-    private function cloneIntersection(): void
-    {
-        if ($this->extra_types) {
-            foreach ($this->extra_types as &$type) {
-                $type = clone $type;
-            }
-        }
     }
 }

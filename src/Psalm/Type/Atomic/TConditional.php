@@ -13,58 +13,14 @@ use Psalm\Type\Union;
  */
 final class TConditional extends Atomic
 {
-    /**
-     * @var string
-     */
-    public $param_name;
-
-    /**
-     * @var string
-     */
-    public $defining_class;
-
-    /**
-     * @var Union
-     */
-    public $as_type;
-
-    /**
-     * @var Union
-     */
-    public $conditional_type;
-
-    /**
-     * @var Union
-     */
-    public $if_type;
-
-    /**
-     * @var Union
-     */
-    public $else_type;
-
     public function __construct(
-        string $param_name,
-        string $defining_class,
-        Union $as_type,
-        Union $conditional_type,
-        Union $if_type,
-        Union $else_type
+        public readonly string $param_name,
+        public readonly string $defining_class,
+        public readonly Union $as_type,
+        public readonly Union $conditional_type,
+        public readonly Union $if_type,
+        public readonly Union $else_type
     ) {
-        $this->param_name = $param_name;
-        $this->defining_class = $defining_class;
-        $this->as_type = $as_type;
-        $this->conditional_type = $conditional_type;
-        $this->if_type = $if_type;
-        $this->else_type = $else_type;
-    }
-
-    public function __clone()
-    {
-        $this->conditional_type = clone $this->conditional_type;
-        $this->if_type = clone $this->if_type;
-        $this->else_type = clone $this->else_type;
-        $this->as_type = clone $this->as_type;
     }
 
     public function getKey(bool $include_extra = true): string

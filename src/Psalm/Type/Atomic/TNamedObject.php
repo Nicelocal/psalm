@@ -49,11 +49,6 @@ class TNamedObject extends Atomic
         $this->definite_class = $definite_class;
     }
 
-    public function __clone()
-    {
-        $this->cloneIntersection();
-    }
-
     public function getKey(bool $include_extra = true): string
     {
         if ($include_extra && $this->extra_types) {

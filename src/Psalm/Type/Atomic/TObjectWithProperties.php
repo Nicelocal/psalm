@@ -25,25 +25,13 @@ final class TObjectWithProperties extends TObject
     use HasIntersectionTrait;
 
     /**
-     * @var array<string|int, Union>
-     */
-    public $properties;
-
-    /**
-     * @var array<string, string>
-     */
-    public $methods;
-
-    /**
      * Constructs a new instance of a generic type
      *
      * @param array<string|int, Union> $properties
      * @param array<string, string> $methods
      */
-    public function __construct(array $properties, array $methods = [])
+    public function __construct(public readonly array $properties, public readonly array $methods = [])
     {
-        $this->properties = $properties;
-        $this->methods = $methods;
     }
 
     public function getId(bool $exact = true, bool $nested = false): string
@@ -134,14 +122,6 @@ final class TObjectWithProperties extends TObject
     public function canBeFullyExpressedInPhp(int $analysis_php_version_id): bool
     {
         return false;
-    }
-
-    public function __clone()
-    {
-        $this->cloneIntersection();
-        foreach ($this->properties as &$property) {
-            $property = clone $property;
-        }
     }
 
     public function equals(Atomic $other_type, bool $ensure_source_equality): bool

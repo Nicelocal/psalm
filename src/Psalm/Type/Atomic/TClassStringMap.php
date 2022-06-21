@@ -20,28 +20,10 @@ use function get_class;
 final class TClassStringMap extends Atomic
 {
     /**
-     * @var string
-     */
-    public $param_name;
-
-    /**
-     * @var ?TNamedObject
-     */
-    public $as_type;
-
-    /**
-     * @var Union
-     */
-    public $value_param;
-
-    /**
      * Constructs a new instance of a list
      */
-    public function __construct(string $param_name, ?TNamedObject $as_type, Union $value_param)
+    public function __construct(public readonly string $param_name, public readonly ?TNamedObject $as_type, public readonly Union $value_param)
     {
-        $this->value_param = $value_param;
-        $this->param_name = $param_name;
-        $this->as_type = $as_type;
     }
 
     public function getId(bool $exact = true, bool $nested = false): string
@@ -54,11 +36,6 @@ final class TClassStringMap extends Atomic
             . ', '
             . $this->value_param->getId($exact)
             . '>';
-    }
-
-    public function __clone()
-    {
-        $this->value_param = clone $this->value_param;
     }
 
     /**

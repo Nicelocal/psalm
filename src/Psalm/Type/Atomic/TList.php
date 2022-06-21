@@ -21,30 +21,19 @@ use function get_class;
  */
 class TList extends Atomic
 {
-    /**
-     * @var Union
-     */
-    public $type_param;
-
     /** @var non-empty-lowercase-string */
     public const KEY = 'list';
 
     /**
      * Constructs a new instance of a list
      */
-    public function __construct(Union $type_param)
+    public function __construct(public readonly Union $type_param)
     {
-        $this->type_param = $type_param;
     }
 
     public function getId(bool $exact = true, bool $nested = false): string
     {
         return static::KEY . '<' . $this->type_param->getId($exact) . '>';
-    }
-
-    public function __clone()
-    {
-        $this->type_param = clone $this->type_param;
     }
 
     /**

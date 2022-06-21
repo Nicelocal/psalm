@@ -234,6 +234,9 @@ final class Union implements TypeNode
      */
     public $different = false;
 
+    /**
+     * @deprecated In psalm v5, Unions are immutable and thus cloning them is pointless, use MutableUnions to build new unions.
+     */
     public function __clone()
     {
         throw new \RuntimeException('Cloning is disallowed!');

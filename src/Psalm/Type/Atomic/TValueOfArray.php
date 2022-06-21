@@ -13,17 +13,8 @@ use function array_values;
  */
 final class TValueOfArray extends Atomic
 {
-    /** @var Union */
-    public $type;
-
-    public function __construct(Union $type)
+    public function __construct(public readonly Union $type)
     {
-        $this->type = $type;
-    }
-
-    public function __clone()
-    {
-        $this->type = clone $this->type;
     }
 
     public function getKey(bool $include_extra = true): string

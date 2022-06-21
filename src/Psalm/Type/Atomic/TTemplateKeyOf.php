@@ -13,34 +13,11 @@ use Psalm\Type\Union;
  */
 final class TTemplateKeyOf extends Atomic
 {
-    /**
-     * @var string
-     */
-    public $param_name;
-
-    /**
-     * @var string
-     */
-    public $defining_class;
-
-    /**
-     * @var Union
-     */
-    public $as;
-
     public function __construct(
-        string $param_name,
-        string $defining_class,
-        Union $as
+        public readonly string $param_name,
+        public readonly string $defining_class,
+        public readonly Union $as
     ) {
-        $this->param_name = $param_name;
-        $this->defining_class = $defining_class;
-        $this->as = $as;
-    }
-
-    public function __clone()
-    {
-        $this->as = clone $this->as;
     }
 
     public function getKey(bool $include_extra = true): string

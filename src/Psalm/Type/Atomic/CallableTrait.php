@@ -18,46 +18,17 @@ use function implode;
 trait CallableTrait
 {
     /**
-     * @var list<FunctionLikeParameter>|null
-     */
-    public $params = [];
-
-    /**
-     * @var Union|null
-     */
-    public $return_type;
-
-    /**
-     * @var ?bool
-     */
-    public $is_pure;
-
-    /**
      * Constructs a new instance of a generic type
      *
      * @param list<FunctionLikeParameter> $params
      */
     public function __construct(
         string $value = 'callable',
-        ?array $params = null,
-        ?Union $return_type = null,
-        ?bool $is_pure = null
+        public readonly ?array $params = null,
+        public readonly ?Union $return_type = null,
+        public readonly ?bool $is_pure = null
     ) {
         $this->value = $value;
-        $this->params = $params;
-        $this->return_type = $return_type;
-        $this->is_pure = $is_pure;
-    }
-
-    public function __clone()
-    {
-        if ($this->params) {
-            foreach ($this->params as &$param) {
-                $param = clone $param;
-            }
-        }
-
-        $this->return_type = $this->return_type ? clone $this->return_type : null;
     }
 
     public function getKey(bool $include_extra = true): string

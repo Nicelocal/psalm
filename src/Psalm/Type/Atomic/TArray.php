@@ -16,11 +16,6 @@ class TArray extends Atomic
     use GenericTrait;
 
     /**
-     * @var array{Union, Union}
-     */
-    public $type_params;
-
-    /**
      * @var string
      */
     public $value = 'array';
@@ -30,15 +25,9 @@ class TArray extends Atomic
      *
      * @param array{Union, Union} $type_params
      */
-    public function __construct(array $type_params)
+    public function __construct(public readonly array $type_params)
     {
         $this->type_params = $type_params;
-    }
-
-    public function __clone()
-    {
-        $this->type_params[0] = clone $this->type_params[0];
-        $this->type_params[1] = clone $this->type_params[1];
     }
 
     public function getKey(bool $include_extra = true): string

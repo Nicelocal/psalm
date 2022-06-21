@@ -18,11 +18,6 @@ final class TGenericObject extends TNamedObject
 {
     use GenericTrait;
 
-    /**
-     * @var non-empty-list<Union>
-     */
-    public $type_params;
-
     /** @var bool if the parameters have been remapped to another class */
     public $remapped_params = false;
 
@@ -30,21 +25,13 @@ final class TGenericObject extends TNamedObject
      * @param string                $value the name of the object
      * @param non-empty-list<Union> $type_params
      */
-    public function __construct(string $value, array $type_params)
+    public function __construct(string $value, public readonly array $type_params)
     {
         if ($value[0] === '\\') {
             $value = substr($value, 1);
         }
 
         $this->value = $value;
-        $this->type_params = $type_params;
-    }
-
-    public function __clone()
-    {
-        foreach ($this->type_params as &$union) {
-            $union = clone $union;
-        }
     }
 
     public function getKey(bool $include_extra = true): string

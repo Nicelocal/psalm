@@ -17,26 +17,8 @@ final class TTemplateParam extends Atomic
 {
     use HasIntersectionTrait;
 
-    /**
-     * @var string
-     */
-    public $param_name;
-
-    /**
-     * @var Union
-     */
-    public $as;
-
-    /**
-     * @var string
-     */
-    public $defining_class;
-
-    public function __construct(string $param_name, Union $extends, string $defining_class)
+    public function __construct(public readonly string $param_name, public readonly Union $as, public readonly string $defining_class)
     {
-        $this->param_name = $param_name;
-        $this->as = $extends;
-        $this->defining_class = $defining_class;
     }
 
     public function __clone()
