@@ -54,7 +54,7 @@ use function reset;
 use function sort;
 use function strpos;
 
-final class MutableUnion implements TypeNode
+final class UnionBuilder implements TypeNode
 {
     use UnionTrait;
 

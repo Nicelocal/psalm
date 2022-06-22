@@ -8,14 +8,9 @@ namespace Psalm\Type\Atomic;
 final class TAnonymousClassInstance extends TNamedObject
 {
     /**
-     * @var string|null
-     */
-    public $extends;
-
-    /**
      * @param string $value the name of the object
      */
-    public function __construct(string $value, bool $is_static = false, ?string $extends = null)
+    public function __construct(string $value, bool $is_static = false, public readonly ?string $extends = null)
     {
         parent::__construct($value, $is_static);
 

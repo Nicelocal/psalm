@@ -36,8 +36,9 @@ final class TIterable extends Atomic
 
     /**
      * @param list<Union> $type_params
+     * @param array<string, TNamedObject|TTemplateParam|TIterable|TObjectWithProperties>|null $extra_types
      */
-    public function __construct(array $type_params = [])
+    public function __construct(array $type_params = [], public readonly ?array $extra_types = null)
     {
         if (count($type_params) === 2) {
             $this->has_docblock_params = true;

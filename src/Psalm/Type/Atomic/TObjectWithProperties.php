@@ -29,8 +29,9 @@ final class TObjectWithProperties extends TObject
      *
      * @param array<string|int, Union> $properties
      * @param array<string, string> $methods
+     * @param array<string, TNamedObject|TTemplateParam|TIterable|TObjectWithProperties>|null $extra_types
      */
-    public function __construct(public readonly array $properties, public readonly array $methods = [])
+    public function __construct(public readonly array $properties, public readonly array $methods = [], public readonly ?array $extra_types = [])
     {
     }
 

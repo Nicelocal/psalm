@@ -13,11 +13,6 @@ use function implode;
 trait HasIntersectionTrait
 {
     /**
-     * @var array<string, TNamedObject|TTemplateParam|TIterable|TObjectWithProperties>|null
-     */
-    public readonly ?array $extra_types;
-
-    /**
      * @param  array<lowercase-string, string> $aliased_classes
      */
     private function getNamespacedIntersectionTypes(
@@ -50,7 +45,7 @@ trait HasIntersectionTrait
     /**
      * @param TNamedObject|TTemplateParam|TIterable|TObjectWithProperties $type
      */
-    public function addIntersectionType(Atomic $type): void
+    public function addIntersectionType(Atomic $type): Atomic
     {
         $this->extra_types[$type->getKey()] = $type;
     }

@@ -17,14 +17,11 @@ final class TTemplateParam extends Atomic
 {
     use HasIntersectionTrait;
 
-    public function __construct(public readonly string $param_name, public readonly Union $as, public readonly string $defining_class)
+    /**
+     * @param array<string, TNamedObject|TTemplateParam|TIterable|TObjectWithProperties>|null $extra_types
+     */
+    public function __construct(public readonly string $param_name, public readonly Union $as, public readonly string $defining_class, public readonly ?array $extra_types = [])
     {
-    }
-
-    public function __clone()
-    {
-        $this->cloneIntersection();
-        $this->as = clone $this->as;
     }
 
     public function getKey(bool $include_extra = true): string

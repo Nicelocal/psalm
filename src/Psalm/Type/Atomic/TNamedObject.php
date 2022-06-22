@@ -37,8 +37,9 @@ class TNamedObject extends Atomic
 
     /**
      * @param string $value the name of the object
+     * @param array<string, TNamedObject|TTemplateParam|TIterable|TObjectWithProperties>|null $extra_types
      */
-    public function __construct(string $value, bool $is_static = false, bool $definite_class = false)
+    public function __construct(string $value, bool $is_static = false, bool $definite_class = false, public readonly ?array $extra_types = null)
     {
         if ($value[0] === '\\') {
             $value = substr($value, 1);

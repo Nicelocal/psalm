@@ -23,12 +23,11 @@ trait CallableTrait
      * @param list<FunctionLikeParameter> $params
      */
     public function __construct(
-        string $value = 'callable',
+        public readonly string $value = 'callable',
         public readonly ?array $params = null,
         public readonly ?Union $return_type = null,
         public readonly ?bool $is_pure = null
     ) {
-        $this->value = $value;
     }
 
     public function getKey(bool $include_extra = true): string
