@@ -1011,7 +1011,7 @@ class FunctionLikeDocblockScanner
                             $storage->signature_return_type
                         )
                     ) {
-                        $storage->return_type->addType(new TNull());
+                        $storage->return_type = $storage->return_type->getBuilder()->addType(new TNull())->freeze();
                     }
                 }
             }
