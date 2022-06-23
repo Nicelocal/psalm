@@ -152,6 +152,13 @@ final class Union implements TypeNode
     public $by_ref = false;
 
     /**
+     * Whether or not this union had a template, since replaced
+     *
+     * @var bool
+     */
+    public $had_template = false;
+
+    /**
      * @var bool
      */
     public $reference_free = false;
