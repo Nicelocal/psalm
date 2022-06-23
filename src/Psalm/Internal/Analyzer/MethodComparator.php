@@ -362,7 +362,7 @@ class MethodComparator
                 $guide_param_signature_type = $guide_param->type;
 
                 $or_null_guide_param_signature_type = $guide_param->signature_type
-                    ? clone $guide_param->signature_type
+                    ? $guide_param->signature_type->getBuilder()
                     : null;
 
                 if ($or_null_guide_param_signature_type) {
@@ -687,7 +687,7 @@ class MethodComparator
             $implementer_classlike_storage->name,
             $implementer_called_class_name,
             $implementer_classlike_storage->parent_class
-        );
+        )->getBuilder();
 
         $guide_method_storage_param_type = TypeExpander::expandUnion(
             $codebase,
@@ -701,7 +701,7 @@ class MethodComparator
             $guide_classlike_storage->is_trait && $guide_method_storage->abstract
                 ? $implementer_classlike_storage->parent_class
                 : $guide_classlike_storage->parent_class
-        );
+        )->getBuilder();
 
         $guide_class_name = $guide_classlike_storage->name;
 
@@ -757,7 +757,7 @@ class MethodComparator
             self::transformTemplates(
                 $implementer_classlike_storage->template_extended_params,
                 $guide_class_name,
-                $guide_method_storage_param_type,
+                $guide_method_storage_param_type->freeze(),
                 $codebase
             );
         }
@@ -1092,7 +1092,7 @@ class MethodComparator
 
             $template_result = new TemplateResult([], $template_types);
 
-            TemplateInferredTypeReplacer::replace(
+            $templated_type = TemplateInferredTypeReplacer::replace(
                 $templated_type,
                 $template_result,
                 $codebase

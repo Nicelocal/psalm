@@ -829,10 +829,10 @@ class ArrayFetchAnalyzer
                     }
 
                     if ($bad_types && $good_types) {
-                        $offset_type->substitute(
+                        $offset_type = $offset_type->getBuilder()->substitute(
                             TypeCombiner::combine($bad_types, $codebase),
                             TypeCombiner::combine($good_types, $codebase)
-                        );
+                        )->freeze();
                     }
 
                     IssueBuffer::maybeAdd(
@@ -1440,7 +1440,7 @@ class ArrayFetchAnalyzer
 
                 $expected_value_param_get = clone $type->value_param;
 
-                TemplateInferredTypeReplacer::replace(
+                $expected_value_param_get = TemplateInferredTypeReplacer::replace(
                     $expected_value_param_get,
                     $template_result_get,
                     $codebase
@@ -1449,7 +1449,7 @@ class ArrayFetchAnalyzer
                 if ($replacement_type) {
                     $expected_value_param_set = clone $type->value_param;
 
-                    TemplateInferredTypeReplacer::replace(
+                    $replacement_type = TemplateInferredTypeReplacer::replace(
                         $replacement_type,
                         $template_result_set,
                         $codebase

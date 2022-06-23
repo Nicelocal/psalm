@@ -47,7 +47,7 @@ class TemplateInferredTypeReplacer
         Union $union,
         TemplateResult $template_result,
         ?Codebase $codebase
-    ): void {
+    ): Union {
         $keys_to_unset = [];
 
         $new_types = [];
@@ -207,7 +207,7 @@ class TemplateInferredTypeReplacer
             }
         }
 
-        $union->bustCache();
+        $union = $union->getBuilder();
 
         if ($is_mixed) {
             if (!$new_types) {
@@ -221,7 +221,7 @@ class TemplateInferredTypeReplacer
                 )->getAtomicTypes()
             );
 
-            return;
+            return $union->freeze();
         }
 
         foreach ($keys_to_unset as $key) {
@@ -236,6 +236,8 @@ class TemplateInferredTypeReplacer
                 $codebase
             )->getAtomicTypes()
         );
+
+        return $union->freeze()
     }
 
     /**

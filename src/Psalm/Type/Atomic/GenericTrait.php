@@ -235,7 +235,7 @@ trait GenericTrait
         ?Codebase $codebase
     ): void {
         foreach ($this->type_params as $offset => $type_param) {
-            TemplateInferredTypeReplacer::replace(
+            $type_param = TemplateInferredTypeReplacer::replace(
                 $type_param,
                 $template_result,
                 $codebase

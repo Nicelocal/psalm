@@ -557,7 +557,7 @@ class ArrayAssignmentAnalyzer
                         ]
                     );
 
-                    TemplateInferredTypeReplacer::replace(
+                    $value_type = TemplateInferredTypeReplacer::replace(
                         $value_type,
                         $template_result,
                         $codebase

@@ -2,6 +2,7 @@
 
 namespace Psalm\Internal\Analyzer\Statements\Expression\BinaryOp;
 
+use phpDocumentor\Reflection\PseudoTypes\NumericString;
 use PhpParser;
 use Psalm\CodeLocation;
 use Psalm\Config;
@@ -193,9 +194,11 @@ class ConcatAnalyzer
             }
 
             if (!$literal_concat) {
-                $numeric_type = Type::getNumericString();
-                $numeric_type->addType(new TInt());
-                $numeric_type->addType(new TFloat());
+                $numeric_type = new Union([
+                    new NumericString,
+                    new TInt,
+                    new TFloat
+                ]);
                 $left_is_numeric = UnionTypeComparator::isContainedBy(
                     $codebase,
                     $left_type,
@@ -216,8 +219,7 @@ class ConcatAnalyzer
                     }
                 }
 
-                $lowercase_type = clone $numeric_type;
-                $lowercase_type->addType(new TLowercaseString());
+                $lowercase_type = $numeric_type->getBuilder()->addType(new TLowercaseString())->freeze();
 
                 $all_lowercase = UnionTypeComparator::isContainedBy(
                     $codebase,
@@ -229,8 +231,7 @@ class ConcatAnalyzer
                     $lowercase_type
                 );
 
-                $non_empty_string = clone $numeric_type;
-                $non_empty_string->addType(new TNonEmptyString());
+                $non_empty_string = $numeric_type->getBuilder()->addType(new TNonEmptyString())->freeze();
 
                 $has_non_empty = UnionTypeComparator::isContainedBy(
                     $codebase,

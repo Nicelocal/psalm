@@ -323,7 +323,7 @@ class TKeyedArray extends Atomic
         ?Codebase $codebase
     ): void {
         foreach ($this->properties as $property) {
-            TemplateInferredTypeReplacer::replace(
+            $property = TemplateInferredTypeReplacer::replace(
                 $property,
                 $template_result,
                 $codebase

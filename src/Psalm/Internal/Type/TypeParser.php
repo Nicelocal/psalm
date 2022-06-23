@@ -431,7 +431,7 @@ class TypeParser
                     $t->type_params
                 );
 
-                $as->substitute(new Union([$t]), new Union([$traversable]));
+                $as = $as->getBuilder()->substitute(new Union([$t]), new Union([$traversable]))->freeze();
 
                 return new TTemplateParamClass(
                     $param_name,

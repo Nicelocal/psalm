@@ -302,7 +302,7 @@ class ExistingAtomicMethodCallAnalyzer extends CallAnalyzer
                 $class_type = new Union([$lhs_type_part]);
                 $if_this_is_type = clone $method_storage->if_this_is_type;
 
-                TemplateInferredTypeReplacer::replace($if_this_is_type, $template_result, $codebase);
+                $if_this_is_type = TemplateInferredTypeReplacer::replace($if_this_is_type, $template_result, $codebase);
 
                 if (!UnionTypeComparator::isContainedBy($codebase, $class_type, $if_this_is_type)) {
                     IssueBuffer::maybeAdd(

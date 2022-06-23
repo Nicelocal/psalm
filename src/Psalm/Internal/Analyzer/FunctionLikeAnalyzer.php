@@ -1844,7 +1844,7 @@ abstract class FunctionLikeAnalyzer extends SourceAnalyzer
 
                     foreach ($context->vars_in_scope as $var_name => $var_type) {
                         if (0 === mb_strpos($var_name, '$this->')) {
-                            TemplateInferredTypeReplacer::replace($var_type, $template_result, $codebase);
+                            $var_type = TemplateInferredTypeReplacer::replace($var_type, $template_result, $codebase);
                         }
                     }
 

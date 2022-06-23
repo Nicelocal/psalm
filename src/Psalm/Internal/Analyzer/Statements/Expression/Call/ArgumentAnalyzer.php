@@ -835,6 +835,7 @@ class ArgumentAnalyzer
         if ($param_type->hasCallableType() && $param_type->isSingle()) {
             // we do this replacement early because later we don't have access to the
             // $statements_analyzer, which is necessary to understand string function names
+            $input_type = $input_type->getBuilder();
             foreach ($input_type->getAtomicTypes() as $key => $atomic_type) {
                 if (!$atomic_type instanceof TLiteralString
                     || InternalCallMapHandler::inCallMap($atomic_type->value)
@@ -851,10 +852,11 @@ class ArgumentAnalyzer
                 );
 
                 if ($candidate_callable) {
-                    $input_type->removeType($key);
-                    $input_type->addType($candidate_callable);
+                    $input_type = $input_type->removeType($key);
+                    $input_type = $input_type->addType($candidate_callable);
                 }
             }
+            $input_type = $input_type->freeze();
         }
 
         $union_comparison_results = new TypeComparisonResult();

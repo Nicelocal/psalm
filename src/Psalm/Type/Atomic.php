@@ -539,13 +539,13 @@ abstract class Atomic implements TypeNode
             if ($this->params) {
                 foreach ($this->params as $param) {
                     if ($param->type) {
-                        $param->type->replaceClassLike($old, $new);
+                        $param->type = $param->type->getBuilder()->replaceClassLike($old, $new)->freeze();
                     }
                 }
             }
 
             if ($this->return_type) {
-                $this->return_type->replaceClassLike($old, $new);
+                $this->return_type = $this->return_type->getBuilder()->replaceClassLike($old, $new)->freeze();
             }
         }
     }
