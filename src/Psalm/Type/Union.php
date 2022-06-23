@@ -211,6 +211,24 @@ final class Union implements TypeNode
             if ($key === 'types') {
                 continue;
             }
+            if ($key === 'id') {
+                continue;
+            }
+            if ($key === 'exact_id') {
+                continue;
+            }
+            if ($key === 'literal_string_types') {
+                continue;
+            }
+            if ($key === 'typed_class_strings') {
+                continue;
+            }
+            if ($key === 'literal_int_types') {
+                continue;
+            }
+            if ($key === 'literal_float_types') {
+                continue;
+            }
             $union->{$key} = $value;
         }
         return $union;
