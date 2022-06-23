@@ -201,7 +201,7 @@ final class Union implements TypeNode
      */
     public function __clone()
     {
-        throw new RuntimeException('Cloning is disallowed!');
+        //throw new RuntimeException('Cloning is disallowed!');
     }
 
     public function getBuilder(): MutableUnion
