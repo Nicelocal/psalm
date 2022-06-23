@@ -413,6 +413,7 @@ class SimpleNegatedAssertionReconciler extends Reconciler
     private static function reconcileCallable(
         Union $existing_var_type
     ): Union {
+        $existing_var_type = $existing_var_type->getBuilder();
         foreach ($existing_var_type->getAtomicTypes() as $atomic_key => $type) {
             if ($type instanceof TLiteralString
                 && InternalCallMapHandler::inCallMap($type->value)
@@ -425,7 +426,7 @@ class SimpleNegatedAssertionReconciler extends Reconciler
             }
         }
 
-        return $existing_var_type;
+        return $existing_var_type->freeze();
     }
 
     /**
@@ -513,6 +514,7 @@ class SimpleNegatedAssertionReconciler extends Reconciler
         bool $is_equality,
         ?int $min_count
     ): Union {
+        $existing_var_type = $existing_var_type->getBuilder();
         $old_var_type_string = $existing_var_type->getId();
         $existing_var_atomic_types = $existing_var_type->getAtomicTypes();
 
@@ -570,7 +572,7 @@ class SimpleNegatedAssertionReconciler extends Reconciler
             }
         }
 
-        return $existing_var_type;
+        return $existing_var_type->freeze();
     }
 
     /**
@@ -587,6 +589,7 @@ class SimpleNegatedAssertionReconciler extends Reconciler
         int &$failed_reconciliation,
         bool $is_equality
     ): Union {
+        $existing_var_type = $existing_var_type->getBuilder();
         $old_var_type_string = $existing_var_type->getId();
         $did_remove_type = false;
 
@@ -633,7 +636,7 @@ class SimpleNegatedAssertionReconciler extends Reconciler
         }
 
         if (!$existing_var_type->isUnionEmpty()) {
-            return $existing_var_type;
+            return $existing_var_type->freeze();
         }
 
         $failed_reconciliation = Reconciler::RECONCILIATION_EMPTY;
@@ -660,6 +663,7 @@ class SimpleNegatedAssertionReconciler extends Reconciler
         $old_var_type_string = $existing_var_type->getId();
         $did_remove_type = $existing_var_type->hasScalar();
 
+        $existing_var_type = $existing_var_type->getBuilder();
         if ($existing_var_type->hasType('false')) {
             $did_remove_type = true;
             $existing_var_type->removeType('false');
@@ -728,6 +732,7 @@ class SimpleNegatedAssertionReconciler extends Reconciler
         int &$failed_reconciliation,
         bool $recursive_check
     ): Union {
+        $existing_var_type = $existing_var_type->getBuilder();
         $old_var_type_string = $existing_var_type->getId();
 
         $did_remove_type = $existing_var_type->possibly_undefined
@@ -894,7 +899,7 @@ class SimpleNegatedAssertionReconciler extends Reconciler
         }
 
         assert(!$existing_var_type->isUnionEmpty());
-        return $existing_var_type;
+        return $existing_var_type->freeze();
     }
 
     /**
@@ -1685,6 +1690,7 @@ class SimpleNegatedAssertionReconciler extends Reconciler
         ?CodeLocation       $code_location,
         array               $suppressed_issues
     ): Union {
+        $existing_var_type = $existing_var_type->getBuilder();
         $assertion_value = $assertion->value;
 
         $did_remove_type = false;
@@ -1773,7 +1779,7 @@ class SimpleNegatedAssertionReconciler extends Reconciler
             $existing_var_type->addType(new TNever());
         }
 
-        return $existing_var_type;
+        return $existing_var_type->freeze();
     }
 
     /**
@@ -1789,6 +1795,7 @@ class SimpleNegatedAssertionReconciler extends Reconciler
         ?CodeLocation          $code_location,
         array                  $suppressed_issues
     ): Union {
+        $existing_var_type = $existing_var_type->getBuilder();
         $assertion_value = $assertion->value;
 
         $did_remove_type = false;
@@ -1874,6 +1881,6 @@ class SimpleNegatedAssertionReconciler extends Reconciler
             $existing_var_type->addType(new TNever());
         }
 
-        return $existing_var_type;
+        return $existing_var_type->freeze();
     }
 }

@@ -729,6 +729,7 @@ class MethodComparator
             }
         }
 
+        $implementer_method_storage_param_type = $implementer_method_storage_param_type->getBuilder();
         foreach ($implementer_method_storage_param_type->getAtomicTypes() as $k => $t) {
             if ($t instanceof TTemplateParam
                 && strpos($t->defining_class, 'fn-') === 0
@@ -740,7 +741,9 @@ class MethodComparator
                 }
             }
         }
+        $implementer_method_storage_param_type = $implementer_method_storage_param_type->freeze();
 
+        $guide_method_storage_param_type = $guide_method_storage_param_type->getBuilder();
         foreach ($guide_method_storage_param_type->getAtomicTypes() as $k => $t) {
             if ($t instanceof TTemplateParam
                 && strpos($t->defining_class, 'fn-') === 0
@@ -752,6 +755,7 @@ class MethodComparator
                 }
             }
         }
+        $guide_method_storage_param_type = $guide_method_storage_param_type->freeze();
 
         if ($implementer_classlike_storage->template_extended_params) {
             self::transformTemplates(

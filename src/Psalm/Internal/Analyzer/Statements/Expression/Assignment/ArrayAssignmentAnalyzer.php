@@ -909,7 +909,7 @@ class ArrayAssignmentAnalyzer
                 );
             }
 
-            $new_child_type->removeType('null');
+            $new_child_type = $new_child_type->getBuilder()->removeType('null')->freeze();
             $new_child_type->possibly_undefined = false;
 
             if (!$child_stmt_type->hasObjectType()) {

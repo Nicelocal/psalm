@@ -256,7 +256,7 @@ class TypeParser
             );
 
             if ($non_nullable_type instanceof Union) {
-                $non_nullable_type->addType(new TNull);
+                $non_nullable_type = $non_nullable_type->getBuilder()->addType(new TNull)->freeze();
 
                 return $non_nullable_type;
             }

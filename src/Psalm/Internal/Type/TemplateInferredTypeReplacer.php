@@ -263,9 +263,9 @@ class TemplateInferredTypeReplacer
             $template_type = $traversed_type;
 
             if (!$atomic_type->as->isMixed() && $template_type->isMixed()) {
-                $template_type = clone $atomic_type->as;
+                $template_type = $atomic_type->as->getBuilder();
             } else {
-                $template_type = clone $template_type;
+                $template_type = $template_type->getBuilder();
             }
 
             if ($atomic_type->extra_types) {
@@ -325,7 +325,7 @@ class TemplateInferredTypeReplacer
             }
         }
 
-        return $template_type;
+        return $template_type->freeze();
     }
 
     /**

@@ -1387,9 +1387,10 @@ class ArgumentAnalyzer
             $was_cloned = false;
 
             if ($input_type->isNullable() && !$param_type->isNullable()) {
-                $input_type = clone $input_type;
+                $input_type = $input_type->getBuilder();
                 $was_cloned = true;
                 $input_type->removeType('null');
+                $input_type = $input_type->freeze();
             }
 
             if ($input_type->getId() === $param_type->getId()) {
