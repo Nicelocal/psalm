@@ -344,6 +344,12 @@ trait UnionTrait
         return implode('|', $types);
     }
 
+    public function bustCache(): void
+    {
+        $this->id = null;
+        $this->exact_id = null;
+    }
+
     public function getId(bool $exact = true): string
     {
         if ($exact && $this->exact_id) {

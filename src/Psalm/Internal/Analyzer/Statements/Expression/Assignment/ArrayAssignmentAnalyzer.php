@@ -295,7 +295,7 @@ class ArrayAssignmentAnalyzer
         $has_matching_objectlike_property = false;
         $has_matching_string = false;
 
-        $child_stmt_type = clone $child_stmt_type;
+        $child_stmt_type = $child_stmt_type->getBuilder();
 
         foreach ($child_stmt_type->getAtomicTypes() as $type) {
             if ($type instanceof TTemplateParam) {
@@ -351,7 +351,7 @@ class ArrayAssignmentAnalyzer
             }
         }
 
-        $child_stmt_type->bustCache();
+        $child_stmt_type = $child_stmt_type->freeze();
 
         if (!$has_matching_objectlike_property && !$has_matching_string) {
             if (count($key_values) === 1) {
