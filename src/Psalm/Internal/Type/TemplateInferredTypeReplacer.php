@@ -237,7 +237,7 @@ class TemplateInferredTypeReplacer
             )->getAtomicTypes()
         );
 
-        return $union->freeze()
+        return $union->freeze();
     }
 
     /**
@@ -325,7 +325,7 @@ class TemplateInferredTypeReplacer
             }
         }
 
-        return $template_type->freeze();
+        return $template_type?->freeze();
     }
 
     /**

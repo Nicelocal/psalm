@@ -992,7 +992,9 @@ abstract class FunctionLikeAnalyzer extends SourceAnalyzer
             if ($signature_type && $signature_type_location && $signature_type->hasObjectType()) {
                 $referenced_type = $signature_type;
                 if ($referenced_type->isNullable()) {
-                    $referenced_type = $referenced_type->getBuilder()->removeType('null')->freeze();
+                    $referenced_type = $referenced_type->getBuilder();
+                    $referenced_type->removeType('null');
+                    $referenced_type = $referenced_type->freeze();
                 }
                 [$start, $end] = $signature_type_location->getSelectionBounds();
                 $codebase->analyzer->addOffsetReference(

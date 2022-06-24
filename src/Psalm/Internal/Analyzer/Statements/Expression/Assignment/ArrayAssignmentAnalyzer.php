@@ -218,7 +218,9 @@ class ArrayAssignmentAnalyzer
             $new_child_type = $root_type;
         }
 
+        $new_child_type = $new_child_type->getBuilder();
         $new_child_type->removeType('null');
+        $new_child_type = $new_child_type->freeze();
 
         if (!$root_type->hasObjectType()) {
             $root_type = $new_child_type;
@@ -909,8 +911,10 @@ class ArrayAssignmentAnalyzer
                 );
             }
 
-            $new_child_type = $new_child_type->getBuilder()->removeType('null')->freeze();
+            $new_child_type = $new_child_type->getBuilder();
+            $new_child_type->removeType('null');
             $new_child_type->possibly_undefined = false;
+            $new_child_type = $new_child_type->freeze();
 
             if (!$child_stmt_type->hasObjectType()) {
                 $child_stmt_type = $new_child_type;

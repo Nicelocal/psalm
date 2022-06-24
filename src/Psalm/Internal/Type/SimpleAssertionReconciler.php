@@ -1725,7 +1725,7 @@ class SimpleAssertionReconciler extends Reconciler
             $existing_var_type->addType(new TNever());
         }
 
-        return $existing_var_type;
+        return $existing_var_type->freeze();
     }
 
     /**
@@ -2419,7 +2419,7 @@ class SimpleAssertionReconciler extends Reconciler
 
             $failed_reconciliation = 1;
 
-            return $existing_var_type;
+            return $existing_var_type->freeze();
         }
 
         $existing_var_type->possibly_undefined = false;
@@ -2508,7 +2508,7 @@ class SimpleAssertionReconciler extends Reconciler
             }
 
             if ($existing_var_type->isSingle()) {
-                return $existing_var_type;
+                return $existing_var_type->freeze();
             }
         }
 

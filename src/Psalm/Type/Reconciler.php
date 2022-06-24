@@ -680,7 +680,9 @@ class Reconciler
 
                             if (($has_isset || $has_inverted_isset) && isset($new_assertions[$new_base_key])) {
                                 if ($has_inverted_isset && $new_base_key === $key) {
+                                    $new_base_type_candidate = $new_base_type_candidate->getBuilder();
                                     $new_base_type_candidate->addType(new TNull);
+                                    $new_base_type_candidate = $new_base_type_candidate->freeze();
                                 }
 
                                 $new_base_type_candidate->possibly_undefined = true;

@@ -38,6 +38,7 @@ use Psalm\Type\Atomic\TNonEmptyNonspecificLiteralString;
 use Psalm\Type\Atomic\TNonEmptyString;
 use Psalm\Type\Atomic\TNonspecificLiteralString;
 use Psalm\Type\Atomic\TNull;
+use Psalm\Type\Atomic\TNumericString;
 use Psalm\Type\Atomic\TString;
 use Psalm\Type\Atomic\TTemplateParam;
 use Psalm\Type\Union;
@@ -195,7 +196,7 @@ class ConcatAnalyzer
 
             if (!$literal_concat) {
                 $numeric_type = new Union([
-                    new NumericString,
+                    new TNumericString,
                     new TInt,
                     new TFloat
                 ]);

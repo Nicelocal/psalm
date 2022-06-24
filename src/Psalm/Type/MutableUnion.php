@@ -259,7 +259,7 @@ final class MutableUnion implements TypeNode
         return $this;
     }
 
-    public function removeType(string $type_string): self
+    public function removeType(string $type_string): bool
     {
         if (isset($this->types[$type_string])) {
             unset($this->types[$type_string]);
@@ -274,7 +274,7 @@ final class MutableUnion implements TypeNode
 
             $this->bustCache();
 
-            return $this;
+            return true;
         }
 
         if ($type_string === 'string') {
@@ -305,7 +305,7 @@ final class MutableUnion implements TypeNode
             $this->literal_float_types = [];
         }
 
-        return $this;
+        return false;
     }
 
     public function bustCache(): void
@@ -403,7 +403,7 @@ final class MutableUnion implements TypeNode
     public function replaceClassLike(string $old, string $new): self
     {
         foreach ($this->types as $key => $atomic_type) {
-            $atomic_type = $atomic_type->getBuilder()->replaceClassLike($old, $new)->freeze();
+            $atomic_type = $atomic_type->replaceClassLike($old, $new);
 
             $this->removeType($key);
             $this->addType($atomic_type);

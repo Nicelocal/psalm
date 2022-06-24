@@ -707,7 +707,7 @@ class SimpleNegatedAssertionReconciler extends Reconciler
         }
 
         if (!$existing_var_type->isUnionEmpty()) {
-            return $existing_var_type;
+            return $existing_var_type->freeze();
         }
 
         $failed_reconciliation = Reconciler::RECONCILIATION_EMPTY;
@@ -791,7 +791,7 @@ class SimpleNegatedAssertionReconciler extends Reconciler
 
             $failed_reconciliation = 1;
 
-            return $existing_var_type;
+            return $existing_var_type->freeze();
         }
 
         if ($existing_var_type->hasType('bool')) {
@@ -1626,7 +1626,9 @@ class SimpleNegatedAssertionReconciler extends Reconciler
 
         if ($existing_var_type->hasType('resource')) {
             $did_remove_type = true;
+            $existing_var_type = $existing_var_type->getBuilder();
             $existing_var_type->removeType('resource');
+            $existing_var_type = $existing_var_type->freeze();
         }
 
         foreach ($existing_var_type->getAtomicTypes() as $type) {

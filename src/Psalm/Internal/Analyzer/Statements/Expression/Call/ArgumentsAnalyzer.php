@@ -1387,7 +1387,7 @@ class ArgumentsAnalyzer
                 );
 
                 $t = $context->vars_in_scope[$var_id]->getBuilder();
-                foreach ($t as $type) {
+                foreach ($t->getAtomicTypes() as $type) {
                     if ($type instanceof TArray && $type->isEmptyArray()) {
                         $t->removeType('array');
                         $t->addType(

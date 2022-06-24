@@ -687,7 +687,7 @@ class MethodComparator
             $implementer_classlike_storage->name,
             $implementer_called_class_name,
             $implementer_classlike_storage->parent_class
-        )->getBuilder();
+        );
 
         $guide_method_storage_param_type = TypeExpander::expandUnion(
             $codebase,
@@ -701,7 +701,7 @@ class MethodComparator
             $guide_classlike_storage->is_trait && $guide_method_storage->abstract
                 ? $implementer_classlike_storage->parent_class
                 : $guide_classlike_storage->parent_class
-        )->getBuilder();
+        );
 
         $guide_class_name = $guide_classlike_storage->name;
 
@@ -761,7 +761,7 @@ class MethodComparator
             self::transformTemplates(
                 $implementer_classlike_storage->template_extended_params,
                 $guide_class_name,
-                $guide_method_storage_param_type->freeze(),
+                $guide_method_storage_param_type,
                 $codebase
             );
         }
@@ -1059,7 +1059,7 @@ class MethodComparator
     private static function transformTemplates(
         array $template_extended_params,
         string $base_class_name,
-        Union $templated_type,
+        Union &$templated_type,
         Codebase $codebase
     ): void {
         if (isset($template_extended_params[$base_class_name])) {

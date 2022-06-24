@@ -419,7 +419,6 @@ class Reflection
         return null;
     }
 
-    /** @psalm-suppress UndefinedClass,TypeDoesNotContainType 7.4 has no ReflectionUnionType */
     public static function getPsalmTypeFromReflectionType(?ReflectionType $reflection_type = null): Union
     {
         if (!$reflection_type) {
@@ -429,7 +428,6 @@ class Reflection
         if ($reflection_type instanceof ReflectionNamedType) {
             $type = $reflection_type->getName();
         } elseif ($reflection_type instanceof ReflectionUnionType) {
-            /** @psalm-suppress MixedArgument */
             $type = implode(
                 '|',
                 array_map(

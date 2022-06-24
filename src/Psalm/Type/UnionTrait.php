@@ -229,7 +229,7 @@ trait UnionTrait
     /**
      * Constructs an Union instance
      *
-     * @param non-empty-array<int, Atomic>     $types
+     * @param non-empty-array<Atomic>     $types
      */
     public function __construct(array $types)
     {
@@ -1213,7 +1213,7 @@ trait UnionTrait
         (new FromDocblockSetter())->traverseArray($this->types);
     }
 
-    public function equals(Union $other_type, bool $ensure_source_equality = true): bool
+    public function equals(self $other_type, bool $ensure_source_equality = true): bool
     {
         if ($other_type === $this) {
             return true;

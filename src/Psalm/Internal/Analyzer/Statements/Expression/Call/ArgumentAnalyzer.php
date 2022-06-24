@@ -852,8 +852,8 @@ class ArgumentAnalyzer
                 );
 
                 if ($candidate_callable) {
-                    $input_type = $input_type->removeType($key);
-                    $input_type = $input_type->addType($candidate_callable);
+                    $input_type->removeType($key);
+                    $input_type->addType($candidate_callable);
                 }
             }
             $input_type = $input_type->freeze();
