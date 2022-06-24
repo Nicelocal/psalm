@@ -2,7 +2,6 @@
 
 namespace Psalm\Internal\Analyzer\Statements\Expression\BinaryOp;
 
-use phpDocumentor\Reflection\PseudoTypes\NumericString;
 use PhpParser;
 use Psalm\CodeLocation;
 use Psalm\Config;

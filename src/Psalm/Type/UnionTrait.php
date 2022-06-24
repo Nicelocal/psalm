@@ -38,7 +38,6 @@ use Psalm\Type\Atomic\TString;
 use Psalm\Type\Atomic\TTemplateParam;
 use Psalm\Type\Atomic\TTemplateParamClass;
 use Psalm\Type\Atomic\TTrue;
-use Psalm\Type\ImmutableUnion;
 
 use function array_filter;
 use function array_merge;
