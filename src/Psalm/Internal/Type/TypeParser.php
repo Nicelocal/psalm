@@ -397,7 +397,7 @@ class TypeParser
 
     private static function getGenericParamClass(
         string $param_name,
-        Union $as,
+        Union &$as,
         string $defining_class
     ): TTemplateParamClass {
         if ($as->hasMixed()) {

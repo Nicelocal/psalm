@@ -216,7 +216,7 @@ final class TObjectWithProperties extends TObject
         TemplateResult $template_result,
         ?Codebase $codebase
     ): void {
-        foreach ($this->properties as $property) {
+        foreach ($this->properties as &$property) {
             $property = TemplateInferredTypeReplacer::replace(
                 $property,
                 $template_result,
