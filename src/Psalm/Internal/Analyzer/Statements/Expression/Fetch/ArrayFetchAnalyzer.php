@@ -80,6 +80,7 @@ use Psalm\Type\Atomic\TTemplateKeyOf;
 use Psalm\Type\Atomic\TTemplateParam;
 use Psalm\Type\Atomic\TTemplateParamClass;
 use Psalm\Type\Atomic\TTrue;
+use Psalm\Type\MutableUnion;
 use Psalm\Type\Union;
 use UnexpectedValueException;
 
@@ -458,7 +459,7 @@ class ArrayFetchAnalyzer
         StatementsAnalyzer $statements_analyzer,
         PhpParser\Node\Expr\ArrayDimFetch $stmt,
         Union $array_type,
-        Union $offset_type,
+        Union &$offset_type_original,
         bool $in_assignment,
         ?string $extended_var_id,
         Context $context,
@@ -498,7 +499,7 @@ class ArrayFetchAnalyzer
 
         $array_access_type = null;
 
-        $offset_type = $offset_type->getBuilder();
+        $offset_type = $offset_type_original->getBuilder();
         if ($offset_type->isNull()) {
             IssueBuffer::maybeAdd(
                 new NullArrayOffset(
@@ -534,11 +535,10 @@ class ArrayFetchAnalyzer
                 }
             }
         }
-        $offset_type = $offset_type->freeze();
 
         if ($array_type->isArray()) {
             $has_valid_absolute_offset = self::checkArrayOffsetType(
-                $offset_type,
+                $offset_type->freeze(),
                 $offset_type->getAtomicTypes(),
                 $codebase
             );
@@ -622,6 +622,7 @@ class ArrayFetchAnalyzer
                 || $type instanceof TList
                 || $type instanceof TClassStringMap
             ) {
+                $offset_type_original = $offset_type->freeze();
                 $array_type = self::handleArrayAccessOnArray(
                     $in_assignment,
                     $type,
@@ -630,7 +631,7 @@ class ArrayFetchAnalyzer
                     $type_string,
                     $stmt,
                     $replacement_type,
-                    $offset_type,
+                    $offset_type_original,
                     $original_type,
                     $codebase,
                     $extended_var_id,
@@ -641,6 +642,7 @@ class ArrayFetchAnalyzer
                     $has_array_access,
                     $has_valid_expected_offset
                 );
+                $offset_type = $offset_type_original->getBuilder();
 
                 continue;
             }
@@ -654,7 +656,7 @@ class ArrayFetchAnalyzer
                     $context,
                     $replacement_type,
                     $type,
-                    $offset_type,
+                    $offset_type->freeze(),
                     $expected_offset_types,
                     $array_access_type,
                     $has_valid_expected_offset
@@ -832,10 +834,10 @@ class ArrayFetchAnalyzer
                     }
 
                     if ($bad_types && $good_types) {
-                        $offset_type = $offset_type->getBuilder()->substitute(
+                        $offset_type->substitute(
                             TypeCombiner::combine($bad_types, $codebase),
                             TypeCombiner::combine($good_types, $codebase)
-                        )->freeze();
+                        );
                     }
 
                     IssueBuffer::maybeAdd(
@@ -850,6 +852,7 @@ class ArrayFetchAnalyzer
             }
         }
 
+        $offset_type_original = $offset_type->freeze();
         if ($array_access_type === null) {
             // shouldn’t happen, but don’t crash
             return Type::getMixed();
@@ -967,24 +970,13 @@ class ArrayFetchAnalyzer
         $offset_type = $offset_type->getBuilder();
         $offset_types = $offset_type->getAtomicTypes();
 
-        $cloned = false;
-
         foreach ($offset_types as $key => $offset_type_part) {
             if ($offset_type_part instanceof TLiteralString) {
                 if (preg_match('/^(0|[1-9][0-9]*)$/', $offset_type_part->value)) {
-                    if (!$cloned) {
-                        $offset_type = clone $offset_type;
-                        $cloned = true;
-                    }
                     $offset_type->addType(new TLiteralInt((int) $offset_type_part->value));
                     $offset_type->removeType($key);
                 }
             } elseif ($offset_type_part instanceof TBool) {
-                if (!$cloned) {
-                    $offset_type = clone $offset_type;
-                    $cloned = true;
-                }
-
                 if ($offset_type_part instanceof TFalse) {
                     if (!$offset_type->ignore_falsable_issues) {
                         $offset_type->addType(new TLiteralInt(0));
