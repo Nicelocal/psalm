@@ -755,7 +755,7 @@ class ArrayAssignmentAnalyzer
                 !$is_last ? null : $assignment_type
             );
             if ($child_stmt_dim_type) {
-                $statements_analyzer->node_data->setType($child_stmt->dim, $temp)
+                $statements_analyzer->node_data->setType($child_stmt->dim, $temp);
             }
 
             $statements_analyzer->node_data->setType(
