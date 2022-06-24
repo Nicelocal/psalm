@@ -144,7 +144,7 @@ class NegatedAssertionReconciler extends Reconciler
 
             $existing_var_type->from_calculation = false;
 
-            return $existing_var_type;
+            return $existing_var_type->freeze();
         }
 
         if (!$is_equality
@@ -160,7 +160,7 @@ class NegatedAssertionReconciler extends Reconciler
                 $existing_var_type->addType(new TNamedObject('DateTime'));
             }
 
-            return $existing_var_type;
+            return $existing_var_type->freeze();
         }
 
         if (!$is_equality && $assertion_type instanceof TNamedObject) {

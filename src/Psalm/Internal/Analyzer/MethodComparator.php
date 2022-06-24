@@ -729,33 +729,35 @@ class MethodComparator
             }
         }
 
-        $implementer_method_storage_param_type = $implementer_method_storage_param_type->getBuilder();
-        foreach ($implementer_method_storage_param_type->getAtomicTypes() as $k => $t) {
+        $temp = $implementer_method_storage_param_type->getBuilder();
+        foreach ($temp->getAtomicTypes() as $k => $t) {
             if ($t instanceof TTemplateParam
                 && strpos($t->defining_class, 'fn-') === 0
             ) {
-                $implementer_method_storage_param_type->removeType($k);
+                $temp->removeType($k);
 
                 foreach ($t->as->getAtomicTypes() as $as_t) {
-                    $implementer_method_storage_param_type->addType($as_t);
+                    $temp->addType($as_t);
                 }
             }
         }
-        $implementer_method_storage_param_type = $implementer_method_storage_param_type->freeze();
+        $implementer_method_storage_param_type = $temp->freeze();
+        unset($temp);
 
-        $guide_method_storage_param_type = $guide_method_storage_param_type->getBuilder();
-        foreach ($guide_method_storage_param_type->getAtomicTypes() as $k => $t) {
+        $temp = $guide_method_storage_param_type->getBuilder();
+        foreach ($temp->getAtomicTypes() as $k => $t) {
             if ($t instanceof TTemplateParam
                 && strpos($t->defining_class, 'fn-') === 0
             ) {
-                $guide_method_storage_param_type->removeType($k);
+                $temp->removeType($k);
 
                 foreach ($t->as->getAtomicTypes() as $as_t) {
-                    $guide_method_storage_param_type->addType($as_t);
+                    $temp->addType($as_t);
                 }
             }
         }
-        $guide_method_storage_param_type = $guide_method_storage_param_type->freeze();
+        $guide_method_storage_param_type = $temp->freeze();
+        unset($temp);
 
         if ($implementer_classlike_storage->template_extended_params) {
             self::transformTemplates(
