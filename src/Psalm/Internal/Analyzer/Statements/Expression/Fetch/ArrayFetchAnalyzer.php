@@ -468,7 +468,7 @@ class ArrayFetchAnalyzer
         Union $replacement_type = null
     ): Union {
         $array_type = $array_type_original->getBuilder();
-        $offset_type = $array_type_original->getBuilder();
+        $offset_type = $offset_type_original->getBuilder();
 
         $codebase = $statements_analyzer->getCodebase();
 
@@ -794,7 +794,7 @@ class ArrayFetchAnalyzer
                     if (!$context->inside_unset) {
                         IssueBuffer::maybeAdd(
                             new PossiblyInvalidArrayOffset(
-                                'Cannot access value on variable ' . $extended_var_id . ' ' . $used_offset
+                                'Cannot 1 access value on variable ' . $extended_var_id . ' ' . $used_offset
                                     . ', expecting ' . $invalid_offset_type,
                                 new CodeLocation($statements_analyzer->getSource(), $stmt)
                             ),
@@ -843,7 +843,7 @@ class ArrayFetchAnalyzer
 
                     IssueBuffer::maybeAdd(
                         new InvalidArrayOffset(
-                            'Cannot access value on variable ' . $extended_var_id . ' ' . $used_offset
+                            'Cannot 2 access value on variable ' . $extended_var_id . ' ' . $used_offset
                                 . ', expecting ' . $invalid_offset_type,
                             new CodeLocation($statements_analyzer->getSource(), $stmt)
                         ),
