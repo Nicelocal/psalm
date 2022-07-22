@@ -794,7 +794,7 @@ class ArrayFetchAnalyzer
                     if (!$context->inside_unset) {
                         IssueBuffer::maybeAdd(
                             new PossiblyInvalidArrayOffset(
-                                'Cannot 1 access value on variable ' . $extended_var_id . ' ' . $used_offset
+                                'Cannot access value on variable ' . $extended_var_id . ' ' . $used_offset
                                     . ', expecting ' . $invalid_offset_type,
                                 new CodeLocation($statements_analyzer->getSource(), $stmt)
                             ),
@@ -843,7 +843,7 @@ class ArrayFetchAnalyzer
 
                     IssueBuffer::maybeAdd(
                         new InvalidArrayOffset(
-                            'Cannot 2 access value on variable ' . $extended_var_id . ' ' . $used_offset
+                            'Cannot access value on variable ' . $extended_var_id . ' ' . $used_offset
                                 . ', expecting ' . $invalid_offset_type,
                             new CodeLocation($statements_analyzer->getSource(), $stmt)
                         ),
