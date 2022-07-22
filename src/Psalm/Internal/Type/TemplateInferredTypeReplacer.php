@@ -56,6 +56,7 @@ class TemplateInferredTypeReplacer
 
         $inferred_lower_bounds = $template_result->lower_bounds ?: [];
 
+        $union = $union->getBuilder();
         foreach ($union->getAtomicTypes() as $key => $atomic_type) {
             $atomic_type->replaceTemplateTypesWithArgTypes($template_result, $codebase);
 
@@ -207,7 +208,7 @@ class TemplateInferredTypeReplacer
             }
         }
 
-        $union = $union->getBuilder();
+        $union->bustCache();
 
         if ($is_mixed) {
             if (!$new_types) {
