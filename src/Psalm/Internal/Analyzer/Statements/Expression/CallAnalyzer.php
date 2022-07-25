@@ -1137,49 +1137,6 @@ class CallAnalyzer
     }
 
     /**
-     * This method should detect if the new type narrows down the old type.
-     */
-    private static function isNewTypeNarrowingDownOldType(Union $new_type, Union $old_type): bool
-    {
-        if (count($new_type->getAtomicTypes()) === 1) {
-            return true;
-        }
-
-        // non-mixed is always better than mixed
-        if ($old_type->isMixed() && !$new_type->hasMixed()) {
-            return true;
-        }
-
-        // non-nullable is always better than nullable
-        if ($old_type->isNullable() && !$new_type->isNullable()) {
-            return true;
-        }
-
-        // Do not hassle around with non-single old types if they are not nullable
-        if (count($old_type->getAtomicTypes()) !== 1) {
-            return false;
-        }
-
-        // Do not hassle around with single literals as they supposed to be more accurate than any new type assertion
-        if ($old_type->isSingleFloatLiteral()
-            || $old_type->isSingleIntLiteral()
-            || $old_type->isSingleStringLiteral()
-        ) {
-            return false;
-        }
-
-        // Literals should always replace non-literals
-        if (($old_type->isString() && $new_type->allStringLiterals())
-            || ($old_type->isInt() && $new_type->allIntLiterals())
-            || ($old_type->isFloat() && $new_type->allFloatLiterals())
-        ) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * This method should kick all literals within `new_type` which are not part of the already known `old_type`.
      * So lets say we already know that the old type is one of "a", "b" or "c".
      * If another assertion takes place to determine if the value is either "a", "c" or "d", we can kick "d" as that
@@ -1187,10 +1144,6 @@ class CallAnalyzer
      */
     private static function createUnionIntersectionFromOldType(Union $new_type, Union $old_type): ?Union
     {
-        if (!self::isNewTypeNarrowingDownOldType($new_type, $old_type)) {
-            return null;
-        }
-
         if (!$new_type->allLiterals() || !$old_type->allLiterals()) {
             return $new_type;
         }
@@ -1207,7 +1160,7 @@ class CallAnalyzer
             }
         }
 
-        if ($equal_atomic_types === []) {
+        if ($equal_atomic_types === [] || count($equal_atomic_types) === count($old_type->getAtomicTypes())) {
             return null;
         }
 
