@@ -763,7 +763,7 @@ class CallAnalyzer
                             $codebase
                         );
 
-                        if ($union->isSingle()) {
+                        if (count($union->getAtomicTypes()) === 1) {
                             foreach ($union->getAtomicTypes() as $atomic_type) {
                                 if ($assertion_type instanceof TTemplateParam
                                     && $assertion_type->as->getId() === $atomic_type->getId()
@@ -1139,9 +1139,9 @@ class CallAnalyzer
     /**
      * This method should detect if the new type narrows down the old type.
      */
-    private static function isNewTypeNarrowingDownOldType(Union $old_type, Union $new_type): bool
+    private static function isNewTypeNarrowingDownOldType(Union $new_type, Union $old_type): bool
     {
-        if ($new_type->isSingle()) {
+        if (count($new_type->getAtomicTypes()) === 1) {
             return true;
         }
 
@@ -1156,7 +1156,7 @@ class CallAnalyzer
         }
 
         // Do not hassle around with non-single old types if they are not nullable
-        if (!$old_type->isSingle()) {
+        if (count($old_type->getAtomicTypes()) !== 1) {
             return false;
         }
 
@@ -1187,7 +1187,7 @@ class CallAnalyzer
      */
     private static function createUnionIntersectionFromOldType(Union $new_type, Union $old_type): ?Union
     {
-        if (!self::isNewTypeNarrowingDownOldType($old_type, $new_type)) {
+        if (!self::isNewTypeNarrowingDownOldType($new_type, $old_type)) {
             return null;
         }
 
