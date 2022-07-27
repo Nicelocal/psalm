@@ -742,12 +742,12 @@ class ArrayAssignmentAnalyzer
 
             $is_last = $i === count($child_stmts) - 1;
 
-            $temp = $child_stmt_dim_type ?? Type::getInt();
+            $child_stmt_dim_type_or_int = $child_stmt_dim_type ?? Type::getInt();
             $child_stmt_type = ArrayFetchAnalyzer::getArrayAccessTypeGivenOffset(
                 $statements_analyzer,
                 $child_stmt,
                 $array_type,
-                $temp,
+                $child_stmt_dim_type_or_int,
                 true,
                 $extended_var_id,
                 $context,
@@ -755,7 +755,7 @@ class ArrayAssignmentAnalyzer
                 !$is_last ? null : $assignment_type
             );
             if ($child_stmt->dim) {
-                $statements_analyzer->node_data->setType($child_stmt->dim, $temp);
+                $statements_analyzer->node_data->setType($child_stmt->dim, $child_stmt_dim_type_or_int);
             }
 
             $statements_analyzer->node_data->setType(

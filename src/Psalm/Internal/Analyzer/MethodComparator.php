@@ -729,35 +729,34 @@ class MethodComparator
             }
         }
 
-        $temp = $implementer_method_storage_param_type->getBuilder();
-        foreach ($temp->getAtomicTypes() as $k => $t) {
+        $builder = $implementer_method_storage_param_type->getBuilder();
+        foreach ($builder->getAtomicTypes() as $k => $t) {
             if ($t instanceof TTemplateParam
                 && strpos($t->defining_class, 'fn-') === 0
             ) {
-                $temp->removeType($k);
+                $builder->removeType($k);
 
                 foreach ($t->as->getAtomicTypes() as $as_t) {
-                    $temp->addType($as_t);
+                    $builder->addType($as_t);
                 }
             }
         }
-        $implementer_method_storage_param_type = $temp->freeze();
-        unset($temp);
+        $implementer_method_storage_param_type = $builder->freeze();
 
-        $temp = $guide_method_storage_param_type->getBuilder();
-        foreach ($temp->getAtomicTypes() as $k => $t) {
+        $builder = $guide_method_storage_param_type->getBuilder();
+        foreach ($builder->getAtomicTypes() as $k => $t) {
             if ($t instanceof TTemplateParam
                 && strpos($t->defining_class, 'fn-') === 0
             ) {
-                $temp->removeType($k);
+                $builder->removeType($k);
 
                 foreach ($t->as->getAtomicTypes() as $as_t) {
-                    $temp->addType($as_t);
+                    $builder->addType($as_t);
                 }
             }
         }
-        $guide_method_storage_param_type = $temp->freeze();
-        unset($temp);
+        $guide_method_storage_param_type = $builder->freeze();
+        unset($builder);
 
         if ($implementer_classlike_storage->template_extended_params) {
             self::transformTemplates(

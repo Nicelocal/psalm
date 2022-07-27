@@ -7,10 +7,11 @@ use Psalm\Type\Atomic\TClassString;
 use Psalm\Type\Atomic\TLiteralFloat;
 use Psalm\Type\Atomic\TLiteralInt;
 use Psalm\Type\Atomic\TLiteralString;
+use Stringable;
 
 use function get_object_vars;
 
-final class Union implements TypeNode
+final class Union implements TypeNode, Stringable
 {
     use UnionTrait;
 

@@ -60,7 +60,6 @@ class BitwiseNotAnalyzer
                         new TLiteralInt(~$type_part->value) :
                         new TInt;
 
-                    // todo:immutable this makes no sense?
                     $stmt_expr_type->removeType($type_string);
                     $stmt_expr_type->addType($type_part);
 
