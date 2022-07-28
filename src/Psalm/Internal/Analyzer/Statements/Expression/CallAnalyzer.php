@@ -753,20 +753,19 @@ class CallAnalyzer
                 $orred_rules = [];
 
                 foreach ($var_possibilities->rule as $assertion_rule) {
-                    $assertion_type = $assertion_rule->getAtomicType();
+                    $assertion_type_atomic = $assertion_rule->getAtomicType();
 
-                    if ($assertion_type) {
-                        $union = new Union([clone $assertion_type]);
-                        $union = TemplateInferredTypeReplacer::replace(
-                            $union,
+                    if ($assertion_type_atomic) {
+                        $assertion_type = TemplateInferredTypeReplacer::replace(
+                            new Union([clone $assertion_type_atomic]),
                             $template_result,
                             $codebase
                         );
 
-                        if (count($union->getAtomicTypes()) === 1) {
-                            foreach ($union->getAtomicTypes() as $atomic_type) {
-                                if ($assertion_type instanceof TTemplateParam
-                                    && $assertion_type->as->getId() === $atomic_type->getId()
+                        if (count($assertion_type->getAtomicTypes()) === 1) {
+                            foreach ($assertion_type->getAtomicTypes() as $atomic_type) {
+                                if ($assertion_type_atomic instanceof TTemplateParam
+                                    && $assertion_type_atomic->as->getId() === $atomic_type->getId()
                                 ) {
                                     continue;
                                 }
@@ -775,46 +774,46 @@ class CallAnalyzer
                                 $assertion_rule->setAtomicType($atomic_type);
                                 $orred_rules[] = $assertion_rule;
                             }
-                        } elseif (isset($context->vars_in_scope[$var_possibilities->var_id])) {
-                            $other_type = $context->vars_in_scope[$var_possibilities->var_id];
+                        } elseif (isset($context->vars_in_scope[$assertion_var_id])) {
+                            $asserted_type = $context->vars_in_scope[$assertion_var_id];
+                            if ($assertion_rule instanceof IsIdentical) {
+                                $intersection = Type::intersectUnionTypes($assertion_type, $asserted_type, $codebase);
 
-                            if ($assertion_rule instanceof IsIdentical
-                                || $assertion_rule instanceof IsType
-                            ) {
+                                if ($intersection === null) {
+                                    IssueBuffer::maybeAdd(
+                                        new TypeDoesNotContainType(
+                                            $asserted_type->getId() . ' is not contained by '
+                                            . $assertion_type->getId(),
+                                            new CodeLocation($statements_analyzer->getSource(), $expr),
+                                            $asserted_type->getId() . ' ' . $assertion_type->getId()
+                                        ),
+                                        $statements_analyzer->getSuppressedIssues()
+                                    );
+                                    $intersection = Type::getNever();
+                                } elseif ($intersection->getId(true) === $asserted_type->getId(true)) {
+                                    continue;
+                                }
+                                foreach ($intersection->getAtomicTypes() as $atomic_type) {
+                                    $orred_rules[] = new IsIdentical($atomic_type);
+                                }
+                            } elseif ($assertion_rule instanceof IsType) {
                                 if (!UnionTypeComparator::canExpressionTypesBeIdentical(
                                     $codebase,
-                                    $union,
-                                    $context->vars_in_scope[$var_possibilities->var_id]
+                                    $assertion_type,
+                                    $asserted_type
                                 )) {
                                     IssueBuffer::maybeAdd(
                                         new TypeDoesNotContainType(
-                                            $union->getId() . ' cannot be identical to ' . $other_type->getId(),
+                                            $asserted_type->getId() . ' is not contained by '
+                                            . $assertion_type->getId(),
                                             new CodeLocation($statements_analyzer->getSource(), $expr),
-                                            $union->getId() . ' ' . $other_type->getId()
+                                            $asserted_type->getId() . ' ' . $assertion_type->getId()
                                         ),
                                         $statements_analyzer->getSuppressedIssues()
                                     );
                                 }
-                            }
-                        } elseif (isset($context->vars_in_scope[$assertion_var_id])) {
-                            $other_type = $context->vars_in_scope[$assertion_var_id];
-                            $union = Type::intersectUnionTypes($union, $other_type, $codebase);
-                            if ($union) {
-                                $union->parent_nodes = $other_type->parent_nodes;
-                            }
-
-                            if ($union !== null && !$union->equals($other_type)) {
-                                foreach ($union->getAtomicTypes() as $atomic_type) {
-                                    if ($assertion_type instanceof TTemplateParam
-                                        && $assertion_type->as->getId() === $atomic_type->getId()
-                                    ) {
-                                        continue;
-                                    }
-
-                                    $assertion_rule = clone $assertion_rule;
-                                    $assertion_rule->setAtomicType($atomic_type);
-                                    $orred_rules[] = $assertion_rule;
-                                }
+                            } else {
+                                // Ignore negations and loose assertions with union types
                             }
                         }
                     } else {
