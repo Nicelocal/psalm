@@ -494,7 +494,7 @@ final class Context
                     $updated_vars[$var_id] = true;
                 }
 
-                $this->vars_in_scope[$var_id] = $existing_type;
+                $this->vars_in_scope[$var_id] = $existing_type->freeze();
             }
         }
     }

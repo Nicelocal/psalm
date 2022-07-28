@@ -1683,11 +1683,15 @@ class ArrayFetchAnalyzer
         }
     }
 
+    /**
+     * @param Type\Union|Type\MutableUnion $array_type
+     * @param Type\Union|Type\MutableUnion $offset_type
+     */
     public static function validateArrayOffset(
         StatementsAnalyzer $statements_analyzer,
         Expr $stmt,
-        Type\Union|Type\MutableUnion $array_type,
-        Type\Union|Type\MutableUnion $offset_type
+        $array_type,
+        $offset_type
     ): void {
         $all_arrays_shaped = true;
         $exact_keys = null;
