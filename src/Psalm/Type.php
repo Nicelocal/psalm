@@ -4,6 +4,7 @@ namespace Psalm;
 
 use InvalidArgumentException;
 use LogicException;
+use Psalm\Exception\TypeParseTreeException;
 use Psalm\Internal\Type\Comparator\AtomicTypeComparator;
 use Psalm\Internal\Type\Comparator\UnionTypeComparator;
 use Psalm\Internal\Type\TypeCombiner;
@@ -21,6 +22,7 @@ use Psalm\Type\Atomic\TFloat;
 use Psalm\Type\Atomic\TInt;
 use Psalm\Type\Atomic\TIntRange;
 use Psalm\Type\Atomic\TIterable;
+use Psalm\Type\Atomic\TKeyedArray;
 use Psalm\Type\Atomic\TList;
 use Psalm\Type\Atomic\TLiteralClassString;
 use Psalm\Type\Atomic\TLiteralFloat;
@@ -44,6 +46,7 @@ use Psalm\Type\Atomic\TSingleLetter;
 use Psalm\Type\Atomic\TString;
 use Psalm\Type\Atomic\TTemplateParam;
 use Psalm\Type\Atomic\TTrue;
+use Psalm\Type\Atomic\TTypeAlias;
 use Psalm\Type\Atomic\TVoid;
 use Psalm\Type\Union;
 use UnexpectedValueException;
@@ -593,13 +596,12 @@ abstract class Type
                 foreach ($type_1->getAtomicTypes() as $type_1_atomic) {
                     foreach ($type_2->getAtomicTypes() as $type_2_atomic) {
                         $intersection_atomic = self::intersectAtomicTypes(
-                            $type_1_atomic,
-                            $type_2_atomic,
+                            [$type_1_atomic, $type_2_atomic],
                             $codebase,
-                            $intersection_performed
                         );
 
                         if (null !== $intersection_atomic) {
+                            $intersection_performed = true;
                             if (null === $combined_type) {
                                 $combined_type = new Union([$intersection_atomic]);
                             } else {
@@ -665,31 +667,145 @@ abstract class Type
         return $combined_type;
     }
 
-    private static function intersectAtomicTypes(
+    /**
+     * Intersect an array of atomic types, returning a single atomic.
+     * Use intersectUnionTypes to intersect unions.
+     *
+     * @param non-empty-array<Atomic> $atomics
+     * @param Codebase $codebase
+     * @return Atomic|null
+     */
+    public static function intersectAtomicTypes(
+        array $atomics,
+        Codebase $codebase
+    ): ?Atomic {
+        if (count($atomics) === 1) {
+            throw new InvalidArgumentException("Cannot intersect a single atomic type!");
+        }
+
+        $out_types = [];
+        self::extractIntersectionTypes($atomics, $out_types, $codebase);
+
+        $init = null;
+        foreach ($out_types as $atomic) {
+            if ($init === null) {
+                $init = $atomic;
+            } else {
+                $init = self::intersectBareAtomicTypes($init, $atomic, $codebase);
+            }
+        }
+
+        return $init;
+    }
+
+    /**
+     * @param non-empty-array<Atomic> $type
+     * @param-out non-empty-array<string, Atomic> $out_types
+     */
+    private static function extractIntersectionTypes(array $types, array &$out_types, Codebase $codebase): void
+    {
+        foreach ($types as $type) {
+            if ($type instanceof TTypeAlias) {
+                $class = $codebase->classlike_storage_provider->get($type->declaring_fq_classlike_name);
+                self::extractIntersectionTypes(
+                    $class->type_aliases[$type->alias_name]->replacement_atomic_types,
+                    $out_types,
+                    $codebase
+                );
+                continue;
+            }
+            if (($type instanceof TIterable
+                || $type instanceof TNamedObject
+                || $type instanceof TTemplateParam
+                || $type instanceof TObjectWithProperties) && $type->extra_types
+            ) {
+                self::extractIntersectionTypes(
+                    $type->extra_types,
+                    $out_types,
+                    $codebase
+                );
+                $type = clone $type;
+                $type->extra_types = [];
+            }
+            $out_types[$type->getKey()] = $type;
+        }
+    }
+    private static function intersectBareAtomicTypes(
         Atomic $type_1_atomic,
         Atomic $type_2_atomic,
         Codebase $codebase,
-        bool &$intersection_performed
     ): ?Atomic {
+        if ($type_1_atomic instanceof TKeyedArray && $type_2_atomic instanceof TKeyedArray) {
+            $properties = array_intersect_key(
+                $type_1_atomic->properties,
+                $type_2_atomic->properties
+            );
+            if (!$properties) {
+                return null;
+            }
+
+            foreach ($type_2_atomic->properties as $property => $property_type) {
+                if (!array_key_exists($property, $properties)) {
+                    continue;
+                }
+
+                $intersection_type = Type::intersectUnionTypes(
+                    $properties[$property],
+                    $property_type,
+                    $codebase
+                );
+                if ($intersection_type === null) {
+                    throw new TypeParseTreeException(
+                        'Incompatible intersection types for "' . $property . '", '
+                        . $properties[$property] . ' and ' . $property_type
+                        . ' provided'
+                    );
+                }
+                $properties[$property] = $intersection_type;
+            }
+
+            return new TKeyedArray($properties);
+        }
+        if ($type_1_atomic instanceof TArray && $type_2_atomic instanceof TKeyedArray) {
+            $type_2_atomic = clone $type_2_atomic;
+            $type_2_atomic->previous_key_type = $type_1_atomic->type_params[0];
+            $type_2_atomic->previous_value_type = $type_1_atomic->type_params[1];
+            return $type_2_atomic;
+        }
+        if ($type_2_atomic instanceof TArray && $type_1_atomic instanceof TKeyedArray) {
+            $type_1_atomic = clone $type_1_atomic;
+            $type_1_atomic->previous_key_type = $type_2_atomic->type_params[0];
+            $type_1_atomic->previous_value_type = $type_2_atomic->type_params[1];
+            return $type_1_atomic;
+        }
         $intersection_atomic = null;
         $wider_type = null;
         if ($type_1_atomic instanceof TNamedObject
             && $type_2_atomic instanceof TNamedObject
         ) {
+            if ($type_1_atomic->value === 'static' && $type_2_atomic !== 'static') {
+                $intersection_atomic = clone $type_1_atomic;
+                $intersection_atomic->is_static = true;
+                return $intersection_atomic;
+            }
+            if ($type_2_atomic->value === 'static' && $type_1_atomic !== 'static') {
+                $intersection_atomic = clone $type_2_atomic;
+                $intersection_atomic->is_static = true;
+                return $intersection_atomic;
+            }
+
             if (($type_1_atomic->value === $type_2_atomic->value
                 && get_class($type_1_atomic) === TNamedObject::class
                 && get_class($type_2_atomic) !== TNamedObject::class)
             ) {
                 $intersection_atomic = clone $type_2_atomic;
                 $wider_type = $type_1_atomic;
-                $intersection_performed = true;
             } elseif (($type_1_atomic->value === $type_2_atomic->value
                 && get_class($type_2_atomic) === TNamedObject::class
                 && get_class($type_1_atomic) !== TNamedObject::class)
             ) {
                 $intersection_atomic = clone $type_1_atomic;
                 $wider_type = $type_2_atomic;
-                $intersection_performed = true;
             }
         }
         if ($type_1_atomic instanceof TInt && $type_2_atomic instanceof TInt) {
@@ -700,7 +816,6 @@ abstract class Type
             if ($int_intersection
                 && ($int_intersection->min_bound !== null || $int_intersection->max_bound !== null)
             ) {
-                $intersection_performed = true;
                 if ($int_intersection->min_bound !== null
                     && $int_intersection->min_bound === $int_intersection->max_bound
                 ) {
@@ -718,7 +833,6 @@ abstract class Type
             )) {
                 $intersection_atomic = clone $type_2_atomic;
                 $wider_type = $type_1_atomic;
-                $intersection_performed = true;
             } elseif (AtomicTypeComparator::isContainedBy(
                 $codebase,
                 $type_1_atomic,
@@ -726,7 +840,6 @@ abstract class Type
             )) {
                 $intersection_atomic = clone $type_1_atomic;
                 $wider_type = $type_2_atomic;
-                $intersection_performed = true;
             }
 
             if ($intersection_atomic
@@ -769,26 +882,8 @@ abstract class Type
                     .' Check the preceding code for errors.'
                 );
             }
-            if (!$intersection_atomic->extra_types) {
-                $intersection_atomic->extra_types = [];
-            }
-
-            $intersection_performed = true;
-
-            $wider_type_clone = clone $wider_type;
-
-            $wider_type_clone->extra_types = [];
-
-            $intersection_atomic->extra_types[$wider_type_clone->getKey()] = $wider_type_clone;
-
-            $wider_type_intersection_types = $wider_type->getIntersectionTypes();
-
-            if ($wider_type_intersection_types !== null) {
-                foreach ($wider_type_intersection_types as $wider_type_intersection_type) {
-                    $intersection_atomic->extra_types[$wider_type_intersection_type->getKey()]
-                        = clone $wider_type_intersection_type;
-                }
-            }
+            $intersection_atomic->extra_types ??= [];
+            $intersection_atomic->extra_types[$wider_type->getKey()] = $wider_type;
         }
 
         return $intersection_atomic;
