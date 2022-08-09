@@ -707,8 +707,12 @@ abstract class Type
         foreach ($types as $type) {
             if ($type instanceof TTypeAlias) {
                 $class = $codebase->classlike_storage_provider->get($type->declaring_fq_classlike_name);
+                $replacement = $class->type_aliases[$type->alias_name]->replacement_atomic_types;
+                if (count($replacement) !== 1) {
+                    throw new InvalidArgumentException("Intersections can only contain atomic types, not unions!");
+                }
                 self::extractIntersectionTypes(
-                    $class->type_aliases[$type->alias_name]->replacement_atomic_types,
+                    $replacement,
                     $out_types,
                     $codebase
                 );

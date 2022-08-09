@@ -23,6 +23,8 @@ use Psalm\Internal\Type\ParseTree\NullableTree;
 use Psalm\Internal\Type\ParseTree\TemplateAsTree;
 use Psalm\Internal\Type\ParseTree\UnionTree;
 use Psalm\Internal\Type\ParseTree\Value;
+use Psalm\Issue\InvalidIntersectionType;
+use Psalm\IssueBuffer;
 use Psalm\Storage\FunctionLikeParameter;
 use Psalm\Type;
 use Psalm\Type\Atomic;
@@ -1007,7 +1009,15 @@ class TypeParser
             $intersection_types[$name] = $atomic_type;
         }
 
-        return Type::intersectAtomicTypes($intersection_types, $codebase);
+        $type = Type::intersectAtomicTypes($intersection_types, $codebase);
+
+        if ($type === null) {
+            throw new TypeParseTreeException(
+                'Intersection type can never be satisfied'
+            );
+        }
+
+        return $type;
     }
 
     /**
