@@ -877,7 +877,7 @@ class CallAnalyzer
                 }
 
                 $simplified_clauses = Algebra::simplifyCNF(
-                    array_merge($context->clauses, $assert_clauses)
+                    [...$context->clauses, ...$assert_clauses]
                 );
 
                 $assert_type_assertions = Algebra::getTruthsFromFormula(
