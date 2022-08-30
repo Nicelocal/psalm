@@ -344,12 +344,10 @@ class AssertionReconciler extends Reconciler
             }
 
             if ($acceptable_atomic_types) {
-                return new Union([new TTemplateParam(
-                    $new_type_part->param_name,
-                    new Union($acceptable_atomic_types),
-                    $new_type_part->defining_class,
-                    $new_type_part->extra_types,
-                )]);
+                $acceptable_atomic_types = count($acceptable_atomic_types) === count($existing_var_type->getAtomicTypes())
+                    ? $existing_var_type
+                    : new Union($acceptable_atomic_types);
+                return new Union([$new_type_part->replaceAs($acceptable_atomic_types)]);
             }
         }
 
@@ -837,12 +835,7 @@ class AssertionReconciler extends Reconciler
                 return null;
             }
 
-            return new TTemplateParam(
-                $type_1_atomic->param_name,
-                $type_1_as,
-                $type_1_atomic->defining_class,
-                $type_1_atomic->extra_types
-            );
+            return $type_1_atomic->replaceAs($type_1_as);
         } else {
             return clone $type_2_atomic;
         }
@@ -1051,8 +1044,7 @@ class AssertionReconciler extends Reconciler
                     return $compatible_int_type;
                 }
 
-                $existing_var_atomic_type = new TTemplateParam(
-                    $existing_var_atomic_type->param_name,
+                $existing_var_atomic_type = $existing_var_atomic_type->replaceAs(
                     self::handleLiteralEquality(
                         $statements_analyzer,
                         $assertion,
@@ -1063,9 +1055,7 @@ class AssertionReconciler extends Reconciler
                         $negated,
                         $code_location,
                         $suppressed_issues
-                    ),
-                    $existing_var_atomic_type->defining_class,
-                    $existing_var_atomic_type->extra_types
+                    )
                 );
 
                 return new Union([$existing_var_atomic_type]);
@@ -1196,8 +1186,7 @@ class AssertionReconciler extends Reconciler
                     return $literal_asserted_type_string;
                 }
 
-                $existing_var_atomic_type = new TTemplateParam(
-                    $existing_var_atomic_type->param_name,
+                $existing_var_atomic_type = $existing_var_atomic_type->replaceAs(
                     self::handleLiteralEquality(
                         $statements_analyzer,
                         $assertion,
@@ -1208,9 +1197,7 @@ class AssertionReconciler extends Reconciler
                         $negated,
                         $code_location,
                         $suppressed_issues
-                    ),
-                    $existing_var_atomic_type->defining_class,
-                    $existing_var_atomic_type->extra_types
+                    )
                 );
 
                 return new Union([$existing_var_atomic_type]);
@@ -1341,8 +1328,7 @@ class AssertionReconciler extends Reconciler
                     return $literal_asserted_type;
                 }
 
-                $existing_var_atomic_type = new TTemplateParam(
-                    $existing_var_atomic_type->param_name,
+                $existing_var_atomic_type = $existing_var_atomic_type->replaceAs(
                     self::handleLiteralEquality(
                         $statements_analyzer,
                         $assertion,
@@ -1353,9 +1339,7 @@ class AssertionReconciler extends Reconciler
                         $negated,
                         $code_location,
                         $suppressed_issues
-                    ),
-                    $existing_var_atomic_type->defining_class,
-                    $existing_var_atomic_type->extra_types
+                    )
                 );
 
                 return new Union([$existing_var_atomic_type]);
