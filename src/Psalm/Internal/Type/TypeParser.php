@@ -96,6 +96,7 @@ use function strtolower;
 use function substr;
 
 /**
+ * @psalm-suppress InaccessibleProperty Allowed during construction
  * @internal
  */
 class TypeParser
@@ -129,10 +130,15 @@ class TypeParser
             } else {
                 $only_token[0] = TypeTokenizer::fixScalarTerms($only_token[0], $analysis_php_version_id);
 
-                $atomic = Atomic::create($only_token[0], $analysis_php_version_id, $template_type_map, $type_aliases);
-                $atomic->offset_start = 0;
-                $atomic->offset_end = strlen($only_token[0]);
-                $atomic->text = isset($only_token[2]) && $only_token[2] !== $only_token[0] ? $only_token[2] : null;
+                $atomic = Atomic::create(
+                    $only_token[0],
+                    $analysis_php_version_id,
+                    $template_type_map,
+                    $type_aliases,
+                    0,
+                    strlen($only_token[0]),
+                    isset($only_token[2]) && $only_token[2] !== $only_token[0] ? $only_token[2] : null
+                );
 
                 return new Union([$atomic]);
             }
@@ -385,13 +391,15 @@ class TypeParser
 
         $atomic_type_string = TypeTokenizer::fixScalarTerms($parse_tree->value, $analysis_php_version_id);
 
-        $atomic_type = Atomic::create($atomic_type_string, $analysis_php_version_id, $template_type_map, $type_aliases);
-
-        $atomic_type->offset_start = $parse_tree->offset_start;
-        $atomic_type->offset_end = $parse_tree->offset_end;
-        $atomic_type->text = $parse_tree->text;
-
-        return $atomic_type;
+        return Atomic::create(
+            $atomic_type_string,
+            $analysis_php_version_id,
+            $template_type_map,
+            $type_aliases,
+            $parse_tree->offset_start,
+            $parse_tree->offset_end,
+            $parse_tree->text
+        );
     }
 
     private static function getGenericParamClass(
@@ -590,10 +598,13 @@ class TypeParser
             $array_acccess = new TGenericObject('ArrayAccess', $generic_params);
             $countable = new TNamedObject('Countable');
 
-            $traversable->extra_types[$array_acccess->getKey()] = $array_acccess;
-            $traversable->extra_types[$countable->getKey()] = $countable;
-
-            return $traversable;
+            return $traversable->setIntersectionTypes(array_merge(
+                $traversable->extra_types,
+                [
+                    $array_acccess->getKey() => $array_acccess,
+                    $countable->getKey() => $countable
+                ]
+            ));
         }
 
         if ($generic_type_value === 'non-empty-array') {
@@ -1093,7 +1104,7 @@ class TypeParser
             $first_type = array_shift($keyed_intersection_types);
 
             if ($keyed_intersection_types) {
-                $first_type->extra_types = $keyed_intersection_types;
+                $first_type = $first_type->setIntersectionTypes($keyed_intersection_types);
             }
         } else {
             foreach ($intersection_types as $intersection_type) {
@@ -1133,7 +1144,7 @@ class TypeParser
             }
 
             if ($keyed_intersection_types) {
-                $first_type->extra_types = $keyed_intersection_types;
+                $first_type = $first_type->setIntersectionTypes($keyed_intersection_types);
             }
         }
 
@@ -1197,9 +1208,6 @@ class TypeParser
                 false,
                 $is_variadic
             );
-
-            // type is not authoritative
-            $param->signature_type = null;
 
             $params[] = $param;
         }
@@ -1359,13 +1367,13 @@ class TypeParser
             return new TCallableKeyedArray($properties);
         }
 
-        $object_like = new TKeyedArray($properties, $class_strings);
-
-        if ($is_tuple) {
-            $object_like->sealed = true;
-            $object_like->is_list = true;
-        }
-
-        return $object_like;
+        return new TKeyedArray(
+            $properties,
+            $class_strings,
+            $is_tuple,
+            null,
+            null,
+            $is_tuple
+        );
     }
 }
