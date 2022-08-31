@@ -14,6 +14,7 @@ use Psalm\Internal\Type\TemplateInferredTypeReplacer;
 use Psalm\Internal\Type\TemplateResult;
 use Psalm\Internal\Type\TemplateStandinTypeReplacer;
 use Psalm\Internal\Type\TypeExpander;
+use Psalm\Storage\FunctionLikeParameter;
 use Psalm\Type;
 use Psalm\Type\Atomic;
 use Psalm\Type\Atomic\TArray;
@@ -259,20 +260,20 @@ class CallableTypeComparator
                     $params = [];
 
                     foreach ($function_storage->params as $param) {
-                        $param = clone $param;
-
                         if ($param->type) {
-                            $param->type = TypeExpander::expandUnion(
-                                $codebase,
-                                $param->type,
-                                null,
-                                null,
-                                null,
-                                true,
-                                true,
-                                false,
-                                false,
-                                true
+                            $param = $param->replaceType(
+                                TypeExpander::expandUnion(
+                                    $codebase,
+                                    $param->type,
+                                    null,
+                                    null,
+                                    null,
+                                    true,
+                                    true,
+                                    false,
+                                    false,
+                                    true
+                                )
                             );
                         }
 
