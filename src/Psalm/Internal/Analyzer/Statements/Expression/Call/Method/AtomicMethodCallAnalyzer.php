@@ -92,11 +92,11 @@ class AtomicMethodCallAnalyzer extends CallAnalyzer
             $lhs_type_part->from_docblock = true;
 
             if ($lhs_type_part instanceof TNamedObject) {
-                $lhs_type_part->extra_types = $extra_types;
+                $lhs_type_part = $lhs_type_part->setIntersectionTypes($extra_types);
             } elseif ($lhs_type_part instanceof TObject && $extra_types) {
                 $lhs_type_part = array_shift($extra_types);
                 if ($extra_types) {
-                    $lhs_type_part->extra_types = $extra_types;
+                    $lhs_type_part = $lhs_type_part->setIntersectionTypes($extra_types);
                 }
             }
 
@@ -849,9 +849,7 @@ class AtomicMethodCallAnalyzer extends CallAnalyzer
                     $lhs_var_id === '$this'
                 );
 
-                $lhs_type_part = clone $mixin;
-
-                $lhs_type_part->replaceTemplateTypesWithArgTypes(
+                $lhs_type_part = $mixin->replaceTemplateTypesWithArgTypes(
                     new TemplateResult([], $mixin_class_template_params ?: []),
                     $codebase
                 );

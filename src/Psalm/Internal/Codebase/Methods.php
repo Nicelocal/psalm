@@ -723,9 +723,7 @@ class Methods
                     $types[] = new Union([new TEnumCase($original_fq_class_name, $case_name)]);
                 }
 
-                $list = new TKeyedArray($types);
-                $list->is_list = true;
-                $list->sealed = true;
+                $list = new TKeyedArray($types, null, true, null, null, true);
                 return new Union([$list]);
             }
         }
@@ -887,12 +885,17 @@ class Methods
                 if ((!$old_contained_by_new && !$new_contained_by_old)
                     || ($old_contained_by_new && $new_contained_by_old)
                 ) {
+                    $attempted_intersection = null;
                     if ($old_contained_by_new) { //implicitly $new_contained_by_old as well
-                        $attempted_intersection = Type::intersectUnionTypes(
-                            $candidate_type,
-                            $overridden_storage->return_type,
-                            $source_analyzer->getCodebase()
-                        );
+                        try {
+                            $attempted_intersection = Type::intersectUnionTypes(
+                                $candidate_type,
+                                $overridden_storage->return_type,
+                                $source_analyzer->getCodebase()
+                            );
+                        } catch (InvalidArgumentException $e) {
+                            // TODO: fix
+                        }
                     } else {
                         $attempted_intersection = Type::intersectUnionTypes(
                             $overridden_storage->return_type,

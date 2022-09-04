@@ -461,7 +461,7 @@ class ArrayFetchAnalyzer
     public static function getArrayAccessTypeGivenOffset(
         StatementsAnalyzer $statements_analyzer,
         PhpParser\Node\Expr\ArrayDimFetch $stmt,
-        Union &$array_type_original,
+        Union &$array_type,
         Union &$offset_type_original,
         bool $in_assignment,
         ?string $extended_var_id,
@@ -469,7 +469,6 @@ class ArrayFetchAnalyzer
         PhpParser\Node\Expr $assign_value = null,
         Union $replacement_type = null
     ): Union {
-        $array_type = $array_type_original->getBuilder();
         $offset_type = $offset_type_original->getBuilder();
 
         $codebase = $statements_analyzer->getCodebase();
@@ -566,7 +565,10 @@ class ArrayFetchAnalyzer
             $has_valid_absolute_offset = true;
         }
 
-        foreach ($array_type->getAtomicTypes() as $type_string => $type) {
+        $types = $array_type->getAtomicTypes();
+        $changed = false;
+        foreach ($types as $type_string => $type) {
+            $original_type_real = $type;
             $original_type = $type;
 
             if ($type instanceof TMixed
@@ -591,6 +593,7 @@ class ArrayFetchAnalyzer
                 }
 
                 $type = clone $type->as->getSingleAtomic();
+                $original_type = $type;
             }
 
             if ($type instanceof TNull) {
@@ -640,12 +643,11 @@ class ArrayFetchAnalyzer
                     $in_assignment,
                     $type,
                     $key_values,
-                    $array_type,
-                    $type_string,
+                    $array_type->hasMixed(),
                     $stmt,
                     $replacement_type,
                     $offset_type,
-                    $original_type,
+                    $original_type_real,
                     $codebase,
                     $extended_var_id,
                     $context,
@@ -655,6 +657,12 @@ class ArrayFetchAnalyzer
                     $has_array_access,
                     $has_valid_expected_offset
                 );
+
+                if ($type !== $original_type) {
+                    $changed = true;
+                    unset($types[$type_string]);
+                    $types[$type->getKey()] = $type;
+                }
 
                 continue;
             }
@@ -705,6 +713,9 @@ class ArrayFetchAnalyzer
             } elseif (!$array_type->hasMixed()) {
                 $non_array_types[] = (string)$type;
             }
+        }
+        if ($changed) {
+            $array_type = $array_type->getBuilder()->setTypes($types)->freeze();
         }
 
         if ($non_array_types) {
@@ -864,7 +875,6 @@ class ArrayFetchAnalyzer
             }
         }
 
-        $array_type_original = $array_type->freeze();
         $offset_type_original = $offset_type->freeze();
 
         if ($array_access_type === null) {
@@ -874,10 +884,6 @@ class ArrayFetchAnalyzer
 
         if ($array_type->by_ref) {
             $array_access_type->by_ref = true;
-        }
-
-        if ($in_assignment) {
-            $array_type->bustCache();
         }
 
         return $array_access_type;
@@ -1089,14 +1095,14 @@ class ArrayFetchAnalyzer
     /**
      * @param list<string> $expected_offset_types
      * @param TArray|TKeyedArray|TList|TClassStringMap $type
+     * @param-out TArray|TKeyedArray|TList|TClassStringMap $type
      * @param list<TLiteralInt|TLiteralString> $key_values
      */
     private static function handleArrayAccessOnArray(
         bool $in_assignment,
         Atomic &$type,
         array &$key_values,
-        MutableUnion $array_type,
-        string $type_string,
+        bool $hasMixed,
         PhpParser\Node\Expr\ArrayDimFetch $stmt,
         ?Union $replacement_type,
         MutableUnion $offset_type,
@@ -1123,25 +1129,19 @@ class ArrayFetchAnalyzer
                     [$previous_key_type, $previous_value_type] = $type->type_params;
 
                     // ok, type becomes an TKeyedArray
-                    $array_type->removeType($type_string);
-                    $type = new TKeyedArray([
-                        $single_atomic->value => $from_mixed_array ? Type::getMixed() : Type::getNever()
-                    ]);
-                    if ($single_atomic instanceof TLiteralClassString) {
-                        $type->class_strings[$single_atomic->value] = true;
-                    }
-
-                    $type->sealed = $from_empty_array;
-
-                    if (!$from_empty_array) {
-                        $type->previous_value_type = clone $previous_value_type;
-                        $type->previous_key_type = clone $previous_key_type;
-                    }
-
-                    $array_type->addType($type);
+                    $type = new TKeyedArray(
+                        [
+                            $single_atomic->value => $from_mixed_array ? Type::getMixed() : Type::getNever(),
+                        ],
+                        $single_atomic instanceof TLiteralClassString ? [
+                            $single_atomic->value => true
+                        ] : null,
+                        $from_empty_array,
+                        $from_empty_array ? null : $previous_key_type,
+                        $from_empty_array ? null : $previous_value_type,
+                    );
                 } elseif (!$stmt->dim && $from_empty_array && $replacement_type) {
-                    $array_type->removeType($type_string);
-                    $array_type->addType(new TNonEmptyList($replacement_type));
+                    $type = new TNonEmptyList($replacement_type);
                     return;
                 }
             } elseif ($type instanceof TKeyedArray
@@ -1149,7 +1149,9 @@ class ArrayFetchAnalyzer
                 && $type->previous_value_type->isMixed()
                 && count($key_values) === 1
             ) {
-                $type->properties[$key_values[0]->value] = Type::getMixed();
+                $properties = $type->properties;
+                $properties[$key_values[0]->value] = Type::getMixed();
+                $type = $type->setProperties($properties);
             }
         }
 
@@ -1160,16 +1162,29 @@ class ArrayFetchAnalyzer
                 || $original_type instanceof TTemplateParam
                 || !$offset_type->isInt())
         ) {
-            $type = new TArray([Type::getInt(), $type->type_param]);
-        }
-
-        if ($type instanceof TArray) {
+            $temp = new TArray([Type::getInt(), $type->type_param]);
             self::handleArrayAccessOnTArray(
                 $statements_analyzer,
                 $codebase,
                 $context,
                 $stmt,
-                $array_type,
+                $hasMixed,
+                $extended_var_id,
+                $temp,
+                $offset_type,
+                $in_assignment,
+                $expected_offset_types,
+                $array_access_type,
+                $original_type,
+                $has_valid_offset
+            );
+        } elseif ($type instanceof TArray) {
+            self::handleArrayAccessOnTArray(
+                $statements_analyzer,
+                $codebase,
+                $context,
+                $stmt,
+                $hasMixed,
                 $extended_var_id,
                 $type,
                 $offset_type,
@@ -1216,9 +1231,8 @@ class ArrayFetchAnalyzer
                 $extended_var_id,
                 $context,
                 $type,
-                $array_type,
+                $hasMixed,
                 $expected_offset_types,
-                $type_string,
                 $has_valid_offset
             );
         }
@@ -1230,15 +1244,16 @@ class ArrayFetchAnalyzer
 
     /**
      * @param list<string> $expected_offset_types
+     * @param-out TArray $type
      */
     private static function handleArrayAccessOnTArray(
         StatementsAnalyzer $statements_analyzer,
         Codebase $codebase,
         Context $context,
         PhpParser\Node\Expr\ArrayDimFetch $stmt,
-        MutableUnion $array_type,
+        bool $hasMixed,
         ?string $extended_var_id,
-        TArray $type,
+        TArray &$type,
         MutableUnion $offset_type,
         bool $in_assignment,
         array &$expected_offset_types,
@@ -1249,9 +1264,12 @@ class ArrayFetchAnalyzer
         // if we're assigning to an empty array with a key offset, refashion that array
         if ($in_assignment) {
             if ($type->isEmptyArray()) {
-                $type->type_params[0] = $offset_type->isMixed()
-                    ? Type::getArrayKey()
-                    : $offset_type->freeze();
+                $type = $type->replaceTypeParams([
+                    $offset_type->isMixed()
+                        ? Type::getArrayKey()
+                        : $offset_type->freeze(),
+                    $type->type_params[1]
+                ]);
             }
         } elseif (!$type->isEmptyArray()) {
             $expected_offset_type = $type->type_params[0]->hasMixed()
@@ -1274,12 +1292,15 @@ class ArrayFetchAnalyzer
                         && $offset_as->param_name === $original_type->param_name
                         && $offset_as->defining_class === $original_type->defining_class
                     ) {
-                        $type->type_params[1] = new Union([
-                            new TTemplateIndexedAccess(
-                                $offset_as->param_name,
-                                $templated_offset_type->param_name,
-                                $offset_as->defining_class
-                            )
+                        $type = $type->replaceTypeParams([
+                            $type->type_params[0],
+                            new Union([
+                                new TTemplateIndexedAccess(
+                                    $offset_as->param_name,
+                                    $templated_offset_type->param_name,
+                                    $offset_as->defining_class
+                                )
+                            ])
                         ]);
 
                         $has_valid_offset = true;
@@ -1358,7 +1379,7 @@ class ArrayFetchAnalyzer
         }
 
         if (!$stmt->dim && $type instanceof TNonEmptyArray && $type->count !== null) {
-            $type->count++;
+            $type = $type->setCount($type->count+1);
         }
 
         $array_access_type = Type::combineUnionTypes(
@@ -1367,7 +1388,7 @@ class ArrayFetchAnalyzer
         );
 
         if ($array_access_type->isNever()
-            && !$array_type->hasMixed()
+            && !$hasMixed
             && !$in_assignment
             && !$context->inside_isset
         ) {
@@ -1387,7 +1408,7 @@ class ArrayFetchAnalyzer
 
     private static function handleArrayAccessOnClassStringMap(
         Codebase $codebase,
-        TClassStringMap $type,
+        TClassStringMap &$type,
         MutableUnion $offset_type,
         ?Union $replacement_type,
         ?Union &$array_access_type
@@ -1448,27 +1469,27 @@ class ArrayFetchAnalyzer
                     );
                 }
 
-                $expected_value_param_get = clone $type->value_param;
-
                 $expected_value_param_get = TemplateInferredTypeReplacer::replace(
-                    $expected_value_param_get,
+                    $type->value_param,
                     $template_result_get,
                     $codebase
                 );
 
                 if ($replacement_type) {
-                    $expected_value_param_set = clone $type->value_param;
-
                     $replacement_type = TemplateInferredTypeReplacer::replace(
                         $replacement_type,
                         $template_result_set,
                         $codebase
                     );
 
-                    $type->value_param = Type::combineUnionTypes(
-                        $replacement_type,
-                        $expected_value_param_set,
-                        $codebase
+                    $type = new TClassStringMap(
+                        $type->param_name,
+                        $type->as_type,
+                        Type::combineUnionTypes(
+                            $replacement_type,
+                            $type->value_param,
+                            $codebase
+                        )
                     );
                 }
 
@@ -1484,6 +1505,7 @@ class ArrayFetchAnalyzer
     /**
      * @param list<string> $expected_offset_types
      * @param list<TLiteralString|TLiteralInt> $key_values
+     * @param-out TArray|TKeyedArray|TList $type
      */
     private static function handleArrayAccessOnKeyedArray(
         StatementsAnalyzer $statements_analyzer,
@@ -1496,10 +1518,9 @@ class ArrayFetchAnalyzer
         MutableUnion $offset_type,
         ?string $extended_var_id,
         Context $context,
-        TKeyedArray $type,
-        MutableUnion $array_type,
+        TKeyedArray &$type,
+        bool $hasMixed,
         array &$expected_offset_types,
-        string $type_string,
         bool &$has_valid_offset
     ): void {
         $generic_key_type = $type->getGenericKeyType();
@@ -1509,27 +1530,28 @@ class ArrayFetchAnalyzer
         }
 
         if ($key_values) {
+            $properties = $type->properties;
             foreach ($key_values as $key_value) {
-                if (isset($type->properties[$key_value->value]) || $replacement_type) {
+                if (isset($properties[$key_value->value]) || $replacement_type) {
                     $has_valid_offset = true;
 
                     if ($replacement_type) {
-                        $type->properties[$key_value->value] = Type::combineUnionTypes(
-                            $type->properties[$key_value->value] ?? null,
+                        $properties[$key_value->value] = Type::combineUnionTypes(
+                            $properties[$key_value->value] ?? null,
                             $replacement_type
                         );
                     }
 
                     $array_access_type = Type::combineUnionTypes(
                         $array_access_type,
-                        clone $type->properties[$key_value->value]
+                        clone $properties[$key_value->value]
                     );
                 } elseif ($in_assignment) {
-                    $type->properties[$key_value->value] = new Union([new TNever]);
+                    $properties[$key_value->value] = new Union([new TNever]);
 
                     $array_access_type = Type::combineUnionTypes(
                         $array_access_type,
-                        clone $type->properties[$key_value->value]
+                        clone $properties[$key_value->value]
                     );
                 } elseif ($type->previous_value_type) {
                     if ($codebase->config->ensure_array_string_offsets_exist) {
@@ -1554,16 +1576,16 @@ class ArrayFetchAnalyzer
                         );
                     }
 
-                    $type->properties[$key_value->value] = clone $type->previous_value_type;
+                    $properties[$key_value->value] = clone $type->previous_value_type;
 
                     $array_access_type = clone $type->previous_value_type;
-                } elseif ($array_type->hasMixed()) {
+                } elseif ($hasMixed) {
                     $has_valid_offset = true;
 
                     $array_access_type = Type::getMixed();
                 } else {
                     if ($type->sealed || !$context->inside_isset) {
-                        $object_like_keys = array_keys($type->properties);
+                        $object_like_keys = array_keys($properties);
 
                         $last_key = array_pop($object_like_keys);
 
@@ -1590,6 +1612,8 @@ class ArrayFetchAnalyzer
                     $array_access_type = Type::getMixed();
                 }
             }
+
+            $type = $type->setProperties($properties);
         } else {
             $key_type = $generic_key_type->hasMixed()
                 ? Type::getArrayKey()
@@ -1637,16 +1661,11 @@ class ArrayFetchAnalyzer
 
                     if (!$stmt->dim && $property_count) {
                         ++$property_count;
-                        $array_type->removeType($type_string);
                         $type = new TNonEmptyArray([
                             $new_key_type,
                             $generic_params,
-                        ]);
-                        $array_type->addType($type);
-                        $type->count = $property_count;
+                        ], $property_count);
                     } else {
-                        $array_type->removeType($type_string);
-
                         if (!$stmt->dim && $type->is_list) {
                             $type = new TList($generic_params);
                         } else {
@@ -1655,8 +1674,6 @@ class ArrayFetchAnalyzer
                                 $generic_params,
                             ]);
                         }
-
-                        $array_type->addType($type);
                     }
 
                     $array_access_type = Type::combineUnionTypes(
@@ -1731,12 +1748,13 @@ class ArrayFetchAnalyzer
     /**
      * @param list<string> $expected_offset_types
      * @param list<TLiteralString|TLiteralInt> $key_values
+     * @param-out TList $type
      */
     private static function handleArrayAccessOnList(
         StatementsAnalyzer $statements_analyzer,
         Codebase $codebase,
         PhpParser\Node\Expr\ArrayDimFetch $stmt,
-        TList $type,
+        TList &$type,
         MutableUnion $offset_type,
         ?string $extended_var_id,
         array $key_values,
@@ -1781,15 +1799,15 @@ class ArrayFetchAnalyzer
         }
 
         if ($in_assignment && $type instanceof TNonEmptyList && $type->count !== null) {
-            $type->count++;
+            $type = $type->setCount($type->count+1);
         }
 
         if ($in_assignment && $replacement_type) {
-            $type->type_param = Type::combineUnionTypes(
+            $type = $type->replaceTypeParam(Type::combineUnionTypes(
                 $type->type_param,
                 $replacement_type,
                 $codebase
-            );
+            ));
         }
 
         $array_access_type = Type::combineUnionTypes(

@@ -767,6 +767,7 @@ class FunctionLikeDocblockScanner
                     null,
                     null,
                     null,
+                    null,
                     false,
                     false,
                     true,

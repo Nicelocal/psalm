@@ -259,20 +259,20 @@ class CallableTypeComparator
                     $params = [];
 
                     foreach ($function_storage->params as $param) {
-                        $param = clone $param;
-
                         if ($param->type) {
-                            $param->type = TypeExpander::expandUnion(
-                                $codebase,
-                                $param->type,
-                                null,
-                                null,
-                                null,
-                                true,
-                                true,
-                                false,
-                                false,
-                                true
+                            $param = $param->replaceType(
+                                TypeExpander::expandUnion(
+                                    $codebase,
+                                    $param->type,
+                                    null,
+                                    null,
+                                    null,
+                                    true,
+                                    true,
+                                    false,
+                                    false,
+                                    true
+                                )
                             );
                         }
 
@@ -409,7 +409,7 @@ class CallableTypeComparator
                         $input_with_templates = new Atomic\TGenericObject($input_type_part->value, $type_params);
                         $template_result = new TemplateResult($invokable_storage->template_types ?? [], []);
 
-                        TemplateStandinTypeReplacer::replace(
+                        TemplateStandinTypeReplacer::fillTemplateResult(
                             new Type\Union([$input_with_templates]),
                             $template_result,
                             $codebase,
