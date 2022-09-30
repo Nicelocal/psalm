@@ -5,8 +5,6 @@ namespace Psalm\Type\Atomic;
 use Psalm\Type;
 use Psalm\Type\Atomic;
 
-use function strtolower;
-
 /**
  * Denotes a class constant whose value might not yet be known.
  * @psalm-immutable
@@ -24,20 +22,6 @@ final class TClassConstant extends Atomic
         $this->fq_classlike_name = $fq_classlike_name;
         $this->const_name = $const_name;
         $this->from_docblock = $from_docblock;
-    }
-
-    /**
-     * @return static
-     */
-    public function replaceClassLike(string $old, string $new): self
-    {
-        if (strtolower($this->fq_classlike_name) === $old) {
-            return new TClassConstant(
-                $new,
-                $this->const_name
-            );
-        }
-        return $this;
     }
 
     public function getKey(bool $include_extra = true): string

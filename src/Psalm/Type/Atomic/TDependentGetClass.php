@@ -31,11 +31,6 @@ final class TDependentGetClass extends TString implements DependentType
         $this->as_type = $as_type;
     }
 
-    public function __clone()
-    {
-        $this->as_type = clone $this->as_type;
-    }
-
     public function getId(bool $exact = true, bool $nested = false): string
     {
         return $this->as_type->isMixed()

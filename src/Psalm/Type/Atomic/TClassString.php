@@ -49,6 +49,7 @@ class TClassString extends TString
         $this->is_enum = $is_enum;
         $this->from_docblock = $from_docblock;
     }
+
     public function getKey(bool $include_extra = true): string
     {
         if ($this->is_interface) {

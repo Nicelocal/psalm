@@ -9,10 +9,8 @@ use Psalm\Type;
 use Psalm\Type\Atomic;
 
 use function array_map;
-use function array_values;
 use function implode;
 use function strrpos;
-use function strtolower;
 use function substr;
 
 /**

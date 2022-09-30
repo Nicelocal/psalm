@@ -28,11 +28,6 @@ final class TValueOf extends Atomic
         $this->from_docblock = $from_docblock;
     }
 
-    public function __clone()
-    {
-        $this->type = clone $this->type;
-    }
-
     public function getKey(bool $include_extra = true): string
     {
         return 'value-of<' . $this->type . '>';

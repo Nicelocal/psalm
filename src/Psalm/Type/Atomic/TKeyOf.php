@@ -23,11 +23,6 @@ final class TKeyOf extends TArrayKey
         $this->from_docblock = $from_docblock;
     }
 
-    public function __clone()
-    {
-        $this->type = clone $this->type;
-    }
-
     public function getKey(bool $include_extra = true): string
     {
         return 'key-of<' . $this->type . '>';

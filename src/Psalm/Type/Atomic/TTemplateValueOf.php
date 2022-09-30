@@ -41,11 +41,6 @@ final class TTemplateValueOf extends Atomic
         $this->from_docblock = $from_docblock;
     }
 
-    public function __clone()
-    {
-        $this->as = clone $this->as;
-    }
-
     public function getKey(bool $include_extra = true): string
     {
         return 'value-of<' . $this->param_name . '>';

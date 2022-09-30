@@ -26,7 +26,7 @@ final class TIterable extends Atomic
     use GenericTrait;
 
     /**
-     * @use GenericTrait<array{Union, Union}>
+     * @var array{Union, Union}
      */
     public array $type_params;
 
