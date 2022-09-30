@@ -17,6 +17,7 @@ use function substr;
 
 /**
  * Denotes an object type that has generic parameters e.g. `ArrayObject<string, Foo\Bar>`
+ * @psalm-immutable
  */
 final class TGenericObject extends TNamedObject
 {
@@ -24,6 +25,11 @@ final class TGenericObject extends TNamedObject
      * @use GenericTrait<non-empty-list<Union>>
      */
     use GenericTrait;
+
+    /**
+     * @use GenericTrait<non-empty-list<Union>>
+     */
+    public array $type_params;
 
     /** @var bool if the parameters have been remapped to another class */
     public $remapped_params = false;
@@ -33,7 +39,7 @@ final class TGenericObject extends TNamedObject
      * @param non-empty-list<Union> $type_params
      * @param array<string, TNamedObject|TTemplateParam|TIterable|TObjectWithProperties> $extra_types
      */
-    public function __construct(string $value, array $type_params, bool $remapped_params = false, bool $is_static = false, array $extra_types = [])
+    public function __construct(string $value, array $type_params, bool $remapped_params = false, bool $is_static = false, array $extra_types = [], bool $from_docblock = false)
     {
         if ($value[0] === '\\') {
             $value = substr($value, 1);
@@ -44,13 +50,7 @@ final class TGenericObject extends TNamedObject
         $this->remapped_params = $remapped_params;
         $this->is_static = $is_static;
         $this->extra_types = $extra_types;
-    }
-
-    public function __clone()
-    {
-        foreach ($this->type_params as &$union) {
-            $union = clone $union;
-        }
+        $this->from_docblock = $from_docblock;
     }
 
     public function getKey(bool $include_extra = true): string
@@ -116,28 +116,9 @@ final class TGenericObject extends TNamedObject
         return $this->value;
     }
 
-    public function getChildNodes(): array
+    public function getChildNodeKeys(): array
     {
-        return array_merge(parent::getChildNodes(), $this->type_params);
-    }
-
-    /**
-     * @return static
-     */
-    public function replaceClassLike(string $old, string $new): self
-    {
-        $type_params = $this->replaceTypeParamsClassLike($old, $new);
-        $intersection = $this->replaceIntersectionClassLike($old, $new);
-        if (!$type_params && !$intersection) {
-            return $this;
-        }
-        return new static(
-            strtolower($this->value) === $old ? $new : $this->value,
-            $type_params ?? $this->type_params,
-            $this->remapped_params,
-            $this->is_static,
-            $intersection ?? $this->extra_types
-        );
+        return array_merge(parent::getChildNodeKeys(), ['type_params']);
     }
 
     /**

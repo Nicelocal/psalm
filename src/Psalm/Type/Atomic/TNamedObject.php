@@ -17,6 +17,7 @@ use function substr;
 
 /**
  * Denotes an object type where the type of the object is known e.g. `Exception`, `Throwable`, `Foo\Bar`
+ * @psalm-immutable
  */
 class TNamedObject extends Atomic
 {
@@ -42,7 +43,7 @@ class TNamedObject extends Atomic
      * @param string $value the name of the object
      * @param array<string, TNamedObject|TTemplateParam|TIterable|TObjectWithProperties> $extra_types
      */
-    public function __construct(string $value, bool $is_static = false, bool $definite_class = false, array $extra_types = [])
+    public function __construct(string $value, bool $is_static = false, bool $definite_class = false, array $extra_types = [], bool $from_docblock = false)
     {
         if ($value[0] === '\\') {
             $value = substr($value, 1);
@@ -52,11 +53,17 @@ class TNamedObject extends Atomic
         $this->is_static = $is_static;
         $this->definite_class = $definite_class;
         $this->extra_types = $extra_types;
+        $this->from_docblock = $from_docblock;
     }
 
-    public function __clone()
+    public function setIsStatic(bool $is_static): self
     {
-        $this->cloneIntersection();
+        if ($this->is_static === $is_static) {
+            return $this;
+        }
+        $cloned = clone $this;
+        $cloned->is_static = $is_static;
+        return $cloned;
     }
 
     public function getKey(bool $include_extra = true): string
@@ -147,23 +154,6 @@ class TNamedObject extends Atomic
     /**
      * @return static
      */
-    public function replaceClassLike(string $old, string $new): self
-    {
-        $intersection = $this->replaceIntersectionClassLike($old, $new);
-        if (!$intersection && strtolower($this->value) !== $old) {
-            return $this;
-        }
-        $cloned = clone $this;
-        if (strtolower($cloned->value) === $old) {
-            $cloned->value = $new;
-        }
-        $cloned->extra_types = $intersection ?? $this->extra_types;
-        return $cloned;
-    }
-
-    /**
-     * @return static
-     */
     public function replaceTemplateTypesWithArgTypes(
         TemplateResult $template_result,
         ?Codebase $codebase
@@ -201,8 +191,8 @@ class TNamedObject extends Atomic
         }
         return $this;
     }
-    public function getChildNodes(): array
+    public function getChildNodeKeys(): array
     {
-        return array_values($this->extra_types);
+        return ['extra_types'];
     }
 }

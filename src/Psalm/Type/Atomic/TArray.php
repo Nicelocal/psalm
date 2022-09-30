@@ -13,6 +13,7 @@ use function get_class;
 
 /**
  * Denotes a simple array of the form `array<TKey, TValue>`. It expects an array with two elements, both union types.
+ * @psalm-immutable
  */
 class TArray extends Atomic
 {
@@ -20,6 +21,11 @@ class TArray extends Atomic
      * @use GenericTrait<array{Union, Union}>
      */
     use GenericTrait;
+
+    /**
+     * @use GenericTrait<array{Union, Union}>
+     */
+    public array $type_params;
 
     /**
      * @var string
@@ -31,15 +37,10 @@ class TArray extends Atomic
      *
      * @param array{Union, Union} $type_params
      */
-    public function __construct(array $type_params)
+    public function __construct(array $type_params, bool $from_docblock = false)
     {
         $this->type_params = $type_params;
-    }
-
-    public function __clone()
-    {
-        $this->type_params[0] = clone $this->type_params[0];
-        $this->type_params[1] = clone $this->type_params[1];
+        $this->from_docblock = $from_docblock;
     }
 
     public function getKey(bool $include_extra = true): string
@@ -107,20 +108,6 @@ class TArray extends Atomic
     /**
      * @return static
      */
-    public function replaceClassLike(string $old, string $new): self
-    {
-        $type_params = $this->replaceTypeParamsClassLike($old, $new);
-        if ($type_params) {
-            $cloned = clone $this;
-            $cloned->type_params = $type_params;
-            return $cloned;
-        }
-        return $this;
-    }
-
-    /**
-     * @return static
-     */
     public function replaceTemplateTypesWithStandins(TemplateResult $template_result, Codebase $codebase, ?StatementsAnalyzer $statements_analyzer = null, ?Atomic $input_type = null, ?int $input_arg_offset = null, ?string $calling_class = null, ?string $calling_function = null, bool $replace = true, bool $add_lower_bound = false, int $depth = 0): self
     {
         $type_params = $this->replaceTypeParamsTemplateTypesWithStandins(
@@ -160,8 +147,8 @@ class TArray extends Atomic
         return $this;
     }
 
-    public function getChildNodes(): array
+    public function getChildNodeKeys(): array
     {
-        return $this->type_params;
+        return ['type_params'];
     }
 }

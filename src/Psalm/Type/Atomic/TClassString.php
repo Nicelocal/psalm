@@ -20,6 +20,7 @@ use function strtolower;
 /**
  * Denotes the `class-string` type, used to describe a string representing a valid PHP class.
  * The parent type from which the classes descend may or may not be specified in the constructor.
+ * @psalm-immutable
  */
 class TClassString extends TString
 {
@@ -28,10 +29,7 @@ class TClassString extends TString
      */
     public $as;
 
-    /**
-     * @var ?TNamedObject
-     */
-    public $as_type;
+    public ?TNamedObject $as_type;
 
     /** @var bool */
     public $is_loaded = false;
@@ -42,25 +40,14 @@ class TClassString extends TString
     /** @var bool */
     public $is_enum = false;
 
-    public function __construct(string $as = 'object', ?TNamedObject $as_type = null, bool $is_loaded = false, bool $is_interface = false, bool $is_enum = false)
+    public function __construct(string $as = 'object', ?TNamedObject $as_type = null, bool $is_loaded = false, bool $is_interface = false, bool $is_enum = false, bool $from_docblock = false)
     {
         $this->as = $as;
         $this->as_type = $as_type;
         $this->is_loaded = $is_loaded;
         $this->is_interface = $is_interface;
         $this->is_enum = $is_enum;
-    }
-    /**
-     * @return static
-     */
-    public function replaceClassLike(string $old, string $new): self
-    {
-        if ($this->as !== 'object' && strtolower($this->as) === $old) {
-            $cloned = clone $this;
-            $cloned->as = $new;
-            return $cloned;
-        }
-        return $this;
+        $this->from_docblock = $from_docblock;
     }
     public function getKey(bool $include_extra = true): string
     {
@@ -142,9 +129,9 @@ class TClassString extends TString
         return false;
     }
 
-    public function getChildNodes(): array
+    public function getChildNodeKeys(): array
     {
-        return $this->as_type ? [$this->as_type] : [];
+        return $this->as_type ? ['as_type'] : [];
     }
 
     /**
@@ -197,11 +184,6 @@ class TClassString extends TString
             : null;
 
         if ($this->as_type === $as_type) {
-            if (!$this->as_type && $this->as !== 'object') {
-                $cloned = clone $this;
-                $cloned->as = 'object';
-                return $cloned;
-            }
             return $this;
         }
         $cloned = clone $this;

@@ -12,6 +12,9 @@ use function array_map;
 use function array_merge;
 use function implode;
 
+/**
+ * @psalm-immutable
+ */
 trait HasIntersectionTrait
 {
     /**
@@ -159,30 +162,5 @@ trait HasIntersectionTrait
         }
 
         return $new_types === $this->extra_types ? null : $new_types;
-    }
-
-    /**
-     * @return array<string, TNamedObject|TTemplateParam|TIterable|TObjectWithProperties>|null
-     */
-    protected function replaceIntersectionClassLike(string $old, string $new): ?array
-    {
-        if (!$this->extra_types) {
-            return null;
-        }
-        $new_types = [];
-        foreach ($this->extra_types as $extra_type) {
-            $extra_type = $extra_type->replaceClassLike($old, $new);
-            $new_types[$extra_type->getKey()] = $extra_type;
-        }
-        return $new_types === $this->extra_types ? null : $new_types;
-    }
-
-    private function cloneIntersection(): void
-    {
-        if ($this->extra_types) {
-            foreach ($this->extra_types as &$type) {
-                $type = clone $type;
-            }
-        }
     }
 }

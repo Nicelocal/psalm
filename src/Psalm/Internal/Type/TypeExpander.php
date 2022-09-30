@@ -9,6 +9,7 @@ use Psalm\Internal\Analyzer\Statements\Expression\Fetch\AtomicPropertyFetchAnaly
 use Psalm\Internal\Type\SimpleAssertionReconciler;
 use Psalm\Internal\Type\SimpleNegatedAssertionReconciler;
 use Psalm\Internal\Type\TypeParser;
+use Psalm\Internal\TypeVisitor\ClasslikeReplacer;
 use Psalm\Storage\Assertion\IsType;
 use Psalm\Type\Atomic;
 use Psalm\Type\Atomic\TArray;
@@ -58,7 +59,7 @@ use function substr;
 class TypeExpander
 {
     /**
-     * @param  string|TNamedObject|TTemplateParam|null $static_class_type
+     * @param string|TNamedObject|TTemplateParam|null $static_class_type
      */
     public static function expandUnion(
         Codebase $codebase,
@@ -126,8 +127,8 @@ class TypeExpander
     }
 
     /**
-     * @param  string|TNamedObject|TTemplateParam|null $static_class_type
-     *
+     * @param string|TNamedObject|TTemplateParam|null $static_class_type
+     * @param-out Atomic $return_type
      * @return non-empty-list<Atomic>
      *
      * @psalm-suppress ComplexMethod, ConflictingReferenceConstraint
@@ -195,7 +196,7 @@ class TypeExpander
         if ($return_type instanceof TClassString
             && $return_type->as_type
         ) {
-            $new_as_type = clone $return_type->as_type;
+            $new_as_type = $return_type->as_type;
 
             self::expandAtomic(
                 $codebase,
@@ -211,9 +212,14 @@ class TypeExpander
                 $throw_on_unresolvable_constant,
             );
 
-            if ($new_as_type instanceof TNamedObject) {
-                $return_type->as_type = $new_as_type;
-                $return_type->as = $return_type->as_type->value;
+            if ($new_as_type instanceof TNamedObject && $new_as_type !== $return_type->as_type) {
+                $return_type = new TClassString(
+                    $new_as_type->value,
+                    $new_as_type,
+                    $return_type->is_loaded,
+                    $return_type->is_interface,
+                    $return_type->is_enum,
+                );
             }
         } elseif ($return_type instanceof TTemplateParam) {
             $new_as_type = self::expandUnion(
@@ -234,15 +240,21 @@ class TypeExpander
                 return array_values($new_as_type->getAtomicTypes());
             }
 
-            $return_type->as = $new_as_type;
+            $return_type = $return_type->replaceAs($new_as_type);
         }
 
         if ($return_type instanceof TClassConstant) {
             if ($self_class) {
-                $return_type = $return_type->replaceClassLike('self', $self_class);
+                $return_type = $return_type->replaceClassLike(
+                    'self',
+                    $self_class
+                );
             }
             if (is_string($static_class_type) || $self_class) {
-                $return_type = $return_type->replaceClassLike('static', is_string($static_class_type) ? $static_class_type : $self_class);
+                $return_type = $return_type->replaceClassLike(
+                    'static',
+                    is_string($static_class_type) ? $static_class_type : $self_class
+                );
             }
 
             if ($evaluate_class_constants && $codebase->classOrInterfaceOrEnumExists($return_type->fq_classlike_name)) {
@@ -468,9 +480,9 @@ class TypeExpander
             || $return_type instanceof TGenericObject
             || $return_type instanceof TIterable
         ) {
-            foreach ($return_type->type_params as $k => $type_param) {
-                /** @psalm-suppress PropertyTypeCoercion */
-                $return_type->type_params[$k] = self::expandUnion(
+            $type_params = $return_type->type_params;
+            foreach ($type_params as &$type_param) {
+                $type_param = self::expandUnion(
                     $codebase,
                     $type_param,
                     $self_class,
@@ -484,8 +496,11 @@ class TypeExpander
                     $throw_on_unresolvable_constant,
                 );
             }
+            /** @psalm-suppress ArgumentTypeCoercion */
+            $return_type = $return_type->replaceTypeParams($type_params);
         } elseif ($return_type instanceof TKeyedArray) {
-            foreach ($return_type->properties as &$property_type) {
+            $properties = $return_type->properties;
+            foreach ($properties as &$property_type) {
                 $property_type = self::expandUnion(
                     $codebase,
                     $property_type,
@@ -500,8 +515,9 @@ class TypeExpander
                     $throw_on_unresolvable_constant,
                 );
             }
+            $return_type = $return_type->setProperties($properties);
         } elseif ($return_type instanceof TList) {
-            $return_type->type_param = self::expandUnion(
+            $return_type = $return_type->replaceTypeParam(self::expandUnion(
                 $codebase,
                 $return_type->type_param,
                 $self_class,
@@ -513,11 +529,12 @@ class TypeExpander
                 $expand_generic,
                 $expand_templates,
                 $throw_on_unresolvable_constant,
-            );
+            ));
         }
 
         if ($return_type instanceof TObjectWithProperties) {
-            foreach ($return_type->properties as &$property_type) {
+            $properties = $return_type->properties;
+            foreach ($properties as &$property_type) {
                 $property_type = self::expandUnion(
                     $codebase,
                     $property_type,
@@ -532,15 +549,17 @@ class TypeExpander
                     $throw_on_unresolvable_constant,
                 );
             }
+            $return_type = $return_type->setProperties($properties);
         }
 
         if ($return_type instanceof TCallable
             || $return_type instanceof TClosure
         ) {
-            if ($return_type->params) {
-                foreach ($return_type->params as $param) {
+            $params = $return_type->params;
+            if ($params) {
+                foreach ($params as &$param) {
                     if ($param->type) {
-                        $param->type = self::expandUnion(
+                        $param = $param->replaceType(self::expandUnion(
                             $codebase,
                             $param->type,
                             $self_class,
@@ -552,14 +571,15 @@ class TypeExpander
                             $expand_generic,
                             $expand_templates,
                             $throw_on_unresolvable_constant,
-                        );
+                        ));
                     }
                 }
             }
-            if ($return_type->return_type) {
-                $return_type->return_type = self::expandUnion(
+            $sub_return_type = $return_type->return_type;
+            if ($sub_return_type) {
+                $sub_return_type = self::expandUnion(
                     $codebase,
-                    $return_type->return_type,
+                    $sub_return_type,
                     $self_class,
                     $static_class_type,
                     $parent_class,
@@ -571,18 +591,26 @@ class TypeExpander
                     $throw_on_unresolvable_constant,
                 );
             }
+
+            if ($sub_return_type !== $return_type->return_type || $params !== $return_type->params) {
+                $return_type = clone $return_type;
+                /** @psalm-suppress InaccessibleProperty We just cloned this */
+                $return_type->return_type = $sub_return_type;
+                /** @psalm-suppress InaccessibleProperty We just cloned this */
+                $return_type->params = $params;
+            }
         }
 
         return [$return_type];
     }
 
     /**
-     * @param  string|TNamedObject|TTemplateParam|null $static_class_type
+     * @param string|TNamedObject|TTemplateParam|null $static_class_type
      * @return TNamedObject|TTemplateParam
      */
     private static function expandNamedObject(
         Codebase $codebase,
-        TNamedObject $return_type,
+        TNamedObject &$return_type,
         ?string $self_class,
         $static_class_type,
         ?string $parent_class,
@@ -624,11 +652,15 @@ class TypeExpander
 
         if ($static_class_type && ($return_type_lc === 'static' || $return_type_lc === '$this')) {
             if (is_string($static_class_type)) {
+                $return_type = clone $return_type;
+                /** @psalm-suppress InaccessibleProperty Acting on a clone */
                 $return_type->value = $static_class_type;
             } else {
                 if ($return_type instanceof TGenericObject
                     && $static_class_type instanceof TGenericObject
                 ) {
+                    $return_type = clone $return_type;
+                    /** @psalm-suppress InaccessibleProperty Acting on a clone */
                     $return_type->value = $static_class_type->value;
                 } else {
                     $return_type = clone $static_class_type;
@@ -636,6 +668,7 @@ class TypeExpander
             }
 
             if (!$final && $return_type instanceof TNamedObject) {
+                /** @psalm-suppress InaccessibleProperty Acting on a clone */
                 $return_type->is_static = true;
             }
         } elseif ($return_type->is_static
@@ -657,21 +690,33 @@ class TypeExpander
             }
             $return_type = $return_type->setIntersectionTypes($return_type_types);
         } elseif ($return_type->is_static && is_string($static_class_type) && $final) {
+            $return_type = clone $return_type;
+            /** @psalm-suppress InaccessibleProperty Acting on a clone */
             $return_type->value = $static_class_type;
+            /** @psalm-suppress InaccessibleProperty Acting on a clone */
             $return_type->is_static = false;
         } elseif ($self_class && $return_type_lc === 'self') {
+            $return_type = clone $return_type;
+            /** @psalm-suppress InaccessibleProperty Acting on a clone */
             $return_type->value = $self_class;
         } elseif ($parent_class && $return_type_lc === 'parent') {
+            $return_type = clone $return_type;
+            /** @psalm-suppress InaccessibleProperty Acting on a clone */
             $return_type->value = $parent_class;
         } else {
-            $return_type->value = $codebase->classlikes->getUnAliasedName($return_type->value);
+            $new_value = $codebase->classlikes->getUnAliasedName($return_type->value);
+            if ($return_type->value !== $new_value) {
+                $return_type = clone $return_type;
+                /** @psalm-suppress InaccessibleProperty Acting on a clone */
+                $return_type->value = $new_value;
+            }
         }
 
         return $return_type;
     }
 
     /**
-     * @param  string|TNamedObject|TTemplateParam|null $static_class_type
+     * @param string|TNamedObject|TTemplateParam|null $static_class_type
      *
      * @return non-empty-list<Atomic>
      */
@@ -822,9 +867,7 @@ class TypeExpander
                 );
 
                 if (count($all_conditional_return_types) !== $number_of_types) {
-                    $null_type = new TNull();
-                    $null_type->from_docblock = true;
-                    $all_conditional_return_types[] = $null_type;
+                    $all_conditional_return_types[] = new TNull(true);
                 }
             }
 
@@ -896,8 +939,14 @@ class TypeExpander
         $static_class_type
     ): array {
         if ($self_class) {
-            $return_type = $return_type->replaceClassLike('self', $self_class);
-            $return_type = $return_type->replaceClassLike('static', is_string($static_class_type) ? $static_class_type : $self_class);
+            $return_type = $return_type->replaceClassLike(
+                'self',
+                $self_class
+            );
+            $return_type = $return_type->replaceClassLike(
+                'static',
+                is_string($static_class_type) ? $static_class_type : $self_class
+            );
         }
 
         $class_storage = null;
