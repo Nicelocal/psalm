@@ -56,9 +56,30 @@ final class TCallable extends Atomic
     /**
      * @return static
      */
-    public function replaceTemplateTypesWithStandins(TemplateResult $template_result, Codebase $codebase, ?StatementsAnalyzer $statements_analyzer = null, ?Atomic $input_type = null, ?int $input_arg_offset = null, ?string $calling_class = null, ?string $calling_function = null, bool $replace = true, bool $add_lower_bound = false, int $depth = 0): self
-    {
-        $replaced = $this->replaceCallableTemplateTypesWithStandins($template_result, $codebase, $statements_analyzer, $input_type, $input_arg_offset, $calling_class, $calling_function, $replace, $add_lower_bound, $depth);
+    public function replaceTemplateTypesWithStandins(
+        TemplateResult $template_result,
+        Codebase $codebase,
+        ?StatementsAnalyzer $statements_analyzer = null,
+        ?Atomic $input_type = null,
+        ?int $input_arg_offset = null,
+        ?string $calling_class = null,
+        ?string $calling_function = null,
+        bool $replace = true,
+        bool $add_lower_bound = false,
+        int $depth = 0
+    ): self {
+        $replaced = $this->replaceCallableTemplateTypesWithStandins(
+            $template_result,
+            $codebase,
+            $statements_analyzer,
+            $input_type,
+            $input_arg_offset,
+            $calling_class,
+            $calling_function,
+            $replace,
+            $add_lower_bound,
+            $depth
+        );
         if (!$replaced) {
             return $this;
         }

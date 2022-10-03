@@ -39,6 +39,7 @@ use function is_array;
 use function is_string;
 use function max;
 use function microtime;
+use function preg_last_error_msg;
 use function preg_replace;
 use function preg_split;
 use function realpath;

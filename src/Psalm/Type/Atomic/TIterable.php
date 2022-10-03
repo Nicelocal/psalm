@@ -46,7 +46,7 @@ final class TIterable extends Atomic
      */
     public function __construct(array $type_params = [], array $extra_types = [], bool $from_docblock = false)
     {
-        if (count($type_params) === 2) {
+        if (isset($type_params[0], $type_params[1])) {
             $this->has_docblock_params = true;
             $this->type_params = $type_params;
         } else {
@@ -149,8 +149,18 @@ final class TIterable extends Atomic
     /**
      * @return static
      */
-    public function replaceTemplateTypesWithStandins(TemplateResult $template_result, Codebase $codebase, ?StatementsAnalyzer $statements_analyzer = null, ?Atomic $input_type = null, ?int $input_arg_offset = null, ?string $calling_class = null, ?string $calling_function = null, bool $replace = true, bool $add_lower_bound = false, int $depth = 0): self
-    {
+    public function replaceTemplateTypesWithStandins(
+        TemplateResult $template_result,
+        Codebase $codebase,
+        ?StatementsAnalyzer $statements_analyzer = null,
+        ?Atomic $input_type = null,
+        ?int $input_arg_offset = null,
+        ?string $calling_class = null,
+        ?string $calling_function = null,
+        bool $replace = true,
+        bool $add_lower_bound = false,
+        int $depth = 0
+    ): self {
         $types = $this->replaceTypeParamsTemplateTypesWithStandins(
             $template_result,
             $codebase,

@@ -131,7 +131,8 @@ class TypeExpander
      * @param-out Atomic $return_type
      * @return non-empty-list<Atomic>
      *
-     * @psalm-suppress ComplexMethod, ConflictingReferenceConstraint
+     * @psalm-suppress ConflictingReferenceConstraint Ultimately, the output type is always an Atomic
+     * @psalm-suppress ComplexMethod
      */
     public static function expandAtomic(
         Codebase $codebase,
@@ -177,6 +178,7 @@ class TypeExpander
                     $extra_types[$extra_type->getKey()] = $extra_type;
                 }
 
+                /** @psalm-suppress ArgumentTypeCoercion */
                 $return_type = $return_type->setIntersectionTypes(array_merge($extra_types, $new_intersection_types));
             }
 

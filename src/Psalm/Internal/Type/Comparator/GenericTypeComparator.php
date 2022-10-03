@@ -178,7 +178,8 @@ class GenericTypeComparator
             && $atomic_comparison_result_type_params
         ) {
             $atomic_comparison_result->replacement_atomic_type =
-                $atomic_comparison_result->replacement_atomic_type->replaceTypeParams($atomic_comparison_result_type_params);
+                $atomic_comparison_result->replacement_atomic_type
+                    ->replaceTypeParams($atomic_comparison_result_type_params);
         }
 
         if ($all_types_contain) {

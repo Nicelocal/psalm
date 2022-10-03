@@ -189,15 +189,33 @@ class TypeParser
         }
 
         if ($parse_tree instanceof UnionTree) {
-            return self::getTypeFromUnionTree($parse_tree, $codebase, $template_type_map, $type_aliases, $from_docblock);
+            return self::getTypeFromUnionTree(
+                $parse_tree,
+                $codebase,
+                $template_type_map,
+                $type_aliases,
+                $from_docblock
+            );
         }
 
         if ($parse_tree instanceof IntersectionTree) {
-            return self::getTypeFromIntersectionTree($parse_tree, $codebase, $template_type_map, $type_aliases, $from_docblock);
+            return self::getTypeFromIntersectionTree(
+                $parse_tree,
+                $codebase,
+                $template_type_map,
+                $type_aliases,
+                $from_docblock
+            );
         }
 
         if ($parse_tree instanceof KeyedArrayTree) {
-            return self::getTypeFromKeyedArrayTree($parse_tree, $codebase, $template_type_map, $type_aliases, $from_docblock);
+            return self::getTypeFromKeyedArrayTree(
+                $parse_tree,
+                $codebase,
+                $template_type_map,
+                $type_aliases,
+                $from_docblock
+            );
         }
 
         if ($parse_tree instanceof CallableWithReturnTypeTree) {
@@ -227,13 +245,22 @@ class TypeParser
                 $from_docblock
             );
 
-            $callable_type->return_type = $return_type instanceof Union ? $return_type : new Union([$return_type], $from_docblock);
+            $callable_type->return_type = $return_type instanceof Union
+                ? $return_type
+                : new Union([$return_type], $from_docblock)
+            ;
 
             return $callable_type;
         }
 
         if ($parse_tree instanceof CallableTree) {
-            return self::getTypeFromCallableTree($parse_tree, $codebase, $template_type_map, $type_aliases, $from_docblock);
+            return self::getTypeFromCallableTree(
+                $parse_tree,
+                $codebase,
+                $template_type_map,
+                $type_aliases,
+                $from_docblock
+            );
         }
 
         if ($parse_tree instanceof EncapsulationTree) {
@@ -750,7 +777,8 @@ class TypeParser
                 }
                 if ($template_param->getIntersectionTypes()) {
                     throw new TypeParseTreeException(
-                        $generic_type_value . '<' . $param_name . '> must be a TTemplateParam with no intersection types.'
+                        $generic_type_value . '<' . $param_name . '> must be a TTemplateParam'
+                            . ' with no intersection types.'
                     );
                 }
 

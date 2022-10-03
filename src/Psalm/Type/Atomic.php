@@ -238,13 +238,22 @@ abstract class Atomic implements TypeNode
 
             case 'array':
             case 'associative-array':
-                return new TArray([new Union([new TArrayKey($from_docblock)]), new Union([new TMixed(false, $from_docblock)])]);
+                return new TArray([
+                    new Union([new TArrayKey($from_docblock)]),
+                    new Union([new TMixed(false, $from_docblock)])
+                ]);
 
             case 'non-empty-array':
-                return new TNonEmptyArray([new Union([new TArrayKey($from_docblock)]), new Union([new TMixed(false, $from_docblock)])]);
+                return new TNonEmptyArray([
+                    new Union([new TArrayKey($from_docblock)]),
+                    new Union([new TMixed(false, $from_docblock)])
+                ]);
 
             case 'callable-array':
-                return new TCallableArray([new Union([new TArrayKey($from_docblock)]), new Union([new TMixed(false, $from_docblock)])]);
+                return new TCallableArray([
+                    new Union([new TArrayKey($from_docblock)]),
+                    new Union([new TMixed(false, $from_docblock)])
+                ]);
 
             case 'list':
                 return new TList(Type::getMixed(false, $from_docblock));

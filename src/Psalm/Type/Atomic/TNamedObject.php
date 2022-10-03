@@ -41,8 +41,13 @@ class TNamedObject extends Atomic
      * @param string $value the name of the object
      * @param array<string, TNamedObject|TTemplateParam|TIterable|TObjectWithProperties> $extra_types
      */
-    public function __construct(string $value, bool $is_static = false, bool $definite_class = false, array $extra_types = [], bool $from_docblock = false)
-    {
+    public function __construct(
+        string $value,
+        bool $is_static = false,
+        bool $definite_class = false,
+        array $extra_types = [],
+        bool $from_docblock = false
+    ) {
         if ($value[0] === '\\') {
             $value = substr($value, 1);
         }
@@ -168,8 +173,18 @@ class TNamedObject extends Atomic
     /**
      * @return static
      */
-    public function replaceTemplateTypesWithStandins(TemplateResult $template_result, Codebase $codebase, ?StatementsAnalyzer $statements_analyzer = null, ?Atomic $input_type = null, ?int $input_arg_offset = null, ?string $calling_class = null, ?string $calling_function = null, bool $replace = true, bool $add_lower_bound = false, int $depth = 0): self
-    {
+    public function replaceTemplateTypesWithStandins(
+        TemplateResult $template_result,
+        Codebase $codebase,
+        ?StatementsAnalyzer $statements_analyzer = null,
+        ?Atomic $input_type = null,
+        ?int $input_arg_offset = null,
+        ?string $calling_class = null,
+        ?string $calling_function = null,
+        bool $replace = true,
+        bool $add_lower_bound = false,
+        int $depth = 0
+    ): self {
         $intersection = $this->replaceIntersectionTemplateTypesWithStandins(
             $template_result,
             $codebase,

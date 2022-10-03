@@ -31,6 +31,7 @@ use function get_included_files;
 use function implode;
 use function in_array;
 use function is_string;
+use function preg_last_error_msg;
 use function preg_match;
 use function preg_replace;
 use function preg_split;

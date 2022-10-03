@@ -38,8 +38,14 @@ final class TGenericObject extends TNamedObject
      * @param non-empty-list<Union> $type_params
      * @param array<string, TNamedObject|TTemplateParam|TIterable|TObjectWithProperties> $extra_types
      */
-    public function __construct(string $value, array $type_params, bool $remapped_params = false, bool $is_static = false, array $extra_types = [], bool $from_docblock = false)
-    {
+    public function __construct(
+        string $value,
+        array $type_params,
+        bool $remapped_params = false,
+        bool $is_static = false,
+        array $extra_types = [],
+        bool $from_docblock = false
+    ) {
         if ($value[0] === '\\') {
             $value = substr($value, 1);
         }
@@ -123,8 +129,18 @@ final class TGenericObject extends TNamedObject
     /**
      * @return static
      */
-    public function replaceTemplateTypesWithStandins(TemplateResult $template_result, Codebase $codebase, ?StatementsAnalyzer $statements_analyzer = null, ?Atomic $input_type = null, ?int $input_arg_offset = null, ?string $calling_class = null, ?string $calling_function = null, bool $replace = true, bool $add_lower_bound = false, int $depth = 0): self
-    {
+    public function replaceTemplateTypesWithStandins(
+        TemplateResult $template_result,
+        Codebase $codebase,
+        ?StatementsAnalyzer $statements_analyzer = null,
+        ?Atomic $input_type = null,
+        ?int $input_arg_offset = null,
+        ?string $calling_class = null,
+        ?string $calling_function = null,
+        bool $replace = true,
+        bool $add_lower_bound = false,
+        int $depth = 0
+    ): self {
         $types = $this->replaceTypeParamsTemplateTypesWithStandins(
             $template_result,
             $codebase,

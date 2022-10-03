@@ -130,7 +130,10 @@ class ArrayFunctionArgumentsAnalyzer
                 $new []= $closure_type;
             }
 
-            $statements_analyzer->node_data->setType($closure_arg->value, $closure_arg_type->getBuilder()->setTypes($new)->freeze());
+            $statements_analyzer->node_data->setType(
+                $closure_arg->value,
+                $closure_arg_type->getBuilder()->setTypes($new)->freeze()
+            );
         }
     }
 
