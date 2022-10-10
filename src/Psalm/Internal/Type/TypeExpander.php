@@ -131,7 +131,7 @@ class TypeExpander
      * @param-out Atomic $return_type
      * @return non-empty-list<Atomic>
      *
-     * @psalm-suppress ConflictingReferenceConstraint Ultimately, the output type is always an Atomic
+     * @psalm-suppress ConflictingReferenceConstraint, ReferenceConstraintViolation The output type is always Atomic
      * @psalm-suppress ComplexMethod
      */
     public static function expandAtomic(
@@ -496,7 +496,7 @@ class TypeExpander
                     $throw_on_unresolvable_constant,
                 );
             }
-            /** @psalm-suppress ArgumentTypeCoercion */
+            /** @psalm-suppress ArgumentTypeCoercion Psalm bug */
             $return_type = $return_type->replaceTypeParams($type_params);
         } elseif ($return_type instanceof TKeyedArray) {
             $properties = $return_type->properties;
@@ -712,6 +712,7 @@ class TypeExpander
             }
         }
 
+        /** @psalm-suppress ReferenceConstraintViolation Psalm bug, we are never assigning a TTemplateParam to $return_type */
         return $return_type;
     }
 

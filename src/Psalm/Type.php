@@ -357,12 +357,12 @@ abstract class Type
     /**
      * @psalm-pure
      */
-    public static function getFloat(?float $value = null): Union
+    public static function getFloat(?float $value = null, bool $from_docblock = false): Union
     {
         if ($value !== null) {
-            $type = new TLiteralFloat($value);
+            $type = new TLiteralFloat($value, $from_docblock);
         } else {
-            $type = new TFloat();
+            $type = new TFloat($from_docblock);
         }
 
         return new Union([$type]);
@@ -510,6 +510,8 @@ abstract class Type
      *                               will be merged to a scalar
      *
      * @psalm-external-mutation-free
+     *
+     * @psalm-suppress ImpurePropertyAssignment We're not mutating external instances
      */
     public static function combineUnionTypes(
         ?Union $type_1,

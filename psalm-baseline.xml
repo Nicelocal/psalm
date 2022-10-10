@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="dev-master@2488c523963efcc6d8a1a6a8874d08bd0d7a40cf">
+<files psalm-version="dev-master@06621754bd1efa8def8e33e5086dea3d8df636f4">
   <file src="examples/TemplateChecker.php">
     <LiteralKeyUnshapedArray occurrences="1">
       <code>$comment_block-&gt;tags['variablesfrom']</code>
@@ -240,16 +240,6 @@
       <code>$return_type-&gt;getAtomicTypes()['null']</code>
     </LiteralKeyUnshapedArray>
   </file>
-  <file src="src/Psalm/Internal/Analyzer/FunctionLike/ReturnTypeCollector.php">
-    <MixedArgument occurrences="2">
-      <code>clone $key_type_param</code>
-      <code>clone $value_type_param</code>
-    </MixedArgument>
-    <MixedClone occurrences="2">
-      <code>clone $key_type_param</code>
-      <code>clone $value_type_param</code>
-    </MixedClone>
-  </file>
   <file src="src/Psalm/Internal/Analyzer/FunctionLikeAnalyzer.php">
     <LiteralKeyUnshapedArray occurrences="5">
       <code>$context-&gt;vars_in_scope['$this']</code>
@@ -278,36 +268,7 @@
       <code>$generic_storage-&gt;template_extended_params['Traversable']</code>
       <code>$project_analyzer-&gt;getIssuesToFix()['UnnecessaryVarAnnotation']</code>
     </LiteralKeyUnshapedArray>
-    <MixedArgument occurrences="12">
-      <code>$intersection_key_type</code>
-      <code>$intersection_key_type</code>
-      <code>$intersection_value_type</code>
-      <code>$intersection_value_type</code>
-      <code>$iterator_atomic_type-&gt;type_params[0]</code>
-      <code>$iterator_atomic_type-&gt;type_params[1]</code>
-      <code>$key_type_part</code>
-      <code>$key_type_part</code>
-      <code>$key_type_part</code>
-      <code>$value_type_part</code>
-      <code>$value_type_part</code>
-      <code>clone $iterator_atomic_type-&gt;type_params[1]</code>
-    </MixedArgument>
-    <MixedArgumentTypeCoercion occurrences="2">
-      <code>$passed_type_params</code>
-      <code>$passed_type_params</code>
-    </MixedArgumentTypeCoercion>
-    <MixedAssignment occurrences="3">
-      <code>$intersection_key_type</code>
-      <code>$intersection_value_type</code>
-      <code>$key_type_part</code>
-    </MixedAssignment>
-    <MixedClone occurrences="1">
-      <code>clone $iterator_atomic_type-&gt;type_params[1]</code>
-    </MixedClone>
-    <PossiblyUndefinedIntArrayOffset occurrences="4">
-      <code>$iterator_atomic_type-&gt;type_params[0]</code>
-      <code>$iterator_atomic_type-&gt;type_params[0]</code>
-      <code>$iterator_atomic_type-&gt;type_params[1]</code>
+    <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$iterator_atomic_type-&gt;type_params[1]</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
@@ -337,67 +298,12 @@
     <LiteralKeyUnshapedArray occurrences="1">
       <code>$atomic_key_type-&gt;methods['__toString']</code>
     </LiteralKeyUnshapedArray>
-    <MixedArgument occurrences="5">
-      <code>$iterable_type-&gt;type_params[0]</code>
-      <code>$iterable_type-&gt;type_params[0]</code>
-      <code>$iterable_type-&gt;type_params[0]-&gt;getAtomicTypes()</code>
-      <code>$iterable_type-&gt;type_params[1]</code>
-      <code>$iterable_type-&gt;type_params[1]-&gt;getAtomicTypes()</code>
-    </MixedArgument>
-    <MixedMethodCall occurrences="5">
-      <code>getAtomicTypes</code>
-      <code>getAtomicTypes</code>
-      <code>getId</code>
-      <code>hasString</code>
-      <code>isNever</code>
-    </MixedMethodCall>
-    <MixedOperand occurrences="1">
-      <code>$iterable_type-&gt;type_params[0]-&gt;getId()</code>
-    </MixedOperand>
-    <MixedPropertyTypeCoercion occurrences="2"/>
-    <PossiblyUndefinedIntArrayOffset occurrences="8">
-      <code>$iterable_type-&gt;type_params[0]</code>
-      <code>$iterable_type-&gt;type_params[0]</code>
-      <code>$iterable_type-&gt;type_params[0]</code>
-      <code>$iterable_type-&gt;type_params[0]</code>
-      <code>$iterable_type-&gt;type_params[0]</code>
-      <code>$iterable_type-&gt;type_params[0]</code>
-      <code>$iterable_type-&gt;type_params[1]</code>
-      <code>$iterable_type-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/AssertionFinder.php">
     <LiteralKeyUnshapedArray occurrences="1">
       <code>$class_definition-&gt;methods['__get']</code>
     </LiteralKeyUnshapedArray>
-    <MixedArgument occurrences="4">
-      <code>$array_literal_type</code>
-      <code>$array_literal_type</code>
-      <code>$value_type</code>
-      <code>$value_type</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="5">
-      <code>$array_literal_type</code>
-      <code>$array_literal_type</code>
-      <code>$atomic_value_type</code>
-      <code>$key_type</code>
-      <code>$value_type</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="8">
-      <code>allIntLiterals</code>
-      <code>allStringLiterals</code>
-      <code>getAtomicTypes</code>
-      <code>getId</code>
-      <code>getLiteralInts</code>
-      <code>getLiteralStrings</code>
-      <code>hasTemplate</code>
-      <code>isMixed</code>
-    </MixedMethodCall>
-    <MixedPropertyFetch occurrences="2">
-      <code>$key_type-&gt;possibly_undefined</code>
-      <code>$key_type-&gt;possibly_undefined</code>
-    </MixedPropertyFetch>
-    <PossiblyUndefinedIntArrayOffset occurrences="37">
+    <PossiblyUndefinedIntArrayOffset occurrences="35">
       <code>$assertion-&gt;rule[0]</code>
       <code>$assertion-&gt;rule[0]</code>
       <code>$assertion-&gt;rule[0]</code>
@@ -405,8 +311,6 @@
       <code>$assertion-&gt;rule[0]</code>
       <code>$assertion-&gt;rule[0]</code>
       <code>$assertion-&gt;rule[0]</code>
-      <code>$atomic_type-&gt;type_params[0]</code>
-      <code>$atomic_type-&gt;type_params[1]</code>
       <code>$count_expr-&gt;getArgs()[0]</code>
       <code>$count_expr-&gt;getArgs()[0]</code>
       <code>$count_expr-&gt;getArgs()[0]</code>
@@ -443,14 +347,8 @@
       <code>$atomic_root_types['array']</code>
       <code>$parent_type-&gt;getAtomicTypes()['array']</code>
     </LiteralKeyUnshapedArray>
-    <MixedArgumentTypeCoercion occurrences="1">
-      <code>$array_atomic_type-&gt;type_params</code>
-    </MixedArgumentTypeCoercion>
   </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Assignment/InstancePropertyAssignmentAnalyzer.php">
-    <ComplexMethod occurrences="1">
-      <code>analyzeAtomicAssignment</code>
-    </ComplexMethod>
     <LiteralKeyUnshapedArray occurrences="1">
       <code>$project_analyzer-&gt;getIssuesToFix()['MissingImmutableAnnotation']</code>
     </LiteralKeyUnshapedArray>
@@ -460,40 +358,8 @@
       <code>$project_analyzer-&gt;getIssuesToFix()['UnnecessaryVarAnnotation']</code>
       <code>$statements_analyzer-&gt;getProjectAnalyzer()-&gt;getIssuesToFix()['UnnecessaryVarAnnotation']</code>
     </LiteralKeyUnshapedArray>
-    <MixedArgument occurrences="5">
-      <code>$array_value_type</code>
-      <code>$context-&gt;vars_in_scope[$list_var_id]</code>
-      <code>$new_assign_type</code>
-      <code>$new_assign_type</code>
-      <code>$new_assign_type</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="2">
-      <code>$array_value_type</code>
-      <code>$new_assign_type</code>
-    </MixedAssignment>
-    <MixedClone occurrences="2">
-      <code>clone $assign_value_atomic_type-&gt;type_params[1]</code>
-      <code>clone $assign_value_atomic_type-&gt;type_params[1]</code>
-    </MixedClone>
-    <MixedPropertyAssignment occurrences="2">
-      <code>$context-&gt;vars_in_scope[$list_var_id]</code>
-      <code>$context-&gt;vars_in_scope[$list_var_id]</code>
-    </MixedPropertyAssignment>
-    <MixedPropertyFetch occurrences="1">
-      <code>$context-&gt;vars_in_scope[$list_var_id]-&gt;parent_nodes</code>
-    </MixedPropertyFetch>
-    <MixedPropertyTypeCoercion occurrences="1">
-      <code>$context-&gt;vars_in_scope</code>
-    </MixedPropertyTypeCoercion>
-    <PossiblyUndefinedIntArrayOffset occurrences="2">
-      <code>$assign_value_atomic_type-&gt;type_params[1]</code>
-      <code>$assign_value_atomic_type-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/BinaryOp/ArithmeticOpAnalyzer.php">
-    <ComplexMethod occurrences="1">
-      <code>analyzeOperands</code>
-    </ComplexMethod>
     <PossiblyUndefinedIntArrayOffset occurrences="2">
       <code>$invalid_left_messages[0]</code>
       <code>$invalid_right_messages[0]</code>
@@ -503,15 +369,14 @@
     <ComplexMethod occurrences="1">
       <code>verifyType</code>
     </ComplexMethod>
+    <LiteralKeyUnshapedArray occurrences="3">
+      <code>$arg_value_type-&gt;getAtomicTypes()['array']</code>
+      <code>$param_type-&gt;getAtomicTypes()['array']</code>
+      <code>$param_type-&gt;getAtomicTypes()['array']</code>
+    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="3">
       <code>$non_existent_method_ids[0]</code>
-      <code>$param_array_type-&gt;getGenericArrayType()-&gt;type_params[1]</code>
-      <code>$param_array_type-&gt;type_params[1]</code>
-      <code>$param_type_part-&gt;type_params[1]</code>
       <code>$parts[1]</code>
-      <code>$unpacked_atomic_array-&gt;type_params[0]</code>
-      <code>$unpacked_atomic_array-&gt;type_params[0]</code>
-      <code>$unpacked_atomic_array-&gt;type_params[1]</code>
       <code>explode('::', $cased_method_id)[1]</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
@@ -520,18 +385,8 @@
       <code>$arg_value_type-&gt;getAtomicTypes()['array']</code>
       <code>$arg_value_type-&gt;getAtomicTypes()['array']</code>
     </LiteralKeyUnshapedArray>
-    <MixedAssignment occurrences="2">
-      <code>$key_type</code>
-      <code>$key_types</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="2">
-      <code>getAtomicTypes</code>
-      <code>isNever</code>
-    </MixedMethodCall>
-    <PossiblyUndefinedIntArrayOffset occurrences="3">
+    <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$arg_function_params[$argument_offset][0]</code>
-      <code>$array_type-&gt;type_params[0]</code>
-      <code>$atomic_arg_type-&gt;type_params[1]</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Call/ArrayFunctionArgumentsAnalyzer.php">
@@ -542,68 +397,12 @@
       <code>$types['array']</code>
       <code>$types['array']</code>
     </LiteralKeyUnshapedArray>
-    <MixedArgument occurrences="12">
-      <code>$arg_value_atomic_type-&gt;type_params[1]</code>
-      <code>$arg_value_atomic_type-&gt;type_params[1]</code>
-      <code>$array_type-&gt;type_params[1]</code>
-      <code>$array_type-&gt;type_params[1]</code>
-      <code>$array_type-&gt;type_params[1]</code>
-      <code>$array_type-&gt;type_params[1]</code>
-      <code>$input_type</code>
-      <code>$input_type</code>
-      <code>$input_type-&gt;ignore_falsable_issues</code>
-      <code>$input_type-&gt;ignore_nullable_issues</code>
-      <code>$replacement_array_type-&gt;type_params[1]</code>
-      <code>$replacement_array_type-&gt;type_params[1]</code>
-    </MixedArgument>
-    <MixedArgumentTypeCoercion occurrences="1">
-      <code>$array_atomic_type-&gt;type_params</code>
-    </MixedArgumentTypeCoercion>
-    <MixedAssignment occurrences="1">
-      <code>$input_type</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="3">
-      <code>hasInt</code>
-      <code>hasMixed</code>
-      <code>hasString</code>
-    </MixedMethodCall>
-    <MixedPropertyFetch occurrences="2">
-      <code>$input_type-&gt;ignore_falsable_issues</code>
-      <code>$input_type-&gt;ignore_nullable_issues</code>
-    </MixedPropertyFetch>
-    <PossiblyUndefinedIntArrayOffset occurrences="15">
-      <code>$arg_value_atomic_type-&gt;type_params[1]</code>
-      <code>$arg_value_atomic_type-&gt;type_params[1]</code>
+    <PossiblyUndefinedIntArrayOffset occurrences="4">
       <code>$args[0]</code>
       <code>$args[0]</code>
       <code>$args[1]</code>
-      <code>$array_arg_type-&gt;type_params[1]</code>
-      <code>$array_type-&gt;type_params[0]</code>
-      <code>$array_type-&gt;type_params[0]</code>
-      <code>$array_type-&gt;type_params[1]</code>
-      <code>$array_type-&gt;type_params[1]</code>
-      <code>$array_type-&gt;type_params[1]</code>
-      <code>$array_type-&gt;type_params[1]</code>
       <code>$callmap_callables[0]</code>
-      <code>$replacement_array_type-&gt;type_params[1]</code>
-      <code>$replacement_array_type-&gt;type_params[1]</code>
     </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Call/ClassTemplateParamCollector.php">
-    <MixedArgument occurrences="1">
-      <code>$lhs_type_part-&gt;type_params[$mapped_offset]</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="1">
-      <code>$class_template_params[$type_name][$class_storage-&gt;name]</code>
-    </MixedAssignment>
-    <MixedReturnTypeCoercion occurrences="2">
-      <code>$class_template_params</code>
-      <code>array&lt;string, non-empty-array&lt;string, Union&gt;&gt;|null</code>
-    </MixedReturnTypeCoercion>
-    <UnusedPsalmSuppress occurrences="2">
-      <code>LessSpecificReturnStatement</code>
-      <code>MoreSpecificReturnType</code>
-    </UnusedPsalmSuppress>
   </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Call/FunctionCallAnalyzer.php">
     <LiteralKeyUnshapedArray occurrences="1">
@@ -619,40 +418,6 @@
       <code>$atomic_types['array']</code>
       <code>$first_arg_type-&gt;getAtomicTypes()['array']</code>
     </LiteralKeyUnshapedArray>
-    <MixedClone occurrences="1">
-      <code>clone $array_type-&gt;type_params[1]</code>
-    </MixedClone>
-    <MixedInferredReturnType occurrences="1">
-      <code>Union</code>
-    </MixedInferredReturnType>
-    <MixedReturnStatement occurrences="1">
-      <code>clone $array_type-&gt;type_params[1]</code>
-    </MixedReturnStatement>
-    <PossiblyUndefinedIntArrayOffset occurrences="1">
-      <code>$array_type-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Call/Method/AtomicMethodCallAnalyzer.php">
-    <MixedArgument occurrences="1">
-      <code>$current_type_param-&gt;getAtomicTypes()</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="1">
-      <code>$current_type_param</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="2">
-      <code>getAtomicTypes</code>
-      <code>isSingle</code>
-    </MixedMethodCall>
-    <PossiblyUndefinedIntArrayOffset occurrences="1"/>
-    <TypeDoesNotContainType occurrences="1">
-      <code>$lhs_type_part_new instanceof TNamedObject</code>
-    </TypeDoesNotContainType>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Call/Method/MethodCallReturnTypeFetcher.php">
-    <MixedArgumentTypeCoercion occurrences="2">
-      <code>$lhs_type_part instanceof TGenericObject ? $lhs_type_part-&gt;type_params : null</code>
-      <code>$lhs_type_part instanceof TGenericObject ? $lhs_type_part-&gt;type_params : null</code>
-    </MixedArgumentTypeCoercion>
   </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Call/MethodCallAnalyzer.php">
     <PossiblyUndefinedIntArrayOffset occurrences="6">
@@ -715,66 +480,14 @@
     </LiteralKeyUnshapedArray>
   </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Fetch/ArrayFetchAnalyzer.php">
-    <ArgumentTypeCoercion occurrences="2"/>
-    <ConflictingReferenceConstraint occurrences="3">
-      <code>else {</code>
-      <code>elseif ($type instanceof TClassStringMap) {</code>
-      <code>elseif ($type instanceof TList) {</code>
-    </ConflictingReferenceConstraint>
     <LiteralKeyUnshapedArray occurrences="3">
       <code>$atomic_key_type-&gt;methods['__toString']</code>
       <code>$stmt_var_type-&gt;getAtomicTypes()['array']</code>
       <code>$stmt_var_type-&gt;getAtomicTypes()['array']</code>
     </LiteralKeyUnshapedArray>
-    <MixedArgument occurrences="6">
-      <code>$const_array_key_type</code>
-      <code>$const_array_key_type</code>
-      <code>$expected_offset_type</code>
-      <code>$from_empty_array ? null : $previous_key_type</code>
-      <code>$from_empty_array ? null : $previous_value_type</code>
-      <code>$type-&gt;type_params[1]</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="5">
-      <code>$array_value_type</code>
-      <code>$const_array_key_atomic_types</code>
-      <code>$const_array_key_type</code>
-      <code>$expected_offset_type</code>
-      <code>$from_mixed_array</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="6">
-      <code>getAtomicTypes</code>
-      <code>hasMixed</code>
-      <code>hasMixed</code>
-      <code>isMixed</code>
-      <code>isMixed</code>
-      <code>isSingleStringLiteral</code>
-    </MixedMethodCall>
-    <PossiblyUndefinedIntArrayOffset occurrences="8">
-      <code>$array_type-&gt;type_params[0]</code>
-      <code>$array_type-&gt;type_params[1]</code>
-      <code>$type-&gt;type_params[0]</code>
-      <code>$type-&gt;type_params[0]</code>
-      <code>$type-&gt;type_params[0]</code>
-      <code>$type-&gt;type_params[1]</code>
-      <code>$type-&gt;type_params[1]</code>
-      <code>$type-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
     <UnusedVariable occurrences="1">
       <code>$exact_keys</code>
     </UnusedVariable>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Fetch/AtomicPropertyFetchAnalyzer.php">
-    <ComplexMethod occurrences="1">
-      <code>analyze</code>
-    </ComplexMethod>
-    <MixedArgumentTypeCoercion occurrences="1">
-      <code>$template_types</code>
-    </MixedArgumentTypeCoercion>
-    <MixedAssignment occurrences="3">
-      <code>$lhs_param_type</code>
-      <code>$template_types[$calling_param_name][$property_class_storage-&gt;name]</code>
-      <code>$template_types[$type_name][$property_declaring_class_storage-&gt;name]</code>
-    </MixedAssignment>
   </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Fetch/InstancePropertyFetchAnalyzer.php">
     <PossiblyUndefinedIntArrayOffset occurrences="1">
@@ -793,72 +506,13 @@
       <code>$codebase-&gt;config-&gt;forbidden_functions['print']</code>
     </LiteralKeyUnshapedArray>
   </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/Expression/SimpleTypeInferer.php">
-    <MixedArgument occurrences="1"/>
-    <MixedMethodCall occurrences="3">
-      <code>getAtomicTypes</code>
-      <code>hasInt</code>
-      <code>hasString</code>
-    </MixedMethodCall>
-    <PossiblyUndefinedIntArrayOffset occurrences="2">
-      <code>$unpacked_atomic_type-&gt;type_params[0]</code>
-      <code>$unpacked_atomic_type-&gt;type_params[0]</code>
-    </PossiblyUndefinedIntArrayOffset>
-  </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/YieldAnalyzer.php">
     <LiteralKeyUnshapedArray occurrences="1">
       <code>$project_analyzer-&gt;getIssuesToFix()['UnnecessaryVarAnnotation']</code>
     </LiteralKeyUnshapedArray>
-    <MixedArgument occurrences="1">
-      <code>clone $atomic_return_type-&gt;type_params[2]</code>
-    </MixedArgument>
-    <MixedClone occurrences="1">
-      <code>clone $atomic_return_type-&gt;type_params[2]</code>
-    </MixedClone>
-    <MixedMethodCall occurrences="1">
-      <code>isVoid</code>
-    </MixedMethodCall>
-    <PossiblyUndefinedIntArrayOffset occurrences="2">
-      <code>$atomic_return_type-&gt;type_params[2]</code>
+    <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$atomic_return_type-&gt;type_params[2]</code>
     </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/Expression/YieldFromAnalyzer.php">
-    <MixedArgument occurrences="1">
-      <code>$yield_from_type ?: Type::getMixed()</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="2">
-      <code>$yield_from_type</code>
-      <code>$yield_from_type</code>
-    </MixedAssignment>
-    <MixedClone occurrences="2">
-      <code>clone $atomic_type-&gt;type_params[1]</code>
-      <code>clone $atomic_type-&gt;type_params[3]</code>
-    </MixedClone>
-    <PossiblyUndefinedIntArrayOffset occurrences="1">
-      <code>$atomic_type-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/ReturnAnalyzer.php">
-    <MixedAssignment occurrences="2">
-      <code>$local_array_type_part</code>
-      <code>$value_param</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="1">
-      <code>getAtomicTypes</code>
-    </MixedMethodCall>
-    <PossiblyUndefinedIntArrayOffset occurrences="1">
-      <code>$local_type_part-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/UnsetAnalyzer.php">
-    <DocblockTypeContradiction occurrences="2">
-      <code>!$properties</code>
-      <code>$properties</code>
-    </DocblockTypeContradiction>
-    <MixedArgumentTypeCoercion occurrences="1">
-      <code>$atomic_root_type-&gt;type_params</code>
-    </MixedArgumentTypeCoercion>
   </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/UnusedAssignmentRemover.php">
     <PossiblyUndefinedIntArrayOffset occurrences="6">
@@ -1044,14 +698,7 @@
     <LiteralKeyUnshapedArray occurrences="1">
       <code>$arg_type-&gt;getAtomicTypes()['array']</code>
     </LiteralKeyUnshapedArray>
-    <MixedArgument occurrences="1">
-      <code>$arg_type</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="1">
-      <code>$arg_type</code>
-    </MixedAssignment>
-    <PossiblyUndefinedIntArrayOffset occurrences="3">
-      <code>$array_atomic_type-&gt;type_params[1]</code>
+    <PossiblyUndefinedIntArrayOffset occurrences="2">
       <code>$callables[0]</code>
       <code>$callables[0]</code>
     </PossiblyUndefinedIntArrayOffset>
@@ -1216,19 +863,6 @@
       <code>$parsed_docblock-&gt;tags['phpstan-type']</code>
       <code>$parsed_docblock-&gt;tags['psalm-type']</code>
     </LiteralKeyUnshapedArray>
-    <MixedAssignment occurrences="6">
-      <code>$extended_type_parameters[]</code>
-      <code>$implemented_type_parameters[]</code>
-      <code>$type_param</code>
-      <code>$type_param</code>
-      <code>$type_param</code>
-      <code>$used_type_parameters[]</code>
-    </MixedAssignment>
-    <MixedPropertyTypeCoercion occurrences="3">
-      <code>$storage-&gt;template_extended_offsets</code>
-      <code>$storage-&gt;template_extended_offsets</code>
-      <code>$storage-&gt;template_extended_offsets</code>
-    </MixedPropertyTypeCoercion>
     <PossiblyUndefinedIntArrayOffset occurrences="2">
       <code>$l[4]</code>
       <code>$r[4]</code>
@@ -1301,57 +935,20 @@
     <LiteralKeyUnshapedArray occurrences="1">
       <code>$new_param_type-&gt;getAtomicTypes()['array']</code>
     </LiteralKeyUnshapedArray>
-    <MixedArgument occurrences="1">
-      <code>$new_param_type</code>
-    </MixedArgument>
     <MixedArgumentTypeCoercion occurrences="1">
       <code>$new</code>
     </MixedArgumentTypeCoercion>
-    <MixedArrayOffset occurrences="1">
-      <code>$storage_param_atomic_types[$key]</code>
-    </MixedArrayOffset>
-    <MixedAssignment occurrences="10">
-      <code>$key</code>
+    <MixedAssignment occurrences="3">
       <code>$new []</code>
-      <code>$new_param_type</code>
-      <code>$new_param_type</code>
-      <code>$new_param_type</code>
-      <code>$storage_param-&gt;type</code>
-      <code>$storage_param-&gt;type</code>
       <code>$t</code>
-      <code>$type</code>
       <code>$types</code>
     </MixedAssignment>
-    <MixedMethodCall occurrences="11">
-      <code>addType</code>
-      <code>addType</code>
-      <code>freeze</code>
-      <code>freeze</code>
-      <code>getAtomicTypes</code>
-      <code>getBuilder</code>
-      <code>getBuilder</code>
-      <code>hasArrayKey</code>
-      <code>hasTemplate</code>
-      <code>isNullable</code>
-      <code>isNullable</code>
-    </MixedMethodCall>
-    <MixedPropertyAssignment occurrences="3">
-      <code>$new_param_type</code>
-      <code>$type</code>
-      <code>$type-&gt;type_params[0]</code>
-    </MixedPropertyAssignment>
-    <PossiblyUndefinedIntArrayOffset occurrences="4">
-      <code>$array_type-&gt;type_params[1]</code>
+    <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$flow_parts[0]</code>
-      <code>$type-&gt;type_params[0]</code>
-      <code>$type-&gt;type_params[0]</code>
     </PossiblyUndefinedIntArrayOffset>
     <RedundantConditionGivenDocblockType occurrences="2">
       <code>!$storage-&gt;signature_return_type</code>
     </RedundantConditionGivenDocblockType>
-    <UnusedPsalmSuppress occurrences="1">
-      <code>InaccessibleProperty</code>
-    </UnusedPsalmSuppress>
   </file>
   <file src="src/Psalm/Internal/PhpVisitor/Reflector/FunctionLikeNodeScanner.php">
     <LiteralKeyUnshapedArray occurrences="1">
@@ -1366,246 +963,67 @@
       <code>$cs[0]</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
-  <file src="src/Psalm/Internal/Type/Comparator/CallableTypeComparator.php">
-    <LessSpecificReturnStatement occurrences="1">
-      <code>$callable</code>
-    </LessSpecificReturnStatement>
-    <MoreSpecificReturnType occurrences="1">
-      <code>TCallable|TClosure|null</code>
-    </MoreSpecificReturnType>
+  <file src="src/Psalm/Internal/PluginManager/ComposerLock.php">
+    <LiteralKeyUnshapedArray occurrences="5">
+      <code>$composer_lock_contents['packages']</code>
+      <code>$package['extra']</code>
+      <code>$package['extra']['psalm']</code>
+      <code>$package['extra']['psalm']['pluginClass']</code>
+      <code>$package['name']</code>
+    </LiteralKeyUnshapedArray>
   </file>
-  <file src="src/Psalm/Internal/Type/TypeCombiner.php">
-    <PossiblyUndefinedIntArrayOffset occurrences="6">
-      <code>$combination-&gt;array_type_params[1]</code>
-      <code>$combination-&gt;array_type_params[1]</code>
-      <code>$combination-&gt;array_type_params[1]</code>
-      <code>$combination-&gt;array_type_params[1]</code>
-      <code>$combination-&gt;array_type_params[1]</code>
-      <code>$combination-&gt;array_type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
+  <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/ArrayChunkReturnTypeProvider.php">
+    <LiteralKeyUnshapedArray occurrences="1">
+      <code>$array_arg_type-&gt;getAtomicTypes()['array']</code>
+    </LiteralKeyUnshapedArray>
+  </file>
+  <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/ArrayColumnReturnTypeProvider.php">
+    <LiteralKeyUnshapedArray occurrences="2">
+      <code>$first_arg_type-&gt;getAtomicTypes()['array']</code>
+      <code>$row_type-&gt;getAtomicTypes()['array']</code>
+    </LiteralKeyUnshapedArray>
   </file>
   <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/ArrayFilterReturnTypeProvider.php">
-    <ArgumentTypeCoercion occurrences="3"/>
     <LiteralKeyUnshapedArray occurrences="3">
       <code>$first_arg_type-&gt;getAtomicTypes()['array']</code>
       <code>$reconciled_types['$inner_type']</code>
       <code>$reconciled_types['$inner_type']</code>
     </LiteralKeyUnshapedArray>
-    <MixedArgument occurrences="1">
-      <code>clone $inner_type</code>
-    </MixedArgument>
-    <MixedArgumentTypeCoercion occurrences="2">
-      <code>['$inner_type' =&gt; $inner_type]</code>
-      <code>['$inner_type' =&gt; $inner_type]</code>
-    </MixedArgumentTypeCoercion>
-    <MixedAssignment occurrences="4">
-      <code>$inner_type</code>
-      <code>$key_type</code>
-      <code>$key_type</code>
-      <code>$key_type</code>
-    </MixedAssignment>
-    <MixedClone occurrences="2">
-      <code>clone $first_arg_array-&gt;type_params[0]</code>
-      <code>clone $inner_type</code>
-    </MixedClone>
-    <MixedMethodCall occurrences="11">
-      <code>addType</code>
-      <code>addType</code>
-      <code>freeze</code>
-      <code>freeze</code>
-      <code>getBuilder</code>
-      <code>getBuilder</code>
-      <code>getLiteralInts</code>
-      <code>getLiteralStrings</code>
-      <code>getSingleIntLiteral</code>
-      <code>isSingleIntLiteral</code>
-      <code>isUnionEmpty</code>
-    </MixedMethodCall>
-    <MixedPropertyFetch occurrences="1">
-      <code>$key_type-&gt;getSingleIntLiteral()-&gt;value</code>
-    </MixedPropertyFetch>
-    <PossiblyUndefinedIntArrayOffset occurrences="2">
-      <code>$first_arg_array-&gt;type_params[0]</code>
-      <code>$first_arg_array-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/ArrayMapReturnTypeProvider.php">
     <LiteralKeyUnshapedArray occurrences="1">
       <code>$arg_types['array']</code>
     </LiteralKeyUnshapedArray>
   </file>
-  <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/ArrayMergeReturnTypeProvider.php">
-    <MixedArgument occurrences="3">
-      <code>$unpacked_type_part-&gt;type_params[0]-&gt;getAtomicTypes()</code>
-      <code>$unpacked_type_part-&gt;type_params[1]</code>
-      <code>$unpacked_type_part-&gt;type_params[1]-&gt;getAtomicTypes()</code>
-    </MixedArgument>
-    <MixedArgumentTypeCoercion occurrences="2">
-      <code>$inner_key_types</code>
-      <code>$inner_value_types</code>
-    </MixedArgumentTypeCoercion>
-    <MixedAssignment occurrences="4">
-      <code>$type_part_value_type</code>
-      <code>$unpacked_type_part</code>
-      <code>$unpacked_type_parts[]</code>
-      <code>$value_type_part</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="4">
-      <code>getAtomicTypes</code>
-      <code>getAtomicTypes</code>
-      <code>getAtomicTypes</code>
-      <code>isInt</code>
-    </MixedMethodCall>
-    <PossiblyUndefinedIntArrayOffset occurrences="5">
-      <code>$type_part-&gt;type_params[1]</code>
-      <code>$unpacked_type_part-&gt;type_params[0]</code>
-      <code>$unpacked_type_part-&gt;type_params[0]</code>
-      <code>$unpacked_type_part-&gt;type_params[1]</code>
-      <code>$unpacked_type_part-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
-    <UnusedPsalmSuppress occurrences="1">
-      <code>InvalidScalarArgument</code>
-    </UnusedPsalmSuppress>
-  </file>
   <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/ArrayPadReturnTypeProvider.php">
     <LiteralKeyUnshapedArray occurrences="1">
       <code>$array_arg_type-&gt;getAtomicTypes()['array']</code>
     </LiteralKeyUnshapedArray>
   </file>
-  <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/ArrayPointerAdjustmentReturnTypeProvider.php">
-    <MixedArgument occurrences="1">
-      <code>$value_type</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="2">
-      <code>$value_type</code>
-      <code>$value_type</code>
-    </MixedAssignment>
-    <MixedClone occurrences="1">
-      <code>clone $atomic_type-&gt;type_params[1]</code>
-    </MixedClone>
-    <MixedMethodCall occurrences="4">
-      <code>addType</code>
-      <code>freeze</code>
-      <code>getBuilder</code>
-      <code>isNever</code>
-    </MixedMethodCall>
-    <MixedPropertyAssignment occurrences="1">
-      <code>$value_type</code>
-    </MixedPropertyAssignment>
-    <PossiblyUndefinedIntArrayOffset occurrences="1">
-      <code>$atomic_type-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
-  </file>
   <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/ArrayPopReturnTypeProvider.php">
     <LiteralKeyUnshapedArray occurrences="1">
       <code>$first_arg_type-&gt;getAtomicTypes()['array']</code>
     </LiteralKeyUnshapedArray>
-    <MixedAssignment occurrences="2">
-      <code>$value_type</code>
-      <code>$value_type</code>
-    </MixedAssignment>
-    <MixedClone occurrences="1">
-      <code>clone $first_arg_array-&gt;type_params[1]</code>
-    </MixedClone>
-    <MixedInferredReturnType occurrences="1">
-      <code>Union</code>
-    </MixedInferredReturnType>
-    <MixedMethodCall occurrences="3">
-      <code>addType</code>
-      <code>freeze</code>
-      <code>getBuilder</code>
-    </MixedMethodCall>
-    <MixedPropertyAssignment occurrences="1">
-      <code>$value_type</code>
-    </MixedPropertyAssignment>
-    <MixedReturnStatement occurrences="2">
-      <code>$value_type</code>
-      <code>$value_type</code>
-    </MixedReturnStatement>
-    <PossiblyUndefinedIntArrayOffset occurrences="1">
-      <code>$first_arg_array-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/ArrayRandReturnTypeProvider.php">
     <LiteralKeyUnshapedArray occurrences="1">
       <code>$first_arg_type-&gt;getAtomicTypes()['array']</code>
     </LiteralKeyUnshapedArray>
-    <MixedArgument occurrences="1">
-      <code>$key_type</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="1">
-      <code>$key_type</code>
-    </MixedAssignment>
-    <MixedClone occurrences="1">
-      <code>clone $first_arg_array-&gt;type_params[0]</code>
-    </MixedClone>
-    <MixedInferredReturnType occurrences="1">
-      <code>Union</code>
-    </MixedInferredReturnType>
-    <MixedReturnStatement occurrences="2">
-      <code>$key_type</code>
-      <code>$key_type</code>
-    </MixedReturnStatement>
-    <PossiblyUndefinedIntArrayOffset occurrences="1">
-      <code>$first_arg_array-&gt;type_params[0]</code>
-    </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/ArrayReduceReturnTypeProvider.php">
     <LiteralKeyUnshapedArray occurrences="1">
       <code>$array_arg_types['array']</code>
     </LiteralKeyUnshapedArray>
-    <MixedArgument occurrences="1">
-      <code>$array_arg_atomic_type-&gt;type_params[1]</code>
-    </MixedArgument>
-    <MixedMethodCall occurrences="1">
-      <code>hasMixed</code>
-    </MixedMethodCall>
-    <MixedOperand occurrences="1">
-      <code>$array_arg_atomic_type-&gt;type_params[1]</code>
-    </MixedOperand>
-    <PossiblyUndefinedIntArrayOffset occurrences="3">
-      <code>$array_arg_atomic_type-&gt;type_params[1]</code>
-      <code>$array_arg_atomic_type-&gt;type_params[1]</code>
-      <code>$array_arg_atomic_type-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/ArrayReverseReturnTypeProvider.php">
     <LiteralKeyUnshapedArray occurrences="1">
       <code>$first_arg_type-&gt;getAtomicTypes()['array']</code>
     </LiteralKeyUnshapedArray>
   </file>
-  <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/ArraySliceReturnTypeProvider.php">
-    <MixedArgument occurrences="1">
-      <code>$return_atomic_type-&gt;type_params[1]</code>
-    </MixedArgument>
-    <MixedArgumentTypeCoercion occurrences="1">
-      <code>$atomic_type-&gt;type_params</code>
-    </MixedArgumentTypeCoercion>
-    <MixedMethodCall occurrences="1">
-      <code>isInt</code>
-    </MixedMethodCall>
-    <PossiblyUndefinedIntArrayOffset occurrences="2">
-      <code>$return_atomic_type-&gt;type_params[0]</code>
-      <code>$return_atomic_type-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
-  </file>
   <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/ArraySpliceReturnTypeProvider.php">
     <LiteralKeyUnshapedArray occurrences="1">
       <code>$first_arg_type-&gt;getAtomicTypes()['array']</code>
     </LiteralKeyUnshapedArray>
-    <MixedArgumentTypeCoercion occurrences="1">
-      <code>$first_arg_array-&gt;type_params</code>
-    </MixedArgumentTypeCoercion>
-    <MixedMethodCall occurrences="3">
-      <code>hasString</code>
-      <code>isInt</code>
-      <code>isString</code>
-    </MixedMethodCall>
-    <PossiblyUndefinedIntArrayOffset occurrences="3">
-      <code>$array_type-&gt;type_params[0]</code>
-      <code>$array_type-&gt;type_params[1]</code>
-      <code>$array_type-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/ArrayUniqueReturnTypeProvider.php">
     <LiteralKeyUnshapedArray occurrences="1">
@@ -1624,32 +1042,11 @@
     <LiteralKeyUnshapedArray occurrences="1">
       <code>$types['array']</code>
     </LiteralKeyUnshapedArray>
-    <MixedArgument occurrences="1">
-      <code>$haystack_item_type</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="1">
-      <code>$haystack_item_type</code>
-    </MixedAssignment>
-    <PossiblyUndefinedIntArrayOffset occurrences="1">
-      <code>$array_arg_type-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/MbInternalEncodingReturnTypeProvider.php">
     <LiteralKeyUnshapedArray occurrences="1">
       <code>$atomic_type-&gt;methods['__toString']</code>
     </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/MinMaxReturnTypeProvider.php">
-    <MixedAssignment occurrences="2">
-      <code>$atomic_type</code>
-      <code>$possibly_unpacked_arg_type</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="1">
-      <code>getAtomicTypes</code>
-    </MixedMethodCall>
-    <PossiblyUndefinedIntArrayOffset occurrences="1">
-      <code>$array_arg_type-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Provider/StatementsProvider.php">
     <MixedArgument occurrences="7">
@@ -1755,191 +1152,19 @@
       <code>$map['']</code>
       <code>$map['']</code>
     </LiteralKeyUnshapedArray>
-    <MixedClone occurrences="2">
-      <code>clone $array_atomic_type-&gt;type_params[1]</code>
-      <code>clone $array_atomic_type-&gt;type_params[1]</code>
-    </MixedClone>
-    <MixedInferredReturnType occurrences="2">
-      <code>?Union</code>
-      <code>Union</code>
-    </MixedInferredReturnType>
-    <MixedReturnStatement occurrences="2">
-      <code>clone $array_atomic_type-&gt;type_params[1]</code>
-      <code>clone $array_atomic_type-&gt;type_params[1]</code>
-    </MixedReturnStatement>
-    <PossiblyUndefinedIntArrayOffset occurrences="2">
-      <code>$array_atomic_type-&gt;type_params[1]</code>
-      <code>$array_atomic_type-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/Internal/Type/ArrayType.php">
-    <MixedArgument occurrences="2">
-      <code>$type-&gt;type_params[0]</code>
-      <code>$type-&gt;type_params[1]</code>
-    </MixedArgument>
-    <PossiblyUndefinedIntArrayOffset occurrences="2">
-      <code>$type-&gt;type_params[0]</code>
-      <code>$type-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/Internal/Type/AssertionReconciler.php">
-    <MixedArgument occurrences="4">
-      <code>$type_1_param</code>
-      <code>$type_2_param</code>
-      <code>$type_2_param</code>
-      <code>$type_2_param</code>
-    </MixedArgument>
-    <MixedArgumentTypeCoercion occurrences="4">
-      <code>$type_1_atomic-&gt;type_params</code>
-      <code>$type_1_params</code>
-      <code>$type_1_params</code>
-      <code>$type_1_params</code>
-    </MixedArgumentTypeCoercion>
-    <MixedAssignment occurrences="5">
-      <code>$type_1_param</code>
-      <code>$type_2_param</code>
-      <code>$type_2_param</code>
-      <code>$type_2_param</code>
-      <code>$type_2_param_id</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="2">
-      <code>getId</code>
-      <code>getId</code>
-    </MixedMethodCall>
-    <PossiblyUndefinedIntArrayOffset occurrences="2">
-      <code>$type_2_atomic-&gt;type_params[1]</code>
-      <code>$type_2_atomic-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
-    <UnusedPsalmSuppress occurrences="1">
-      <code>ArgumentTypeCoercion</code>
-    </UnusedPsalmSuppress>
-  </file>
-  <file src="src/Psalm/Internal/Type/Comparator/ArrayTypeComparator.php">
-    <MixedArgument occurrences="7">
-      <code>$container_param</code>
-      <code>$input_param</code>
-      <code>$input_param-&gt;ignore_falsable_issues</code>
-      <code>$input_param-&gt;ignore_nullable_issues</code>
-      <code>$input_type_part-&gt;type_params[1]</code>
-      <code>$input_type_part-&gt;type_params[1]-&gt;ignore_falsable_issues</code>
-      <code>$input_type_part-&gt;type_params[1]-&gt;ignore_nullable_issues</code>
-    </MixedArgument>
-    <MixedArgumentTypeCoercion occurrences="1">
-      <code>$properties</code>
-    </MixedArgumentTypeCoercion>
-    <MixedAssignment occurrences="4">
-      <code>$atomic_key_type</code>
-      <code>$container_param</code>
-      <code>$input_param</code>
-      <code>$properties[$atomic_key_type-&gt;value]</code>
-    </MixedAssignment>
-    <MixedClone occurrences="1">
-      <code>clone $input_type_part-&gt;type_params[1]</code>
-    </MixedClone>
-    <MixedMethodCall occurrences="8">
-      <code>getAtomicTypes</code>
-      <code>getSingleIntLiteral</code>
-      <code>hasInt</code>
-      <code>hasMixed</code>
-      <code>hasString</code>
-      <code>isNever</code>
-      <code>isNever</code>
-      <code>isSingleIntLiteral</code>
-    </MixedMethodCall>
-    <MixedPropertyAssignment occurrences="1">
-      <code>$properties[$atomic_key_type-&gt;value]</code>
-    </MixedPropertyAssignment>
-    <MixedPropertyFetch occurrences="5">
-      <code>$input_param-&gt;ignore_falsable_issues</code>
-      <code>$input_param-&gt;ignore_nullable_issues</code>
-      <code>$input_type_part-&gt;type_params[0]-&gt;getSingleIntLiteral()-&gt;value</code>
-      <code>$input_type_part-&gt;type_params[1]-&gt;ignore_falsable_issues</code>
-      <code>$input_type_part-&gt;type_params[1]-&gt;ignore_nullable_issues</code>
-    </MixedPropertyFetch>
-    <PossiblyUndefinedIntArrayOffset occurrences="4">
-      <code>$input_type_part-&gt;type_params[0]</code>
-      <code>$input_type_part-&gt;type_params[0]</code>
-      <code>$input_type_part-&gt;type_params[0]</code>
-      <code>$input_type_part-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Type/Comparator/AtomicTypeComparator.php">
-    <InvalidOperand occurrences="1">
-      <code>$i</code>
-    </InvalidOperand>
     <LiteralKeyUnshapedArray occurrences="1">
       <code>$input_type_part-&gt;methods['__toString']</code>
     </LiteralKeyUnshapedArray>
-    <MixedArgument occurrences="8">
-      <code>$container_param</code>
-      <code>$input_param</code>
-      <code>$input_param-&gt;ignore_falsable_issues</code>
-      <code>$input_param-&gt;ignore_nullable_issues</code>
-      <code>$type1_part-&gt;type_params[0]</code>
-      <code>$type1_part-&gt;type_params[1]</code>
-      <code>$type2_part-&gt;type_params[0]</code>
-      <code>$type2_part-&gt;type_params[1]</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="2">
-      <code>$container_param</code>
-      <code>$input_param</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="4">
-      <code>hasInt</code>
-      <code>hasMixed</code>
-      <code>hasString</code>
-      <code>isNever</code>
-    </MixedMethodCall>
-    <MixedPropertyFetch occurrences="2">
-      <code>$input_param-&gt;ignore_falsable_issues</code>
-      <code>$input_param-&gt;ignore_nullable_issues</code>
-    </MixedPropertyFetch>
-    <PossiblyInvalidArrayOffset occurrences="1">
-      <code>$container_type_part-&gt;type_params[$container_param_offset]</code>
-    </PossiblyInvalidArrayOffset>
-    <PossiblyUndefinedIntArrayOffset occurrences="4">
-      <code>$type1_part-&gt;type_params[0]</code>
-      <code>$type1_part-&gt;type_params[1]</code>
-      <code>$type2_part-&gt;type_params[0]</code>
-      <code>$type2_part-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Type/Comparator/CallableTypeComparator.php">
     <LessSpecificReturnStatement occurrences="1">
       <code>$callable</code>
     </LessSpecificReturnStatement>
-    <MixedMethodCall occurrences="3">
-      <code>hasScalar</code>
-      <code>hasString</code>
-      <code>isMixed</code>
-    </MixedMethodCall>
     <MoreSpecificReturnType occurrences="1">
       <code>TCallable|TClosure|null</code>
     </MoreSpecificReturnType>
-    <PossiblyNullArgument occurrences="1">
-      <code>$calling_method_id ?: $file_name</code>
-    </PossiblyNullArgument>
-    <PossiblyUndefinedIntArrayOffset occurrences="3">
-      <code>$input_type_part-&gt;type_params[1]</code>
-      <code>$input_type_part-&gt;type_params[1]</code>
-      <code>$input_type_part-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/Internal/Type/Comparator/GenericTypeComparator.php">
-    <MixedArgument occurrences="1">
-      <code>$container_param</code>
-    </MixedArgument>
-    <MixedArgumentTypeCoercion occurrences="2">
-      <code>$atomic_comparison_result_type_params</code>
-      <code>$container_type_part-&gt;type_params</code>
-    </MixedArgumentTypeCoercion>
-    <MixedAssignment occurrences="2">
-      <code>$atomic_comparison_result_type_params[$i]</code>
-      <code>$container_param</code>
-    </MixedAssignment>
-    <MixedClone occurrences="1">
-      <code>clone $container_param</code>
-    </MixedClone>
   </file>
   <file src="src/Psalm/Internal/Type/Comparator/IntegerRangeComparator.php">
     <LiteralKeyUnshapedArray occurrences="1">
@@ -1947,7 +1172,6 @@
     </LiteralKeyUnshapedArray>
   </file>
   <file src="src/Psalm/Internal/Type/NegatedAssertionReconciler.php">
-    <ArgumentTypeCoercion occurrences="1"/>
     <LiteralKeyUnshapedArray occurrences="7">
       <code>$existing_var_atomic_types['DateTimeInterface']</code>
       <code>$existing_var_atomic_types['bool']</code>
@@ -1957,26 +1181,8 @@
       <code>$existing_var_type-&gt;getAtomicTypes()['array-key']</code>
       <code>$existing_var_type-&gt;getAtomicTypes()['int']</code>
     </LiteralKeyUnshapedArray>
-    <MixedClone occurrences="2">
-      <code>clone $iterable-&gt;type_params[0]</code>
-      <code>clone $iterable-&gt;type_params[1]</code>
-    </MixedClone>
-    <MixedMethodCall occurrences="2">
-      <code>hasMixed</code>
-      <code>isMixed</code>
-    </MixedMethodCall>
-    <PossiblyUndefinedIntArrayOffset occurrences="4">
-      <code>$assertion_type-&gt;type_params[1]</code>
-      <code>$iterable-&gt;type_params[0]</code>
-      <code>$iterable-&gt;type_params[0]</code>
-      <code>$iterable-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Type/SimpleAssertionReconciler.php">
-    <InvalidArgument occurrences="2">
-      <code>$params</code>
-      <code>$params</code>
-    </InvalidArgument>
     <LiteralKeyUnshapedArray occurrences="7">
       <code>$existing_var_type-&gt;getAtomicTypes()['array']</code>
       <code>$existing_var_type-&gt;getAtomicTypes()['array']</code>
@@ -1986,48 +1192,8 @@
       <code>$types['scalar']</code>
       <code>$types['string']</code>
     </LiteralKeyUnshapedArray>
-    <MixedArgument occurrences="5">
-      <code>$clone_type-&gt;type_params[1]</code>
-      <code>$params[0]</code>
-      <code>$params[0]</code>
-      <code>$type-&gt;type_params[1]</code>
-      <code>$type-&gt;type_params[1]</code>
-    </MixedArgument>
-    <MixedArgumentTypeCoercion occurrences="7">
-      <code>$array_atomic_type-&gt;type_params</code>
-      <code>$array_atomic_type-&gt;type_params</code>
-      <code>$array_atomic_type-&gt;type_params</code>
-      <code>$clone_type-&gt;type_params</code>
-      <code>$type-&gt;type_params</code>
-      <code>$type-&gt;type_params</code>
-      <code>$type-&gt;type_params</code>
-    </MixedArgumentTypeCoercion>
-    <MixedMethodCall occurrences="6">
-      <code>hasArrayKey</code>
-      <code>hasInt</code>
-      <code>isArrayKey</code>
-      <code>isMixed</code>
-      <code>isMixed</code>
-      <code>isMixed</code>
-    </MixedMethodCall>
-    <PossiblyUndefinedIntArrayOffset occurrences="11">
-      <code>$assertion_type-&gt;type_params[0]</code>
-      <code>$assertion_type-&gt;type_params[0]</code>
-      <code>$assertion_type-&gt;type_params[1]</code>
-      <code>$assertion_type-&gt;type_params[1]</code>
-      <code>$clone_type-&gt;type_params[1]</code>
-      <code>$params[0]</code>
-      <code>$params[0]</code>
-      <code>$type-&gt;type_params[0]</code>
-      <code>$type-&gt;type_params[0]</code>
-      <code>$type-&gt;type_params[1]</code>
-      <code>$type-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Type/SimpleNegatedAssertionReconciler.php">
-    <InvalidArgument occurrences="1">
-      <code>$params</code>
-    </InvalidArgument>
     <LiteralKeyUnshapedArray occurrences="7">
       <code>$existing_var_atomic_types['array']</code>
       <code>$existing_var_type-&gt;getAtomicTypes()['mixed']</code>
@@ -2037,96 +1203,19 @@
       <code>$types['null']</code>
       <code>$types['resource']</code>
     </LiteralKeyUnshapedArray>
-    <MixedArgument occurrences="1">
-      <code>$params[0]</code>
-    </MixedArgument>
-    <MixedArgumentTypeCoercion occurrences="1">
-      <code>$type-&gt;type_params</code>
-    </MixedArgumentTypeCoercion>
-    <MixedMethodCall occurrences="4">
-      <code>isArrayKey</code>
-      <code>isMixed</code>
-      <code>isMixed</code>
-      <code>isMixed</code>
-    </MixedMethodCall>
-    <PossiblyUndefinedIntArrayOffset occurrences="5">
-      <code>$assertion_type-&gt;type_params[0]</code>
-      <code>$assertion_type-&gt;type_params[1]</code>
-      <code>$params[0]</code>
-      <code>$type-&gt;type_params[0]</code>
-      <code>$type-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
-    <RedundantCondition occurrences="1">
-      <code>assert(!$existing_var_type-&gt;isUnionEmpty())</code>
-    </RedundantCondition>
   </file>
   <file src="src/Psalm/Internal/Type/TemplateStandinTypeReplacer.php">
-    <MixedArgument occurrences="1">
-      <code>$candidate_param_type</code>
-    </MixedArgument>
-    <MixedArgumentTypeCoercion occurrences="2">
-      <code>$base_type-&gt;type_params</code>
-      <code>$replacement_templates</code>
-    </MixedArgumentTypeCoercion>
-    <MixedAssignment occurrences="11">
-      <code>$atomic_type</code>
-      <code>$atomic_types[]</code>
-      <code>$atomic_types[]</code>
-      <code>$candidate_param_type</code>
-      <code>$existing_lower_bound-&gt;type</code>
-      <code>$key_atomic_type</code>
-      <code>$key_type</code>
-      <code>$key_type_atomic</code>
-      <code>$replacement_templates[$template_name][$input_type_part-&gt;value]</code>
-      <code>$template_atomic</code>
-      <code>$template_atomic</code>
-    </MixedAssignment>
-    <MixedClone occurrences="4">
-      <code>clone $key_type</code>
-      <code>clone $key_type_atomic</code>
-      <code>clone $template_atomic-&gt;type_params[0]</code>
-      <code>clone $template_atomic-&gt;type_params[1]</code>
-    </MixedClone>
-    <MixedMethodCall occurrences="2">
-      <code>getAtomicTypes</code>
-      <code>getAtomicTypes</code>
-    </MixedMethodCall>
-    <MixedPropertyAssignment occurrences="1">
-      <code>$candidate_param_type</code>
-    </MixedPropertyAssignment>
-    <MixedReturnTypeCoercion occurrences="6">
-      <code>$atomic_types</code>
-      <code>$atomic_types</code>
-      <code>$input_type_params</code>
-      <code>list&lt;Atomic&gt;</code>
-      <code>list&lt;Atomic&gt;</code>
-      <code>list&lt;Union&gt;</code>
-    </MixedReturnTypeCoercion>
-    <PossiblyUndefinedIntArrayOffset occurrences="3">
-      <code>$keyed_template-&gt;type_params[0]</code>
-      <code>$template_atomic-&gt;type_params[0]</code>
-      <code>$template_atomic-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
-    <ReferenceConstraintViolation occurrences="2">
-      <code>$atomic_type</code>
-      <code>$atomic_type</code>
-    </ReferenceConstraintViolation>
+    <ImpureMethodCall occurrences="4">
+      <code>get</code>
+      <code>get</code>
+      <code>get</code>
+      <code>getClassTemplateTypes</code>
+    </ImpureMethodCall>
+    <ImpurePropertyAssignment occurrences="1">
+      <code>$candidate_param_type-&gt;from_template_default</code>
+    </ImpurePropertyAssignment>
   </file>
   <file src="src/Psalm/Internal/Type/TypeCombiner.php">
-    <ArgumentTypeCoercion occurrences="2">
-      <code>$combination-&gt;extra_types</code>
-      <code>$combination-&gt;extra_types</code>
-    </ArgumentTypeCoercion>
-    <ComplexMethod occurrences="1">
-      <code>scrapeTypeProperties</code>
-    </ComplexMethod>
-    <ImpurePropertyAssignment occurrences="5">
-      <code>$combination-&gt;array_type_params</code>
-      <code>$combination-&gt;extra_types</code>
-      <code>$combination-&gt;value_types</code>
-      <code>$result-&gt;from_docblock</code>
-      <code>$union_type-&gt;from_docblock</code>
-    </ImpurePropertyAssignment>
     <LiteralKeyUnshapedArray occurrences="57">
       <code>$combination-&gt;builtin_type_params['Traversable']</code>
       <code>$combination-&gt;builtin_type_params['Traversable']</code>
@@ -2186,101 +1275,22 @@
       <code>$combination-&gt;value_types['true']</code>
       <code>$combination-&gt;value_types['void']</code>
     </LiteralKeyUnshapedArray>
-    <MixedArgument occurrences="3">
-      <code>$type_param</code>
-      <code>$type_param</code>
-      <code>$type_param</code>
-    </MixedArgument>
-    <MixedArrayTypeCoercion occurrences="3">
-      <code>$combination-&gt;array_type_params[$i]</code>
-      <code>$combination-&gt;builtin_type_params[$type_key][$i]</code>
-      <code>$combination-&gt;object_type_params[$type_key][$i]</code>
-    </MixedArrayTypeCoercion>
-    <MixedAssignment occurrences="3">
-      <code>$type_param</code>
-      <code>$type_param</code>
-      <code>$type_param</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="1">
-      <code>isMixed</code>
-    </MixedMethodCall>
-    <MixedPropertyTypeCoercion occurrences="3">
-      <code>$combination-&gt;array_type_params</code>
-      <code>$combination-&gt;builtin_type_params</code>
-      <code>$combination-&gt;object_type_params</code>
-    </MixedPropertyTypeCoercion>
-    <PossiblyUndefinedIntArrayOffset occurrences="7">
+    <PossiblyUndefinedIntArrayOffset occurrences="6">
       <code>$combination-&gt;array_type_params[1]</code>
       <code>$combination-&gt;array_type_params[1]</code>
       <code>$combination-&gt;array_type_params[1]</code>
       <code>$combination-&gt;array_type_params[1]</code>
       <code>$combination-&gt;array_type_params[1]</code>
       <code>$combination-&gt;array_type_params[1]</code>
-      <code>$type-&gt;type_params[1]</code>
     </PossiblyUndefinedIntArrayOffset>
-    <UnusedPsalmSuppress occurrences="3">
-      <code>PropertyTypeCoercion</code>
-      <code>PropertyTypeCoercion</code>
-      <code>PropertyTypeCoercion</code>
-    </UnusedPsalmSuppress>
-  </file>
-  <file src="src/Psalm/Internal/Type/TypeExpander.php">
-    <ArgumentTypeCoercion occurrences="2">
-      <code>array_merge($extra_types, $new_intersection_types)</code>
-      <code>array_merge($extra_types, $new_intersection_types)</code>
-    </ArgumentTypeCoercion>
-    <MixedArgument occurrences="1">
-      <code>$type_param</code>
-    </MixedArgument>
-    <MixedArgumentTypeCoercion occurrences="3">
-      <code>$type_params</code>
-      <code>$type_params</code>
-      <code>$type_params</code>
-    </MixedArgumentTypeCoercion>
-    <MixedAssignment occurrences="1">
-      <code>$type_param</code>
-    </MixedAssignment>
-    <ReferenceConstraintViolation occurrences="11">
-      <code>$return_type</code>
-      <code>$return_type</code>
-      <code>$return_type</code>
-      <code>$return_type</code>
-      <code>$return_type</code>
-      <code>$return_type</code>
-      <code>$return_type</code>
-      <code>$return_type</code>
-      <code>$return_type</code>
-      <code>$return_type</code>
-      <code>return $return_type;</code>
-    </ReferenceConstraintViolation>
-    <UnusedPsalmSuppress occurrences="1">
-      <code>ArgumentTypeCoercion</code>
-    </UnusedPsalmSuppress>
   </file>
   <file src="src/Psalm/Internal/Type/TypeParser.php">
     <LiteralKeyUnshapedArray occurrences="2">
       <code>$keyed_intersection_types['static']</code>
       <code>$offset_template_data['']</code>
     </LiteralKeyUnshapedArray>
-    <MixedArgument occurrences="2">
-      <code>$previous_key_type ?? null</code>
-      <code>$previous_value_type ?? null</code>
-    </MixedArgument>
-    <MixedArgumentTypeCoercion occurrences="1">
-      <code>$t-&gt;type_params</code>
-    </MixedArgumentTypeCoercion>
-    <MixedAssignment occurrences="4">
-      <code>$previous_key_type</code>
-      <code>$previous_key_type</code>
-      <code>$previous_value_type</code>
-      <code>$previous_value_type</code>
-    </MixedAssignment>
-    <PossiblyUndefinedIntArrayOffset occurrences="12">
-      <code>$first_type-&gt;type_params[0]</code>
-      <code>$first_type-&gt;type_params[1]</code>
+    <PossiblyUndefinedIntArrayOffset occurrences="8">
       <code>$intersection_types[0]</code>
-      <code>$last_type-&gt;type_params[0]</code>
-      <code>$last_type-&gt;type_params[1]</code>
       <code>$parse_tree-&gt;children[0]</code>
       <code>$parse_tree-&gt;condition-&gt;children[0]</code>
       <code>array_keys($offset_template_data)[0]</code>
@@ -2290,8 +1300,30 @@
       <code>array_keys($template_type_map[$template_param_name])[0]</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
+  <file src="src/Psalm/IssueBuffer.php">
+    <LiteralKeyUnshapedArray occurrences="1">
+      <code>$_SERVER['GITHUB_WORKFLOW']</code>
+    </LiteralKeyUnshapedArray>
+  </file>
+  <file src="src/Psalm/Plugin/Shepherd.php">
+    <LiteralKeyUnshapedArray occurrences="3">
+      <code>$build_info['git']</code>
+      <code>$build_info['git']</code>
+      <code>$curl_info['ssl_verify_result']</code>
+    </LiteralKeyUnshapedArray>
+  </file>
+  <file src="src/Psalm/Report/ConsoleReport.php">
+    <RedundantCondition occurrences="1">
+      <code>true</code>
+    </RedundantCondition>
+  </file>
+  <file src="src/Psalm/Report/JsonReport.php">
+    <LiteralKeyUnshapedArray occurrences="1">
+      <code>$issue_data['dupe_key']</code>
+    </LiteralKeyUnshapedArray>
+  </file>
   <file src="src/Psalm/Type/Atomic.php">
-    <ImpureMethodCall occurrences="11">
+    <ImpureMethodCall occurrences="10">
       <code>classExtendsOrImplements</code>
       <code>classExtendsOrImplements</code>
       <code>classExtendsOrImplements</code>
@@ -2302,12 +1334,7 @@
       <code>interfaceExtends</code>
       <code>interfaceExtends</code>
       <code>interfaceExtends</code>
-      <code>traverse</code>
     </ImpureMethodCall>
-    <MixedArgumentTypeCoercion occurrences="2">
-      <code>$this-&gt;type_params</code>
-      <code>$this-&gt;type_params</code>
-    </MixedArgumentTypeCoercion>
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>array_keys($template_type_map[$value])[0]</code>
     </PossiblyUndefinedIntArrayOffset>
@@ -2326,96 +1353,14 @@
       <code>replace</code>
       <code>replace</code>
     </ImpureMethodCall>
-    <MixedArgument occurrences="3">
-      <code>$input_type_param</code>
-      <code>$type_param</code>
-      <code>$type_param</code>
-    </MixedArgument>
-    <MixedArrayTypeCoercion occurrences="1">
-      <code>$input_object_type_params[$offset]</code>
-    </MixedArrayTypeCoercion>
-    <MixedAssignment occurrences="6">
-      <code>$input_type_param</code>
-      <code>$type_param</code>
-      <code>$type_param</code>
-      <code>$type_param</code>
-      <code>$value_type</code>
-      <code>$value_type_string</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="7">
-      <code>getId</code>
-      <code>isArrayKey</code>
-      <code>isMixed</code>
-      <code>isMixed</code>
-      <code>isNever</code>
-      <code>isSingle</code>
-      <code>toNamespacedString</code>
-    </MixedMethodCall>
-    <MixedOperand occurrences="3">
-      <code>$type_param-&gt;getId($exact)</code>
-      <code>$value_type_string</code>
-      <code>$value_type_string</code>
-    </MixedOperand>
-    <MixedReturnTypeCoercion occurrences="4">
-      <code>TTypeParams|null</code>
-      <code>TTypeParams|null</code>
-      <code>TTypeParams|null</code>
-      <code>TTypeParams|null</code>
-    </MixedReturnTypeCoercion>
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$this-&gt;type_params[1]</code>
     </PossiblyUndefinedIntArrayOffset>
-    <PossiblyUnusedMethod occurrences="3">
-      <code>replaceTypeParams</code>
-      <code>replaceTypeParams</code>
-      <code>replaceTypeParams</code>
-    </PossiblyUnusedMethod>
-  </file>
-  <file src="src/Psalm/Type/Atomic/TTemplateParam.php">
-    <PossiblyUnusedMethod occurrences="1">
-      <code>replaceAs</code>
-    </PossiblyUnusedMethod>
-  </file>
-  <file src="src/Psalm/Type/MutableUnion.php">
-    <PossiblyUnusedProperty occurrences="6">
-      <code>$allow_mutations</code>
-      <code>$failed_reconciliation</code>
-      <code>$from_template_default</code>
-      <code>$has_mutations</code>
-      <code>$initialized_class</code>
-      <code>$reference_free</code>
-    </PossiblyUnusedProperty>
   </file>
   <file src="src/Psalm/Type/Atomic/HasIntersectionTrait.php">
     <ImpureMethodCall occurrences="1">
       <code>getMostSpecificTypeFromBounds</code>
     </ImpureMethodCall>
-  </file>
-  <file src="src/Psalm/Type/Atomic/TArray.php">
-    <MixedAssignment occurrences="1">
-      <code>$type_param</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="1">
-      <code>bool</code>
-    </MixedInferredReturnType>
-    <MixedMethodCall occurrences="6">
-      <code>equals</code>
-      <code>isArrayKey</code>
-      <code>isMixed</code>
-      <code>isMixed</code>
-      <code>isMixed</code>
-      <code>isNever</code>
-    </MixedMethodCall>
-    <MixedReturnStatement occurrences="1">
-      <code>$this-&gt;type_params[1]-&gt;isNever()</code>
-    </MixedReturnStatement>
-    <PossiblyUndefinedIntArrayOffset occurrences="5">
-      <code>$this-&gt;type_params[0]</code>
-      <code>$this-&gt;type_params[0]</code>
-      <code>$this-&gt;type_params[1]</code>
-      <code>$this-&gt;type_params[1]</code>
-      <code>$this-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Type/Atomic/TClassString.php">
     <ImpureMethodCall occurrences="1">
@@ -2432,74 +1377,11 @@
     <ImpurePropertyAssignment occurrences="1">
       <code>$cloned-&gt;value_param</code>
     </ImpurePropertyAssignment>
-    <MixedArgument occurrences="1">
-      <code>$input_type_param</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="1">
-      <code>$input_type_param</code>
-    </MixedAssignment>
-    <MixedClone occurrences="1">
-      <code>clone $input_type-&gt;type_params[$offset]</code>
-    </MixedClone>
   </file>
   <file src="src/Psalm/Type/Atomic/TConditional.php">
     <ImpureMethodCall occurrences="1">
       <code>replace</code>
     </ImpureMethodCall>
-  </file>
-  <file src="src/Psalm/Type/Atomic/TGenericObject.php">
-    <MixedArgumentTypeCoercion occurrences="2">
-      <code>$type_params ?? $this-&gt;type_params</code>
-      <code>$types ?? $this-&gt;type_params</code>
-    </MixedArgumentTypeCoercion>
-    <MixedAssignment occurrences="2">
-      <code>$type_param</code>
-      <code>$type_param</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="2">
-      <code>equals</code>
-      <code>getKey</code>
-    </MixedMethodCall>
-    <MixedOperand occurrences="1">
-      <code>$type_param-&gt;getKey()</code>
-    </MixedOperand>
-  </file>
-  <file src="src/Psalm/Type/Atomic/TIterable.php">
-    <MixedArgumentTypeCoercion occurrences="2">
-      <code>$type_params ?? $this-&gt;type_params</code>
-      <code>$types ?? $this-&gt;type_params</code>
-    </MixedArgumentTypeCoercion>
-    <MixedAssignment occurrences="2">
-      <code>$type_param</code>
-      <code>$type_param</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="4">
-      <code>equals</code>
-      <code>getId</code>
-      <code>isMixed</code>
-      <code>isMixed</code>
-    </MixedMethodCall>
-    <MixedOperand occurrences="1">
-      <code>$type_param-&gt;getId($exact)</code>
-    </MixedOperand>
-    <PossiblyUndefinedIntArrayOffset occurrences="2">
-      <code>$this-&gt;type_params[0]</code>
-      <code>$this-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/Type/Atomic/TKeyOf.php">
-    <MixedArgument occurrences="1">
-      <code>$array_key_atomics-&gt;getAtomicTypes()</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="1">
-      <code>$array_key_atomics</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="1">
-      <code>getAtomicTypes</code>
-    </MixedMethodCall>
-    <PossiblyUndefinedIntArrayOffset occurrences="1">
-      <code>$atomic_type-&gt;type_params[0]</code>
-    </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Type/Atomic/TKeyedArray.php">
     <ImpureMethodCall occurrences="10">
@@ -2528,15 +1410,6 @@
     <ImpurePropertyAssignment occurrences="1">
       <code>$cloned-&gt;type_param</code>
     </ImpurePropertyAssignment>
-    <MixedArgument occurrences="1">
-      <code>$input_type_param</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="1">
-      <code>$input_type_param</code>
-    </MixedAssignment>
-    <MixedClone occurrences="1">
-      <code>clone $input_type-&gt;type_params[$offset]</code>
-    </MixedClone>
   </file>
   <file src="src/Psalm/Type/Atomic/TObjectWithProperties.php">
     <ImpureMethodCall occurrences="2">
@@ -2563,27 +1436,7 @@
       <code>replace</code>
     </ImpureMethodCall>
   </file>
-  <file src="src/Psalm/Type/Atomic/TValueOf.php">
-    <MixedArgument occurrences="1">
-      <code>$value_atomics-&gt;getAtomicTypes()</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="1">
-      <code>$value_atomics</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="1">
-      <code>getAtomicTypes</code>
-    </MixedMethodCall>
-    <PossiblyUndefinedIntArrayOffset occurrences="1">
-      <code>$atomic_type-&gt;type_params[1]</code>
-    </PossiblyUndefinedIntArrayOffset>
-  </file>
   <file src="src/Psalm/Type/MutableUnion.php">
-    <ImpureMethodCall occurrences="1">
-      <code>traverseArray</code>
-    </ImpureMethodCall>
-    <ImpurePropertyAssignment occurrences="1">
-      <code>$union-&gt;{$key}</code>
-    </ImpurePropertyAssignment>
     <LiteralKeyUnshapedArray occurrences="6">
       <code>$this-&gt;types['array-key']</code>
       <code>$this-&gt;types['bool']</code>
@@ -2603,43 +1456,7 @@
     </PossiblyUnusedProperty>
   </file>
   <file src="src/Psalm/Type/Reconciler.php">
-    <MixedArgument occurrences="3">
-      <code>$new_base_type_candidate</code>
-      <code>$previous_key_type-&gt;isNever() ? null : $previous_key_type</code>
-      <code>$previous_value_type</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="5">
-      <code>$new_base_type_candidate</code>
-      <code>$new_base_type_candidate</code>
-      <code>$new_base_type_candidate</code>
-      <code>$previous_key_type</code>
-      <code>$previous_value_type</code>
-    </MixedAssignment>
-    <MixedClone occurrences="3">
-      <code>clone $base_atomic_type-&gt;type_params[0]</code>
-      <code>clone $base_atomic_type-&gt;type_params[1]</code>
-      <code>clone $existing_key_type_part-&gt;type_params[1]</code>
-    </MixedClone>
-    <MixedInferredReturnType occurrences="1">
-      <code>?Union</code>
-    </MixedInferredReturnType>
-    <MixedMethodCall occurrences="5">
-      <code>addType</code>
-      <code>freeze</code>
-      <code>getBuilder</code>
-      <code>isMixed</code>
-      <code>isNever</code>
-    </MixedMethodCall>
-    <MixedPropertyAssignment occurrences="1">
-      <code>$new_base_type_candidate</code>
-    </MixedPropertyAssignment>
-    <MixedReturnStatement occurrences="1">
-      <code>$new_base_type_candidate</code>
-    </MixedReturnStatement>
-    <PossiblyUndefinedIntArrayOffset occurrences="5">
-      <code>$base_atomic_type-&gt;type_params[0]</code>
-      <code>$base_atomic_type-&gt;type_params[1]</code>
-      <code>$existing_key_type_part-&gt;type_params[1]</code>
+    <PossiblyUndefinedIntArrayOffset occurrences="2">
       <code>$type[0]</code>
       <code>$type[0][0]</code>
     </PossiblyUndefinedIntArrayOffset>
@@ -2650,10 +1467,129 @@
     </PossiblyUnusedProperty>
   </file>
   <file src="src/Psalm/Type/UnionTrait.php">
+    <LiteralKeyUnshapedArray occurrences="54">
+      <code>$this-&gt;types['array']</code>
+      <code>$this-&gt;types['array']</code>
+      <code>$this-&gt;types['array']</code>
+      <code>$this-&gt;types['array']</code>
+      <code>$this-&gt;types['array']</code>
+      <code>$this-&gt;types['array-key']</code>
+      <code>$this-&gt;types['array-key']</code>
+      <code>$this-&gt;types['array-key']</code>
+      <code>$this-&gt;types['array-key']</code>
+      <code>$this-&gt;types['bool']</code>
+      <code>$this-&gt;types['bool']</code>
+      <code>$this-&gt;types['bool']</code>
+      <code>$this-&gt;types['callable-string']</code>
+      <code>$this-&gt;types['class-string']</code>
+      <code>$this-&gt;types['class-string']</code>
+      <code>$this-&gt;types['false']</code>
+      <code>$this-&gt;types['false']</code>
+      <code>$this-&gt;types['false']</code>
+      <code>$this-&gt;types['false']</code>
+      <code>$this-&gt;types['false']</code>
+      <code>$this-&gt;types['float']</code>
+      <code>$this-&gt;types['float']</code>
+      <code>$this-&gt;types['float']</code>
+      <code>$this-&gt;types['int']</code>
+      <code>$this-&gt;types['int']</code>
+      <code>$this-&gt;types['iterable']</code>
+      <code>$this-&gt;types['mixed']</code>
+      <code>$this-&gt;types['mixed']</code>
+      <code>$this-&gt;types['mixed']</code>
+      <code>$this-&gt;types['mixed']</code>
+      <code>$this-&gt;types['never']</code>
+      <code>$this-&gt;types['null']</code>
+      <code>$this-&gt;types['null']</code>
+      <code>$this-&gt;types['null']</code>
+      <code>$this-&gt;types['null']</code>
+      <code>$this-&gt;types['numeric']</code>
+      <code>$this-&gt;types['numeric']</code>
+      <code>$this-&gt;types['numeric-string']</code>
+      <code>$this-&gt;types['numeric-string']</code>
+      <code>$this-&gt;types['object']</code>
+      <code>$this-&gt;types['scalar']</code>
+      <code>$this-&gt;types['string']</code>
+      <code>$this-&gt;types['string']</code>
+      <code>$this-&gt;types['string']</code>
+      <code>$this-&gt;types['trait-string']</code>
+      <code>$this-&gt;types['trait-string']</code>
+      <code>$this-&gt;types['true']</code>
+      <code>$this-&gt;types['true']</code>
+      <code>$this-&gt;types['true']</code>
+      <code>$this-&gt;types['true']</code>
+      <code>$this-&gt;types['void']</code>
+      <code>$types['false']</code>
+      <code>$types['null']</code>
+      <code>$types['null']</code>
+    </LiteralKeyUnshapedArray>
     <PossiblyUnusedMethod occurrences="2">
       <code>allFloatLiterals</code>
       <code>allFloatLiterals</code>
     </PossiblyUnusedMethod>
+  </file>
+  <file src="tests/BinaryOperationTest.php">
+    <LiteralKeyUnshapedArray occurrences="2">
+      <code>$context-&gt;vars_in_scope[$var]</code>
+      <code>$context-&gt;vars_in_scope[$var]</code>
+    </LiteralKeyUnshapedArray>
+  </file>
+  <file src="tests/CodebaseTest.php">
+    <LiteralKeyUnshapedArray occurrences="12">
+      <code>$class_storage-&gt;custom_metadata['a']</code>
+      <code>$class_storage-&gt;custom_metadata['extends']</code>
+      <code>$class_storage-&gt;custom_metadata['fqcn']</code>
+      <code>$class_storage-&gt;custom_metadata['implements']</code>
+      <code>$class_storage-&gt;methods['m']</code>
+      <code>$class_storage-&gt;methods['m']-&gt;custom_metadata['c']</code>
+      <code>$class_storage-&gt;methods['m']-&gt;params[0]-&gt;custom_metadata['g']</code>
+      <code>$class_storage-&gt;properties['prop']</code>
+      <code>$class_storage-&gt;properties['prop']-&gt;custom_metadata['e']</code>
+      <code>$file_storage-&gt;custom_metadata['i']</code>
+      <code>$storage-&gt;methods['m']</code>
+      <code>$storage-&gt;properties['prop']</code>
+    </LiteralKeyUnshapedArray>
+  </file>
+  <file src="tests/ComposerLockTest.php">
+    <LiteralKeyUnshapedArray occurrences="2">
+      <code>$plugins['vendor/package']</code>
+      <code>$plugins['vendor/package']</code>
+    </LiteralKeyUnshapedArray>
+  </file>
+  <file src="tests/Config/Plugin/FileTypeSelfRegisteringPlugin.php">
+    <LiteralKeyUnshapedArray occurrences="6">
+      <code>self::$names['analyzer']</code>
+      <code>self::$names['analyzer']</code>
+      <code>self::$names['extension']</code>
+      <code>self::$names['extension']</code>
+      <code>self::$names['scanner']</code>
+      <code>self::$names['scanner']</code>
+    </LiteralKeyUnshapedArray>
+  </file>
+  <file src="tests/Internal/Codebase/InternalCallMapHandlerTest.php">
+    <UnusedPsalmSuppress occurrences="1">
+      <code>UndefinedMethod</code>
+    </UnusedPsalmSuppress>
+  </file>
+  <file src="tests/JsonOutputTest.php">
+    <LiteralKeyUnshapedArray occurrences="1">
+      <code>IssueBuffer::getIssuesData()['somefile.php']</code>
+    </LiteralKeyUnshapedArray>
+  </file>
+  <file src="tests/MagicMethodAnnotationTest.php">
+    <LiteralKeyUnshapedArray occurrences="1">
+      <code>$context-&gt;vars_in_scope['$child']</code>
+    </LiteralKeyUnshapedArray>
+  </file>
+  <file src="tests/MethodMutationTest.php">
+    <LiteralKeyUnshapedArray occurrences="6">
+      <code>$method_context-&gt;vars_in_scope['$this-&gt;foo']</code>
+      <code>$method_context-&gt;vars_in_scope['$this-&gt;foo']</code>
+      <code>$method_context-&gt;vars_in_scope['$this-&gt;user']</code>
+      <code>$method_context-&gt;vars_in_scope['$this-&gt;user_viewdata']</code>
+      <code>$method_context-&gt;vars_in_scope['$this-&gt;user_viewdata-&gt;name']</code>
+      <code>$method_context-&gt;vars_possibly_in_scope['$this-&gt;title']</code>
+    </LiteralKeyUnshapedArray>
   </file>
   <file src="vendor/nikic/php-parser/lib/PhpParser/Node/Expr/ArrowFunction.php">
     <LiteralKeyUnshapedArray occurrences="6">
