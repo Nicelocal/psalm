@@ -39,10 +39,13 @@ use function array_merge;
 use function array_shift;
 use function count;
 use function filemtime;
+use function hash;
 use function md5;
 use function strlen;
 use function strpos;
 use function strtolower;
+
+use const PHP_VERSION_ID;
 
 /**
  * @internal
@@ -149,7 +152,11 @@ class StatementsProvider
 
         $config = Config::getInstance();
 
-        $file_content_hash = md5($version . $file_contents);
+        if (PHP_VERSION_ID >= 8_01_00) {
+            $file_content_hash = hash('xxh128', $version . $file_contents);
+        } else {
+            $file_content_hash = hash('md4', $version . $file_contents);
+        }
 
         if (!$this->parser_cache_provider
             || (!$config->isInProjectDirs($file_path) && strpos($file_path, 'vendor'))
@@ -241,6 +248,7 @@ class StatementsProvider
                 $unchanged_members = array_fill_keys($unchanged_members, true);
                 $unchanged_signature_members = array_fill_keys($unchanged_signature_members, true);
 
+                // do NOT change this to hash, it will fail on Windows for whatever reason
                 $file_path_hash = md5($file_path);
 
                 $changed_members = array_map(
