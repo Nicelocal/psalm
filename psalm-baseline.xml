@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="dev-master@06621754bd1efa8def8e33e5086dea3d8df636f4">
+<files psalm-version="dev-master@aa034986e9ae99b31a8a089f77ff213174a65907">
   <file src="examples/TemplateChecker.php">
     <LiteralKeyUnshapedArray occurrences="1">
       <code>$comment_block-&gt;tags['variablesfrom']</code>
@@ -31,7 +31,7 @@
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Config.php">
-    <LiteralKeyUnshapedArray occurrences="60">
+    <LiteralKeyUnshapedArray occurrences="62">
       <code>$composer_json["require"]</code>
       <code>$composer_json['require']</code>
       <code>$composer_json['require']['php']</code>
@@ -64,6 +64,8 @@
       <code>$config_xml['serializer']</code>
       <code>$config_xml['threads']</code>
       <code>$config_xml['threads']</code>
+      <code>$config_xml['triggerErrorExits']</code>
+      <code>$config_xml['triggerErrorExits']</code>
       <code>$defined_functions['internal']</code>
       <code>$defined_functions['user']</code>
       <code>$exception_class['name']</code>
@@ -241,12 +243,13 @@
     </LiteralKeyUnshapedArray>
   </file>
   <file src="src/Psalm/Internal/Analyzer/FunctionLikeAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="5">
+    <LiteralKeyUnshapedArray occurrences="6">
       <code>$context-&gt;vars_in_scope['$this']</code>
       <code>$project_analyzer-&gt;getIssuesToFix()['MismatchingDocblockParamType']</code>
       <code>$project_analyzer-&gt;getIssuesToFix()['MissingImmutableAnnotation']</code>
       <code>$project_analyzer-&gt;getIssuesToFix()['MissingPureAnnotation']</code>
       <code>$project_analyzer-&gt;getIssuesToFix()['MissingPureAnnotation']</code>
+      <code>$project_analyzer-&gt;getIssuesToFix()['MissingThrowsDocblock']</code>
     </LiteralKeyUnshapedArray>
   </file>
   <file src="src/Psalm/Internal/Analyzer/MethodComparator.php">
@@ -303,7 +306,7 @@
     <LiteralKeyUnshapedArray occurrences="1">
       <code>$class_definition-&gt;methods['__get']</code>
     </LiteralKeyUnshapedArray>
-    <PossiblyUndefinedIntArrayOffset occurrences="35">
+    <PossiblyUndefinedIntArrayOffset occurrences="29">
       <code>$assertion-&gt;rule[0]</code>
       <code>$assertion-&gt;rule[0]</code>
       <code>$assertion-&gt;rule[0]</code>
@@ -317,12 +320,6 @@
       <code>$count_expr-&gt;getArgs()[0]</code>
       <code>$count_expr-&gt;getArgs()[0]</code>
       <code>$counted_expr-&gt;getArgs()[0]</code>
-      <code>$expr-&gt;getArgs()[0]</code>
-      <code>$expr-&gt;getArgs()[0]</code>
-      <code>$expr-&gt;getArgs()[0]</code>
-      <code>$expr-&gt;getArgs()[0]</code>
-      <code>$expr-&gt;getArgs()[0]</code>
-      <code>$expr-&gt;getArgs()[0]</code>
       <code>$expr-&gt;getArgs()[0]</code>
       <code>$expr-&gt;getArgs()[0]</code>
       <code>$expr-&gt;getArgs()[0]</code>
@@ -454,10 +451,7 @@
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/CastAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="6">
-      <code>$casted_type-&gt;getAtomicTypes()['bool']</code>
-      <code>$casted_type-&gt;getAtomicTypes()['false']</code>
-      <code>$casted_type-&gt;getAtomicTypes()['true']</code>
+    <LiteralKeyUnshapedArray occurrences="3">
       <code>$intersection_type-&gt;methods['__toString']</code>
       <code>$project_analyzer-&gt;getIssuesToFix()['RedundantCast']</code>
       <code>$project_analyzer-&gt;getIssuesToFix()['RedundantCastGivenDocblockType']</code>
@@ -541,7 +535,7 @@
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Cli/LanguageServer.php">
-    <LiteralKeyUnshapedArray occurrences="18">
+    <LiteralKeyUnshapedArray occurrences="19">
       <code>$options['c']</code>
       <code>$options['clear-cache']</code>
       <code>$options['config']</code>
@@ -551,6 +545,7 @@
       <code>$options['r']</code>
       <code>$options['r']</code>
       <code>$options['root']</code>
+      <code>$options['tcp']</code>
       <code>$options['tcp']</code>
       <code>$options['tcp-server']</code>
       <code>$options['use-extended-diagnostic-codes']</code>
@@ -652,15 +647,7 @@
     </LiteralKeyUnshapedArray>
   </file>
   <file src="src/Psalm/Internal/CliUtils.php">
-    <LiteralKeyUnshapedArray occurrences="13">
-      <code>$_SERVER['APPVEYOR']</code>
-      <code>$_SERVER['CIRCLECI']</code>
-      <code>$_SERVER['DRONE']</code>
-      <code>$_SERVER['GITHUB_WORKFLOW']</code>
-      <code>$_SERVER['GITLAB_CI']</code>
-      <code>$_SERVER['JENKINS_URL']</code>
-      <code>$_SERVER['SCRUTINIZER']</code>
-      <code>$_SERVER['TRAVIS']</code>
+    <LiteralKeyUnshapedArray occurrences="5">
       <code>$composer_json['config']</code>
       <code>$composer_json['config']['vendor-dir']</code>
       <code>$options['c']</code>
@@ -741,12 +728,13 @@
     </LiteralKeyUnshapedArray>
   </file>
   <file src="src/Psalm/Internal/FileManipulation/FunctionDocblockManipulator.php">
-    <LiteralKeyUnshapedArray occurrences="5">
+    <LiteralKeyUnshapedArray occurrences="6">
       <code>$parsed_docblock-&gt;tags['param']</code>
       <code>$parsed_docblock-&gt;tags['psalm-param']</code>
       <code>$parsed_docblock-&gt;tags['psalm-return']</code>
       <code>$parsed_docblock-&gt;tags['return']</code>
       <code>$parsed_docblock-&gt;tags['return']</code>
+      <code>array_key_exists('throws', $parsed_docblock-&gt;tags)</code>
     </LiteralKeyUnshapedArray>
   </file>
   <file src="src/Psalm/Internal/FileManipulation/PropertyDocblockManipulator.php">
@@ -1205,11 +1193,12 @@
     </LiteralKeyUnshapedArray>
   </file>
   <file src="src/Psalm/Internal/Type/TemplateStandinTypeReplacer.php">
-    <ImpureMethodCall occurrences="4">
+    <ImpureMethodCall occurrences="5">
       <code>get</code>
       <code>get</code>
       <code>get</code>
       <code>getClassTemplateTypes</code>
+      <code>has</code>
     </ImpureMethodCall>
     <ImpurePropertyAssignment occurrences="1">
       <code>$candidate_param_type-&gt;from_template_default</code>
@@ -1299,11 +1288,6 @@
       <code>array_keys($template_type_map[$fq_classlike_name])[0]</code>
       <code>array_keys($template_type_map[$template_param_name])[0]</code>
     </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/IssueBuffer.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$_SERVER['GITHUB_WORKFLOW']</code>
-    </LiteralKeyUnshapedArray>
   </file>
   <file src="src/Psalm/Plugin/Shepherd.php">
     <LiteralKeyUnshapedArray occurrences="3">
@@ -1529,7 +1513,8 @@
     </PossiblyUnusedMethod>
   </file>
   <file src="tests/BinaryOperationTest.php">
-    <LiteralKeyUnshapedArray occurrences="2">
+    <LiteralKeyUnshapedArray occurrences="3">
+      <code>$context-&gt;vars_in_scope[$var]</code>
       <code>$context-&gt;vars_in_scope[$var]</code>
       <code>$context-&gt;vars_in_scope[$var]</code>
     </LiteralKeyUnshapedArray>
