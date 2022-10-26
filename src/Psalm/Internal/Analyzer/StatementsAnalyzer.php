@@ -706,6 +706,7 @@ class StatementsAnalyzer extends SourceAnalyzer
                     try {
                         $checked_type = $context->vars_in_scope[$checked_var_id];
                         $check_type = Type::parseString($check_type_string);
+                        /** @psalm-suppress InaccessibleProperty We just created this type */
                         $check_type->possibly_undefined = $possibly_undefined;
 
                         if ($check_type->possibly_undefined !== $checked_type->possibly_undefined
@@ -1141,6 +1142,7 @@ class StatementsAnalyzer extends SourceAnalyzer
         return $this->parsed_docblock;
     }
 
+    /** @psalm-mutation-free */
     public function getFQCLN(): ?string
     {
         if ($this->fake_this_class) {

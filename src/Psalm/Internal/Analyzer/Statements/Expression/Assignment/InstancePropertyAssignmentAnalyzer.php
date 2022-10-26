@@ -523,15 +523,15 @@ class InstancePropertyAssignmentAnalyzer
                     }
                 }
 
-                $stmt_var_type = clone $context->vars_in_scope[$var_id];
+                $stmt_var_type = $context->vars_in_scope[$var_id]->setParentNodes(
+                    [$var_node->id => $var_node]
+                );
 
                 if ($context->vars_in_scope[$var_id]->parent_nodes) {
                     foreach ($context->vars_in_scope[$var_id]->parent_nodes as $parent_node) {
                         $data_flow_graph->addPath($parent_node, $var_node, '=', $added_taints, $removed_taints);
                     }
                 }
-
-                $stmt_var_type->parent_nodes = [$var_node->id => $var_node];
 
                 $context->vars_in_scope[$var_id] = $stmt_var_type;
             }
@@ -863,7 +863,7 @@ class InstancePropertyAssignmentAnalyzer
             if ($context->collect_initializations
                 && $lhs_var_id === '$this'
             ) {
-                $context_type->initialized_class = $context->self;
+                $context_type = $context_type->setProperties(['initialized_class' => $context->self]);
             }
 
             // because we don't want to be assigning for property declarations
@@ -1055,7 +1055,7 @@ class InstancePropertyAssignmentAnalyzer
                 if (isset($class_storage->pseudo_property_set_types['$' . $prop_name])) {
                     $class_property_type = TypeExpander::expandUnion(
                         $codebase,
-                        clone $class_storage->pseudo_property_set_types['$' . $prop_name],
+                        $class_storage->pseudo_property_set_types['$' . $prop_name],
                         $fq_class_name,
                         $fq_class_name,
                         $class_storage->parent_class
@@ -1362,7 +1362,7 @@ class InstancePropertyAssignmentAnalyzer
 
             $class_property_type = TypeExpander::expandUnion(
                 $codebase,
-                clone $class_property_type,
+                $class_property_type,
                 $fq_class_name,
                 $lhs_type_part,
                 $declaring_class_storage->parent_class,
@@ -1489,7 +1489,7 @@ class InstancePropertyAssignmentAnalyzer
             return null;
         }
 
-        $property_type = clone $property_storage->type;
+        $property_type = $property_storage->type;
 
         $fleshed_out_type = !$property_type->isMixed()
             ? TypeExpander::expandUnion(

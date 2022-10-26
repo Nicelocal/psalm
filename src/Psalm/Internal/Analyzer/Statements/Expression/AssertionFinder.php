@@ -3709,11 +3709,7 @@ class AssertionFinder
                             }
                         }
 
-                        $key_type = $atomic_type->getGenericKeyType();
-
-                        if ($key_possibly_undefined) {
-                            $key_type->possibly_undefined = true;
-                        }
+                        $key_type = $atomic_type->getGenericKeyType($key_possibly_undefined);
                     } else {
                         $key_type = $atomic_type->type_params[0];
                     }

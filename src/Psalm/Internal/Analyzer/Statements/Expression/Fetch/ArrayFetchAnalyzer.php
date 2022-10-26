@@ -172,7 +172,7 @@ class ArrayFetchAnalyzer
             && $stmt_var_type
             && !$stmt_var_type->hasClassStringMap()
         ) {
-            $stmt_type = clone $context->vars_in_scope[$keyed_array_var_id];
+            $stmt_type = $context->vars_in_scope[$keyed_array_var_id];
 
             $statements_analyzer->node_data->setType(
                 $stmt,
@@ -330,7 +330,8 @@ class ArrayFetchAnalyzer
                 );
             }
 
-            $stmt_type->possibly_undefined = false;
+            $stmt_type = $stmt_type->setPossiblyUndefined(false);
+            $statements_analyzer->node_data->setType($stmt, $stmt_type);
         }
 
         if ($context->inside_isset && $dim_var_id && $new_offset_type && !$new_offset_type->isUnionEmpty()) {
@@ -592,7 +593,7 @@ class ArrayFetchAnalyzer
                     continue;
                 }
 
-                $type = clone $type->as->getSingleAtomic();
+                $type = $type->as->getSingleAtomic();
                 $original_type = $type;
             }
 
@@ -603,7 +604,7 @@ class ArrayFetchAnalyzer
 
                 if ($in_assignment) {
                     if ($replacement_type) {
-                        $array_access_type = Type::combineUnionTypes($array_access_type, clone $replacement_type);
+                        $array_access_type = Type::combineUnionTypes($array_access_type, $replacement_type);
                     } else {
                         IssueBuffer::maybeAdd(
                             new PossiblyNullArrayAssignment(
@@ -883,7 +884,7 @@ class ArrayFetchAnalyzer
         }
 
         if ($array_type->by_ref) {
-            $array_access_type->by_ref = true;
+            return $array_access_type->setByRef(true);
         }
 
         return $array_access_type;
@@ -1546,14 +1547,14 @@ class ArrayFetchAnalyzer
 
                     $array_access_type = Type::combineUnionTypes(
                         $array_access_type,
-                        clone $properties[$key_value->value]
+                        $properties[$key_value->value]
                     );
                 } elseif ($in_assignment) {
                     $properties[$key_value->value] = new Union([new TNever]);
 
                     $array_access_type = Type::combineUnionTypes(
                         $array_access_type,
-                        clone $properties[$key_value->value]
+                        $properties[$key_value->value]
                     );
                 } elseif ($type->previous_value_type) {
                     if ($codebase->config->ensure_array_string_offsets_exist) {
@@ -1578,9 +1579,9 @@ class ArrayFetchAnalyzer
                         );
                     }
 
-                    $properties[$key_value->value] = clone $type->previous_value_type;
+                    $properties[$key_value->value] = $type->previous_value_type;
 
-                    $array_access_type = clone $type->previous_value_type;
+                    $array_access_type = $type->previous_value_type;
                 } elseif ($hasMixed) {
                     $has_valid_offset = true;
 
@@ -1680,7 +1681,7 @@ class ArrayFetchAnalyzer
 
                     $array_access_type = Type::combineUnionTypes(
                         $array_access_type,
-                        clone $generic_params
+                        $generic_params
                     );
                 } else {
                     $array_access_type = Type::combineUnionTypes(
@@ -1805,7 +1806,7 @@ class ArrayFetchAnalyzer
         }
 
         if ($in_assignment && $replacement_type) {
-            $type = $type->replaceTypeParam(Type::combineUnionTypes(
+            $type = $type->setTypeParam(Type::combineUnionTypes(
                 $type->type_param,
                 $replacement_type,
                 $codebase

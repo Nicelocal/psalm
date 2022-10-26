@@ -108,7 +108,7 @@ class VariableFetchAnalyzer
                 return true;
             }
 
-            $statements_analyzer->node_data->setType($stmt, clone $context->vars_in_scope['$this']);
+            $statements_analyzer->node_data->setType($stmt, $context->vars_in_scope['$this']);
 
             if ($codebase->store_node_types
                     && !$context->collect_initializations
@@ -150,7 +150,7 @@ class VariableFetchAnalyzer
                     $context->vars_possibly_in_scope[$var_name] = true;
                     $statements_analyzer->node_data->setType($stmt, Type::getMixed());
                 } else {
-                    $stmt_type = clone $context->vars_in_scope[$var_name];
+                    $stmt_type = $context->vars_in_scope[$var_name];
 
                     $statements_analyzer->node_data->setType($stmt, $stmt_type);
 
@@ -167,7 +167,7 @@ class VariableFetchAnalyzer
             $var_name = '$' . $stmt->name;
 
             if (isset($context->vars_in_scope[$var_name])) {
-                $type = clone $context->vars_in_scope[$var_name];
+                $type = $context->vars_in_scope[$var_name];
 
                 self::taintVariable($statements_analyzer, $var_name, $type, $stmt);
 
@@ -181,7 +181,7 @@ class VariableFetchAnalyzer
             self::taintVariable($statements_analyzer, $var_name, $type, $stmt);
 
             $statements_analyzer->node_data->setType($stmt, $type);
-            $context->vars_in_scope[$var_name] = clone $type;
+            $context->vars_in_scope[$var_name] = $type;
             $context->vars_possibly_in_scope[$var_name] = true;
 
             $codebase->analyzer->addNodeReference(
@@ -372,7 +372,7 @@ class VariableFetchAnalyzer
                 return true;
             }
         } else {
-            $stmt_type = clone $context->vars_in_scope[$var_name];
+            $stmt_type = $context->vars_in_scope[$var_name];
 
             $statements_analyzer->node_data->setType($stmt, $stmt_type);
 
@@ -551,6 +551,9 @@ class VariableFetchAnalyzer
         );
     }
 
+    /** @var array<value-of<self::SUPER_GLOBALS>|'$_FILES full path'|'$argv'|'$argc', Union> */
+    private static array $globalCache = [];
+
     public static function getGlobalType(string $var_id, int $codebase_analysis_php_version_id): Union
     {
         $config = Config::getInstance();
@@ -559,6 +562,36 @@ class VariableFetchAnalyzer
             return Type::parseString($config->globals[$var_id]);
         }
 
+        if (!self::$globalCache) {
+            foreach (self::SUPER_GLOBALS as $v) {
+                self::$globalCache[$v] = self::getGlobalTypeInner($v);
+            }
+            self::$globalCache['$_FILES full path'] = self::getGlobalTypeInner(
+                '$_FILES',
+                true
+            );
+            self::$globalCache['$argv'] = self::getGlobalTypeInner('$argv');
+            self::$globalCache['$argc'] = self::getGlobalTypeInner('$argc');
+        }
+
+        if ($codebase_analysis_php_version_id >= 8_01_00 && $var_id === '$_FILES') {
+            $var_id = '$_FILES full path';
+        }
+
+        if (isset(self::$globalCache[$var_id])) {
+            return self::$globalCache[$var_id];
+        }
+        
+        return Type::getMixed();
+    }
+
+    /**
+     * @psalm-suppress InaccessibleProperty Always acting on new types
+     *
+     * @param value-of<self::SUPER_GLOBALS>|'$argv'|'$argc' $var_id
+     */
+    private static function getGlobalTypeInner(string $var_id, bool $files_full_path = false): Union
+    {
         if ($var_id === '$argv') {
             // only in CLI, null otherwise
             $argv_nullable = new Union([
@@ -583,10 +616,6 @@ class VariableFetchAnalyzer
             // $argc_nullable->possibly_undefined = true;
             $argc_nullable->ignore_nullable_issues = true;
             return $argc_nullable;
-        }
-
-        if (!self::isSuperGlobal($var_id)) {
-            return Type::getMixed();
         }
 
         if ($var_id === '$http_response_header') {
@@ -780,7 +809,7 @@ class VariableFetchAnalyzer
                 ]),
             ];
 
-            if ($codebase_analysis_php_version_id >= 8_10_00) {
+            if ($files_full_path) {
                 $values['full_path'] = new Union([
                     new TString(),
                     new TNonEmptyList(Type::getString()),
@@ -810,7 +839,5 @@ class VariableFetchAnalyzer
             $type->possibly_undefined = true;
             return $type;
         }
-
-        return Type::getMixed();
     }
 }
