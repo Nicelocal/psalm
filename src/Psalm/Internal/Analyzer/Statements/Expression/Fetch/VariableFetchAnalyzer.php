@@ -152,9 +152,10 @@ class VariableFetchAnalyzer
                 } else {
                     $stmt_type = $context->vars_in_scope[$var_name];
 
-                    $statements_analyzer->node_data->setType($stmt, $stmt_type);
-
                     self::addDataFlowToVariable($statements_analyzer, $stmt, $var_name, $stmt_type, $context);
+
+                    $context->vars_in_scope[$var_name] = $stmt_type;
+                    $statements_analyzer->node_data->setType($stmt, $stmt_type);
                 }
             } else {
                 $statements_analyzer->node_data->setType($stmt, Type::getMixed());
@@ -170,7 +171,8 @@ class VariableFetchAnalyzer
                 $type = $context->vars_in_scope[$var_name];
 
                 self::taintVariable($statements_analyzer, $var_name, $type, $stmt);
-
+                
+                $context->vars_in_scope[$var_name] = $type;
                 $statements_analyzer->node_data->setType($stmt, $type);
 
                 return true;
@@ -363,9 +365,9 @@ class VariableFetchAnalyzer
 
                 $stmt_type = Type::getMixed();
 
-                $statements_analyzer->node_data->setType($stmt, $stmt_type);
-
                 self::addDataFlowToVariable($statements_analyzer, $stmt, $var_name, $stmt_type, $context);
+
+                $statements_analyzer->node_data->setType($stmt, $stmt_type);
 
                 $statements_analyzer->registerPossiblyUndefinedVariable($var_name, $stmt);
 
@@ -374,9 +376,10 @@ class VariableFetchAnalyzer
         } else {
             $stmt_type = $context->vars_in_scope[$var_name];
 
-            $statements_analyzer->node_data->setType($stmt, $stmt_type);
-
             self::addDataFlowToVariable($statements_analyzer, $stmt, $var_name, $stmt_type, $context);
+
+            $context->vars_in_scope[$var_name] = $stmt_type;
+            $statements_analyzer->node_data->setType($stmt, $stmt_type);
 
             if ($stmt_type->possibly_undefined_from_try && !$context->inside_isset) {
                 if ($context->is_global) {
@@ -435,7 +438,7 @@ class VariableFetchAnalyzer
         StatementsAnalyzer $statements_analyzer,
         PhpParser\Node\Expr\Variable $stmt,
         string $var_name,
-        Union $stmt_type,
+        Union &$stmt_type,
         Context $context
     ): void {
         $codebase = $statements_analyzer->getCodebase();
@@ -455,9 +458,9 @@ class VariableFetchAnalyzer
                     new CodeLocation($statements_analyzer->getSource(), $stmt)
                 );
 
-                $stmt_type->parent_nodes = [
+                $stmt_type = $stmt_type->setParentNodes([
                     $assignment_node->id => $assignment_node
-                ];
+                ]);
             }
 
             foreach ($stmt_type->parent_nodes as $parent_node) {
@@ -509,7 +512,7 @@ class VariableFetchAnalyzer
     private static function taintVariable(
         StatementsAnalyzer $statements_analyzer,
         string $var_name,
-        Union $type,
+        Union &$type,
         PhpParser\Node\Expr\Variable $stmt
     ): void {
         if ($statements_analyzer->data_flow_graph instanceof TaintFlowGraph
@@ -532,9 +535,9 @@ class VariableFetchAnalyzer
 
                 $statements_analyzer->data_flow_graph->addSource($server_taint_source);
 
-                $type->parent_nodes = [
+                $type = $type->setParentNodes([
                     $server_taint_source->id => $server_taint_source
-                ];
+                ]);
             }
         }
     }
@@ -828,16 +831,16 @@ class VariableFetchAnalyzer
             return TypeCombiner::combine([$default_type, $type, $named_type]);
         }
 
-        if ($var_id === '$_SESSION') {
-            // keys must be string
-            $type = new Union([
-                new TArray([
-                    Type::getNonEmptyString(),
-                    Type::getMixed(),
-                ])
-            ]);
-            $type->possibly_undefined = true;
-            return $type;
-        }
+        // $var_id === $_SESSION
+        
+        // keys must be string
+        $type = new Union([
+            new TArray([
+                Type::getNonEmptyString(),
+                Type::getMixed(),
+            ])
+        ]);
+        $type->possibly_undefined = true;
+        return $type;
     }
 }

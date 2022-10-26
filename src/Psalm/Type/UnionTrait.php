@@ -68,10 +68,17 @@ trait UnionTrait
         foreach ($properties as $key => $value) {
             $this->{$key} = $value;
         }
+        $this->literal_int_types = [];
+        $this->literal_string_types = [];
+        $this->literal_float_types = [];
+        $this->typed_class_strings = [];
+        $this->checked = false;
+        $this->id = null;
+        $this->exact_id = null;
 
         $keyed_types = [];
 
-        $from_docblock = $this->from_docblock ?? false;
+        $from_docblock = $this->from_docblock;
         foreach ($types as $type) {
             $key = $type->getKey();
             $keyed_types[$key] = $type;
@@ -93,7 +100,6 @@ trait UnionTrait
 
         $this->from_docblock = $from_docblock;
         $this->types = $keyed_types;
-        $this->checked = false;
     }
 
     /**
@@ -594,6 +600,14 @@ trait UnionTrait
     public function hasBool(): bool
     {
         return isset($this->types['bool']) || isset($this->types['false']) || isset($this->types['true']);
+    }
+
+    /**
+     * @psalm-mutation-free
+     */
+    public function hasNull(): bool
+    {
+        return isset($this->types['null']);
     }
 
     /**
@@ -1224,7 +1238,7 @@ trait UnionTrait
 
         $checker->traverseArray($this->types);
 
-        /** @psalm-suppress InaccessibleProperty Does not affect anything else */
+        /** @psalm-suppress InaccessibleProperty, ImpurePropertyAssignment Does not affect anything else */
         $this->checked = true;
 
         return !$checker->hasErrors();
@@ -1302,7 +1316,7 @@ trait UnionTrait
     /**
      * @psalm-mutation-free
      */
-    public function equals(self $other_type, bool $ensure_source_equality = true): bool
+    public function equals(self $other_type, bool $ensure_source_equality = true, bool $ensure_parent_node_equality = true): bool
     {
         if ($other_type === $this) {
             return true;
@@ -1344,7 +1358,7 @@ trait UnionTrait
             return false;
         }
 
-        if ($this->parent_nodes !== $other_type->parent_nodes) {
+        if ($ensure_parent_node_equality && $this->parent_nodes !== $other_type->parent_nodes) {
             return false;
         }
 

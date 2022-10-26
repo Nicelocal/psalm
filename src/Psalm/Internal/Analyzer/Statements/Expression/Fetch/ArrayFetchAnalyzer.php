@@ -174,11 +174,6 @@ class ArrayFetchAnalyzer
         ) {
             $stmt_type = $context->vars_in_scope[$keyed_array_var_id];
 
-            $statements_analyzer->node_data->setType(
-                $stmt,
-                $stmt_type
-            );
-
             self::taintArrayFetch(
                 $statements_analyzer,
                 $stmt->var,
@@ -186,6 +181,16 @@ class ArrayFetchAnalyzer
                 $stmt_type,
                 $used_key_type,
                 $context
+            );
+
+            if ($stmt->dim && $statements_analyzer->node_data->getType($stmt->dim)) {
+                $statements_analyzer->node_data->setType($stmt->dim, $used_key_type);
+            }
+
+            $context->vars_in_scope[$keyed_array_var_id] = $stmt_type;
+            $statements_analyzer->node_data->setType(
+                $stmt,
+                $stmt_type
             );
 
             return true;
@@ -313,7 +318,6 @@ class ArrayFetchAnalyzer
 
         if (!($stmt_type = $statements_analyzer->node_data->getType($stmt))) {
             $stmt_type = Type::getMixed();
-            $statements_analyzer->node_data->setType($stmt, $stmt_type);
         } else {
             if ($stmt_type->possibly_undefined
                 && !$context->inside_isset
@@ -331,19 +335,10 @@ class ArrayFetchAnalyzer
             }
 
             $stmt_type = $stmt_type->setPossiblyUndefined(false);
-            $statements_analyzer->node_data->setType($stmt, $stmt_type);
         }
 
         if ($context->inside_isset && $dim_var_id && $new_offset_type && !$new_offset_type->isUnionEmpty()) {
             $context->vars_in_scope[$dim_var_id] = $new_offset_type;
-        }
-
-        if ($keyed_array_var_id && !$context->inside_isset && $can_store_result) {
-            $context->vars_in_scope[$keyed_array_var_id] = $stmt_type;
-            $context->vars_possibly_in_scope[$keyed_array_var_id] = true;
-
-            // reference the variable too
-            $context->hasVariable($keyed_array_var_id);
         }
 
         self::taintArrayFetch(
@@ -355,6 +350,20 @@ class ArrayFetchAnalyzer
             $context
         );
 
+        $statements_analyzer->node_data->setType($stmt, $stmt_type);
+
+        if ($stmt->dim && $statements_analyzer->node_data->getType($stmt->dim)) {
+            $statements_analyzer->node_data->setType($stmt->dim, $used_key_type);
+        }
+
+        if ($keyed_array_var_id && !$context->inside_isset && $can_store_result) {
+            $context->vars_in_scope[$keyed_array_var_id] = $stmt_type;
+            $context->vars_possibly_in_scope[$keyed_array_var_id] = true;
+
+            // reference the variable too
+            $context->hasVariable($keyed_array_var_id);
+        }
+
         return true;
     }
 
@@ -365,8 +374,8 @@ class ArrayFetchAnalyzer
         StatementsAnalyzer $statements_analyzer,
         PhpParser\Node\Expr $var,
         ?string $keyed_array_var_id,
-        Union $stmt_type,
-        Union $offset_type,
+        Union &$stmt_type,
+        Union &$offset_type,
         ?Context $context = null
     ): void {
         if ($statements_analyzer->data_flow_graph
@@ -376,7 +385,7 @@ class ArrayFetchAnalyzer
             if ($statements_analyzer->data_flow_graph instanceof TaintFlowGraph
                 && in_array('TaintedInput', $statements_analyzer->getSuppressedIssues())
             ) {
-                $stmt_var_type->parent_nodes = [];
+                $statements_analyzer->node_data->setType($var, $stmt_var_type->setParentNodes([]));
                 return;
             }
 
@@ -447,10 +456,10 @@ class ArrayFetchAnalyzer
                 }
             }
 
-            $stmt_type->parent_nodes = [$new_parent_node->id => $new_parent_node];
+            $stmt_type = $stmt_type->setParentNodes([$new_parent_node->id => $new_parent_node]);
 
             if ($array_key_node) {
-                $offset_type->parent_nodes = [$array_key_node->id => $array_key_node];
+                $offset_type = $offset_type->setParentNodes([$array_key_node->id => $array_key_node]);
             }
         }
     }
@@ -1081,9 +1090,9 @@ class ArrayFetchAnalyzer
                     );
                 }
 
-                $stmt_var_type->parent_nodes = [
+                $statements_analyzer->node_data->setType($stmt->var, $stmt_var_type->setParentNodes([
                     $new_parent_node->id => $new_parent_node
-                ];
+                ]));
             }
         }
 
@@ -1267,7 +1276,7 @@ class ArrayFetchAnalyzer
         // if we're assigning to an empty array with a key offset, refashion that array
         if ($in_assignment) {
             if ($type->isEmptyArray()) {
-                $type = $type->replaceTypeParams([
+                $type = $type->setTypeParams([
                     $offset_type->isMixed()
                         ? Type::getArrayKey()
                         : $offset_type->freeze(),
@@ -1295,7 +1304,7 @@ class ArrayFetchAnalyzer
                         && $offset_as->param_name === $original_type->param_name
                         && $offset_as->defining_class === $original_type->defining_class
                     ) {
-                        $type = $type->replaceTypeParams([
+                        $type = $type->setTypeParams([
                             $type->type_params[0],
                             new Union([
                                 new TTemplateIndexedAccess(

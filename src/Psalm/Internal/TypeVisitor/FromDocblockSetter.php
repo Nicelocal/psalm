@@ -4,9 +4,9 @@ namespace Psalm\Internal\TypeVisitor;
 
 use Psalm\Type\Atomic;
 use Psalm\Type\Atomic\TTemplateParam;
+use Psalm\Type\MutableTypeVisitor;
 use Psalm\Type\MutableUnion;
 use Psalm\Type\TypeNode;
-use Psalm\Type\MutableTypeVisitor;
 use Psalm\Type\Union;
 
 /**
@@ -30,7 +30,9 @@ class FromDocblockSetter extends MutableTypeVisitor
         if ($type->from_docblock === $this->from_docblock) {
             return null;
         }
-        if (!$type instanceof Atomic) {
+        if ($type instanceof MutableUnion) {
+            $type->from_docblock = true;
+        } elseif ($type instanceof Union) {
             $type = $type->setProperties(['from_docblock' => $this->from_docblock]);
         } else {
             $type = $type->setFromDocblock($this->from_docblock);

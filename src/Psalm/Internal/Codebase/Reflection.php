@@ -305,6 +305,7 @@ class Reflection
 
             foreach ($callables[0]->params as $param) {
                 if ($param->type) {
+                    /** @psalm-suppress UnusedMethodCall */
                     $param->type->queueClassLikesForScanning($this->codebase);
                 }
             }
@@ -315,6 +316,7 @@ class Reflection
             if ($this->codebase->analysis_php_version_id >= 80100) {
                 $storage->signature_return_type = $storage->return_type;
             }
+
             $storage->return_type->queueClassLikesForScanning($this->codebase);
         } else {
             $params = $method->getParameters();

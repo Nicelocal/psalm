@@ -237,6 +237,7 @@ final class Union implements TypeNode, Stringable
                 if ($obj === null) {
                     $obj = clone $this;
                 }
+                /** @psalm-suppress ImpurePropertyAssignment We just cloned this object */
                 $obj->{$key} = $value;
             }
         }
@@ -264,8 +265,15 @@ final class Union implements TypeNode, Stringable
      */
     public function addParentNodes(array $parent_nodes): self
     {
+        if (!$parent_nodes) {
+            return $this;
+        }
+        $parent_nodes = $this->parent_nodes + $parent_nodes;
+        if ($parent_nodes === $this->parent_nodes) {
+            return $this;
+        }
         $cloned = clone $this;
-        $cloned->parent_nodes += $parent_nodes;
+        $cloned->parent_nodes = $parent_nodes;
         return $cloned;
     }
     

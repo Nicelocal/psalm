@@ -592,8 +592,6 @@ class AtomicPropertyFetchAnalyzer
                     );
                 }
 
-                $statements_analyzer->node_data->setType($stmt, $stmt_type);
-
                 self::processTaints(
                     $statements_analyzer,
                     $stmt,
@@ -603,6 +601,8 @@ class AtomicPropertyFetchAnalyzer
                     $in_assignment,
                     $context
                 );
+
+                $statements_analyzer->node_data->setType($stmt, $stmt_type);
 
                 return false;
             }
@@ -760,7 +760,7 @@ class AtomicPropertyFetchAnalyzer
     public static function processTaints(
         StatementsAnalyzer $statements_analyzer,
         PhpParser\Node\Expr\PropertyFetch $stmt,
-        Union $type,
+        Union &$type,
         string $property_id,
         ClassLikeStorage $class_storage,
         bool $in_assignment,
@@ -803,7 +803,7 @@ class AtomicPropertyFetchAnalyzer
                     && $var_type
                     && in_array('TaintedInput', $statements_analyzer->getSuppressedIssues())
                 ) {
-                    $var_type->parent_nodes = [];
+                    $statements_analyzer->node_data->setType($stmt->var, $var_type->setParentNodes([]));
                     return;
                 }
 
@@ -845,7 +845,7 @@ class AtomicPropertyFetchAnalyzer
                     }
                 }
 
-                $type->parent_nodes = [$property_node->id => $property_node];
+                $type = $type->setParentNodes([$property_node->id => $property_node]);
             }
         } else {
             self::processUnspecialTaints(
@@ -867,7 +867,7 @@ class AtomicPropertyFetchAnalyzer
     public static function processUnspecialTaints(
         StatementsAnalyzer $statements_analyzer,
         PhpParser\Node\Expr $stmt,
-        Union $type,
+        Union &$type,
         string $property_id,
         bool $in_assignment,
         ?array $added_taints,
@@ -921,7 +921,7 @@ class AtomicPropertyFetchAnalyzer
             );
         }
 
-        $type->parent_nodes = [$localized_property_node->id => $localized_property_node];
+        $type = $type->setParentNodes([$localized_property_node->id => $localized_property_node]);
     }
 
     private static function handleEnumName(
@@ -1147,8 +1147,6 @@ class AtomicPropertyFetchAnalyzer
                 );
             }
 
-            $statements_analyzer->node_data->setType($stmt, $stmt_type);
-
             self::processTaints(
                 $statements_analyzer,
                 $stmt,
@@ -1158,6 +1156,8 @@ class AtomicPropertyFetchAnalyzer
                 $in_assignment,
                 $context
             );
+
+            $statements_analyzer->node_data->setType($stmt, $stmt_type);
 
             return;
         }

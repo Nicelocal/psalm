@@ -296,8 +296,6 @@ class TypeExpander
 
                     if ($class_constant) {
                         if ($class_constant->isSingle()) {
-                            $class_constant = $class_constant;
-
                             $matching_constant_types = array_merge(
                                 array_values($class_constant->getAtomicTypes()),
                                 $matching_constant_types
@@ -496,7 +494,7 @@ class TypeExpander
             }
             unset($type_param);
             /** @psalm-suppress ArgumentTypeCoercion Psalm bug */
-            $return_type = $return_type->replaceTypeParams($type_params);
+            $return_type = $return_type->setTypeParams($type_params);
         } elseif ($return_type instanceof TKeyedArray) {
             $properties = $return_type->properties;
             foreach ($properties as &$property_type) {
@@ -879,13 +877,13 @@ class TypeExpander
                     $codebase
                 );
 
-                $return_type = $return_type->replaceTypes($new_as_type);
+                $return_type = $return_type->setTypes($new_as_type);
 
                 return array_values($combined->getAtomicTypes());
             }
         }
 
-        $return_type = $return_type->replaceTypes(
+        $return_type = $return_type->setTypes(
             $new_as_type,
             self::expandUnion(
                 $codebase,
