@@ -248,7 +248,7 @@ class ArgumentAnalyzer
 
             $param_type = Type::getMixed();
         } else {
-            $param_type = clone $function_param->type;
+            $param_type = $function_param->type;
         }
 
         $bindable_template_params = [];
@@ -386,7 +386,7 @@ class ArgumentAnalyzer
                     )) {
                         $template_result->lower_bounds[$template_type->param_name][$template_type->defining_class] = [
                             new TemplateBound(
-                                clone $template_result->upper_bounds
+                                $template_result->upper_bounds
                                     [$template_type->param_name]
                                     [$template_type->defining_class]->type
                             )
@@ -394,7 +394,7 @@ class ArgumentAnalyzer
                     } else {
                         $template_result->lower_bounds[$template_type->param_name][$template_type->defining_class] = [
                             new TemplateBound(
-                                clone $template_type->as
+                                $template_type->as
                             )
                         ];
                     }
@@ -488,11 +488,11 @@ class ArgumentAnalyzer
                         && $allow_named_args
                         && isset($unpacked_atomic_array->properties[$function_param->name])
                     ) {
-                        $arg_value_type = clone $unpacked_atomic_array->properties[$function_param->name];
+                        $arg_value_type = $unpacked_atomic_array->properties[$function_param->name];
                     } elseif ($unpacked_atomic_array->is_list
                         && isset($unpacked_atomic_array->properties[$unpacked_argument_offset])
                     ) {
-                        $arg_value_type = clone $unpacked_atomic_array->properties[$unpacked_argument_offset];
+                        $arg_value_type = $unpacked_atomic_array->properties[$unpacked_argument_offset];
                     } elseif ($function_param->is_optional && $function_param->default_type) {
                         if ($function_param->default_type instanceof Union) {
                             $arg_value_type = $function_param->default_type;
@@ -696,7 +696,7 @@ class ArgumentAnalyzer
                     $codebase->analyzer->possible_method_param_types[$id_lc][$argument_offset]
                         = Type::combineUnionTypes(
                             $codebase->analyzer->possible_method_param_types[$id_lc][$argument_offset] ?? null,
-                            clone $input_type,
+                            $input_type,
                             $codebase
                         );
                 }
@@ -829,7 +829,7 @@ class ArgumentAnalyzer
 
         if ($function_param->by_ref || $function_param->is_optional) {
             //if the param is optional or a ref, we'll allow the input to be possibly_undefined
-            $param_type->possibly_undefined = true;
+            $param_type = $param_type->setPossiblyUndefined(true);
         }
 
         if ($param_type->hasCallableType() && $param_type->isSingle()) {
@@ -893,8 +893,7 @@ class ArgumentAnalyzer
             );
 
             if ($function_param->assert_untainted) {
-                $input_type = clone $input_type;
-                $input_type->parent_nodes = [];
+                $input_type = $input_type->setParentNodes([]);
                 $replace_input_type = true;
             }
         }
@@ -1378,6 +1377,7 @@ class ArgumentAnalyzer
                             }
                         }
                     }
+                    unset($input_atomic_type);
                 }
             }
 
@@ -1412,14 +1412,11 @@ class ArgumentAnalyzer
                 $was_cloned = true;
                 $parent_nodes = $input_type->parent_nodes;
                 $by_ref = $input_type->by_ref;
-                $input_type = clone $signature_param_type;
-
-                if ($input_type->isNullable()) {
-                    $input_type->ignore_nullable_issues = true;
-                }
-
-                $input_type->parent_nodes = $parent_nodes;
-                $input_type->by_ref = $by_ref;
+                $input_type = $signature_param_type->setProperties([
+                    'ignore_nullable_issues' => $signature_param_type->isNullable(),
+                    'parent_nodes' => $parent_nodes,
+                    'by_ref' => $by_ref
+                ]);
             }
 
             if ($context->inside_conditional && !isset($context->assigned_var_ids[$var_id])) {
@@ -1432,7 +1429,7 @@ class ArgumentAnalyzer
 
             if ($unpack) {
                 if ($unpacked_atomic_array instanceof TList) {
-                    $unpacked_atomic_array = $unpacked_atomic_array->replaceTypeParam($input_type);
+                    $unpacked_atomic_array = $unpacked_atomic_array->setTypeParam($input_type);
 
                     $context->vars_in_scope[$var_id] = new Union([$unpacked_atomic_array]);
                 } elseif ($unpacked_atomic_array instanceof TArray) {

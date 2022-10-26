@@ -187,11 +187,11 @@ class ArrayAssignmentAnalyzer
 
             if (count($string_literals) + count($int_literals) === count($all_atomic_types)) {
                 foreach ($string_literals as $string_literal) {
-                    $key_values[] = clone $string_literal;
+                    $key_values[] = $string_literal;
                 }
 
                 foreach ($int_literals as $int_literal) {
-                    $key_values[] = clone $int_literal;
+                    $key_values[] = $int_literal;
                 }
             }
         }
@@ -315,7 +315,7 @@ class ArrayAssignmentAnalyzer
                     if (isset($properties[$key_value->value])) {
                         $has_matching_objectlike_property = true;
 
-                        $properties[$key_value->value] = clone $current_type;
+                        $properties[$key_value->value] = $current_type;
                     }
                 }
                 $type = $type->setProperties($properties);
@@ -349,8 +349,8 @@ class ArrayAssignmentAnalyzer
                     $has_matching_objectlike_property = true;
 
                     $changed = true;
-                    $type = $type->replaceTypeParam(Type::combineUnionTypes(
-                        clone $current_type,
+                    $type = $type->setTypeParam(Type::combineUnionTypes(
+                        $current_type,
                         $type->type_param,
                         $codebase,
                         true,
@@ -371,7 +371,7 @@ class ArrayAssignmentAnalyzer
                 $key_value = $key_values[0];
 
                 $object_like = new TKeyedArray(
-                    [$key_value->value => clone $current_type],
+                    [$key_value->value => $current_type],
                     $key_value instanceof TLiteralClassString
                         ? [$key_value->value => true]
                         : null,
@@ -387,7 +387,7 @@ class ArrayAssignmentAnalyzer
                 $array_assignment_type = new Union([
                     new TNonEmptyArray([
                         new Union($array_assignment_literals),
-                        clone $current_type
+                        $current_type
                     ])
                 ]);
             }
@@ -622,11 +622,11 @@ class ArrayAssignmentAnalyzer
                     if ($atomic_root_types['array']->is_list
                         && $array_atomic_type instanceof TList
                     ) {
-                        $array_atomic_type = clone $atomic_root_types['array'];
+                        $array_atomic_type = $atomic_root_types['array'];
 
-                        $new_child_type = new Union([$array_atomic_type]);
-
-                        $new_child_type->parent_nodes = $root_type->parent_nodes;
+                        $new_child_type = new Union([$array_atomic_type], [
+                            'parent_nodes' => $root_type->parent_nodes
+                        ]);
                     }
                 } elseif ($array_atomic_type instanceof TList) {
                     $array_atomic_type = new TNonEmptyList(
@@ -748,11 +748,11 @@ class ArrayAssignmentAnalyzer
             $extended_var_id = $root_var_id . implode('', $var_id_additions);
 
             if ($parent_var_id && isset($context->vars_in_scope[$parent_var_id])) {
-                $child_stmt_var_type = clone $context->vars_in_scope[$parent_var_id];
+                $child_stmt_var_type = $context->vars_in_scope[$parent_var_id];
                 $statements_analyzer->node_data->setType($child_stmt->var, $child_stmt_var_type);
             }
 
-            $array_type = clone $child_stmt_var_type;
+            $array_type = $child_stmt_var_type;
 
             $is_last = $i === count($child_stmts) - 1;
 
@@ -854,7 +854,7 @@ class ArrayAssignmentAnalyzer
                 $offset_already_existed = true;
             }
 
-            $context->vars_in_scope[$extended_var_id] = clone $assignment_type;
+            $context->vars_in_scope[$extended_var_id] = $assignment_type;
             $context->possibly_assigned_var_ids[$extended_var_id] = true;
         }
 
@@ -924,7 +924,7 @@ class ArrayAssignmentAnalyzer
             if ($root_var_id) {
                 $extended_var_id = $root_var_id . implode('', $var_id_additions);
                 $parent_array_var_id = $root_var_id . implode('', array_slice($var_id_additions, 0, -1));
-                $context->vars_in_scope[$extended_var_id] = clone $child_stmt_type;
+                $context->vars_in_scope[$extended_var_id] = $child_stmt_type;
                 $context->possibly_assigned_var_ids[$extended_var_id] = true;
             }
 
@@ -965,11 +965,11 @@ class ArrayAssignmentAnalyzer
 
                 if (count($string_literals) + count($int_literals) === count($all_atomic_types)) {
                     foreach ($string_literals as $string_literal) {
-                        $key_values[] = clone $string_literal;
+                        $key_values[] = $string_literal;
                     }
 
                     foreach ($int_literals as $int_literal) {
-                        $key_values[] = clone $int_literal;
+                        $key_values[] = $int_literal;
                     }
                 }
             }

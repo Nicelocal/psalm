@@ -222,6 +222,7 @@ final class MutableUnion implements TypeNode, Stringable
         $this->literal_int_types = [];
         $this->literal_string_types = [];
         $this->typed_class_strings = [];
+        $this->checked = false;
 
         $from_docblock = false;
         $keyed_types = [];
@@ -496,5 +497,26 @@ final class MutableUnion implements TypeNode, Stringable
             $union->{$key} = $value;
         }
         return $union;
+    }
+
+    public static function visitMutable(MutableTypeVisitor $visitor, &$node, bool $cloned): bool
+    {
+        $result = true;
+        $changed = false;
+        foreach ($node->types as &$type) {
+            $type_orig = $type;
+            $result = $visitor->traverse($type);
+            $changed = $changed || $type_orig !== $type;
+            if (!$result) {
+                break;
+            }
+        }
+        unset($type);
+
+        if ($changed) {
+            $node->setTypes($node->types);
+        }
+
+        return $result;
     }
 }

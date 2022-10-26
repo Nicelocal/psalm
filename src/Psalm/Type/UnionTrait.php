@@ -49,6 +49,10 @@ use function reset;
 use function sort;
 use function strpos;
 
+/**
+ * @psalm-immutable
+ * @psalm-import-type TProperties from Union
+ */
 trait UnionTrait
 {
     /**
@@ -57,11 +61,17 @@ trait UnionTrait
      * @psalm-external-mutation-free
      *
      * @param non-empty-array<Atomic>     $types
+     * @param TProperties $properties
      */
-    public function __construct(array $types, bool $from_docblock = false)
+    public function __construct(array $types, array $properties = [])
     {
+        foreach ($properties as $key => $value) {
+            $this->{$key} = $value;
+        }
+
         $keyed_types = [];
 
+        $from_docblock = $this->from_docblock ?? false;
         foreach ($types as $type) {
             $key = $type->getKey();
             $keyed_types[$key] = $type;
@@ -81,9 +91,9 @@ trait UnionTrait
             $from_docblock = $from_docblock || $type->from_docblock;
         }
 
-        $this->types = $keyed_types;
-
         $this->from_docblock = $from_docblock;
+        $this->types = $keyed_types;
+        $this->checked = false;
     }
 
     /**
@@ -205,10 +215,10 @@ trait UnionTrait
         $id = implode('|', $types);
 
         if ($exact) {
-            /** @psalm-suppress ImpurePropertyAssignment Cache */
+            /** @psalm-suppress ImpurePropertyAssignment, InaccessibleProperty Cache */
             $this->exact_id = $id;
         } else {
-            /** @psalm-suppress ImpurePropertyAssignment Cache */
+            /** @psalm-suppress ImpurePropertyAssignment, InaccessibleProperty Cache */
             $this->id = $id;
         }
 
@@ -1214,6 +1224,7 @@ trait UnionTrait
 
         $checker->traverseArray($this->types);
 
+        /** @psalm-suppress InaccessibleProperty Does not affect anything else */
         $this->checked = true;
 
         return !$checker->hasErrors();
@@ -1401,15 +1412,6 @@ trait UnionTrait
 
     /**
      * @psalm-mutation-free
-     * @return list<string>
-     */
-    public function getChildNodeKeys(): array
-    {
-        return ['types'];
-    }
-
-    /**
-     * @psalm-mutation-free
      * @return bool true if this is a float literal with only one possible value
      */
     public function isSingleFloatLiteral(): bool
@@ -1465,5 +1467,16 @@ trait UnionTrait
     public function isUnionEmpty(): bool
     {
         return $this->types === [];
+    }
+
+    public function visit(TypeVisitor $visitor): bool
+    {
+        foreach ($this->types as $type) {
+            if ($visitor->traverse($type) === false) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

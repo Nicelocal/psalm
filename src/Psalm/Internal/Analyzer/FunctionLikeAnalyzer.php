@@ -55,6 +55,7 @@ use Psalm\Type\Atomic\TArray;
 use Psalm\Type\Atomic\TClosure;
 use Psalm\Type\Atomic\TGenericObject;
 use Psalm\Type\Atomic\TList;
+use Psalm\Type\Atomic\TMixed;
 use Psalm\Type\Atomic\TNamedObject;
 use Psalm\Type\Atomic\TTemplateParam;
 use Psalm\Type\Union;
@@ -192,7 +193,7 @@ abstract class FunctionLikeAnalyzer extends SourceAnalyzer
         if ($global_context) {
             foreach ($global_context->constants as $const_name => $var_type) {
                 if (!$context->hasVariable($const_name)) {
-                    $context->vars_in_scope[$const_name] = clone $var_type;
+                    $context->vars_in_scope[$const_name] = $var_type;
                 }
             }
         }
@@ -623,8 +624,9 @@ abstract class FunctionLikeAnalyzer extends SourceAnalyzer
                 /**
                  * @var TClosure
                  */
-                $closure_atomic = clone $function_type->getSingleAtomic();
+                $closure_atomic = $function_type->getSingleAtomic();
 
+                $new_closure_return_type = $closure_atomic->return_type;
                 if (($storage->return_type === $storage->signature_return_type)
                     && (!$storage->return_type
                         || $storage->return_type->hasMixed()
@@ -634,14 +636,25 @@ abstract class FunctionLikeAnalyzer extends SourceAnalyzer
                             $storage->return_type
                         ))
                 ) {
-                    /** @psalm-suppress InaccessibleProperty Acting on clone */
-                    $closure_atomic->return_type = $closure_return_type;
+                    $new_closure_return_type = $closure_return_type;
                 }
 
-                /** @psalm-suppress InaccessibleProperty Acting on clone */
-                $closure_atomic->is_pure = !$this->inferred_impure;
+                $new_closure_is_pure = !$this->inferred_impure;
 
-                $statements_analyzer->node_data->setType($this->function, new Union([$closure_atomic]));
+                $statements_analyzer->node_data->setType(
+                    $this->function,
+                    new Union([
+                        new TClosure(
+                            $closure_atomic->value,
+                            $closure_atomic->params,
+                            $new_closure_return_type,
+                            $new_closure_is_pure,
+                            $closure_atomic->byref_uses,
+                            $closure_atomic->extra_types,
+                            $closure_atomic->from_docblock,
+                        )
+                    ])
+                );
             }
         }
 
@@ -1040,7 +1053,7 @@ abstract class FunctionLikeAnalyzer extends SourceAnalyzer
             }
 
             if ($function_param->type) {
-                $param_type = clone $function_param->type;
+                $param_type = $function_param->type;
 
                 try {
                     $param_type = TypeExpander::expandUnion(
@@ -1085,7 +1098,7 @@ abstract class FunctionLikeAnalyzer extends SourceAnalyzer
                     }
                 }
             } else {
-                $param_type = Type::getMixed();
+                $param_type = new Union([new TMixed()], ['by_ref' => $function_param->by_ref]);
             }
 
             $var_type = $param_type;
@@ -1094,11 +1107,11 @@ abstract class FunctionLikeAnalyzer extends SourceAnalyzer
                 if ($storage->allow_named_arg_calls) {
                     $var_type = new Union([
                         new TArray([Type::getArrayKey(), $param_type]),
-                    ]);
+                    ], ['by_ref' => $function_param->by_ref]);
                 } else {
                     $var_type = new Union([
                         new TList($param_type),
-                    ]);
+                    ], ['by_ref' => $function_param->by_ref]);
                 }
             }
 
@@ -1144,7 +1157,8 @@ abstract class FunctionLikeAnalyzer extends SourceAnalyzer
             $context->vars_possibly_in_scope[$function_param_id] = true;
 
             if ($function_param->by_ref) {
-                $context->vars_in_scope[$function_param_id]->by_ref = true;
+                $context->vars_in_scope[$function_param_id] =
+                    $context->vars_in_scope[$function_param_id]->setProperties(['by_ref' => true]);
                 $context->references_to_external_scope[$function_param_id] = true;
             }
 
@@ -1239,8 +1253,7 @@ abstract class FunctionLikeAnalyzer extends SourceAnalyzer
             }
 
             if ($has_template_types) {
-                $substituted_type = clone $param_type;
-                if ($substituted_type->check(
+                if ($param_type->check(
                     $this->source,
                     $function_param->type_location,
                     $this->suppressed_issues,
@@ -1665,6 +1678,7 @@ abstract class FunctionLikeAnalyzer extends SourceAnalyzer
     }
 
     /**
+     * @psalm-mutation-free
      * @return array<lowercase-string, string>
      */
     public function getAliasedClassesFlipped(): array
@@ -1680,6 +1694,7 @@ abstract class FunctionLikeAnalyzer extends SourceAnalyzer
     }
 
     /**
+     * @psalm-mutation-free
      * @return array<string, string>
      */
     public function getAliasedClassesFlippedReplaceable(): array
@@ -1695,6 +1710,7 @@ abstract class FunctionLikeAnalyzer extends SourceAnalyzer
     }
 
     /**
+     * @psalm-mutation-free
      * @return array<string, array<string, Union>>|null
      */
     public function getTemplateTypeMap(): ?array
@@ -1861,6 +1877,18 @@ abstract class FunctionLikeAnalyzer extends SourceAnalyzer
                     );
                 }
 
+                $props = [];
+                if ($storage->external_mutation_free
+                    && !$storage->mutation_free_inferred
+                ) {
+                    $props = [
+                        'reference_free' => true
+                    ];
+                    if ($this->function->name->name !== '__construct') {
+                        $props['allow_mutations'] = false;
+                    }
+                }
+
                 if ($this->storage instanceof MethodStorage && $this->storage->if_this_is_type) {
                     $template_result = new TemplateResult($this->getTemplateTypeMap() ?? [], []);
 
@@ -1878,9 +1906,10 @@ abstract class FunctionLikeAnalyzer extends SourceAnalyzer
                         }
                     }
 
-                    $context->vars_in_scope['$this'] = $this->storage->if_this_is_type;
+                    $context->vars_in_scope['$this'] = $this->storage->if_this_is_type
+                        ->setProperties($props);
                 } else {
-                    $context->vars_in_scope['$this'] = new Union([$this_object_type]);
+                    $context->vars_in_scope['$this'] = new Union([$this_object_type], $props);
                 }
 
                 if ($codebase->taint_flow_graph
@@ -1891,16 +1920,6 @@ abstract class FunctionLikeAnalyzer extends SourceAnalyzer
 
                     $codebase->taint_flow_graph->addNode($new_parent_node);
                     $context->vars_in_scope['$this']->parent_nodes += [$new_parent_node->id => $new_parent_node];
-                }
-
-                if ($storage->external_mutation_free
-                    && !$storage->mutation_free_inferred
-                ) {
-                    $context->vars_in_scope['$this']->reference_free = true;
-
-                    if ($this->function->name->name !== '__construct') {
-                        $context->vars_in_scope['$this']->allow_mutations = false;
-                    }
                 }
 
                 $context->vars_possibly_in_scope['$this'] = true;

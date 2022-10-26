@@ -139,7 +139,7 @@ class MethodCallReturnTypeFetcher
                 && ($method_storage = ($class_storage->methods[$method_id->method_name] ?? null))
                 && $method_storage->return_type
             ) {
-                $return_type_candidate = clone $method_storage->return_type;
+                $return_type_candidate = $method_storage->return_type;
 
                 $return_type_candidate = self::replaceTemplateTypes(
                     $return_type_candidate,
@@ -159,7 +159,9 @@ class MethodCallReturnTypeFetcher
             }
 
             if ($return_type_candidate->isFalsable()) {
-                $return_type_candidate->ignore_falsable_issues = true;
+                $return_type_candidate = $return_type_candidate->setProperties([
+                    'ignore_falsable_issues' => true
+                ]);
             }
 
             $return_type_candidate = TypeExpander::expandUnion(
@@ -184,7 +186,7 @@ class MethodCallReturnTypeFetcher
             );
 
             if ($return_type_candidate) {
-                $return_type_candidate = clone $return_type_candidate;
+                $return_type_candidate = $return_type_candidate;
 
                 if ($template_result->lower_bounds) {
                     $return_type_candidate = TypeExpander::expandUnion(
@@ -445,10 +447,10 @@ class MethodCallReturnTypeFetcher
 
                 $return_type_candidate->parent_nodes = $method_call_nodes;
 
-                $stmt_var_type = clone $context->vars_in_scope[$var_id];
-
-                $stmt_var_type->parent_nodes = $var_nodes;
-
+                $stmt_var_type = $context->vars_in_scope[$var_id]->setParentNodes(
+                    $var_nodes
+                );
+                
                 $context->vars_in_scope[$var_id] = $stmt_var_type;
             } else {
                 $method_call_node = DataFlowNode::getForMethodReturn(

@@ -198,12 +198,9 @@ class AssignmentAnalyzer
                     $var_id,
                     $comment_type,
                     $comment_type_location,
-                    $not_ignored_docblock_var_ids
+                    $not_ignored_docblock_var_ids,
+                    $var_id === $var_comment->var_id && $assign_value_type && $comment_type && $assign_value_type->by_ref
                 );
-
-                if ($var_id === $var_comment->var_id && $assign_value_type && $comment_type) {
-                    $comment_type->by_ref = $assign_value_type->by_ref;
-                }
             }
         }
 
@@ -302,10 +299,11 @@ class AssignmentAnalyzer
             }
 
             if ($assign_value_type) {
-                $assign_value_type = clone $assign_value_type;
-                $assign_value_type->from_property = false;
-                $assign_value_type->from_static_property = false;
-                $assign_value_type->ignore_isset = false;
+                $assign_value_type = $assign_value_type->setProperties([
+                    'from_property' => false,
+                    'from_static_property' => false,
+                    'ignore_isset' => false,
+                ]);
             } else {
                 $assign_value_type = Type::getMixed();
             }
@@ -352,7 +350,7 @@ class AssignmentAnalyzer
                     $statements_analyzer->getSource()->inferred_has_mutation = true;
                 }
 
-                $assign_value_type->by_ref = true;
+                $assign_value_type = $assign_value_type->setByRef(true);
             }
 
             // removes dependent vars from $context
@@ -549,8 +547,6 @@ class AssignmentAnalyzer
                 $data_flow_graph = $statements_analyzer->data_flow_graph;
 
                 if ($context->vars_in_scope[$var_id]->parent_nodes) {
-                    $context->vars_in_scope[$var_id] = clone $context->vars_in_scope[$var_id];
-
                     if ($data_flow_graph instanceof TaintFlowGraph
                         && in_array('TaintedInput', $statements_analyzer->getSuppressedIssues())
                     ) {
@@ -592,8 +588,9 @@ class AssignmentAnalyzer
                             );
                         }
 
-                        $assign_value_type = clone $assign_value_type;
-                        $assign_value_type->parent_nodes = [$new_parent_node->id => $new_parent_node];
+                        $assign_value_type = $assign_value_type->setParentNodes(
+                            [$new_parent_node->id => $new_parent_node]
+                        );
                     }
                 }
             }
@@ -699,7 +696,8 @@ class AssignmentAnalyzer
         ?string $var_id = null,
         ?Union &$comment_type = null,
         ?DocblockTypeLocation &$comment_type_location = null,
-        array $not_ignored_docblock_var_ids = []
+        array $not_ignored_docblock_var_ids = [],
+        bool $by_ref = false
     ): void {
         if (!$var_comment->type) {
             return;
@@ -716,7 +714,10 @@ class AssignmentAnalyzer
                 $statements_analyzer->getParentFQCLN()
             );
 
-            $var_comment_type = $var_comment_type->setFromDocblock();
+            $var_comment_type = $var_comment_type->setProperties([
+                'from_docblock' => true,
+                'by_ref' => $by_ref
+            ]);
 
             $var_comment_type->check(
                 $statements_analyzer,
@@ -1102,11 +1103,9 @@ class AssignmentAnalyzer
                     $statements_analyzer
                 );
 
-                $by_ref_out_type = clone $by_ref_out_type;
-
-                if ($existing_type->parent_nodes) {
-                    $by_ref_out_type->parent_nodes += $existing_type->parent_nodes;
-                }
+                $by_ref_out_type = $by_ref_out_type->addParentNodes(
+                    $existing_type->parent_nodes
+                );
 
                 if (!$context->inside_conditional) {
                     $context->vars_in_scope[$var_id] = $by_ref_out_type;
@@ -1114,7 +1113,7 @@ class AssignmentAnalyzer
                     if (!($stmt_type = $statements_analyzer->node_data->getType($stmt))
                         || $stmt_type->isNever()
                     ) {
-                        $statements_analyzer->node_data->setType($stmt, clone $by_ref_type);
+                        $statements_analyzer->node_data->setType($stmt, $by_ref_type);
                     }
 
                     return;
@@ -1128,7 +1127,7 @@ class AssignmentAnalyzer
             $stmt_type = $statements_analyzer->node_data->getType($stmt);
 
             if (!$stmt_type || $stmt_type->isNever()) {
-                $statements_analyzer->node_data->setType($stmt, clone $by_ref_type);
+                $statements_analyzer->node_data->setType($stmt, $by_ref_type);
             }
 
             if ($var_not_in_scope && $stmt instanceof PhpParser\Node\Expr\Variable) {
@@ -1229,8 +1228,7 @@ class AssignmentAnalyzer
                                 $statements_analyzer->getSuppressedIssues()
                             );
 
-                            $value_type = clone $value_type;
-                            $value_type->possibly_undefined = false;
+                            $value_type = $value_type->setPossiblyUndefined(false);
                         }
 
                         if ($statements_analyzer->data_flow_graph
@@ -1341,7 +1339,7 @@ class AssignmentAnalyzer
                     }
 
                     $array_value_type = $assign_value_atomic_type instanceof TArray
-                        ? clone $assign_value_atomic_type->type_params[1]
+                        ? $assign_value_atomic_type->type_params[1]
                         : Type::getMixed();
 
                     self::analyze(
@@ -1385,7 +1383,7 @@ class AssignmentAnalyzer
                     }
 
                     if ($assign_value_atomic_type instanceof TArray) {
-                        $new_assign_type = clone $assign_value_atomic_type->type_params[1];
+                        $new_assign_type = $assign_value_atomic_type->type_params[1];
 
                         if ($statements_analyzer->data_flow_graph
                             && $assign_value
@@ -1401,7 +1399,7 @@ class AssignmentAnalyzer
 
                         $can_be_empty = !$assign_value_atomic_type instanceof TNonEmptyArray;
                     } elseif ($assign_value_atomic_type instanceof TList) {
-                        $new_assign_type = clone $assign_value_atomic_type->type_param;
+                        $new_assign_type = $assign_value_atomic_type->type_param;
 
                         if ($statements_analyzer->data_flow_graph && $assign_value) {
                             ArrayFetchAnalyzer::taintArrayFetch(
@@ -1420,7 +1418,7 @@ class AssignmentAnalyzer
                             && isset($assign_value_atomic_type->properties[$assign_var_item->key->value])
                         ) {
                             $new_assign_type =
-                                clone $assign_value_atomic_type->properties[$assign_var_item->key->value];
+                                $assign_value_atomic_type->properties[$assign_var_item->key->value];
 
                             if ($new_assign_type->possibly_undefined) {
                                 IssueBuffer::maybeAdd(
@@ -1431,7 +1429,7 @@ class AssignmentAnalyzer
                                     $statements_analyzer->getSuppressedIssues()
                                 );
 
-                                $new_assign_type->possibly_undefined = false;
+                                $new_assign_type = $new_assign_type->setPossiblyUndefined(false);
                             }
                         }
 
@@ -1720,7 +1718,7 @@ class AssignmentAnalyzer
                 }
 
                 if (isset($context->byref_constraints[$var_id])) {
-                    $assign_value_type->by_ref = true;
+                    $assign_value_type = $assign_value_type->setByRef(true);
                 }
 
                 if ($statements_analyzer->data_flow_graph instanceof VariableUseGraph
