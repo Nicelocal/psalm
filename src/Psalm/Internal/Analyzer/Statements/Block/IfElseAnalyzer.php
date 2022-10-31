@@ -380,7 +380,9 @@ class IfElseAnalyzer
                 if (isset($context->vars_possibly_in_scope[$var_id])
                     && $statements_analyzer->data_flow_graph
                 ) {
-                    $type = $type->addParentNodes($statements_analyzer->getParentNodesForPossiblyUndefinedVariable($var_id));
+                    $type = $type->addParentNodes(
+                        $statements_analyzer->getParentNodesForPossiblyUndefinedVariable($var_id)
+                    );
                 }
 
                 $context->vars_in_scope[$var_id] = $type;
@@ -424,7 +426,7 @@ class IfElseAnalyzer
                             $codebase
                         );
 
-                        if (!$combined_type->equals($context->vars_in_scope[$var_id], true, false)) {
+                        if (!$combined_type->equals($context->vars_in_scope[$var_id])) {
                             $context->removeDescendents($var_id, $combined_type);
                         }
 
