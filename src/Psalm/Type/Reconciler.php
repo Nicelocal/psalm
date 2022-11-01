@@ -321,7 +321,10 @@ class Reconciler
                 $result_type = $result_type->setByRef(true);
             }
 
-            $type_changed = !$before_adjustment || !$result_type->equals($before_adjustment);
+            $type_changed = !$before_adjustment
+                || !$result_type->equals($before_adjustment)
+                || $result_type->different
+                || $before_adjustment->different;
 
             $key_parts = self::breakUpPathIntoParts($key);
             if ($type_changed || $failed_reconciliation) {
