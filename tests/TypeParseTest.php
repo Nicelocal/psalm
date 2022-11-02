@@ -195,12 +195,12 @@ class TypeParseTest extends TestCase
 
     public function testIntersectionOfTwoDifferentArrays(): void
     {
-        $this->assertSame('array{a: int}<string, string>', Type::parseString('array{a: int}&array<string, string>')->getId());
+        $this->assertSame('unsealed-array{a: int}<string, string>', Type::parseString('array{a: int}&array<string, string>')->getId());
     }
 
     public function testIntersectionOfTwoDifferentArraysReversed(): void
     {
-        $this->assertSame('array{a: int}<string, string>', Type::parseString('array<string, string>&array{a: int}')->getId());
+        $this->assertSame('unsealed-array{a: int}<string, string>', Type::parseString('array<string, string>&array{a: int}')->getId());
     }
 
     public function testIntersectionOfTKeyedArrayWithMergedProperties(): void
@@ -252,7 +252,7 @@ class TypeParseTest extends TestCase
 
     public function testIterableContainingTKeyedArray(): void
     {
-        $this->assertSame('iterable<string, array{int}>', Type::parseString('iterable<string, array{int}>')->getId());
+        $this->assertSame('iterable<string, list{int}>', Type::parseString('iterable<string, array{int}>')->getId());
     }
 
     public function testPhpDocSimpleArray(): void
@@ -393,20 +393,20 @@ class TypeParseTest extends TestCase
     public function testTKeyedArrayWithIntKeysAndUnionArgs(): void
     {
         $this->assertSame(
-            'array{null|stdClass}',
-            (string)Type::parseString('array{stdClass|null}')
+            'list{null|stdClass}',
+            (string)Type::parseString('list{stdClass|null}')
         );
     }
 
     public function testTKeyedArrayWithIntKeysAndGenericArgs(): void
     {
         $this->assertSame(
-            'array{array<array-key, mixed>}',
+            'list{array<array-key, mixed>}',
             (string)Type::parseString('array{array}')
         );
 
         $this->assertSame(
-            'array{array<int, string>}',
+            'list{array<int, string>}',
             (string)Type::parseString('array{array<int, string>}')
         );
     }

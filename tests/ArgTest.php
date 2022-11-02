@@ -11,7 +11,7 @@ class ArgTest extends TestCase
     use ValidCodeAnalysisTestTrait;
 
     /**
-     * @return iterable<string,array{code:string,assertions?:array<string,string>,ignored_issues?:list<string>}>
+     * @return iterable<string,array{code:string,assertions?:array<string,string>,ignored_issues?:list<string>,php_version?:string}>
      */
     public function providerValidCodeParse(): iterable
     {
@@ -39,7 +39,7 @@ class ArgTest extends TestCase
                     $a = [[1, 2]];
                     $b = array_merge([], ...$a);',
                 'assertions' => [
-                    '$b' => 'array{0: int, 1: int}',
+                    '$b===' => 'list{1, 2}',
                 ],
             ],
             'preserveTypesWhenUnpacking' => [
@@ -310,6 +310,17 @@ class ArgTest extends TestCase
                             return $values;
                         }
                     }
+                ',
+            ],
+            'SealedAcceptSealed' => [
+                'code' => '<?php
+                    /** @param array{test: string} $a */
+                    function a(array $a): string {
+                        return $a["test"];
+                    }
+
+                    $sealed = ["test" => "str"];
+                    a($sealed);
                 ',
             ],
         ];
@@ -723,6 +734,31 @@ class ArgTest extends TestCase
                 );
                 ',
                 'error_message' => 'TooFewArguments',
+            ],
+            'SealedRefuseUnsealed' => [
+                'code' => '<?php
+                    /** @param array{test: string} $a */
+                    function a(array $a): string {
+                        return $a["test"];
+                    }
+
+                    /** @var unsealed-array{test: string} */
+                    $unsealed = [];
+                    a($unsealed);
+                ',
+                'error_message' => 'InvalidArgument',
+            ],
+            'SealedRefuseSealedExtra' => [
+                'code' => '<?php
+                    /** @param array{test: string} $a */
+                    function a(array $a): string {
+                        return $a["test"];
+                    }
+
+                    $sealedExtraKeys = ["test" => "str", "somethingElse" => "test"];
+                    a($sealedExtraKeys);
+                ',
+                'error_message' => 'InvalidArgument',
             ],
         ];
     }

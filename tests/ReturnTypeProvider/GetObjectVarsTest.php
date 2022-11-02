@@ -19,6 +19,17 @@ class GetObjectVarsTest extends TestCase
                 }
                 $ret = get_object_vars(new C);
             ',
+            'assertions' => ['$ret' => 'unsealed-array{prop: string}'],
+        ];
+
+        yield 'returnsSealedArrayForFinalClass' => [
+            'code' => '<?php
+                final class C {
+                    /** @var string */
+                    public $prop = "val";
+                }
+                $ret = get_object_vars(new C);
+            ',
             'assertions' => ['$ret' => 'array{prop: string}'],
         ];
 
@@ -45,7 +56,7 @@ class GetObjectVarsTest extends TestCase
                     /** @var string */
                     protected $prot = "val";
 
-                    /** @return array{priv: string, prot: string} */
+                    /** @return unsealed-array{priv: string, prot: string} */
                     public function method(): array {
                         return get_object_vars($this);
                     }
@@ -68,7 +79,7 @@ class GetObjectVarsTest extends TestCase
                 }
 
                 class D extends C {
-                    /** @return array{prot: string} */
+                    /** @return unsealed-array{prot: string, pub: string} */
                     public function method(): array {
                         return get_object_vars($this);
                     }
@@ -81,7 +92,7 @@ class GetObjectVarsTest extends TestCase
             'code' => '<?php
                 /**
                  * @param object{a:int, b:string, c:bool} $p
-                 * @return array{a:int, b:string, c:bool}
+                 * @return unsealed-array{a:int, b:string, c:bool}
                  */
                 function f(object $p): array {
                     return get_object_vars($p);
@@ -92,12 +103,12 @@ class GetObjectVarsTest extends TestCase
 
         yield 'propertiesOfCastScalar' => [
             'code' => '<?php $ret = get_object_vars((object)true);',
-            'assertions' => ['$ret' => 'array{scalar: true}'],
+            'assertions' => ['$ret' => 'unsealed-array{scalar: true}'],
         ];
 
         yield 'propertiesOfPOPO' => [
             'code' => '<?php $ret = get_object_vars((object)["a" => 1]);',
-            'assertions' => ['$ret' => 'array{a: int}'],
+            'assertions' => ['$ret' => 'unsealed-array{a: int}'],
         ];
     }
 }

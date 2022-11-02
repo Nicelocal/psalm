@@ -46,7 +46,10 @@ class TKeyedArray extends Atomic
     public $class_strings;
 
     /**
-     * @var bool - whether or not the objectlike has been created from an explicit array
+     * True if the objectlike has been created from an explicit array,
+     * or if we're sure that this objectlike has only these keys.
+     *
+     * @var bool
      */
     public $sealed = false;
 
@@ -70,7 +73,9 @@ class TKeyedArray extends Atomic
     public $is_list = false;
 
     /** @var non-empty-lowercase-string */
-    public const KEY = 'array';
+    protected const NAME_ARRAY = 'array';
+    /** @var non-empty-lowercase-string */
+    protected const NAME_LIST = 'list';
 
     /**
      * Constructs a new instance of a generic type
@@ -87,6 +92,9 @@ class TKeyedArray extends Atomic
         bool $is_list = false,
         bool $from_docblock = false
     ) {
+        if ($previous_key_type || $previous_value_type) {
+            $sealed = false;
+        }
         $this->properties = $properties;
         $this->class_strings = $class_strings;
         $this->sealed = $sealed;
@@ -111,13 +119,30 @@ class TKeyedArray extends Atomic
         return $cloned;
     }
 
+    /**
+     * @return static
+     */
+    public function setSealed(bool $sealed): self
+    {
+        if ($sealed === $this->sealed) {
+            return $this;
+        }
+        $cloned = clone $this;
+        $cloned->sealed = $sealed;
+        if ($sealed) {
+            $cloned->previous_key_type = null;
+            $cloned->previous_value_type = null;
+        }
+        return $cloned;
+    }
+
     public function getId(bool $exact = true, bool $nested = false): string
     {
         $property_strings = [];
 
         foreach ($this->properties as $name => $type) {
-            if ($this->is_list && $this->sealed) {
-                $property_strings[$name] = $type->getId($exact);
+            if ($this->is_list) {
+                $property_strings[$name] = ($type->possibly_undefined ? '?' : ''). $type->getId($exact);
                 continue;
             }
 
@@ -132,11 +157,17 @@ class TKeyedArray extends Atomic
                 . ': ' . $type->getId($exact);
         }
 
-        if (!$this->is_list) {
+        if ($this->is_list) {
+            $key = static::NAME_LIST;
+        } else {
+            $key = static::NAME_ARRAY;
             sort($property_strings);
         }
+        if (!$this->sealed) {
+            $key = "unsealed-$key";
+        }
 
-        return static::KEY . '{' .
+        return $key . '{' .
                 implode(', ', $property_strings) .
                 '}'
                 . ($this->previous_value_type
@@ -169,6 +200,16 @@ class TKeyedArray extends Atomic
         $suffixed_properties = [];
 
         foreach ($this->properties as $name => $type) {
+            if ($this->is_list) {
+                $suffixed_properties[$name] = ($type->possibly_undefined ? '?' : '') . $type->toNamespacedString(
+                    $namespace,
+                    $aliased_classes,
+                    $this_class,
+                    false
+                );
+                continue;
+            }
+
             $class_string_suffix = '';
             if (isset($this->class_strings[$name])) {
                 $class_string_suffix = '::class';
@@ -185,7 +226,7 @@ class TKeyedArray extends Atomic
                 );
         }
 
-        return static::KEY . '{' . implode(', ', $suffixed_properties) . '}';
+        return ($this->is_list ? static::NAME_LIST : static::NAME_ARRAY) . '{' . implode(', ', $suffixed_properties) . '}';
     }
 
     /**
@@ -197,7 +238,7 @@ class TKeyedArray extends Atomic
         ?string $this_class,
         int $analysis_php_version_id
     ): string {
-        return $this->getKey();
+        return 'array';
     }
 
     public function canBeFullyExpressedInPhp(int $analysis_php_version_id): bool
@@ -303,8 +344,7 @@ class TKeyedArray extends Atomic
 
     public function getKey(bool $include_extra = true): string
     {
-        /** @var string */
-        return static::KEY;
+        return 'array';
     }
 
     /**
@@ -414,7 +454,7 @@ class TKeyedArray extends Atomic
 
     public function getAssertionString(): string
     {
-        return $this->getKey();
+        return $this->is_list ? 'list' : 'array';
     }
 
     public function getList(): TList

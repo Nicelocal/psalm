@@ -102,7 +102,7 @@ class UnusedVariableTest extends TestCase
     }
 
     /**
-     * @return array<string, array{code:string,ignored_issues?:list<string>,php_version?:string}>
+     * @return array<string, array{code:string,ignored_issues?:list<string>,php_version?:string,error_levels?:list<string>,assertions?:array<string, string>}>
      */
     public function providerValidCodeParse(): array
     {
@@ -767,7 +767,7 @@ class UnusedVariableTest extends TestCase
             'arraySubAppend' => [
                 'code' => '<?php
                     $rules = [0, 1, 2];
-                    
+
                     $report = ["runs" => []];
                     foreach ($rules as $rule) {
                         $report["runs"][] = $rule;
@@ -3595,7 +3595,7 @@ class UnusedVariableTest extends TestCase
                         $arr = [$a];
                         takesArrayOfString($arr);
                     }',
-                'error_message' => 'MixedArgumentTypeCoercion - src' . DIRECTORY_SEPARATOR . 'somefile.php:12:44 - Argument 1 of takesArrayOfString expects array<array-key, string>, but parent type array{mixed} provided. Consider improving the type at src' . DIRECTORY_SEPARATOR . 'somefile.php:10:41'
+                'error_message' => 'MixedArgumentTypeCoercion - src' . DIRECTORY_SEPARATOR . 'somefile.php:12:44 - Argument 1 of takesArrayOfString expects array<array-key, string>, but parent type list{mixed} provided. Consider improving the type at src' . DIRECTORY_SEPARATOR . 'somefile.php:10:41'
             ],
             'warnAboutUnusedVariableInTryReassignedInCatch' => [
                 'code' => '<?php

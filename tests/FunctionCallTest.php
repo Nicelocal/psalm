@@ -1066,9 +1066,9 @@ class FunctionCallTest extends TestCase
                     $d = hrtime(false);',
                 'assertions' => [
                     '$a' => 'int',
-                    '$b' => 'array{int, int}',
-                    '$c' => 'array{int, int}|int',
-                    '$d' => 'array{int, int}',
+                    '$b' => 'list{int, int}',
+                    '$c' => 'int|list{int, int}',
+                    '$d' => 'list{int, int}',
                 ],
             ],
             'hrtimeCanBeFloat' => [
@@ -1367,7 +1367,7 @@ class FunctionCallTest extends TestCase
                     $r = preg_match("{foo}", "foo", $matches, PREG_OFFSET_CAPTURE);',
                 'assertions' => [
                     '$r===' => '0|1|false',
-                    '$matches===' => 'array<array-key, array{string, int<-1, max>}>',
+                    '$matches===' => 'array<array-key, list{string, int<-1, max>}>',
                 ],
             ],
             'pregMatchWithFlagUnmatchedAsNull' => [
@@ -1383,7 +1383,7 @@ class FunctionCallTest extends TestCase
                     $r = preg_match("{foo}", "foo", $matches, PREG_OFFSET_CAPTURE | PREG_UNMATCHED_AS_NULL);',
                 'assertions' => [
                     '$r===' => '0|1|false',
-                    '$matches===' => 'array<array-key, array{null|string, int<-1, max>}>',
+                    '$matches===' => 'array<array-key, list{null|string, int<-1, max>}>',
                 ],
             ],
             'pregReplaceCallback' => [
@@ -2450,6 +2450,12 @@ class FunctionCallTest extends TestCase
                     }',
                 'error_message' => 'ArgumentTypeCoercion',
             ],
+            'array_is_list_literal_array' => [
+                'code' => '<?php
+                    $list = [1 => 0, 0 => 1];
+                    assert(array_is_list($list));',
+                'error_message' => 'TypeDoesNotContainType'
+            ]
         ];
     }
 

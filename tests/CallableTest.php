@@ -11,7 +11,7 @@ class CallableTest extends TestCase
     use ValidCodeAnalysisTestTrait;
 
     /**
-     * @return iterable<string,array{code:string,assertions?:array<string,string>,ignored_issues?:list<string>}>
+     * @return iterable<string,array{code:string,assertions?:array<string,string>,ignored_issues?:list<string>,php_version?:string,error_levels?:list<string>}>
      */
     public function providerValidCodeParse(): iterable
     {
@@ -144,7 +144,7 @@ class CallableTest extends TestCase
                     $a = new ArrayList();
                     $b = asTupled($a);',
                 'assertions' => [
-                    '$b' => 'ArrayList<array{int}>',
+                    '$b' => 'ArrayList<list{int}>',
                 ],
             ],
             'inferArgByPreviousFunctionArg' => [
@@ -431,7 +431,7 @@ class CallableTest extends TestCase
                     '$result2' => 'list<int>',
                 ],
                 'error_levels' => [],
-                '8.0',
+                'php_version' => '8.0',
             ],
             'inferPipelineWithPartiallyAppliedFunctions' => [
                 'code' => '<?php
@@ -515,7 +515,7 @@ class CallableTest extends TestCase
                     '$result' => 'non-empty-list<Item<string, bool>>|null',
                 ],
                 'error_levels' => [],
-                '8.0',
+                'php_version' => '8.0',
             ],
             'varReturnType' => [
                 'code' => '<?php
@@ -671,12 +671,12 @@ class CallableTest extends TestCase
                     $e = array_map([$a_instance, "bar"], ["one", "two"]);
                     $f = array_map("baz", ["one", "two"]);',
                 'assertions' => [
-                    '$a' => 'array{string, string}<string>',
-                    '$b' => 'array{string, string}<string>',
-                    '$c' => 'array{string, string}<string>',
-                    '$d' => 'array{string, string}<string>',
-                    '$e' => 'array{string, string}<string>',
-                    '$f' => 'array{string, string}<string>',
+                    '$a' => 'list{string, string}',
+                    '$b' => 'list{string, string}',
+                    '$c' => 'list{string, string}',
+                    '$d' => 'list{string, string}',
+                    '$e' => 'list{string, string}',
+                    '$f' => 'list{string, string}',
                 ],
             ],
             'arrayCallableMethod' => [

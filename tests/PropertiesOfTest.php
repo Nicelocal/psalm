@@ -49,9 +49,9 @@ class PropertiesOfTest extends TestCase
                 $result3 = test3();
                 ',
                 'assertions' => [
-                    '$result1===' => 'array{a: int}',
-                    '$result2===' => 'array{a: int}',
-                    '$result3===' => 'array{a: int}',
+                    '$result1===' => 'unsealed-array{a: int}',
+                    '$result2===' => 'unsealed-array{a: int}',
+                    '$result3===' => 'unsealed-array{a: int}',
                 ]
             ],
             'publicPropertiesOf' => [
@@ -123,6 +123,19 @@ class PropertiesOfTest extends TestCase
                             "bar" => "foo",
                             "adams" => 1
                         ];
+                    }
+                ',
+            ],
+            'finalPropertiesOf' => [
+                'code' => '<?php
+                    class A {
+                        /** @var bool */
+                        public $foo = false;
+                    }
+
+                    /** @return properties-of<A> */
+                    function returnPropertyOfA() {
+                        return ["foo" => true];
                     }
                 ',
             ],
@@ -373,6 +386,24 @@ class PropertiesOfTest extends TestCase
                     /** @return private-properties-of<A> */
                     function returnPropertyOfA() {
                         return ["adams" => true];
+                    }
+                ',
+                'error_message' => 'InvalidReturnStatement'
+            ],
+            'finalPropertiesOfInexact' => [
+                'code' => '<?php
+                    final class A {
+                        /** @var bool */
+                        public $foo = false;
+                        /** @var string */
+                        private $bar = "";
+                        /** @var int */
+                        protected $adams = 42;
+                    }
+
+                    /** @return properties-of<A> */
+                    function returnPropertyOfA() {
+                        return ["foo" => true];
                     }
                 ',
                 'error_message' => 'InvalidReturnStatement'

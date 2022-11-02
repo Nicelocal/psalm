@@ -13,7 +13,7 @@ class ArrayFunctionCallTest extends TestCase
     use ValidCodeAnalysisTestTrait;
 
     /**
-     * @return iterable<string,array{code:string,assertions?:array<string,string>,ignored_issues?:list<string>}>
+     * @return iterable<string,array{code:string,assertions?:array<string,string>,ignored_issues?:list<string>,php_version?:string}>
      */
     public function providerValidCodeParse(): iterable
     {
@@ -212,7 +212,7 @@ class ArrayFunctionCallTest extends TestCase
                 'code' => '<?php
                     $d = array_merge(["a", "b", "c", "d"], [1, 2, 3]);',
                 'assertions' => [
-                    '$d' => 'array{0: string, 1: string, 2: string, 3: string, 4: int, 5: int, 6: int}',
+                    '$d===' => "list{'a', 'b', 'c', 'd', 1, 2, 3}",
                 ],
             ],
             'arrayMergePossiblyUndefined' => [
@@ -268,7 +268,7 @@ class ArrayFunctionCallTest extends TestCase
                 'code' => '<?php
                     $d = array_replace(["a", "b", "c", "d"], [1, 2, 3]);',
                 'assertions' => [
-                    '$d' => 'array{0: int, 1: int, 2: int, 3: string}',
+                    '$d===' => "list{1, 2, 3, 'd'}",
                 ],
             ],
             'arrayReplacePossiblyUndefined' => [
@@ -723,7 +723,7 @@ class ArrayFunctionCallTest extends TestCase
 
                   foo($a3);',
                 'assertions' => [
-                    '$a3' => 'array{hi: int, bye: int}',
+                    '$a3' => 'array{bye: int, hi: int}',
                 ],
             ],
             'arrayReplaceTKeyedArray' => [
@@ -743,7 +743,7 @@ class ArrayFunctionCallTest extends TestCase
 
                   foo($a3);',
                 'assertions' => [
-                    '$a3' => 'array{hi: int, bye: int}',
+                    '$a3' => 'array{bye: int, hi: int}',
                 ],
             ],
             'arrayRand' => [
@@ -758,7 +758,7 @@ class ArrayFunctionCallTest extends TestCase
                     '$vars' => 'array{x: string, y: string}',
                     '$c' => 'string',
                     '$d' => 'string',
-                    '$more_vars' => 'array{string, string}',
+                    '$more_vars' => 'list{string, string}',
                     '$e' => 'int',
                 ],
             ],
@@ -1528,8 +1528,8 @@ class ArrayFunctionCallTest extends TestCase
                     array_splice($a, rand(-10, 0), rand(0, 10), $b);',
                 'assertions' => [
                     '$a' => 'non-empty-list<int|string>',
-                    '$b' => 'array{string, string, string}',
-                    '$c' => 'array{int, int, int}',
+                    '$b' => 'list{string, string, string}',
+                    '$c' => 'list{int, int, int}',
                 ],
             ],
             'arraySpliceReturn' => [
@@ -1545,7 +1545,7 @@ class ArrayFunctionCallTest extends TestCase
                     $d = [["red"], ["green"], ["blue"]];
                     array_splice($d, -1, 1, "foo");',
                 'assertions' => [
-                    '$d' => 'array<int, array{string}|string>',
+                    '$d' => 'array<int, list{string}|string>',
                 ],
             ],
             'ksortPreserveShape' => [
@@ -1972,6 +1972,19 @@ class ArrayFunctionCallTest extends TestCase
                     takesString($a[0]);
                     array_map("takesString", $a);',
             ],
+            'arrayMapZip' => [
+                'code' => '<?php
+                    $a = [1, 2, 3, 4, 5];
+                    $b = ["one", "two", "three", "four", "five"];
+                    $c = ["uno", "dos", "tres", "cuatro", "cinco", "seis"];
+
+                    $d = array_map(null, $a, $b, $c);',
+                'assertions' => [
+                    '$d===' => "list{list{1, 'one', 'uno'}, list{2, 'two', 'dos'}, list{3, 'three', 'tres'}, list{4, 'four', 'cuatro'}, list{5, 'five', 'cinco'}, list{null, null, 'seis'}}"
+                ],
+                'ignored_issues' => [],
+                'php_version' => '7.4',
+            ],
             'arrayMapExplicitZip' => [
                 'code' => '<?php
                     $as = ["key"];
@@ -2032,7 +2045,7 @@ class ArrayFunctionCallTest extends TestCase
                      * @param array{A: int} $a
                      * @param array<string, string> $b
                      *
-                     * @return array{A: int}
+                     * @return unsealed-array{A: int}
                      */
                     function merger(array $a, array $b) : array {
                         return array_merge($b, $a);
@@ -2044,7 +2057,7 @@ class ArrayFunctionCallTest extends TestCase
                      * @param array{A: int} $a
                      * @param array<string, int> $b
                      *
-                     * @return array{A: int}
+                     * @return unsealed-array{A: int}
                      */
                     function merger(array $a, array $b) : array {
                         return array_merge($a, $b);
@@ -2056,7 +2069,7 @@ class ArrayFunctionCallTest extends TestCase
                      * @param array{A: int} $a
                      * @param array<string, string> $b
                      *
-                     * @return array{A: int}
+                     * @return unsealed-array{A: int}
                      */
                     function merger(array $a, array $b) : array {
                         return array_replace($b, $a);
@@ -2068,7 +2081,7 @@ class ArrayFunctionCallTest extends TestCase
                      * @param array{A: int} $a
                      * @param array<string, int> $b
                      *
-                     * @return array{A: int}
+                     * @return unsealed-array{A: int}
                      */
                     function merger(array $a, array $b) : array {
                         return array_replace($a, $b);
@@ -2164,7 +2177,7 @@ class ArrayFunctionCallTest extends TestCase
                     );
                 ',
                 'assertions' => [
-                    '$line===' => 'array{0: int}<array-key, int>',
+                    '$line===' => 'unsealed-array{0: int}<array-key, int>',
                 ],
             ],
             'arrayUnshiftOnEmptyArrayMeansNonEmptyList' => [
@@ -2411,12 +2424,12 @@ class ArrayFunctionCallTest extends TestCase
                      * @param array{A: int} $a
                      * @param array<string, string> $b
                      *
-                     * @return array{A: int}
+                     * @return unsealed-array{A: int}
                      */
                     function merger(array $a, array $b) : array {
                         return array_merge($a, $b);
                     }',
-                'error_message' => 'LessSpecificReturnStatement - src' . DIRECTORY_SEPARATOR . 'somefile.php:9:32 - The type \'array{A: int|string}<string, string>\' is more general',
+                'error_message' => 'LessSpecificReturnStatement - src' . DIRECTORY_SEPARATOR . 'somefile.php:9:32 - The type \'unsealed-array{A: int|string}<string, string>\' is more general',
             ],
             'arrayReplaceKeepFirstKeysButNotType' => [
                 'code' => '<?php
@@ -2424,12 +2437,12 @@ class ArrayFunctionCallTest extends TestCase
                      * @param array{A: int} $a
                      * @param array<string, string> $b
                      *
-                     * @return array{A: int}
+                     * @return unsealed-array{A: int}
                      */
                     function merger(array $a, array $b) : array {
                         return array_replace($a, $b);
                     }',
-                'error_message' => 'LessSpecificReturnStatement - src' . DIRECTORY_SEPARATOR . 'somefile.php:9:32 - The type \'array{A: int|string}<string, string>\' is more general',
+                'error_message' => 'LessSpecificReturnStatement - src' . DIRECTORY_SEPARATOR . 'somefile.php:9:32 - The type \'unsealed-array{A: int|string}<string, string>\' is more general',
             ],
             'arrayWalkOverObject' => [
                 'code' => '<?php
