@@ -140,9 +140,21 @@ class TKeyedArray extends Atomic
     {
         $property_strings = [];
 
+        if ($this->is_list) {
+            $use_list_syntax = true;
+            foreach ($this->properties as $property) {
+                if ($property->possibly_undefined) {
+                    $use_list_syntax = false;
+                    break;
+                }
+            }
+        } else {
+            $use_list_syntax = false;
+        }
+
         foreach ($this->properties as $name => $type) {
-            if ($this->is_list) {
-                $property_strings[$name] = ($type->possibly_undefined ? '?' : ''). $type->getId($exact);
+            if ($use_list_syntax) {
+                $property_strings[$name] = $type->getId($exact);
                 continue;
             }
 
@@ -199,9 +211,21 @@ class TKeyedArray extends Atomic
 
         $suffixed_properties = [];
 
+        if ($this->is_list) {
+            $use_list_syntax = true;
+            foreach ($this->properties as $property) {
+                if ($property->possibly_undefined) {
+                    $use_list_syntax = false;
+                    break;
+                }
+            }
+        } else {
+            $use_list_syntax = false;
+        }
+
         foreach ($this->properties as $name => $type) {
-            if ($this->is_list) {
-                $suffixed_properties[$name] = ($type->possibly_undefined ? '?' : '') . $type->toNamespacedString(
+            if ($use_list_syntax) {
+                $suffixed_properties[$name] = $type->toNamespacedString(
                     $namespace,
                     $aliased_classes,
                     $this_class,
@@ -226,7 +250,8 @@ class TKeyedArray extends Atomic
                 );
         }
 
-        return ($this->is_list ? static::NAME_LIST : static::NAME_ARRAY) . '{' . implode(', ', $suffixed_properties) . '}';
+        return ($this->is_list ? static::NAME_LIST : static::NAME_ARRAY) . '{' .
+                implode(', ', $suffixed_properties) . '}';
     }
 
     /**

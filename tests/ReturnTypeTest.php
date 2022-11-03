@@ -13,7 +13,7 @@ class ReturnTypeTest extends TestCase
     use ValidCodeAnalysisTestTrait;
 
     /**
-     * @return iterable<string,array{code:string,assertions?:array<string,string>,ignored_issues?:list<string>}>
+     *
      */
     public function providerValidCodeParse(): iterable
     {
@@ -513,24 +513,6 @@ class ReturnTypeTest extends TestCase
 
                         return ["a" => 2];
                     }',
-            ],
-            'badlyCasedReturnType' => [
-                'code' => '<?php
-                    namespace MyNS;
-
-                    class Example {
-                        /** @return array<int,example> */
-                        public static function test() : array {
-                            return [new Example()];
-                        }
-
-                        /** @return example */
-                        public static function instance() {
-                            return new Example();
-                        }
-                    }',
-                'assertions' => [],
-                'ignored_issues' => ['InvalidClass'],
             ],
             'arrayReturnTypeWithExplicitKeyType' => [
                 'code' => '<?php
@@ -1140,7 +1122,7 @@ class ReturnTypeTest extends TestCase
     }
 
     /**
-     * @return iterable<string,array{code:string,error_message:string,ignored_issues?:list<string>,php_version?:string}>
+     *
      */
     public function providerInvalidCodeParse(): iterable
     {
@@ -1615,6 +1597,23 @@ class ReturnTypeTest extends TestCase
                         }
                     }',
                     'error_message' => 'LessSpecificImplementedReturnType',
+            ],
+            'badlyCasedReturnType' => [
+                'code' => '<?php
+                    namespace MyNS;
+
+                    class Example {
+                        /** @return array<int,example> */
+                        public static function test() : array {
+                            return [new Example()];
+                        }
+
+                        /** @return example */
+                        public static function instance() {
+                            return new Example();
+                        }
+                    }',
+                'error_message' => 'InvalidClass',
             ]
         ];
     }

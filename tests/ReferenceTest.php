@@ -13,11 +13,22 @@ class ReferenceTest extends TestCase
     use ValidCodeAnalysisTestTrait;
 
     /**
-     * @return iterable<string,array{code:string,assertions?:array<string,string>,ignored_issues?:list<string>,php_version?:string}>
+     *
      */
     public function providerValidCodeParse(): iterable
     {
         return [
+            'referenceAssignmentToNonReferenceCountsAsUse' => [
+                'code' => '<?php
+                    $b = &$a;
+                    $b = 2;
+                    echo $a;
+                ',
+                'assertions' => [
+                    '$b===' => '2',
+                    '$a===' => '2',
+                ],
+            ],
             'updateReferencedTypes' => [
                 'code' => '<?php
                     $a = 1;
@@ -290,7 +301,7 @@ class ReferenceTest extends TestCase
     }
 
     /**
-     * @return iterable<string,array{code:string,error_message:string,ignored_issues?:list<string>,php_version?:string}>
+     *
      */
     public function providerInvalidCodeParse(): iterable
     {

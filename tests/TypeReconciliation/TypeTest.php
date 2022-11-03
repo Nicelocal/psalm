@@ -14,7 +14,7 @@ class TypeTest extends TestCase
     use ValidCodeAnalysisTestTrait;
 
     /**
-     * @return iterable<string,array{code:string,assertions?:array<string,string>,ignored_issues?:list<string>}>
+     *
      */
     public function providerValidCodeParse(): iterable
     {
@@ -40,8 +40,89 @@ class TypeTest extends TestCase
                         $b = $a;
                     }',
                 'assertions' => [
-                    '$a===' => 'list{?0, ?1}',
+                    '$a===' => 'list{0?: 0, 1?: 1}',
                     '$b===' => 'list{0, 1}|null'
+                ]
+            ],
+            'sealedArrayMagic' => [
+                'code' => '<?php
+
+                /** @var array{invoice?: string, utd?: "utd", cancel_agreement?: "test", installment?: "test"} */
+                $b = [];
+
+
+                $buttons = [];
+                foreach ($b as $text) {
+                    $buttons[] = $text;
+                }
+                if (count($buttons) === 0) {
+                    echo "Zero";
+                }
+
+
+                /** @var ?string */
+                $test = null;
+                $urls = array_filter([$test]);
+
+                $mainUrlSet = false;
+                foreach ($urls as $_) {
+                    if (!$mainUrlSet) {
+                        $mainUrlSet = true;
+                    }
+                }
+                if (!$mainUrlSet) {
+                    echo "SKIP";
+                }
+
+
+                /**
+                 * @param string|list<bool|array{0:string, 1:string}> $time
+                 */
+                function mapTime($time): void
+                {
+                    $atime = is_array($time) ? $time : [];
+                    if ($time === "24h") {
+                        return;
+                    }
+
+                    for ($day = 0; $day < 7; ++$day) {
+                        if (!array_key_exists($day, $atime) || !is_array($atime[$day])) {
+                            continue;
+                        }
+
+                        $dayWh = $atime[$day];
+                        array_pop($dayWh);
+                    }
+                }',
+                'assertions' => [
+                    '$buttons===' => 'list<string>',
+                    '$urls===' => 'list{0?: non-falsy-string}',
+                    '$mainUrlSet===' => 'bool',
+                ]
+            ],
+            'validSealedArrayAssertions' => [
+                'code' => '<?php
+                    /** @var array{a: string, b: string, c?: string} */
+                    $a = [];
+
+                    if (count($a) > 2) {
+                        echo "Have C!";
+                    }
+
+                    if (count($a) < 3) {
+                        echo "Do not have C!";
+                    }
+                ',
+            ],
+            'validSealedArrayAssertions2' => [
+                'code' => '<?php
+                    /** @var array{a: string, b: string, c?: string} */
+                    $a = [];
+
+                    assert(count($a) > 2);
+                ',
+                'assertions' => [
+                    '$a===' => 'array{a: string, b: string, c: string}',
                 ]
             ],
             'nullableMethodWithTernaryGuard' => [
@@ -1569,6 +1650,60 @@ class TypeTest extends TestCase
                     function returnsFalse() { return rand() % 2 > 0; }
                     ',
                 'error_message' => 'InvalidReturnStatement',
+            ],
+            'invalidSealedArrayAssertion1' => [
+                'code' => '<?php
+                    /** @var array{a: string, b: string, c?: string} */
+                    $a = [];
+
+                    if (count($a) > 1) {
+                    }',
+                'error_message' => 'RedundantConditionGivenDocblockType'
+            ],
+            'invalidSealedArrayAssertion2' => [
+                'code' => '<?php
+                    /** @var array{a: string, b: string, c?: string} */
+                    $a = [];
+
+                    if (count($a) > 3) {
+                    }',
+                'error_message' => 'DocblockTypeContradiction'
+            ],
+            'invalidSealedArrayAssertion3' => [
+                'code' => '<?php
+                    /** @var array{a: string, b: string, c?: string} */
+                    $a = [];
+
+                    if (count($a) > 4) {
+                    }',
+                'error_message' => 'DocblockTypeContradiction'
+            ],
+            'invalidSealedArrayAssertion4' => [
+                'code' => '<?php
+                    /** @var array{a: string, b: string, c?: string} */
+                    $a = [];
+
+                    if (count($a) < 1) {
+                    }',
+                'error_message' => 'RedundantConditionGivenDocblockType'
+            ],
+            'invalidSealedArrayAssertion5' => [
+                'code' => '<?php
+                    /** @var array{a: string, b: string, c?: string} */
+                    $a = [];
+
+                    if (count($a) < 2) {
+                    }',
+                'error_message' => 'DocblockTypeContradiction'
+            ],
+            'invalidSealedArrayAssertion6' => [
+                'code' => '<?php
+                    /** @var array{a: string, b: string, c?: string} */
+                    $a = [];
+
+                    if (count($a) < 4) {
+                    }',
+                'error_message' => 'RedundantConditionGivenDocblockType'
             ],
             'intersectionTypeClassCheckAfterInstanceof' => [
                 'code' => '<?php
