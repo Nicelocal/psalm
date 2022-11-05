@@ -175,8 +175,8 @@ class TKeyedArray extends Atomic
             $key = static::NAME_ARRAY;
             sort($property_strings);
         }
-        if (!$this->sealed) {
-            $key = "unsealed-$key";
+        if ($this->sealed) {
+            $key = "strict-$key";
         }
 
         return $key . '{' .
@@ -250,7 +250,8 @@ class TKeyedArray extends Atomic
                 );
         }
 
-        return ($this->is_list ? static::NAME_LIST : static::NAME_ARRAY) . '{' .
+        return  ($this->sealed ? 'strict-' : '') .
+                ($this->is_list ? static::NAME_LIST : static::NAME_ARRAY) . '{' .
                 implode(', ', $suffixed_properties) . '}';
     }
 

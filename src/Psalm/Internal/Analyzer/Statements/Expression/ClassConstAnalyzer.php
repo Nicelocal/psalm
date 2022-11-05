@@ -780,7 +780,7 @@ class ClassConstAnalyzer
                 }
 
                 // Check overridden final
-                if ($parent_const_storage->final) {
+                if ($parent_const_storage->final && $parent_const_storage !== $const_storage) {
                     IssueBuffer::maybeAdd(
                         new OverriddenFinalConstant(
                             "{$const_name} cannot be overridden because it is marked as final in "
@@ -811,7 +811,7 @@ class ClassConstAnalyzer
     /**
      * Get the const storage from the parent or interface that this class is overriding.
      *
-     * @return array{ClassLikeStorage, ClassConstantStorage}|null
+     * @return strict-array{ClassLikeStorage, ClassConstantStorage}|null
      */
     private static function getOverriddenConstant(
         ClassLikeStorage $class_storage,

@@ -491,7 +491,7 @@ class Config
     public $plugin_paths = [];
 
     /**
-     * @var array<array{class:string,config:?SimpleXMLElement}>
+     * @var array<strict-array{class:string,config:?SimpleXMLElement}>
      */
     private $plugin_classes = [];
 
@@ -581,7 +581,7 @@ class Config
 
     /**
      * @psalm-readonly-allow-private-mutation
-     * @var array{
+     * @var strict-array{
      *     decimal: bool,
      *     dom: bool,
      *     ds: bool,
@@ -1425,7 +1425,7 @@ class Config
         $this->plugin_classes[] = ['class' => $class_name, 'config' => $plugin_config];
     }
 
-    /** @return array<array{class:string, config:?SimpleXMLElement}> */
+    /** @return array<strict-array{class:string, config:?SimpleXMLElement}> */
     public function getPluginClasses(): array
     {
         return $this->plugin_classes;
@@ -2167,6 +2167,11 @@ class Config
         if (extension_loaded('apcu')) {
             $ext_apcu_path = $dir_lvl_2 . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'ext-apcu.phpstub';
             $this->internal_stubs[] = $ext_apcu_path;
+        }
+
+        if (extension_loaded('random')) {
+            $ext_random_path = $dir_lvl_2 . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'ext-random.phpstub';
+            $this->internal_stubs[] = $ext_random_path;
         }
 
         foreach ($this->internal_stubs as $stub_path) {
