@@ -1355,10 +1355,14 @@ class TypeCombiner
             if ($combination->objectlike_value_type
                 && $combination->objectlike_value_type->isMixed()
             ) {
-                $combination->objectlike_entries = array_filter(
-                    $combination->objectlike_entries,
-                    static fn(Union $type): bool => !$type->possibly_undefined
-                );
+                foreach ($combination->objectlike_entries as &$objectlike_entry) {
+                    if (!$objectlike_entry->possibly_undefined
+                        || $objectlike_entry->hasMixed()) continue;
+                    $objectlike_entry = $objectlike_entry->setTypes(array_merge(
+                        $objectlike_entry->getAtomicTypes(),
+                        ['mixed' => new TMixed]
+                    ));
+                }
             }
 
             if ($combination->objectlike_entries) {

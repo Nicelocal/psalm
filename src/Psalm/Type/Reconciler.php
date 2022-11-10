@@ -799,7 +799,7 @@ class Reconciler
                             $codebase
                         );
 
-                        $existing_keys[$new_base_key] = $new_base_type;
+                        $existing_keys[$new_base_key] = $new_base_type->setPossiblyUndefined(true);
                     }
                 }
 

@@ -19,6 +19,40 @@ class TypeTest extends TestCase
     public function providerValidCodeParse(): iterable
     {
         return [
+            'possiblyUndefinedKeyInnerAssertion' => [
+                'code' => '<?php
+
+                /** @var array */
+                $a = [];
+
+                assert(isset($a["a"]) && is_string($a["a"]));
+
+                $b = null;
+                if (isset($a["b"])) {
+                    assert(is_string($a["b"]));
+                    $b = $a;
+                }
+                ',
+                'assertions' => [
+                    '$a===' => 'array{a: string, b?: string}',
+                    '$b===' => 'array{a: string, b: string}|null'
+                ]
+            ],
+            'randomUnsealedKeyAssertion' => [
+                'code' => '<?php
+
+                /** @var array */
+                $a = [];
+
+                assert(isset($a["a"]) && is_string($a["a"]));
+
+                if (random_int(0, 1)) {
+                    $a["b"] = "test";
+                }',
+                'assertions' => [
+                    '$a===' => "array{a: string, b?: 'test'|mixed}"
+                ]
+            ],
             'sealArray' => [
                 'code' => '<?php
                     /** @var array */
