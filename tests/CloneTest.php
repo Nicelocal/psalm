@@ -164,6 +164,15 @@ class CloneTest extends TestCase
                     clone get();',
                 'error_message' => 'InvalidClone',
             ],
+            'immutableClass' => [
+                'code' => '<?php
+                    /** @psalm-immutable */
+                    class a {}
+
+                    $a = new a;
+                    $b = clone $a;',
+                'error_message' => 'InvalidClone',
+            ],
         ];
     }
 }

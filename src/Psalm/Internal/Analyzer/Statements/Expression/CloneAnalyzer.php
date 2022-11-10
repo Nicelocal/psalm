@@ -65,6 +65,14 @@ class CloneAnalyzer
                     if (!$codebase->classlikes->classOrInterfaceExists($clone_type_part->value)) {
                         $invalid_clones[] = $clone_type_part->getId();
                     } else {
+                        $storage = $codebase->classlike_storage_provider->get(
+                            $clone_type_part->value
+                        );
+                        if ($storage->mutation_free) {
+                            $invalid_clones[] = $clone_type_part->getId();
+                            continue;
+                        }
+
                         $clone_method_id = new MethodIdentifier(
                             $clone_type_part->value,
                             '__clone'
