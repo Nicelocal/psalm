@@ -259,7 +259,6 @@ class EmptyTest extends TestCase
 
                         while (!empty($needle)) {
                             $key = key($needle);
-                            if ($key === null) continue;
                             $val = $needle[$key];
                             unset($needle[$key]);
 
@@ -325,7 +324,7 @@ class EmptyTest extends TestCase
             'doubleEmptyCheckOnTKeyedArray' => [
                 'code' => '<?php
                     /**
-                     * @param strict-array{a: array, b: array} $arr
+                     * @param array{a: array, b: array} $arr
                      */
                     function foo(array $arr) : void {
                         if (empty($arr["a"]) && empty($arr["b"])) {}
@@ -383,7 +382,7 @@ class EmptyTest extends TestCase
             'reconcileNonEmptyArrayKey' => [
                 'code' => '<?php
                     /**
-                     * @param strict-array{a?: string, b: string} $arr
+                     * @param array{a?: string, b: string} $arr
                      */
                     function createFromString(array $arr): void
                     {
@@ -486,7 +485,7 @@ class EmptyTest extends TestCase
             ],
             'preventEmptyCreatingArray' => [
                 'code' => '<?php
-                    /** @return strict-array{a:mixed} */
+                    /** @return array{a:mixed} */
                     function foo(array $r) {
                         if (!empty($r["a"])) {}
                         return $r;
@@ -495,7 +494,7 @@ class EmptyTest extends TestCase
             ],
             'preventEmptyEquivalentCreatingArray' => [
                 'code' => '<?php
-                    /** @return strict-array{a:mixed} */
+                    /** @return array{a:mixed} */
                     function foo(array $r) {
                         if (isset($r["a"]) && $r["a"]) {}
                         return $r;

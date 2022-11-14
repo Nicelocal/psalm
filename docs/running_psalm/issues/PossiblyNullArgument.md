@@ -14,6 +14,8 @@ foo(rand(0, 1) ? "hello" : null);
 ### Using a Function Call inside `if`
 
 ```php
+<?php
+
 if (is_string($cat->getName()) {
     foo($cat->getName());
 }
@@ -22,19 +24,24 @@ This fails since it's not guaranteed that subsequent calls to `$cat->getName()` 
 
 #### Possible Solutions
 
-* Use a variable:
-    ```php
-    $catName = $cat->getName();
-    if (is_string($catName) {
-        foo($catName);
-    }
-    unset($catName);
-    ```
-* Add [`@psalm-mutation-free`](../../annotating_code/supported_annotations.md#psalm-mutation-free) to the declaration of the function
+Use a variable:
+```php
+<?php
+
+$catName = $cat->getName();
+if (is_string($catName) {
+    foo($catName);
+}
+unset($catName);
+```
+
+Or add [`@psalm-mutation-free`](../../annotating_code/supported_annotations.md#psalm-mutation-free) to the declaration of the function
 
 ### Calling Another Function After `if`
 
 ```php
+<?php
+
 if (is_string($cat->getName()) {
     changeCat();
     foo($cat->getName());

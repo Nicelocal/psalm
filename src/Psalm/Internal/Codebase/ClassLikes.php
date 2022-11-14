@@ -2253,7 +2253,7 @@ class ClassLikes
     }
 
     /**
-     * @return strict-array{
+     * @return array{
      *     array<lowercase-string, bool>,
      *     array<lowercase-string, bool>,
      *     array<lowercase-string, bool>,
@@ -2281,7 +2281,7 @@ class ClassLikes
     }
 
     /**
-     * @param strict-array{
+     * @param array{
      *     0: array<lowercase-string, bool>,
      *     1: array<lowercase-string, bool>,
      *     2: array<lowercase-string, bool>,

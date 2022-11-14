@@ -1,15 +1,6 @@
 # Utility types
 
-Psalm supports some _magical_ utility types that brings superpower to the PHP type system.
-
-- [(T is true ? string : bool)](conditional_types.md)
-- [`key-of<T>`](#key-oft)
-- [`value-of<T>`](#value-oft)
-- [`properties-of<T>`](#properties-oft)
-- [`class-string-map<T as Foo, T>`](#class-string-mapt-as-foo-t)
-- [`T[K]`](#tk)
-- [Type aliases](#type-aliases)
-- [Variable templates](#variable-templates)
+Psalm supports some _magical_ utility types that brings superpower to the PHP type system.Re
 
 ## `key-of<T>`
 
@@ -20,7 +11,7 @@ The `key-of` utility returns the offset-type for any [array type](array_types.md
 Some examples:
 - `key-of<Foo\Bar::ARRAY_CONST>` evaluates to offset-type of `ARRAY_CONST` (Psalm 3.3+)
 - `key-of<list<mixed>>` evaluates to `int`
-- `key-of<strict-array{a: mixed, b: mixed}|strict-array{c: mixed}>` evaluates to `'a'|'b'|'c'`
+- `key-of<array{a: mixed, b: mixed}|array{c: mixed}>` evaluates to `'a'|'b'|'c'`
 - `key-of<string[]>` evaluates to `array-key`
 - `key-of<T>` evaluates to the template param's offset-type (ensure `@template T of array`)
 
@@ -54,7 +45,7 @@ The `value-of` utility returns the value-type for any [array type](array_types.m
 Some examples:
 - `value-of<Foo\Bar::ARRAY_CONST>` evaluates to value-type of `ARRAY_CONST` (Psalm 3.3+)
 - `value-of<list<float>>` evaluates to `float`
-- `value-of<strict-array{a: bool, b: int}|strict-array{c: string}>` evaluates to `bool|int|string`
+- `value-of<array{a: bool, b: int}|array{c: string}>` evaluates to `bool|int|string`
 - `value-of<string[]>` evaluates to `string`
 - `value-of<T>` evaluates to the template param's value-type (ensure `@template T of array`)
 
@@ -117,9 +108,9 @@ properties with a certain visibility:
 - `private-properties-of<T>`
 
 
-### Limited template support
+### Sealed array support
 
-Use final classes if you want to properties-of and get_object_vars to return [sealed arrays](array_types.md#sealed-object-like-arrays):
+Use final classes if you want to properties-of and get_object_vars to return sealed arrays:
 
 ```php
 /**
@@ -142,10 +133,10 @@ final class B extends A {
 }
 
 $a = asArray(new A);
-/** @psalm-trace $a */; // unsealed-strict-array{foo: string, bar: int}
+/** @psalm-trace $a */; // array{foo: string, bar: int, ...}
 
 $b = asArray(new B);
-/** @psalm-trace $b */; // strict-array{foo: string, bar: int, baz: float}
+/** @psalm-trace $b */; // array{foo: string, bar: int, baz: float}
 ```
 
 ## `class-string-map<T as Foo, T>`
@@ -271,7 +262,7 @@ Psalm allows defining type aliases for complex types (like array shapes) which m
 
 ```php
 /**
- * @psalm-type PhoneType = strict-array{phone: string}
+ * @psalm-type PhoneType = array{phone: string}
  */
 class Phone {
     /**

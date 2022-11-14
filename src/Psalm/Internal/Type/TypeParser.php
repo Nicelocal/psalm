@@ -12,6 +12,7 @@ use Psalm\Internal\Type\ParseTree\CallableTree;
 use Psalm\Internal\Type\ParseTree\CallableWithReturnTypeTree;
 use Psalm\Internal\Type\ParseTree\ConditionalTree;
 use Psalm\Internal\Type\ParseTree\EncapsulationTree;
+use Psalm\Internal\Type\ParseTree\FieldEllipsis;
 use Psalm\Internal\Type\ParseTree\GenericTree;
 use Psalm\Internal\Type\ParseTree\IndexedAccessTree;
 use Psalm\Internal\Type\ParseTree\IntersectionTree;
@@ -105,8 +106,8 @@ class TypeParser
     /**
      * Parses a string type representation
      *
-     * @param  list<strict-array{0: string, 1: int, 2?: string}> $type_tokens
-     * @param  strict-array{int,int}|null   $php_version
+     * @param  list<array{0: string, 1: int, 2?: string}> $type_tokens
+     * @param  array{int,int}|null   $php_version
      * @param  array<string, array<string, Union>> $template_type_map
      * @param  array<string, TypeAlias> $type_aliases
      *
@@ -1129,47 +1130,52 @@ class TypeParser
 
             /** @var TKeyedArray $intersection_type */
             foreach ($intersection_types as $intersection_type) {
-                if (!$intersection_type->sealed) {
-                    $all_sealed = false;
-                }
                 foreach ($intersection_type->properties as $property => $property_type) {
+                    if ($intersection_type->fallback_params !== null) {
+                        $all_sealed = false;
+                    }
+
                     if (!array_key_exists($property, $properties)) {
                         $properties[$property] = $property_type;
                         continue;
                     }
 
-                    $intersection_type = Type::intersectUnionTypes(
+                    $new_type = Type::intersectUnionTypes(
                         $properties[$property],
                         $property_type,
                         $codebase
                     );
-                    if ($intersection_type === null) {
+
+                    if ($new_type === null) {
                         throw new TypeParseTreeException(
                             'Incompatible intersection types for "' . $property . '", '
                             . $properties[$property] . ' and ' . $property_type
                             . ' provided'
                         );
                     }
-                    $properties[$property] = $intersection_type;
+                    $properties[$property] = $new_type;
                 }
             }
 
-            $previous_key_type = null;
-            $previous_value_type = null;
-            if ($first_type instanceof TArray) {
-                $previous_key_type = $first_type->type_params[0];
-                $previous_value_type = $first_type->type_params[1];
-            } elseif ($last_type instanceof TArray) {
-                $previous_key_type = $last_type->type_params[0];
-                $previous_value_type = $last_type->type_params[1];
+            $first_or_last_type = $first_type instanceof TArray
+                ? $first_type
+                : ($last_type instanceof TArray ? $last_type : null);
+
+            $fallback_params = null;
+
+            if ($first_or_last_type !== null) {
+                $fallback_params = [
+                    $first_or_last_type->type_params[0],
+                    $first_or_last_type->type_params[1],
+                ];
+            } elseif (!$all_sealed) {
+                $fallback_params = [Type::getArrayKey(), Type::getMixed()];
             }
 
             return new TKeyedArray(
                 $properties,
                 null,
-                $all_sealed,
-                $previous_key_type ?? null,
-                $previous_value_type ?? null,
+                $fallback_params,
                 false,
                 $from_docblock
             );
@@ -1388,8 +1394,22 @@ class TypeParser
 
         $is_list = true;
 
+        $sealed = true;
+
         foreach ($parse_tree->children as $i => $property_branch) {
             $class_string = false;
+
+            if ($property_branch instanceof FieldEllipsis) {
+                if ($i !== count($parse_tree->children) - 1) {
+                    throw new TypeParseTreeException(
+                        'Unexpected ...'
+                    );
+                }
+
+                $sealed = false;
+
+                break;
+            }
 
             if (!$property_branch instanceof KeyedArrayPropertyTree) {
                 $property_type = self::getTypeFromTree(
@@ -1459,15 +1479,6 @@ class TypeParser
             $type = substr($type, 9);
         }
 
-        $sealed = str_starts_with($type, 'strict-');
-        if ($sealed) {
-            $type = substr($type, 7);
-        }
-
-        if ($callable && !$sealed) {
-            throw new TypeParseTreeException('A callable array cannot be unsealed!');
-        }
-
         if ($callable && !$properties) {
             throw new TypeParseTreeException('A callable array cannot be empty!');
         }
@@ -1483,9 +1494,9 @@ class TypeParser
         return new $class(
             $properties,
             $class_strings,
-            $sealed,
-            null,
-            null,
+            $sealed
+                ? null
+                : [$is_list ? Type::getInt() : Type::getArrayKey(), Type::getMixed()],
             $is_list,
             $from_docblock
         );

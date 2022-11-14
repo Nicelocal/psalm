@@ -82,6 +82,7 @@ use function explode;
 use function get_class;
 use function min;
 use function strpos;
+use function strtolower;
 
 /**
  * This class receives a known type and an assertion (probably coming from AssertionFinder). The goal is to refine
@@ -622,7 +623,7 @@ class SimpleAssertionReconciler extends Reconciler
                 }
 
                 if ($assertion instanceof HasAtLeastCount) {
-                    if ($array_atomic_type->sealed) {
+                    if ($array_atomic_type->fallback_params === null) {
                         // count($a) > 3
                         // count($a) >= 4
 
@@ -668,7 +669,7 @@ class SimpleAssertionReconciler extends Reconciler
                             $properties = $array_atomic_type->properties;
                             for ($i = $prop_max_count; $i < $assertion->count; $i++) {
                                 $properties[$i]
-                                    = ($array_atomic_type->previous_value_type ?: Type::getMixed());
+                                    = $array_atomic_type->fallback_params[1];
                             }
                             $array_atomic_type = $array_atomic_type->setProperties($properties);
                             $existing_var_type->removeType('array');
@@ -734,7 +735,7 @@ class SimpleAssertionReconciler extends Reconciler
                     $non_empty_list
                 );
             } elseif ($array_atomic_type instanceof TKeyedArray) {
-                if ($array_atomic_type->sealed) {
+                if ($array_atomic_type->fallback_params === null) {
                     if (count($array_atomic_type->properties) === $count) {
                         $existing_var_type->removeType('array');
                         $existing_var_type->addType($array_atomic_type->setProperties(
@@ -755,7 +756,7 @@ class SimpleAssertionReconciler extends Reconciler
 
                     if (!$has_possibly_undefined && count($array_atomic_type->properties) === $count) {
                         $existing_var_type->removeType('array');
-                        $existing_var_type->addType($array_atomic_type->setSealed(true));
+                        $existing_var_type->addType($array_atomic_type->makeSealed());
                     }
                 }
             }
@@ -802,10 +803,10 @@ class SimpleAssertionReconciler extends Reconciler
                         } elseif ($extra_type instanceof TObjectWithProperties) {
                             $match_found = true;
 
-                            if (!isset($extra_type->methods[$method_name])) {
+                            if (!isset($extra_type->methods[strtolower($method_name)])) {
                                 unset($extra_types[$k]);
                                 $extra_type = $extra_type->setMethods(array_merge($extra_type->methods, [
-                                    $method_name => 'object::' . $method_name
+                                    strtolower($method_name) => 'object::' . $method_name
                                 ]));
                                 $extra_types[$extra_type->getKey()] = $extra_type;
                                 $did_remove_type = true;
@@ -816,7 +817,7 @@ class SimpleAssertionReconciler extends Reconciler
                     if (!$match_found) {
                         $extra_type = new TObjectWithProperties(
                             [],
-                            [$method_name => $type->value . '::' . $method_name]
+                            [strtolower($method_name) => $type->value . '::' . $method_name]
                         );
                         $extra_types[$extra_type->getKey()] = $extra_type;
                         $did_remove_type = true;
@@ -826,9 +827,9 @@ class SimpleAssertionReconciler extends Reconciler
                 }
                 $object_types[] = $type;
             } elseif ($type instanceof TObjectWithProperties) {
-                if (!isset($type->methods[$method_name])) {
+                if (!isset($type->methods[strtolower($method_name)])) {
                     $type = $type->setMethods(array_merge($type->methods, [
-                        $method_name => 'object::' . $method_name
+                        strtolower($method_name) => 'object::' . $method_name
                     ]));
                     $did_remove_type = true;
                 }
@@ -836,7 +837,7 @@ class SimpleAssertionReconciler extends Reconciler
             } elseif ($type instanceof TObject || $type instanceof TMixed) {
                 $object_types[] = new TObjectWithProperties(
                     [],
-                    [$method_name =>  'object::' . $method_name]
+                    [strtolower($method_name) =>  'object::' . $method_name]
                 );
                 $did_remove_type = true;
             } elseif ($type instanceof TString) {
@@ -1675,9 +1676,7 @@ class SimpleAssertionReconciler extends Reconciler
                             $atomic_type->class_strings ?? [],
                             [$assertion => true]
                         ) : $atomic_type->class_strings,
-                        $atomic_type->sealed,
-                        $atomic_type->previous_key_type,
-                        $atomic_type->previous_value_type,
+                        $atomic_type->fallback_params,
                         $atomic_type->is_list
                     );
                 }
@@ -2104,7 +2103,9 @@ class SimpleAssertionReconciler extends Reconciler
                 } else {
                     $array_types[] = $type;
                 }
-            } elseif ($type instanceof TArray || ($type instanceof TKeyedArray && !$type->sealed)) {
+            } elseif ($type instanceof TArray
+                || ($type instanceof TKeyedArray && $type->fallback_params !== null)
+            ) {
                 if ($type instanceof TKeyedArray) {
                     $type = $type->getGenericArrayType();
                 }

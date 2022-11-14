@@ -39,7 +39,7 @@ class ArgTest extends TestCase
                     $a = [[1, 2]];
                     $b = array_merge([], ...$a);',
                 'assertions' => [
-                    '$b===' => 'strict-list{1, 2}',
+                    '$b===' => 'list{1, 2}',
                 ],
             ],
             'preserveTypesWhenUnpacking' => [
@@ -120,7 +120,7 @@ class ArgTest extends TestCase
                     sort($c);
                 ',
                 'assertions' => [
-                    '$a' => 'strict-array{a: int, b: int}',
+                    '$a' => 'array{a: int, b: int}',
                     '$b' => 'non-empty-list<int>',
                     '$c' => 'list<never>',
                 ],
@@ -241,7 +241,7 @@ class ArgTest extends TestCase
                     }
 
                     /**
-                     * @param strict-array{age: int, name: string, email: string} $input
+                     * @param array{age: int, name: string, email: string} $input
                      */
                     function foo(array $input) : CustomerData {
                         return new CustomerData(
@@ -314,7 +314,7 @@ class ArgTest extends TestCase
             ],
             'SealedAcceptSealed' => [
                 'code' => '<?php
-                    /** @param strict-array{test: string} $a */
+                    /** @param array{test: string} $a */
                     function a(array $a): string {
                         return $a["test"];
                     }
@@ -322,6 +322,40 @@ class ArgTest extends TestCase
                     $sealed = ["test" => "str"];
                     a($sealed);
                 ',
+            ],
+            'variadicCallbackArgsCountMatch' => [
+                'code' => '<?php
+                /**
+                 * @param callable(string, string):void $callback
+                 * @return void
+                 */
+                function caller($callback) {}
+
+                /**
+                 * @param string ...$bar
+                 * @return void
+                 */
+                function foo(...$bar) {}
+
+                caller("foo");',
+            ],
+            'variadicCallableArgsCountMatch' => [
+                'code' => '<?php
+                    /**
+                     * @param callable(string, ...int):void $callback
+                     * @return void
+                     */
+                    function var_caller($callback) {}
+
+                    /**
+                     * @param string $a
+                     * @param int $b
+                     * @param int $c
+                     * @return void
+                     */
+                    function foo($a, $b, $c) {}
+
+                    var_caller("foo");',
             ],
         ];
     }
@@ -410,7 +444,7 @@ class ArgTest extends TestCase
                     }
 
                     /**
-                     * @param strict-array{age: int, name: string, email: string} $input
+                     * @param array{age: int, name: string, email: string} $input
                      */
                     function foo(array $input) : CustomerData {
                         return new CustomerData(
@@ -445,7 +479,7 @@ class ArgTest extends TestCase
                     }
 
                     /**
-                     * @param strict-array{aage: int, name: string, email: string} $input
+                     * @param array{aage: int, name: string, email: string} $input
                      */
                     function foo(array $input) : CustomerData {
                         return new CustomerData(...$input);
@@ -467,7 +501,7 @@ class ArgTest extends TestCase
                     }
 
                     /**
-                     * @param strict-array{age: int, name: string, email: string} $input
+                     * @param array{age: int, name: string, email: string} $input
                      */
                     function foo(array $input) : CustomerData {
                         return new CustomerData(
@@ -497,7 +531,7 @@ class ArgTest extends TestCase
                     }
 
                     /**
-                     * @param strict-array{id: int, name: string} $data
+                     * @param array{id: int, name: string} $data
                      */
                     function processUserDataInvalid(array $data) : User {
                         return new User(...$data);
@@ -517,7 +551,7 @@ class ArgTest extends TestCase
                     }
 
                     /**
-                     * @param strict-array{id: int, name: string} $data
+                     * @param array{id: int, name: string} $data
                      */
                     function processUserDataInvalid(array $data) : User {
                         /** @psalm-suppress MixedArgument */
@@ -737,12 +771,12 @@ class ArgTest extends TestCase
             ],
             'SealedRefuseUnsealed' => [
                 'code' => '<?php
-                    /** @param strict-array{test: string} $a */
+                    /** @param array{test: string} $a */
                     function a(array $a): string {
                         return $a["test"];
                     }
 
-                    /** @var array{test: string} */
+                    /** @var array{test: string, ...} */
                     $unsealed = [];
                     a($unsealed);
                 ',
@@ -750,7 +784,7 @@ class ArgTest extends TestCase
             ],
             'SealedRefuseSealedExtra' => [
                 'code' => '<?php
-                    /** @param strict-array{test: string} $a */
+                    /** @param array{test: string} $a */
                     function a(array $a): string {
                         return $a["test"];
                     }
@@ -759,6 +793,41 @@ class ArgTest extends TestCase
                     a($sealedExtraKeys);
                 ',
                 'error_message' => 'InvalidArgument',
+            ],
+            'callbackArgsCountMismatch' => [
+                'code' => '<?php
+                    /**
+                     * @param callable(string, string):void $callback
+                     * @return void
+                     */
+                    function caller($callback) {}
+
+                    /**
+                     * @param string $a
+                     * @return void
+                     */
+                    function foo($a) {}
+
+                    caller("foo");',
+                'error_message' => 'InvalidScalarArgument',
+            ],
+            'callableArgsCountMismatch' => [
+                'code' => '<?php
+                    /**
+                     * @param callable(string):void $callback
+                     * @return void
+                     */
+                    function caller($callback) {}
+
+                    /**
+                     * @param string $a
+                     * @param string $b
+                     * @return void
+                     */
+                    function foo($a, $b) {}
+
+                    caller("foo");',
+                'error_message' => 'InvalidScalarArgument',
             ],
         ];
     }

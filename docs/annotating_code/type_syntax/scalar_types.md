@@ -1,29 +1,11 @@
 # Scalar types
 
-* [bool &raquo;](scalar_types.md#scalar)
-* [int &raquo;](scalar_types.md#scalar)
-* [float &raquo;](scalar_types.md#scalar)
-* [string &raquo;](scalar_types.md#scalar)
-* [`int-range<x, y>` &raquo;](scalar_types.md#int-range)
-* [`int-mask<1, 2, 4>` &raquo;](scalar_types.md#int-mask1-2-4)
-* [`int-mask-of<MyClass::CLASS_CONSTANT_*>` &raquo;](scalar_types.md#int-mask-ofmyclassclass_constant_)
-* [class-string and class-string&lt;Foo&gt; &raquo;](scalar_types.md#class-string-interface-string)
-* [trait-string &raquo;](scalar_types.md#trait-string)
-* [enum-string &raquo;](scalar_types.md#enum-string)
-* [callable-string &raquo;](scalar_types.md#callable-string)
-* [numeric-string &raquo;](scalar_types.md#numeric-string)
-* [literal-string &raquo;](scalar_types.md#literal-string)
-* [literal-int &raquo;](scalar_types.md#literal-int)
-* [array-key &raquo;](scalar_types.md#array-key)
-* [numeric &raquo;](scalar_types.md#numeric)
-* [scalar &raquo;](scalar_types.md#scalar)
-
-### scalar
+## scalar
 
 `int`, `bool`, `float`, `string` are examples of scalar types. Scalar types represent scalar values in PHP. These types are also valid types in PHP 7.
 The type `scalar` is the supertype of all scalar types.
 
-### int-range
+## int-range
 
 Integer ranges indicate an integer within a range, specified using generic syntax: `int<x, y>`.  
 `x` and `y` must be integer numbers.  
@@ -49,15 +31,15 @@ Represents the type that is the result of a bitmask combination of its parameter
 Represents the type that is the result of a bitmask combination of its parameters.  
 This is the same concept as [`int-mask`](#int-mask1-2-4) but this type is used with a reference to constants in code: `int-mask-of<MyClass::CLASS_CONSTANT_*>` will correspond to `0|1|2|3|4|5|6|7` if there are three constants called `CLASS_CONSTANT_{A,B,C}` with values 1, 2 and 4.  
 
-### array-key
+## array-key
 
 `array-key` is the supertype (but not a union) of `int` and `string`.
 
-### numeric
+## numeric
 
 `numeric` is a supertype of `int` or `float` and [`numeric-string`](#numeric-string).
 
-### class-string, interface-string
+## class-string, interface-string
 
 Psalm supports a special meta-type for `MyClass::class` constants, `class-string`, which can be used everywhere `string` can.
 
@@ -77,23 +59,23 @@ function takesClassName(string $s) : void {}
 
 You can also parameterize `class-string` with an object name e.g. [`class-string<Foo>`](value_types.md#regular-class-constants). This tells Psalm that any matching type must either be a class string of `Foo` or one of its descendants.
 
-### trait-string
+## trait-string
 
 Psalm also supports a `trait-string` annotation denoting a trait that exists.
 
-### enum-string
+## enum-string
 
 Psalm also supports a `enum-string` annotation denote an enum that exists.
 
-### callable-string
+## callable-string
 
 `callable-string` denotes a string value that has passed an `is_callable` check.
 
-### numeric-string
+## numeric-string
 
 `numeric-string` denotes a string value that has passed an `is_numeric` check.
 
-### literal-string
+## literal-string
 
 `literal-string` denotes a string value that is entirely composed of strings in your application.
 
@@ -111,7 +93,7 @@ Strings that don't pass this type check:
 - `$_GET["foo"]`
 - `"hello " . $_GET["foo"]`
 
-### literal-int
+## literal-int
 
 `literal-int` denotes an int value that is entirely composed of literal integers in your application.
 
@@ -126,7 +108,7 @@ Integers that don't pass this type check:
 - `(int) $_GET["foo"]`
 - `((int)$_GET["foo"]) + 2`
 
-### lowercase-string, non-empty-string, non-empty-lowercase-string
+## lowercase-string, non-empty-string, non-empty-lowercase-string
 
 A non empty string, lowercased or both at once.
 

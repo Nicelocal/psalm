@@ -513,7 +513,7 @@ class AtomicMethodCallAnalyzer extends CallAnalyzer
      * @param  TNamedObject|TTemplateParam $lhs_type_part
      * @param   array<string, Atomic> $intersection_types
      *
-     * @return  strict-array{?Union, array<string>}
+     * @return  array{?Union, array<string>}
      */
     private static function getIntersectionReturnType(
         StatementsAnalyzer $statements_analyzer,
@@ -632,9 +632,9 @@ class AtomicMethodCallAnalyzer extends CallAnalyzer
 
                 if ($lhs_type_part instanceof TObjectWithProperties
                     && $stmt->name instanceof PhpParser\Node\Identifier
-                    && isset($lhs_type_part->methods[$stmt->name->name])
+                    && isset($lhs_type_part->methods[strtolower($stmt->name->name)])
                 ) {
-                    $result->existent_method_ids[] = $lhs_type_part->methods[$stmt->name->name];
+                    $result->existent_method_ids[] = $lhs_type_part->methods[strtolower($stmt->name->name)];
                 } elseif (!$is_intersection) {
                     if ($stmt->name instanceof PhpParser\Node\Identifier) {
                         $codebase->analyzer->addMixedMemberName(
@@ -707,7 +707,7 @@ class AtomicMethodCallAnalyzer extends CallAnalyzer
 
     /**
      * @param lowercase-string $method_name_lc
-     * @return strict-array{TNamedObject, ClassLikeStorage, bool, MethodIdentifier, string}
+     * @return array{TNamedObject, ClassLikeStorage, bool, MethodIdentifier, string}
      */
     private static function handleTemplatedMixins(
         ClassLikeStorage $class_storage,
@@ -795,7 +795,7 @@ class AtomicMethodCallAnalyzer extends CallAnalyzer
 
     /**
      * @param lowercase-string $method_name_lc
-     * @return strict-array{TNamedObject, ClassLikeStorage, bool, MethodIdentifier, string}
+     * @return array{TNamedObject, ClassLikeStorage, bool, MethodIdentifier, string}
      */
     private static function handleRegularMixins(
         ClassLikeStorage $class_storage,

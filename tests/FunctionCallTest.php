@@ -272,7 +272,7 @@ class FunctionCallTest extends TestCase
             'objectLikeKeyChecksAgainstTKeyedArray' => [
                 'code' => '<?php
                     /**
-                     * @param strict-array{a: string} $b
+                     * @param array{a: string} $b
                      */
                     function a($b): string
                     {
@@ -674,7 +674,7 @@ class FunctionCallTest extends TestCase
                     $query = parse_url($url, PHP_URL_QUERY);
                     $fragment = parse_url($url, PHP_URL_FRAGMENT);',
                 'assertions' => [
-                    '$components' => 'false|strict-array{fragment?: string, host?: string, pass?: string, path?: string, port?: int, query?: string, scheme?: string, user?: string}',
+                    '$components' => 'array{fragment?: string, host?: string, pass?: string, path?: string, port?: int, query?: string, scheme?: string, user?: string}|false',
                     '$scheme' => 'false|null|string',
                     '$host' => 'false|null|string',
                     '$port' => 'false|int|null',
@@ -693,9 +693,9 @@ class FunctionCallTest extends TestCase
                     $b = parse_url($url, -42);
                     $c = parse_url($url, $component);',
                 'assertions' => [
-                    '$a' => 'false|strict-array{fragment?: string, host?: string, pass?: string, path?: string, port?: int, query?: string, scheme?: string, user?: string}',
-                    '$b' => 'false|strict-array{fragment?: string, host?: string, pass?: string, path?: string, port?: int, query?: string, scheme?: string, user?: string}',
-                    '$c' => 'false|strict-array{fragment?: string, host?: string, pass?: string, path?: string, port?: int, query?: string, scheme?: string, user?: string}',
+                    '$a' => 'array{fragment?: string, host?: string, pass?: string, path?: string, port?: int, query?: string, scheme?: string, user?: string}|false',
+                    '$b' => 'array{fragment?: string, host?: string, pass?: string, path?: string, port?: int, query?: string, scheme?: string, user?: string}|false',
+                    '$c' => 'array{fragment?: string, host?: string, pass?: string, path?: string, port?: int, query?: string, scheme?: string, user?: string}|false',
                 ],
             ],
             'triggerUserError' => [
@@ -1066,9 +1066,9 @@ class FunctionCallTest extends TestCase
                     $d = hrtime(false);',
                 'assertions' => [
                     '$a' => 'int',
-                    '$b' => 'strict-list{int, int}',
-                    '$c' => 'int|strict-list{int, int}',
-                    '$d' => 'strict-list{int, int}',
+                    '$b' => 'list{int, int}',
+                    '$c' => 'int|list{int, int}',
+                    '$d' => 'list{int, int}',
                 ],
             ],
             'hrtimeCanBeFloat' => [
@@ -1202,7 +1202,7 @@ class FunctionCallTest extends TestCase
                 'code' => '<?php
                     /**
                      * @psalm-pure
-                     * @param strict-array{int, int, string} $x
+                     * @param array{int, int, string} $x
                      * @return 3
                      */
                     function example($x) : int {
@@ -1367,7 +1367,7 @@ class FunctionCallTest extends TestCase
                     $r = preg_match("{foo}", "foo", $matches, PREG_OFFSET_CAPTURE);',
                 'assertions' => [
                     '$r===' => '0|1|false',
-                    '$matches===' => 'array<array-key, strict-list{string, int<-1, max>}>',
+                    '$matches===' => 'array<array-key, list{string, int<-1, max>}>',
                 ],
             ],
             'pregMatchWithFlagUnmatchedAsNull' => [
@@ -1383,7 +1383,7 @@ class FunctionCallTest extends TestCase
                     $r = preg_match("{foo}", "foo", $matches, PREG_OFFSET_CAPTURE | PREG_UNMATCHED_AS_NULL);',
                 'assertions' => [
                     '$r===' => '0|1|false',
-                    '$matches===' => 'array<array-key, strict-list{null|string, int<-1, max>}>',
+                    '$matches===' => 'array<array-key, list{null|string, int<-1, max>}>',
                 ],
             ],
             'pregReplaceCallback' => [
@@ -1907,6 +1907,56 @@ class FunctionCallTest extends TestCase
                     '$b===' => 'lowercase-string',
                 ],
             ],
+            'passingStringableObjectToStringableParam' => [
+                'code' => '<?php
+                    function acceptsStringable(Stringable $_p): void {}
+                    /** @param stringable-object $p */
+                    function f(object $p): void
+                    {
+                        f($p);
+                    }
+                ',
+                'assertions' => [],
+                'ignored_issues' => [],
+                'php_version' => '8.0',
+            ],
+            'passingStringableToStringableObjectParam' => [
+                'code' => '<?php
+                    /** @param stringable-object $_o */
+                    function acceptsStringableObject(object $_o): void {}
+
+                    function f(Stringable $o): void
+                    {
+                        acceptsStringableObject($o);
+                    }
+                ',
+                'assertions' => [],
+                'ignored_issues' => [],
+                'php_version' => '8.0',
+            ],
+            'passingImplicitStringableObjectToStringableObjectParam' => [
+                'code' => '<?php
+                    /** @param stringable-object $o */
+                    function acceptsStringableObject(object $o): void {}
+
+                    class C { public function __toString(): string { return __CLASS__; }}
+
+                    acceptsStringableObject(new C);
+                ',
+            ],
+            'passingExplicitStringableObjectToStringableObjectParam' => [
+                'code' => '<?php
+                    /** @param stringable-object $o */
+                    function acceptsStringableObject(object $o): void {}
+
+                    class C implements Stringable { public function __toString(): string { return __CLASS__; }}
+
+                    acceptsStringableObject(new C);
+                ',
+                'assertions' => [],
+                'ignored_issues' => [],
+                'php_version' => '8.0',
+            ],
         ];
     }
 
@@ -2081,7 +2131,7 @@ class FunctionCallTest extends TestCase
             'objectLikeKeyChecksAgainstDifferentTKeyedArray' => [
                 'code' => '<?php
                     /**
-                     * @param strict-array{a: int} $b
+                     * @param array{a: int} $b
                      */
                     function a($b): int
                     {
@@ -2457,7 +2507,35 @@ class FunctionCallTest extends TestCase
                 'error_message' => 'TypeDoesNotContainType',
                 'ignored_issues' => [],
                 'php_version' => '8.1',
-            ]
+            ],
+            'passingObjectToStringableObjectParam' => [
+                'code' => '<?php
+                    /** @param stringable-object $o */
+                    function acceptsStringableObject(object $o): void {}
+
+                    acceptsStringableObject((object)[]);
+                ',
+                'error_message' => 'InvalidArgument',
+            ],
+            'passingNonStringableObjectToStringableObjectParam' => [
+                'code' => '<?php
+                    /** @param stringable-object $o */
+                    function acceptsStringableObject(object $o): void {}
+
+                    class C {}
+                    acceptsStringableObject(new C);
+                ',
+                'error_message' => 'InvalidArgument',
+            ],
+            'passingStdClassToStringableObjectParam' => [
+                'code' => '<?php
+                    /** @param stringable-object $o */
+                    function acceptsStringableObject(object $o): void {}
+
+                    acceptsStringableObject(new stdClass);
+                ',
+                'error_message' => 'InvalidArgument',
+            ],
         ];
     }
 
