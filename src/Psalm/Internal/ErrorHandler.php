@@ -8,6 +8,7 @@ use Throwable;
 use function defined;
 use function error_reporting;
 use function fwrite;
+use function implode;
 use function ini_set;
 use function set_error_handler;
 use function set_exception_handler;
@@ -25,8 +26,15 @@ final class ErrorHandler
     /** @var bool */
     private static $exceptions_enabled = true;
 
-    public static function install(): void
+    /** @var string */
+    private static $args = '';
+
+    /**
+     * @param array<int,string> $argv
+     */
+    public static function install(array $argv = array()): void
     {
+        self::$args = implode(' ', $argv);
         self::setErrorReporting();
         self::installErrorHandler();
         self::installExceptionHandler();
@@ -71,7 +79,9 @@ final class ErrorHandler
             }
             if (ErrorHandler::$exceptions_enabled && ($error_code & error_reporting())) {
                 throw new RuntimeException(
-                    'PHP Error: ' . $error_message . ' in ' . $error_filename . ':' . $error_line,
+                    'PHP Error: ' . $error_message
+                    . ' in ' . $error_filename . ':' . $error_line
+                    . ' for command with CLI args "' . ErrorHandler::$args . '"',
                     $error_code
                 );
             }
