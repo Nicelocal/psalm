@@ -86,6 +86,7 @@ use Psalm\Type\MutableUnion;
 use Psalm\Type\Union;
 use UnexpectedValueException;
 
+use function array_intersect_key;
 use function array_keys;
 use function array_map;
 use function array_pop;

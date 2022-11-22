@@ -64,6 +64,9 @@ class TNamedObject extends Atomic
         $this->from_docblock = $from_docblock;
     }
 
+    /**
+     * @return static
+     */
     public function setIsStatic(bool $is_static, ?bool $is_static_resolved = null): self
     {
         $is_static_resolved ??= $this->is_static_resolved;

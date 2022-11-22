@@ -226,7 +226,7 @@ class Reconciler
                 throw new InvalidArgumentException('Union::$types cannot be empty after get value for ' . $key);
             }
 
-            $before_adjustment = $result_type ? $result_type->getBuilder()->freeze() : null;
+            $before_adjustment = $result_type;
 
             $failed_reconciliation = self::RECONCILIATION_OK;
 

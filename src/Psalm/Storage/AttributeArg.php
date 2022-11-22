@@ -41,9 +41,4 @@ final class AttributeArg
         $this->type = $type;
         $this->location = $location;
     }
-
-    public function __clone()
-    {
-        $this->type = clone $this->type;
-    }
 }
