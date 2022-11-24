@@ -17,7 +17,6 @@ use Psalm\Config;
 use Psalm\Exception\ComplicatedExpressionException;
 use Psalm\Exception\DocblockParseException;
 use Psalm\Exception\IncorrectDocblockException;
-use Psalm\Internal\Algebra;
 use Psalm\Internal\Algebra\FormulaGenerator;
 use Psalm\Internal\Analyzer\ClassLikeAnalyzer;
 use Psalm\Internal\Analyzer\CommentAnalyzer;
@@ -324,13 +323,13 @@ class FunctionLikeNodeScanner
                         );
 
                         try {
-                            $negated_formula = Algebra::negateFormula($if_clauses);
+                            $negated_formula = $if_clauses->getNegation();
                         } catch (ComplicatedExpressionException $e) {
                             $var_assertions = [];
                             break;
                         }
 
-                        $rules = Algebra::getTruthsFromFormula($negated_formula);
+                        $rules = $negated_formula->getTruthsFromFormula();
 
                         if (!$rules) {
                             $var_assertions = [];
