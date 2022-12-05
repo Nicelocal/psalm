@@ -1391,6 +1391,8 @@ class TypeParser
 
         $type = $parse_tree->value;
 
+        $had_optional = false;
+
         $is_list = true;
 
         $sealed = true;
@@ -1442,7 +1444,13 @@ class TypeParser
                 } else {
                     $property_key = $property_branch->value;
                 }
-                $is_list = false;
+                if (!is_numeric($property_key) || (
+                    $had_optional && !$property_maybe_undefined
+                ) || $type === 'array'
+                  || $type === 'callable-array'
+                ) {
+                    $is_list = false;
+                }
             } else {
                 throw new TypeParseTreeException(
                     'Missing property type'
@@ -1459,6 +1467,7 @@ class TypeParser
 
             if ($property_maybe_undefined) {
                 $property_type->possibly_undefined = true;
+                $had_optional = true;
             }
 
             $properties[$property_key] = $property_type;
@@ -1484,6 +1493,10 @@ class TypeParser
 
         if ($type !== 'array' && $type !== 'list') {
             throw new TypeParseTreeException('Unexpected brace character');
+        }
+
+        if ($type === 'list' && !$is_list) {
+            throw new TypeParseTreeException('A list shape cannot describe a non-list!');
         }
 
         if (!$properties) {
