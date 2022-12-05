@@ -9,6 +9,7 @@ use Psalm\Type\Atomic\TKeyedArray;
 use Psalm\Type\Atomic\TNamedObject;
 use Psalm\Type\Atomic\TObjectWithProperties;
 
+use function array_keys;
 use function is_string;
 
 /**
@@ -37,6 +38,17 @@ class KeyedArrayComparator
             return false;
         }
 
+        if ($container_type_part instanceof TKeyedArray
+            && $container_type_part->is_list
+            && $input_type_part instanceof TKeyedArray
+            && !$input_type_part->is_list
+        ) {
+            if ($atomic_comparison_result) {
+                $atomic_comparison_result->type_coerced = true;
+            }
+            return false;
+        }
+
         $all_types_contain = true;
 
         $input_properties = $input_type_part->properties;
@@ -45,6 +57,14 @@ class KeyedArrayComparator
                 if (!$container_property_type->possibly_undefined) {
                     $all_types_contain = false;
                 }
+
+                continue;
+            }
+
+            if ($input_properties[$key]->possibly_undefined
+                && !$container_property_type->possibly_undefined
+            ) {
+                $all_types_contain = false;
 
                 continue;
             }
@@ -82,6 +102,11 @@ class KeyedArrayComparator
                         ) {
                             $atomic_comparison_result->type_coerced = true;
                         }
+
+                        if ($property_type_comparison->missing_shape_fields) {
+                            $atomic_comparison_result->missing_shape_fields
+                                = $property_type_comparison->missing_shape_fields;
+                        }
                     }
 
                     $all_types_contain = false;
@@ -95,6 +120,9 @@ class KeyedArrayComparator
             }
         }
         if ($container_sealed && $input_properties) {
+            if ($atomic_comparison_result) {
+                $atomic_comparison_result->missing_shape_fields = array_keys($input_properties);
+            }
             return false;
         }
         return $all_types_contain;

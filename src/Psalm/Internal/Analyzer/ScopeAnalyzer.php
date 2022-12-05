@@ -23,6 +23,7 @@ class ScopeAnalyzer
     public const ACTION_BREAK = 'BREAK';
     public const ACTION_CONTINUE = 'CONTINUE';
     public const ACTION_LEAVE_SWITCH = 'LEAVE_SWITCH';
+    public const ACTION_LEAVE_LOOP = 'LEAVE_LOOP';
     public const ACTION_NONE = 'NONE';
     public const ACTION_RETURN = 'RETURN';
 
@@ -87,6 +88,7 @@ class ScopeAnalyzer
                     : ($stmt->num instanceof PhpParser\Node\Scalar\LNumber ? $stmt->num->value : null);
 
                 if ($break_types && $count !== null && count($break_types) >= $count) {
+                    /** @psalm-suppress InvalidArrayOffset Some int-range improvements are needed */
                     if ($break_types[count($break_types) - $count] === 'switch') {
                         return [...$control_actions, ...[self::ACTION_LEAVE_SWITCH]];
                     }
@@ -103,8 +105,14 @@ class ScopeAnalyzer
                     : ($stmt->num instanceof PhpParser\Node\Scalar\LNumber ? $stmt->num->value : null);
 
                 if ($break_types && $count !== null && count($break_types) >= $count) {
+                    /** @psalm-suppress InvalidArrayOffset Some int-range improvements are needed */
                     if ($break_types[count($break_types) - $count] === 'switch') {
                         return [...$control_actions, ...[self::ACTION_LEAVE_SWITCH]];
+                    }
+
+                    /** @psalm-suppress InvalidArrayOffset Some int-range improvements are needed */
+                    if ($break_types[count($break_types) - $count] === 'loop') {
+                        return [...$control_actions, ...[self::ACTION_LEAVE_LOOP]];
                     }
 
                     return array_values($control_actions);
@@ -263,6 +271,7 @@ class ScopeAnalyzer
                     && $nodes
                     && ($stmt_expr_type = $nodes->getType($stmt->cond))
                     && $stmt_expr_type->isAlwaysTruthy()
+                    && !in_array(self::ACTION_LEAVE_LOOP, $control_actions, true)
                 ) {
                     //infinite while loop that only return don't have an exit path
                     $have_exit_path = (bool)array_diff(
@@ -277,6 +286,7 @@ class ScopeAnalyzer
 
                 if ($stmt instanceof PhpParser\Node\Stmt\For_
                     && $nodes
+                    && !in_array(self::ACTION_LEAVE_LOOP, $control_actions, true)
                 ) {
                     $is_infinite_loop = true;
                     if ($stmt->cond) {
@@ -300,6 +310,11 @@ class ScopeAnalyzer
                         }
                     }
                 }
+
+                $control_actions = array_filter(
+                    $control_actions,
+                    static fn(string $action): bool => $action !== self::ACTION_LEAVE_LOOP
+                );
             }
 
             if ($stmt instanceof PhpParser\Node\Stmt\TryCatch) {
@@ -406,6 +421,26 @@ class ScopeAnalyzer
                 if ($stmt_type && $stmt_type->isNever()) {
                     return true;
                 }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param   array<PhpParser\Node> $stmts
+     *
+     */
+    public static function onlyThrows(array $stmts): bool
+    {
+        $stmts_count = count($stmts);
+        if ($stmts_count !== 1) {
+            return false;
+        }
+
+        foreach ($stmts as $stmt) {
+            if ($stmt instanceof PhpParser\Node\Stmt\Throw_) {
+                return true;
             }
         }
 

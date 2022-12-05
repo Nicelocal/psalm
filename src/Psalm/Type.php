@@ -21,7 +21,7 @@ use Psalm\Type\Atomic\TFloat;
 use Psalm\Type\Atomic\TInt;
 use Psalm\Type\Atomic\TIntRange;
 use Psalm\Type\Atomic\TIterable;
-use Psalm\Type\Atomic\TList;
+use Psalm\Type\Atomic\TKeyedArray;
 use Psalm\Type\Atomic\TLiteralClassString;
 use Psalm\Type\Atomic\TLiteralFloat;
 use Psalm\Type\Atomic\TLiteralInt;
@@ -30,7 +30,6 @@ use Psalm\Type\Atomic\TLowercaseString;
 use Psalm\Type\Atomic\TMixed;
 use Psalm\Type\Atomic\TNamedObject;
 use Psalm\Type\Atomic\TNever;
-use Psalm\Type\Atomic\TNonEmptyList;
 use Psalm\Type\Atomic\TNonEmptyLowercaseString;
 use Psalm\Type\Atomic\TNonEmptyString;
 use Psalm\Type\Atomic\TNonFalsyString;
@@ -349,7 +348,6 @@ abstract class Type
     public static function getNever(bool $from_docblock = false): Union
     {
         $type = new TNever($from_docblock);
-
         return new Union([$type]);
     }
 
@@ -427,36 +425,74 @@ abstract class Type
      */
     public static function getEmptyArray(): Union
     {
-        $array_type = new TArray(
+        return new Union([self::getEmptyArrayAtomic()]);
+    }
+
+    /**
+     * @psalm-pure
+     */
+    public static function getEmptyArrayAtomic(): TArray
+    {
+        return new TArray(
             [
                 new Union([new TNever()]),
                 new Union([new TNever()]),
             ]
         );
-
-        return new Union([
-            $array_type,
-        ]);
     }
 
     /**
      * @psalm-pure
      */
-    public static function getList(): Union
+    public static function getList(?Union $of = null, bool $from_docblock = false): Union
     {
-        $type = new TList(new Union([new TMixed]));
-
-        return new Union([$type]);
+        return new Union([self::getListAtomic($of ?? self::getMixed($from_docblock), $from_docblock)]);
     }
 
     /**
      * @psalm-pure
      */
-    public static function getNonEmptyList(): Union
+    public static function getNonEmptyList(?Union $of = null, bool $from_docblock = false): Union
     {
-        $type = new TNonEmptyList(new Union([new TMixed]));
+        return new Union([self::getNonEmptyListAtomic($of ?? self::getMixed($from_docblock), $from_docblock)]);
+    }
 
-        return new Union([$type]);
+    /**
+     * @psalm-pure
+     */
+    public static function getListAtomic(Union $of, bool $from_docblock = false): TKeyedArray
+    {
+        return new TKeyedArray(
+            [$of->setPossiblyUndefined(true)],
+            null,
+            [self::getListKey(), $of],
+            true,
+            $from_docblock
+        );
+    }
+
+    /**
+     * @psalm-pure
+     */
+    public static function getNonEmptyListAtomic(Union $of, bool $from_docblock = false): TKeyedArray
+    {
+        return new TKeyedArray(
+            [$of->setPossiblyUndefined(false)],
+            null,
+            [self::getListKey(), $of],
+            true,
+            $from_docblock
+        );
+    }
+
+    private static ?Union $listKey = null;
+    /**
+     * @psalm-pure
+     * @param int<1, max>|null $max_count
+     */
+    public static function getListKey(): Union
+    {
+        return self::$listKey ??= new Union([new TIntRange(0, null)]);
     }
 
     /**
@@ -607,6 +643,10 @@ abstract class Type
 
             if ($type_1->ignore_falsable_issues || $type_2->ignore_falsable_issues) {
                 $combined_type->ignore_falsable_issues = true;
+            }
+
+            if ($type_1->explicit_never && $type_2->explicit_never) {
+                $combined_type->explicit_never = true;
             }
 
             if ($type_1->had_template && $type_2->had_template) {
@@ -850,12 +890,16 @@ abstract class Type
         ) {
             /** @psalm-suppress TypeDoesNotContainType */
             if ($type_1_atomic instanceof TNamedObject && $type_2_atomic instanceof TNamedObject) {
-                $first = $codebase->classlike_storage_provider->get($type_1_atomic->value);
-                $second = $codebase->classlike_storage_provider->get($type_2_atomic->value);
-                $first_is_class = !$first->is_interface && !$first->is_trait;
-                $second_is_class = !$second->is_interface && !$second->is_trait;
-                if ($first_is_class && $second_is_class) {
-                    return $intersection_atomic;
+                try {
+                    $first = $codebase->classlike_storage_provider->get($type_1_atomic->value);
+                    $second = $codebase->classlike_storage_provider->get($type_2_atomic->value);
+                    $first_is_class = !$first->is_interface && !$first->is_trait;
+                    $second_is_class = !$second->is_interface && !$second->is_trait;
+                    if ($first_is_class && $second_is_class) {
+                        return $intersection_atomic;
+                    }
+                } catch (InvalidArgumentException $e) {
+                    // Ignore non-existing classes during initial scan
                 }
             }
             if ($intersection_atomic === null && $wider_type === null) {
@@ -914,7 +958,12 @@ abstract class Type
         if (!$type instanceof TNamedObject) {
             return false;
         }
-        $storage = $codebase->classlike_storage_provider->get($type->value);
+        try {
+            $storage = $codebase->classlike_storage_provider->get($type->value);
+        } catch (InvalidArgumentException $e) {
+            // Ignore non-existing classes during initial scan
+            return true;
+        }
         return !$storage->final;
     }
 

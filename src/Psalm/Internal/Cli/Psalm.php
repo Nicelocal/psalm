@@ -165,6 +165,7 @@ final class Psalm
      */
     public static function run(array $argv): void
     {
+        CliUtils::checkRuntimeRequirements();
         gc_collect_cycles();
         gc_disable();
 
@@ -239,6 +240,10 @@ final class Psalm
             $run_taint_analysis,
             $options
         );
+
+        if (isset($options['no-cache'])) {
+            $config->cache_directory = null;
+        }
 
         $config->setIncludeCollector($include_collector);
 
@@ -1257,7 +1262,7 @@ final class Psalm
             --output-format=console
                 Changes the output format.
                 Available formats: compact, console, text, emacs, json, pylint, xml, checkstyle, junit, sonarqube,
-                                   github, phpstorm, codeclimate
+                                   github, phpstorm, codeclimate, by-issue-level
 
             --no-progress
                 Disable the progress indicator

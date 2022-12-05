@@ -20,6 +20,50 @@ class FunctionCallTest extends TestCase
     public function providerValidCodeParse(): iterable
     {
         return [
+            'countShapedArrays' => [
+                'code' => '<?php
+                    /** @var array{a?: int} */
+                    $a = [];
+                    $aCount = count($a);
+
+                    /** @var array{a: int} */
+                    $b = [];
+                    $bCount = count($b);
+
+                    /** @var array{a: int, b?: int} */
+                    $c = [];
+                    $cCount = count($c);
+
+                    /** @var array{a: int}&array */
+                    $d = [];
+                    $dCount = count($d);
+
+                    /** @var list{0?: int} */
+                    $e = [];
+                    $eCount = count($e);
+
+                    /** @var list{int} */
+                    $f = [];
+                    $fCount = count($f);
+
+                    /** @var list{0: int, 1?: int} */
+                    $g = [];
+                    $gCount = count($g);
+
+                    /** @var list{0: int, 1?: int}&array */
+                    $h = [];
+                    $hCount = count($h);',
+                'assertions' => [
+                    '$aCount===' => 'int<0, 1>',
+                    '$bCount===' => '1',
+                    '$cCount===' => 'int<1, 2>',
+                    '$dCount===' => 'int<1, max>',
+                    '$eCount===' => 'int<0, 1>',
+                    '$fCount===' => '1',
+                    '$gCount===' => 'int<1, 2>',
+                    '$hCount===' => 'int<1, max>',
+                ]
+            ],
             'preg_grep' => [
                 'code' => '<?php
                   /**
@@ -1957,6 +2001,30 @@ class FunctionCallTest extends TestCase
                 'ignored_issues' => [],
                 'php_version' => '8.0',
             ],
+            'noNeverReturnError' => [
+                'code' => '<?php
+                    /**
+                     * @return string
+                     */
+                    function foo() {
+                        if (random_int(0, 1)) {
+                            exit;
+                        }
+
+                        return "foobar";
+                    }
+                '
+            ],
+            'noNeverReturnErrorOnlyThrows' => [
+                'code' => '<?php
+                    /**
+                     * https://3v4l.org/vCSF4#v8.1.12
+                     */
+                    function foo(): string {
+                         throw new \Exception("foo");
+                    }
+                '
+            ],
         ];
     }
 
@@ -2535,6 +2603,53 @@ class FunctionCallTest extends TestCase
                     acceptsStringableObject(new stdClass);
                 ',
                 'error_message' => 'InvalidArgument',
+            ],
+            'shouldReturnNeverNotString' => [
+                'code' => '<?php
+                    /**
+                     * @return string
+                     */
+                    function finalFunc() {
+                        exit;
+                    }
+
+                    finalFunc();',
+                'error_message' => 'InvalidReturnType'
+            ],
+            'shouldReturnNeverNotStringCaller' => [
+                'code' => '<?php
+                    /**
+                     * @return string
+                     */
+                    function foo() {
+                       finalFunc();
+                    }
+
+                    /**
+                     * @return never
+                     */
+                    function finalFunc() {
+                        exit;
+                    }
+
+                    foo();',
+                'error_message' => 'InvalidReturnType'
+            ],
+            'shouldReturnNeverNotStringNoDocblockCaller' => [
+                'code' => '<?php
+                    /**
+                     * @return string
+                     */
+                    function foo() {
+                       finalFunc();
+                    }
+
+                    function finalFunc() {
+                        exit;
+                    }
+
+                    foo();',
+                'error_message' => 'InvalidReturnType'
             ],
         ];
     }
