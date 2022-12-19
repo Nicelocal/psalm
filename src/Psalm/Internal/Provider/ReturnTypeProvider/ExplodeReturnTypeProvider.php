@@ -42,7 +42,7 @@ class ExplodeReturnTypeProvider implements FunctionReturnTypeProviderInterface
             $inner_type = new Union([
                 $second_arg_type && $second_arg_type->hasLowercaseString()
                     ? new TLowercaseString()
-                    : new TString
+                    : new TString,
             ]);
 
             $can_return_empty = isset($call_args[2])
@@ -83,7 +83,7 @@ class ExplodeReturnTypeProvider implements FunctionReturnTypeProviderInterface
                         new TFalse
                     ], [
                         'ignore_falsable_issues' =>
-                            $statements_source->getCodebase()->config->ignore_internal_falsable_issues
+                            $statements_source->getCodebase()->config->ignore_internal_falsable_issues,
                     ]);
                 } else {
                     $array_type = new Union([

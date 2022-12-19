@@ -17,9 +17,6 @@ class Value extends ParseTree
 
     public ?string $text = null;
 
-    /**
-     * @param ParseTree|null $parent
-     */
     public function __construct(
         string $value,
         int $offset_start,

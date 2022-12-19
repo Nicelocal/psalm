@@ -80,18 +80,14 @@ class ArrayFillReturnTypeProvider implements FunctionReturnTypeProviderInterface
             if ($second_arg_type
                 && self::isPositiveNumericType($second_arg_type)
             ) {
-                return new Union([
-                    Type::getNonEmptyListAtomic(
-                        $value_type_from_third_arg
-                    )
-                ]);
+                return Type::getNonEmptyList(
+                    $value_type_from_third_arg,
+                );
             }
 
-            return new Union([
-                Type::getListAtomic(
-                    $value_type_from_third_arg
-                )
-            ]);
+            return Type::getList(
+                $value_type_from_third_arg,
+            );
         }
 
         if ($second_arg_type
@@ -105,10 +101,10 @@ class ArrayFillReturnTypeProvider implements FunctionReturnTypeProviderInterface
                     new TNonEmptyArray([
                         new Union([new TIntRange(
                             $first_arg_type->getSingleIntLiteral()->value,
-                            $second_arg_type->getSingleIntLiteral()->value
+                            $second_arg_type->getSingleIntLiteral()->value,
                         )]),
                         $value_type_from_third_arg,
-                    ])
+                    ]),
                 ]);
             }
 
@@ -116,7 +112,7 @@ class ArrayFillReturnTypeProvider implements FunctionReturnTypeProviderInterface
                 new TNonEmptyArray([
                     Type::getInt(),
                     $value_type_from_third_arg,
-                ])
+                ]),
             ]);
         }
 
@@ -124,7 +120,7 @@ class ArrayFillReturnTypeProvider implements FunctionReturnTypeProviderInterface
             new TArray([
                 Type::getInt(),
                 $value_type_from_third_arg,
-            ])
+            ]),
         ]);
     }
 

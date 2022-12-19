@@ -46,7 +46,7 @@ class TemplateResult
     /**
      * @var list<Union>
      */
-    public $upper_bounds_unintersectable_types = [];
+    public array $upper_bounds_unintersectable_types = [];
 
     /**
      * @param  array<string, array<string, Union>> $template_types

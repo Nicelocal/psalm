@@ -53,9 +53,6 @@ class ConcatAnalyzer
 {
     private const MAX_LITERALS = 64;
 
-    /**
-     * @param Union|null $result_type
-     */
     public static function analyze(
         StatementsAnalyzer $statements_analyzer,
         PhpParser\Node\Expr $left,
@@ -92,7 +89,7 @@ class ConcatAnalyzer
                         foreach ($left_type->parent_nodes as $parent_node) {
                             $origin_locations = [
                                 ...$origin_locations,
-                                ...$statements_analyzer->data_flow_graph->getOriginLocations($parent_node)
+                                ...$statements_analyzer->data_flow_graph->getOriginLocations($parent_node),
                             ];
                         }
                     }
@@ -107,9 +104,9 @@ class ConcatAnalyzer
                         new MixedOperand(
                             'Left operand cannot be mixed',
                             $arg_location,
-                            $origin_location
+                            $origin_location,
                         ),
-                        $statements_analyzer->getSuppressedIssues()
+                        $statements_analyzer->getSuppressedIssues(),
                     );
                 } else {
                     $arg_location = new CodeLocation($statements_analyzer->getSource(), $right);
@@ -119,7 +116,7 @@ class ConcatAnalyzer
                         foreach ($right_type->parent_nodes as $parent_node) {
                             $origin_locations = [
                                 ...$origin_locations,
-                                ...$statements_analyzer->data_flow_graph->getOriginLocations($parent_node)
+                                ...$statements_analyzer->data_flow_graph->getOriginLocations($parent_node),
                             ];
                         }
                     }
@@ -134,9 +131,9 @@ class ConcatAnalyzer
                         new MixedOperand(
                             'Right operand cannot be mixed',
                             $arg_location,
-                            $origin_location
+                            $origin_location,
                         ),
-                        $statements_analyzer->getSuppressedIssues()
+                        $statements_analyzer->getSuppressedIssues(),
                     );
                 }
 
@@ -192,18 +189,18 @@ class ConcatAnalyzer
                 $numeric_type = new Union([
                     new TNumericString,
                     new TInt,
-                    new TFloat
+                    new TFloat,
                 ]);
                 $left_is_numeric = UnionTypeComparator::isContainedBy(
                     $codebase,
                     $left_type,
-                    $numeric_type
+                    $numeric_type,
                 );
 
                 $right_is_numeric = UnionTypeComparator::isContainedBy(
                     $codebase,
                     $right_type,
-                    $numeric_type
+                    $numeric_type,
                 );
 
                 $has_numeric_type = $left_is_numeric || $right_is_numeric;
@@ -213,7 +210,7 @@ class ConcatAnalyzer
                     $right_is_uint = UnionTypeComparator::isContainedBy(
                         $codebase,
                         $right_type,
-                        $right_uint
+                        $right_uint,
                     );
 
                     if ($right_is_uint) {
@@ -227,11 +224,11 @@ class ConcatAnalyzer
                 $all_lowercase = UnionTypeComparator::isContainedBy(
                     $codebase,
                     $left_type,
-                    $lowercase_type
+                    $lowercase_type,
                 ) && UnionTypeComparator::isContainedBy(
                     $codebase,
                     $right_type,
-                    $lowercase_type
+                    $lowercase_type,
                 );
 
                 $non_empty_string = $numeric_type->getBuilder()->addType(new TNonEmptyString())->freeze();
@@ -239,13 +236,13 @@ class ConcatAnalyzer
                 $left_non_empty = UnionTypeComparator::isContainedBy(
                     $codebase,
                     $left_type,
-                    $non_empty_string
+                    $non_empty_string,
                 );
 
                 $right_non_empty = UnionTypeComparator::isContainedBy(
                     $codebase,
                     $right_type,
-                    $non_empty_string
+                    $non_empty_string,
                 );
 
                 $has_non_empty = $left_non_empty || $right_non_empty;
@@ -291,9 +288,9 @@ class ConcatAnalyzer
             IssueBuffer::maybeAdd(
                 new NullOperand(
                     'Cannot concatenate with a ' . $operand_type,
-                    new CodeLocation($statements_analyzer->getSource(), $operand)
+                    new CodeLocation($statements_analyzer->getSource(), $operand),
                 ),
-                $statements_analyzer->getSuppressedIssues()
+                $statements_analyzer->getSuppressedIssues(),
             );
 
             return;
@@ -303,9 +300,9 @@ class ConcatAnalyzer
             IssueBuffer::maybeAdd(
                 new FalseOperand(
                     'Cannot concatenate with a ' . $operand_type,
-                    new CodeLocation($statements_analyzer->getSource(), $operand)
+                    new CodeLocation($statements_analyzer->getSource(), $operand),
                 ),
-                $statements_analyzer->getSuppressedIssues()
+                $statements_analyzer->getSuppressedIssues(),
             );
 
             return;
@@ -315,9 +312,9 @@ class ConcatAnalyzer
             IssueBuffer::maybeAdd(
                 new PossiblyNullOperand(
                     'Cannot concatenate with a possibly null ' . $operand_type,
-                    new CodeLocation($statements_analyzer->getSource(), $operand)
+                    new CodeLocation($statements_analyzer->getSource(), $operand),
                 ),
-                $statements_analyzer->getSuppressedIssues()
+                $statements_analyzer->getSuppressedIssues(),
             );
         }
 
@@ -325,9 +322,9 @@ class ConcatAnalyzer
             IssueBuffer::maybeAdd(
                 new PossiblyFalseOperand(
                     'Cannot concatenate with a possibly false ' . $operand_type,
-                    new CodeLocation($statements_analyzer->getSource(), $operand)
+                    new CodeLocation($statements_analyzer->getSource(), $operand),
                 ),
-                $statements_analyzer->getSuppressedIssues()
+                $statements_analyzer->getSuppressedIssues(),
             );
         }
 
@@ -340,9 +337,9 @@ class ConcatAnalyzer
                 IssueBuffer::maybeAdd(
                     new MixedOperand(
                         "$side operand cannot be a non-string template param",
-                        new CodeLocation($statements_analyzer->getSource(), $operand)
+                        new CodeLocation($statements_analyzer->getSource(), $operand),
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
 
                 return;
@@ -358,7 +355,7 @@ class ConcatAnalyzer
                 new TString,
                 false,
                 false,
-                $comparison_result
+                $comparison_result,
             );
 
             $operand_type_match = $operand_type_match && $operand_type_part_match;
@@ -369,9 +366,9 @@ class ConcatAnalyzer
                 IssueBuffer::maybeAdd(
                     new ImplicitToStringCast(
                         "$side side of concat op expects string, '$operand_type' provided with a __toString method",
-                        new CodeLocation($statements_analyzer->getSource(), $operand)
+                        new CodeLocation($statements_analyzer->getSource(), $operand),
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
             }
 
@@ -379,7 +376,7 @@ class ConcatAnalyzer
                 if ($atomic_type instanceof TNamedObject) {
                     $to_string_method_id = new MethodIdentifier(
                         $atomic_type->value,
-                        '__tostring'
+                        '__tostring',
                     );
 
                     if ($codebase->methods->methodExists(
@@ -392,7 +389,7 @@ class ConcatAnalyzer
                             && !$context->collect_mutations
                             ? $statements_analyzer
                             : null,
-                        $statements_analyzer->getFilePath()
+                        $statements_analyzer->getFilePath(),
                     )) {
                         try {
                             $storage = $codebase->methods->getStorage($to_string_method_id);
@@ -405,9 +402,9 @@ class ConcatAnalyzer
                                 new ImpureMethodCall(
                                     'Cannot call a possibly-mutating method '
                                         . $atomic_type->value . '::__toString from a pure context',
-                                    new CodeLocation($statements_analyzer, $operand)
+                                    new CodeLocation($statements_analyzer, $operand),
                                 ),
-                                $statements_analyzer->getSuppressedIssues()
+                                $statements_analyzer->getSuppressedIssues(),
                             );
                         } elseif ($statements_analyzer->getSource()
                                 instanceof FunctionLikeAnalyzer
@@ -428,17 +425,17 @@ class ConcatAnalyzer
                 IssueBuffer::maybeAdd(
                     new PossiblyInvalidOperand(
                         'Cannot concatenate with a ' . $operand_type,
-                        new CodeLocation($statements_analyzer->getSource(), $operand)
+                        new CodeLocation($statements_analyzer->getSource(), $operand),
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
             } else {
                 IssueBuffer::maybeAdd(
                     new InvalidOperand(
                         'Cannot concatenate with a ' . $operand_type,
-                        new CodeLocation($statements_analyzer->getSource(), $operand)
+                        new CodeLocation($statements_analyzer->getSource(), $operand),
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
             }
         }

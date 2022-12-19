@@ -10,21 +10,19 @@ use Psalm\Internal\ClauseConjunction;
  */
 class IfConditionalScope
 {
-    /** @var Context */
-    public $if_context;
+    public Context $if_context;
 
-    /** @var Context */
-    public $post_if_context;
+    public Context $post_if_context;
 
     /**
      * @var array<string, bool>
      */
-    public $cond_referenced_var_ids;
+    public array $cond_referenced_var_ids;
 
     /**
      * @var array<string, int>
      */
-    public $assigned_in_conditional_var_ids;
+    public array $assigned_in_conditional_var_ids;
 
     /** @var ClauseConjunction */
     public $entry_clauses;

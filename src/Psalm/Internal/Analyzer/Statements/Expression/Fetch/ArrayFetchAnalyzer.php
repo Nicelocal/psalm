@@ -113,7 +113,7 @@ class ArrayFetchAnalyzer
         $extended_var_id = ExpressionIdentifier::getExtendedVarId(
             $stmt->var,
             $statements_analyzer->getFQCLN(),
-            $statements_analyzer
+            $statements_analyzer,
         );
 
         if ($stmt->dim) {
@@ -138,7 +138,7 @@ class ArrayFetchAnalyzer
         $keyed_array_var_id = ExpressionIdentifier::getExtendedVarId(
             $stmt,
             $statements_analyzer->getFQCLN(),
-            $statements_analyzer
+            $statements_analyzer,
         );
 
         $dim_var_id = null;
@@ -150,7 +150,7 @@ class ArrayFetchAnalyzer
             $dim_var_id = ExpressionIdentifier::getExtendedVarId(
                 $stmt->dim,
                 $statements_analyzer->getFQCLN(),
-                $statements_analyzer
+                $statements_analyzer,
             );
         } else {
             $used_key_type = Type::getInt();
@@ -159,7 +159,7 @@ class ArrayFetchAnalyzer
         if (ExpressionAnalyzer::analyze(
             $statements_analyzer,
             $stmt->var,
-            $context
+            $context,
         ) === false) {
             return false;
         }
@@ -182,7 +182,7 @@ class ArrayFetchAnalyzer
                 $keyed_array_var_id,
                 $stmt_type,
                 $used_key_type,
-                $context
+                $context,
             );
 
             if ($stmt->dim && $statements_analyzer->node_data->getType($stmt->dim)) {
@@ -191,7 +191,7 @@ class ArrayFetchAnalyzer
 
             $statements_analyzer->node_data->setType(
                 $stmt,
-                $stmt_type
+                $stmt_type,
             );
 
             return true;
@@ -205,16 +205,16 @@ class ArrayFetchAnalyzer
                     IssueBuffer::maybeAdd(
                         new NullArrayAccess(
                             'Cannot access array value on null variable ' . $extended_var_id,
-                            new CodeLocation($statements_analyzer->getSource(), $stmt)
+                            new CodeLocation($statements_analyzer->getSource(), $stmt),
                         ),
-                        $statements_analyzer->getSuppressedIssues()
+                        $statements_analyzer->getSuppressedIssues(),
                     );
                 }
 
                 $stmt_type = $statements_analyzer->node_data->getType($stmt);
                 $statements_analyzer->node_data->setType(
                     $stmt,
-                    Type::combineUnionTypes($stmt_type, Type::getNull())
+                    Type::combineUnionTypes($stmt_type, Type::getNull()),
                 );
 
                 return true;
@@ -228,7 +228,7 @@ class ArrayFetchAnalyzer
                 false,
                 $extended_var_id,
                 $context,
-                null
+                null,
             );
 
             if ($stmt->dim && $stmt_var_type->hasArray()) {
@@ -282,7 +282,7 @@ class ArrayFetchAnalyzer
                                 && !UnionTypeComparator::isContainedBy(
                                     $codebase,
                                     new Union([$offset_atomic_type]),
-                                    $const_array_key_type
+                                    $const_array_key_type,
                                 )
                             ) {
                                 $new_offset_type->removeType($offset_key);
@@ -290,7 +290,7 @@ class ArrayFetchAnalyzer
                         } elseif (!UnionTypeComparator::isContainedBy(
                             $codebase,
                             $const_array_key_type,
-                            new Union([$offset_atomic_type])
+                            new Union([$offset_atomic_type]),
                         )) {
                             $new_offset_type->removeType($offset_key);
                         }
@@ -320,9 +320,9 @@ class ArrayFetchAnalyzer
                     new PossiblyUndefinedArrayOffset(
                         'Possibly undefined array key ' . $keyed_array_var_id
                             . ' on ' . $stmt_var_type->getId(),
-                        new CodeLocation($statements_analyzer->getSource(), $stmt)
+                        new CodeLocation($statements_analyzer->getSource(), $stmt),
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
             }
 
@@ -339,7 +339,7 @@ class ArrayFetchAnalyzer
             $keyed_array_var_id,
             $stmt_type,
             $used_key_type,
-            $context
+            $context,
         );
 
         $statements_analyzer->node_data->setType($stmt, $stmt_type);
@@ -396,7 +396,7 @@ class ArrayFetchAnalyzer
 
             $new_parent_node = DataFlowNode::getForAssignment(
                 $keyed_array_var_id ?: 'arrayvalue-fetch',
-                $var_location
+                $var_location,
             );
 
             $array_key_node = null;
@@ -412,7 +412,7 @@ class ArrayFetchAnalyzer
             if ($keyed_array_var_id === null && $dim_value === null) {
                 $array_key_node = DataFlowNode::getForAssignment(
                     'arraykey-fetch',
-                    $var_location
+                    $var_location,
                 );
 
                 $statements_analyzer->data_flow_graph->addNode($array_key_node);
@@ -424,7 +424,7 @@ class ArrayFetchAnalyzer
                     $new_parent_node,
                     'arrayvalue-fetch' . ($dim_value !== null ? '-\'' . $dim_value . '\'' : ''),
                     $added_taints,
-                    $removed_taints
+                    $removed_taints,
                 );
 
                 if ($stmt_type->by_ref) {
@@ -433,7 +433,7 @@ class ArrayFetchAnalyzer
                         $parent_node,
                         'arrayvalue-assignment' . ($dim_value !== null ? '-\'' . $dim_value . '\'' : ''),
                         $added_taints,
-                        $removed_taints
+                        $removed_taints,
                     );
                 }
 
@@ -443,7 +443,7 @@ class ArrayFetchAnalyzer
                         $array_key_node,
                         'arraykey-fetch',
                         $added_taints,
-                        $removed_taints
+                        $removed_taints,
                     );
                 }
             }
@@ -510,9 +510,9 @@ class ArrayFetchAnalyzer
             IssueBuffer::maybeAdd(
                 new NullArrayOffset(
                     'Cannot access value on variable ' . $extended_var_id . ' using null offset',
-                    new CodeLocation($statements_analyzer->getSource(), $stmt)
+                    new CodeLocation($statements_analyzer->getSource(), $stmt),
                 ),
-                $statements_analyzer->getSuppressedIssues()
+                $statements_analyzer->getSuppressedIssues(),
             );
 
             if ($in_assignment) {
@@ -536,9 +536,9 @@ class ArrayFetchAnalyzer
                     new PossiblyNullArrayOffset(
                         'Cannot access value on variable ' . $extended_var_id
                             . ' using possibly null offset ' . $offset_type,
-                        new CodeLocation($statements_analyzer->getSource(), $stmt->var)
+                        new CodeLocation($statements_analyzer->getSource(), $stmt->var),
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
             }
 
@@ -555,7 +555,7 @@ class ArrayFetchAnalyzer
             $has_valid_absolute_offset = self::checkArrayOffsetType(
                 $offset_type,
                 $offset_type->getAtomicTypes(),
-                $codebase
+                $codebase,
             );
 
             if ($has_valid_absolute_offset === false) {
@@ -590,7 +590,7 @@ class ArrayFetchAnalyzer
                         $extended_var_id,
                         $stmt,
                         $array_access_type,
-                        $type
+                        $type,
                     );
 
                     $has_valid_expected_offset = true;
@@ -615,9 +615,9 @@ class ArrayFetchAnalyzer
                             new PossiblyNullArrayAssignment(
                                 'Cannot access array value on possibly null variable ' . $extended_var_id .
                                     ' of type ' . $array_type,
-                                new CodeLocation($statements_analyzer->getSource(), $stmt)
+                                new CodeLocation($statements_analyzer->getSource(), $stmt),
                             ),
-                            $statements_analyzer->getSuppressedIssues()
+                            $statements_analyzer->getSuppressedIssues(),
                         );
 
                         $array_access_type = new Union([new TNever]);
@@ -628,9 +628,9 @@ class ArrayFetchAnalyzer
                             new PossiblyNullArrayAccess(
                                 'Cannot access array value on possibly null variable ' . $extended_var_id .
                                     ' of type ' . $array_type,
-                                new CodeLocation($statements_analyzer->getSource(), $stmt)
+                                new CodeLocation($statements_analyzer->getSource(), $stmt),
                             ),
-                            $statements_analyzer->getSuppressedIssues()
+                            $statements_analyzer->getSuppressedIssues(),
                         );
                     }
 
@@ -660,7 +660,7 @@ class ArrayFetchAnalyzer
                     $expected_offset_types,
                     $array_access_type,
                     $has_array_access,
-                    $has_valid_expected_offset
+                    $has_valid_expected_offset,
                 );
 
                 if ($type !== $original_type) {
@@ -684,7 +684,7 @@ class ArrayFetchAnalyzer
                     $offset_type,
                     $expected_offset_types,
                     $array_access_type,
-                    $has_valid_expected_offset
+                    $has_valid_expected_offset,
                 );
 
                 continue;
@@ -713,7 +713,7 @@ class ArrayFetchAnalyzer
                     $in_assignment,
                     $assign_value,
                     $array_access_type,
-                    $has_array_access
+                    $has_array_access,
                 );
             } elseif (!$array_type->hasMixed()) {
                 $non_array_types[] = (string)$type;
@@ -726,29 +726,23 @@ class ArrayFetchAnalyzer
         if ($non_array_types) {
             if ($has_array_access) {
                 if ($in_assignment) {
-                    if (IssueBuffer::accepts(
+                    IssueBuffer::maybeAdd(
                         new PossiblyInvalidArrayAssignment(
                             'Cannot access array value on non-array variable ' .
                             $extended_var_id . ' of type ' . $non_array_types[0],
-                            new CodeLocation($statements_analyzer->getSource(), $stmt)
+                            new CodeLocation($statements_analyzer->getSource(), $stmt),
                         ),
-                        $statements_analyzer->getSuppressedIssues()
-                    )
-                    ) {
-                        // do nothing
-                    }
+                        $statements_analyzer->getSuppressedIssues(),
+                    );
                 } elseif (!$context->inside_isset) {
-                    if (IssueBuffer::accepts(
+                    IssueBuffer::maybeAdd(
                         new PossiblyInvalidArrayAccess(
                             'Cannot access array value on non-array variable ' .
                             $extended_var_id . ' of type ' . $non_array_types[0],
-                            new CodeLocation($statements_analyzer->getSource(), $stmt)
+                            new CodeLocation($statements_analyzer->getSource(), $stmt),
                         ),
-                        $statements_analyzer->getSuppressedIssues()
-                    )
-                    ) {
-                        // do nothing
-                    }
+                        $statements_analyzer->getSuppressedIssues(),
+                    );
                 }
             } else {
                 if ($in_assignment) {
@@ -756,18 +750,18 @@ class ArrayFetchAnalyzer
                         new InvalidArrayAssignment(
                             'Cannot access array value on non-array variable ' .
                             $extended_var_id . ' of type ' . $non_array_types[0],
-                            new CodeLocation($statements_analyzer->getSource(), $stmt)
+                            new CodeLocation($statements_analyzer->getSource(), $stmt),
                         ),
-                        $statements_analyzer->getSuppressedIssues()
+                        $statements_analyzer->getSuppressedIssues(),
                     );
                 } else {
                     IssueBuffer::maybeAdd(
                         new InvalidArrayAccess(
                             'Cannot access array value on non-array variable ' .
                             $extended_var_id . ' of type ' . $non_array_types[0],
-                            new CodeLocation($statements_analyzer->getSource(), $stmt)
+                            new CodeLocation($statements_analyzer->getSource(), $stmt),
                         ),
-                        $statements_analyzer->getSuppressedIssues()
+                        $statements_analyzer->getSuppressedIssues(),
                     );
                 }
 
@@ -789,9 +783,9 @@ class ArrayFetchAnalyzer
             IssueBuffer::maybeAdd(
                 new MixedArrayOffset(
                     'Cannot access value on variable ' . $extended_var_id . ' using mixed offset',
-                    new CodeLocation($statements_analyzer->getSource(), $stmt)
+                    new CodeLocation($statements_analyzer->getSource(), $stmt),
                 ),
-                $statements_analyzer->getSuppressedIssues()
+                $statements_analyzer->getSuppressedIssues(),
             );
         } else {
             if (!$context->collect_initializations
@@ -823,9 +817,9 @@ class ArrayFetchAnalyzer
                             new PossiblyInvalidArrayOffset(
                                 'Cannot access value on variable ' . $extended_var_id . ' ' . $used_offset
                                     . ', expecting ' . $invalid_offset_type,
-                                new CodeLocation($statements_analyzer->getSource(), $stmt)
+                                new CodeLocation($statements_analyzer->getSource(), $stmt),
                             ),
-                            $statements_analyzer->getSuppressedIssues()
+                            $statements_analyzer->getSuppressedIssues(),
                         );
                     }
                 } else {
@@ -864,7 +858,7 @@ class ArrayFetchAnalyzer
                     if ($bad_types && $good_types) {
                         $offset_type->substitute(
                             TypeCombiner::combine($bad_types, $codebase),
-                            TypeCombiner::combine($good_types, $codebase)
+                            TypeCombiner::combine($good_types, $codebase),
                         );
                     }
 
@@ -872,9 +866,9 @@ class ArrayFetchAnalyzer
                         new InvalidArrayOffset(
                             'Cannot access value on variable ' . $extended_var_id . ' ' . $used_offset
                                 . ', expecting ' . $invalid_offset_type,
-                            new CodeLocation($statements_analyzer->getSource(), $stmt)
+                            new CodeLocation($statements_analyzer->getSource(), $stmt),
                         ),
-                        $statements_analyzer->getSuppressedIssues()
+                        $statements_analyzer->getSuppressedIssues(),
                     );
                 }
             }
@@ -915,7 +909,7 @@ class ArrayFetchAnalyzer
                     && isset(
                         $context->vars_in_scope[
                             $extended_var_id . '[' . $offset_type_part->value . ']'
-                        ]
+                        ],
                     )
                     && !$context->vars_in_scope[
                             $extended_var_id . '[' . $offset_type_part->value . ']'
@@ -934,9 +928,9 @@ class ArrayFetchAnalyzer
                             . 'is risky given expected type \''
                             . $expected_offset_type->getId() . '\'.'
                             . ' Consider using isset beforehand.',
-                        new CodeLocation($statements_analyzer->getSource(), $stmt)
+                        new CodeLocation($statements_analyzer->getSource(), $stmt),
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
             }
         }
@@ -963,7 +957,7 @@ class ArrayFetchAnalyzer
                     && isset(
                         $context->vars_in_scope[
                             $extended_var_id . '[\'' . $offset_type_part->value . '\']'
-                        ]
+                        ],
                     )
                     && !$context->vars_in_scope[
                             $extended_var_id . '[\'' . $offset_type_part->value . '\']'
@@ -982,9 +976,9 @@ class ArrayFetchAnalyzer
                             . 'is risky given expected type \''
                             . $expected_offset_type->getId() . '\'.'
                             . ' Consider using isset beforehand.',
-                        new CodeLocation($statements_analyzer->getSource(), $stmt)
+                        new CodeLocation($statements_analyzer->getSource(), $stmt),
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
             }
         }
@@ -1049,17 +1043,17 @@ class ArrayFetchAnalyzer
                 IssueBuffer::maybeAdd(
                     new MixedArrayAssignment(
                         'Cannot access array value on mixed variable ' . $extended_var_id,
-                        new CodeLocation($statements_analyzer->getSource(), $stmt)
+                        new CodeLocation($statements_analyzer->getSource(), $stmt),
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
             } else {
                 IssueBuffer::maybeAdd(
                     new MixedArrayAccess(
                         'Cannot access array value on mixed variable ' . $extended_var_id,
-                        new CodeLocation($statements_analyzer->getSource(), $stmt)
+                        new CodeLocation($statements_analyzer->getSource(), $stmt),
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
             }
         }
@@ -1081,19 +1075,19 @@ class ArrayFetchAnalyzer
                     $data_flow_graph->addPath(
                         $parent_node,
                         new DataFlowNode('variable-use', 'variable use', null),
-                        'variable-use'
+                        'variable-use',
                     );
                 }
 
                 $statements_analyzer->node_data->setType($stmt->var, $stmt_var_type->setParentNodes([
-                    $new_parent_node->id => $new_parent_node
+                    $new_parent_node->id => $new_parent_node,
                 ]));
             }
         }
 
         return Type::combineUnionTypes(
             $array_access_type,
-            Type::getMixed($type instanceof TNever)
+            Type::getMixed($type instanceof TNever),
         );
     }
 
@@ -1102,7 +1096,6 @@ class ArrayFetchAnalyzer
      * @param TArray|TKeyedArray|TClassStringMap $type
      * @param-out TArray|TKeyedArray|TClassStringMap $type
      * @param list<TLiteralInt|TLiteralString> $key_values
-     *
      * @psalm-suppress ConflictingReferenceConstraint Ignore
      */
     private static function handleArrayAccessOnArray(
@@ -1139,7 +1132,7 @@ class ArrayFetchAnalyzer
                             $single_atomic->value => $from_mixed_array ? Type::getMixed() : Type::getNever(),
                         ],
                         $single_atomic instanceof TLiteralClassString ? [
-                            $single_atomic->value => true
+                            $single_atomic->value => true,
                         ] : null,
                         $from_empty_array ? null : $type->type_params,
                     );
@@ -1185,7 +1178,7 @@ class ArrayFetchAnalyzer
                 $expected_offset_types,
                 $array_access_type,
                 $original_type,
-                $has_valid_offset
+                $has_valid_offset,
             );
         } elseif ($type instanceof TArray) {
             self::handleArrayAccessOnTArray(
@@ -1209,7 +1202,7 @@ class ArrayFetchAnalyzer
                 $type,
                 $offset_type,
                 $replacement_type,
-                $array_access_type
+                $array_access_type,
             );
         } else {
             self::handleArrayAccessOnKeyedArray(
@@ -1226,7 +1219,7 @@ class ArrayFetchAnalyzer
                 $type,
                 $hasMixed,
                 $expected_offset_types,
-                $has_valid_offset
+                $has_valid_offset,
             );
         }
 
@@ -1261,7 +1254,7 @@ class ArrayFetchAnalyzer
                     $offset_type->isMixed()
                         ? Type::getArrayKey()
                         : $offset_type->freeze(),
-                    $type->type_params[1]
+                    $type->type_params[1],
                 ]);
             }
         } elseif (!$type->isEmptyArray()) {
@@ -1291,9 +1284,9 @@ class ArrayFetchAnalyzer
                                 new TTemplateIndexedAccess(
                                     $offset_as->param_name,
                                     $templated_offset_type->param_name,
-                                    $offset_as->defining_class
-                                )
-                            ])
+                                    $offset_as->defining_class,
+                                ),
+                            ]),
                         ]);
 
                         $has_valid_offset = true;
@@ -1306,7 +1299,7 @@ class ArrayFetchAnalyzer
                     $expected_offset_type,
                     true,
                     $offset_type->ignore_falsable_issues,
-                    $union_comparison_results
+                    $union_comparison_results,
                 );
 
                 if ($codebase->config->ensure_array_string_offsets_exist
@@ -1321,7 +1314,7 @@ class ArrayFetchAnalyzer
                             $extended_var_id,
                             $stmt,
                             $context,
-                            $statements_analyzer
+                            $statements_analyzer,
                         );
                     }
                 }
@@ -1335,7 +1328,7 @@ class ArrayFetchAnalyzer
                         $extended_var_id,
                         $stmt,
                         $context,
-                        $statements_analyzer
+                        $statements_analyzer,
                     );
                 }
 
@@ -1350,9 +1343,9 @@ class ArrayFetchAnalyzer
                             new MixedArrayTypeCoercion(
                                 'Coercion from array offset type \'' . $offset_type->getId() . '\' '
                                 . 'to the expected type \'' . $expected_offset_type->getId() . '\'',
-                                new CodeLocation($statements_analyzer->getSource(), $stmt)
+                                new CodeLocation($statements_analyzer->getSource(), $stmt),
                             ),
-                            $statements_analyzer->getSuppressedIssues()
+                            $statements_analyzer->getSuppressedIssues(),
                         );
                     } else {
                         $expected_offset_types[] = $expected_offset_type->getId();
@@ -1361,7 +1354,7 @@ class ArrayFetchAnalyzer
                     if (UnionTypeComparator::canExpressionTypesBeIdentical(
                         $codebase,
                         $offset_type->freeze(),
-                        $expected_offset_type
+                        $expected_offset_type,
                     )) {
                         $has_valid_offset = true;
                     }
@@ -1389,7 +1382,7 @@ class ArrayFetchAnalyzer
 
         $array_access_type = Type::combineUnionTypes(
             $array_access_type,
-            $type->type_params[1]
+            $type->type_params[1],
         );
 
         if ($array_access_type->isNever()
@@ -1400,9 +1393,9 @@ class ArrayFetchAnalyzer
             IssueBuffer::maybeAdd(
                 new EmptyArrayAccess(
                     'Cannot access value on empty array variable ' . $extended_var_id,
-                    new CodeLocation($statements_analyzer->getSource(), $stmt)
+                    new CodeLocation($statements_analyzer->getSource(), $stmt),
                 ),
-                $statements_analyzer->getSuppressedIssues()
+                $statements_analyzer->getSuppressedIssues(),
             );
 
             if (!IssueBuffer::isRecording()) {
@@ -1433,11 +1426,11 @@ class ArrayFetchAnalyzer
                                         $offset_type_part->as_type
                                             ? new Union([$offset_type_part->as_type])
                                             : Type::getObject(),
-                                        $offset_type_part->defining_class
-                                    )
-                                ])
-                            ]
-                        ]
+                                        $offset_type_part->defining_class,
+                                    ),
+                                ]),
+                            ],
+                        ],
                     );
 
                     $template_result_set = new TemplateResult(
@@ -1450,11 +1443,11 @@ class ArrayFetchAnalyzer
                                         $type->as_type
                                             ? new Union([$type->as_type])
                                             : Type::getObject(),
-                                        'class-string-map'
-                                    )
-                                ])
-                            ]
-                        ]
+                                        'class-string-map',
+                                    ),
+                                ]),
+                            ],
+                        ],
                     );
                 } else {
                     $template_result_get = new TemplateResult(
@@ -1463,28 +1456,28 @@ class ArrayFetchAnalyzer
                             $type->param_name => [
                                 'class-string-map' => new Union([
                                     $offset_type_part->as_type
-                                        ?: new TObject()
-                                ])
-                            ]
-                        ]
+                                        ?: new TObject(),
+                                ]),
+                            ],
+                        ],
                     );
                     $template_result_set = new TemplateResult(
                         [],
-                        []
+                        [],
                     );
                 }
 
                 $expected_value_param_get = TemplateInferredTypeReplacer::replace(
                     $type->value_param,
                     $template_result_get,
-                    $codebase
+                    $codebase,
                 );
 
                 if ($replacement_type) {
                     $replacement_type = TemplateInferredTypeReplacer::replace(
                         $replacement_type,
                         $template_result_set,
-                        $codebase
+                        $codebase,
                     );
 
                     $type = new TClassStringMap(
@@ -1493,15 +1486,15 @@ class ArrayFetchAnalyzer
                         Type::combineUnionTypes(
                             $replacement_type,
                             $type->value_param,
-                            $codebase
-                        )
+                            $codebase,
+                        ),
                     );
                 }
 
                 $array_access_type = Type::combineUnionTypes(
                     $array_access_type,
                     $expected_value_param_get,
-                    $codebase
+                    $codebase,
                 );
             }
         }
@@ -1550,20 +1543,20 @@ class ArrayFetchAnalyzer
                     if ($replacement_type) {
                         $properties[$key_value->value] = Type::combineUnionTypes(
                             $properties[$key_value->value] ?? null,
-                            $replacement_type
+                            $replacement_type,
                         );
                     }
 
                     $array_access_type = Type::combineUnionTypes(
                         $array_access_type,
-                        $properties[$key_value->value]
+                        $properties[$key_value->value],
                     );
                 } elseif ($in_assignment) {
                     $properties[$key_value->value] = new Union([new TNever]);
 
                     $array_access_type = Type::combineUnionTypes(
                         $array_access_type,
-                        $properties[$key_value->value]
+                        $properties[$key_value->value],
                     );
                 } elseif ($type->fallback_params !== null) {
                     if ($codebase->config->ensure_array_string_offsets_exist) {
@@ -1573,7 +1566,7 @@ class ArrayFetchAnalyzer
                             $extended_var_id,
                             $stmt,
                             $context,
-                            $statements_analyzer
+                            $statements_analyzer,
                         );
                     }
 
@@ -1584,7 +1577,7 @@ class ArrayFetchAnalyzer
                             $extended_var_id,
                             $stmt,
                             $context,
-                            $statements_analyzer
+                            $statements_analyzer,
                         );
                     }
 
@@ -1608,8 +1601,8 @@ class ArrayFetchAnalyzer
                             array_map(
                                 /** @param int|string $key */
                                 static fn($key): string => is_int($key) ? "$key" : '\'' . $key . '\'',
-                                $object_like_keys
-                            )
+                                $object_like_keys,
+                            ),
                         );
 
                         $key_string = $formatted_keys . ' or ';
@@ -1637,7 +1630,7 @@ class ArrayFetchAnalyzer
                 $key_type,
                 true,
                 $offset_type->ignore_falsable_issues,
-                $union_comparison_results
+                $union_comparison_results,
             );
 
             if ($context->inside_isset && !$is_contained) {
@@ -1646,7 +1639,7 @@ class ArrayFetchAnalyzer
                     $key_type,
                     $offset_type->freeze(),
                     true,
-                    $offset_type->ignore_falsable_issues
+                    $offset_type->ignore_falsable_issues,
                 );
             }
 
@@ -1659,12 +1652,12 @@ class ArrayFetchAnalyzer
                 if ($replacement_type) {
                     $generic_params = Type::combineUnionTypes(
                         $type->getGenericValueType(),
-                        $replacement_type
+                        $replacement_type,
                     );
 
                     $new_key_type = Type::combineUnionTypes(
                         $generic_key_type,
-                        $offset_type->isMixed() ? Type::getArrayKey() : $offset_type->freeze()
+                        $offset_type->isMixed() ? Type::getArrayKey() : $offset_type->freeze(),
                     );
 
                     if (!$stmt->dim) {
@@ -1698,12 +1691,12 @@ class ArrayFetchAnalyzer
 
                     $array_access_type = Type::combineUnionTypes(
                         $array_access_type,
-                        $generic_params
+                        $generic_params,
                     );
                 } else {
                     $array_access_type = Type::combineUnionTypes(
                         $array_access_type,
-                        $type->getGenericValueType()
+                        $type->getGenericValueType(),
                     );
                 }
 
@@ -1786,8 +1779,8 @@ class ArrayFetchAnalyzer
                 $stmt->var,
                 new VirtualIdentifier('item', $stmt->var->getAttributes()),
                 [
-                    new VirtualArg($stmt->dim)
-                ]
+                    new VirtualArg($stmt->dim),
+                ],
             );
 
             $suppressed_issues = $statements_analyzer->getSuppressedIssues();
@@ -1803,7 +1796,7 @@ class ArrayFetchAnalyzer
             MethodCallAnalyzer::analyze(
                 $statements_analyzer,
                 $fake_method_call,
-                $context
+                $context,
             );
 
             if (!in_array('PossiblyInvalidMethodCall', $suppressed_issues, true)) {
@@ -1841,22 +1834,22 @@ class ArrayFetchAnalyzer
                             $stmt->dim
                                 ?? new VirtualConstFetch(
                                     new VirtualName('null'),
-                                    $stmt->var->getAttributes()
-                                )
+                                    $stmt->var->getAttributes(),
+                                ),
                         ),
                         new VirtualArg(
                             $assign_value ?? new VirtualConstFetch(
                                 new VirtualName('null'),
-                                $stmt->var->getAttributes()
-                            )
+                                $stmt->var->getAttributes(),
+                            ),
                         ),
-                    ]
+                    ],
                 );
 
                 MethodCallAnalyzer::analyze(
                     $statements_analyzer,
                     $fake_set_method_call,
-                    $context
+                    $context,
                 );
 
                 $statements_analyzer->node_data = $old_node_data;
@@ -1872,15 +1865,15 @@ class ArrayFetchAnalyzer
                     new VirtualIdentifier('offsetGet', $stmt->var->getAttributes()),
                     [
                         new VirtualArg(
-                            $stmt->dim
-                        )
-                    ]
+                            $stmt->dim,
+                        ),
+                    ],
                 );
 
                 MethodCallAnalyzer::analyze(
                     $statements_analyzer,
                     $fake_get_method_call,
-                    $context
+                    $context,
                 );
 
                 $call_array_access_type =
@@ -1904,7 +1897,7 @@ class ArrayFetchAnalyzer
 
         $array_access_type = Type::combineUnionTypes(
             $array_access_type,
-            $call_array_access_type
+            $call_array_access_type,
         );
     }
 
@@ -1939,9 +1932,9 @@ class ArrayFetchAnalyzer
                 IssueBuffer::maybeAdd(
                     new MixedStringOffsetAssignment(
                         'Right-hand-side of string offset assignment cannot be mixed',
-                        new CodeLocation($statements_analyzer->getSource(), $stmt)
+                        new CodeLocation($statements_analyzer->getSource(), $stmt),
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
             } else {
                 if (!$context->collect_initializations
@@ -1984,7 +1977,7 @@ class ArrayFetchAnalyzer
             $codebase,
             $offset_type->freeze(),
             $valid_offset_type,
-            true
+            true,
         )) {
             $expected_offset_types[] = $valid_offset_type->getId();
 
@@ -1994,7 +1987,7 @@ class ArrayFetchAnalyzer
 
             $array_access_type = Type::combineUnionTypes(
                 $array_access_type,
-                Type::getSingleLetter()
+                Type::getSingleLetter(),
             );
         }
     }
@@ -2017,13 +2010,13 @@ class ArrayFetchAnalyzer
                     $atomic_offset_type->fq_classlike_name,
                     null,
                     true,
-                    true
+                    true,
                 );
 
                 $has_valid_absolute_offset = self::checkArrayOffsetType(
                     $offset_type,
                     $expanded,
-                    $codebase
+                    $codebase,
                 );
 
                 if ($has_valid_absolute_offset) {
@@ -2050,7 +2043,7 @@ class ArrayFetchAnalyzer
                 $has_valid_absolute_offset = self::checkArrayOffsetType(
                     $offset_type,
                     $atomic_offset_type->as->getAtomicTypes(),
-                    $codebase
+                    $codebase,
                 );
 
                 if ($has_valid_absolute_offset) {

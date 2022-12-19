@@ -123,10 +123,11 @@ final class IssueBuffer
     protected static $used_suppressions = [];
 
     /** @var array<array-key,mixed> */
-    private static $server = [];
+    private static array $server = [];
 
     /**
      * This will add an issue to be emitted if it's not suppressed and return if it has been added
+     *
      * @param string[]  $suppressed_issues
      */
     public static function accepts(CodeIssue $e, array $suppressed_issues = [], bool $is_fixable = false): bool
@@ -140,15 +141,12 @@ final class IssueBuffer
 
     /**
      * This will add an issue to be emitted if it's not suppressed
+     *
      * @param string[]  $suppressed_issues
      */
     public static function maybeAdd(CodeIssue $e, array $suppressed_issues = [], bool $is_fixable = false): void
     {
-        if (self::isSuppressed($e, $suppressed_issues)) {
-            return;
-        }
-
-        self::add($e, $is_fixable);
+        self::accepts($e, $suppressed_issues, $is_fixable);
     }
 
     /**
@@ -176,6 +174,7 @@ final class IssueBuffer
      * - The issue is suppressed in config
      * - We're in a recording state
      * - The issue is included in the list of issues to be suppressed in param
+     *
      * @param string[] $suppressed_issues
      */
     public static function isSuppressed(CodeIssue $e, array $suppressed_issues = []): bool
@@ -250,7 +249,6 @@ final class IssueBuffer
      *
      * @psalm-internal Psalm\IssueBuffer
      * @psalm-internal Psalm\Type\Reconciler::getValueForKey
-     *
      * @throws  CodeException
      */
     public static function add(CodeIssue $e, bool $is_fixable = false): bool
@@ -326,7 +324,7 @@ final class IssueBuffer
                 $issue_type
                     . ' - ' . $e->getShortLocationWithPrevious()
                     . ':' . $e->code_location->getColumn()
-                    . ' - ' . $message
+                    . ' - ' . $message,
             );
         }
 
@@ -499,9 +497,9 @@ final class IssueBuffer
                             $file_path,
                             $config->shortenFileName($file_path),
                             $start,
-                            $end
-                        )
-                    )
+                            $end,
+                        ),
+                    ),
                 );
             }
         }
@@ -514,7 +512,6 @@ final class IssueBuffer
 
     /**
      * @param array<string, list<IssueData>> $issues_data
-     *
      */
     public static function addIssues(array $issues_data): void
     {
@@ -535,7 +532,6 @@ final class IssueBuffer
 
     /**
      * @param  array<string,array<string,array{o:int, s:array<int, string>}>>  $issue_baseline
-     *
      */
     public static function finish(
         ProjectAnalyzer $project_analyzer,
@@ -551,9 +547,7 @@ final class IssueBuffer
         $codebase = $project_analyzer->getCodebase();
 
         foreach ($codebase->config->config_issues as $issue) {
-            if (self::accepts($issue)) {
-                // fall through
-            }
+            self::maybeAdd($issue);
         }
 
         $error_count = 0;
@@ -565,7 +559,7 @@ final class IssueBuffer
         if (self::$issues_data) {
             if (in_array(
                 $project_analyzer->stdout_report_options->format,
-                [Report::TYPE_CONSOLE, Report::TYPE_PHP_STORM]
+                [Report::TYPE_CONSOLE, Report::TYPE_PHP_STORM],
             )) {
                 echo "\n";
             }
@@ -599,7 +593,7 @@ final class IssueBuffer
                                 $position = array_search(
                                     trim($issue_data->selected_text),
                                     $issue_baseline[$file][$type]['s'],
-                                    true
+                                    true,
                                 );
 
                                 if ($position !== false) {
@@ -623,7 +617,7 @@ final class IssueBuffer
         echo self::getOutput(
             $issues_data,
             $project_analyzer->stdout_report_options,
-            $codebase->analyzer->getTotalTypeCoverage($codebase)
+            $codebase->analyzer->getTotalTypeCoverage($codebase),
         );
 
         foreach ($issues_data as $file_issues) {
@@ -652,7 +646,7 @@ final class IssueBuffer
                 $codebase,
                 $issues_data,
                 $build_info,
-                $source_control_info
+                $source_control_info,
             );
 
             $codebase->config->eventDispatcher->dispatchAfterAnalysis($event);
@@ -672,14 +666,14 @@ final class IssueBuffer
                 self::getOutput(
                     $issues_data,
                     $report_options,
-                    $codebase->analyzer->getTotalTypeCoverage($codebase)
-                )
+                    $codebase->analyzer->getTotalTypeCoverage($codebase),
+                ),
             );
         }
 
         if (in_array(
             $project_analyzer->stdout_report_options->format,
-            [Report::TYPE_CONSOLE, Report::TYPE_PHP_STORM]
+            [Report::TYPE_CONSOLE, Report::TYPE_PHP_STORM],
         )) {
             echo str_repeat('-', 30) . "\n";
 
@@ -824,7 +818,6 @@ final class IssueBuffer
     /**
      * @param array<string, array<int, IssueData>> $issues_data
      * @param array{int, int} $mixed_counts
-     *
      */
     public static function getOutput(
         array $issues_data,
@@ -865,7 +858,7 @@ final class IssueBuffer
                     self::$fixable_issue_counts,
                     $report_options,
                     $mixed_expression_count,
-                    $total_expression_count
+                    $total_expression_count,
                 );
                 break;
 
@@ -976,6 +969,7 @@ final class IssueBuffer
 
     /**
      * Decrease the recording level after leaving a loop
+     *
      * @see startRecording
      */
     public static function stopRecording(): void
@@ -989,6 +983,7 @@ final class IssueBuffer
 
     /**
      * This will return the recorded issues for the current recording level
+     *
      * @return array<int, CodeIssue>
      */
     public static function clearRecordingLevel(): array

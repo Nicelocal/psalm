@@ -66,10 +66,10 @@ class AlgebraTest extends TestCase
             new Clause(
                 [
                     '$a' => [(string)$a1 => $a1, (string)$a2 => $a2],
-                    '$b' => ['truthy' => new Truthy()]
+                    '$b' => ['truthy' => new Truthy()],
                 ],
                 1,
-                1
+                1,
             ),
         ]);
 
@@ -122,7 +122,7 @@ class AlgebraTest extends TestCase
             spl_object_id($dnf_stmt->expr),
             $dnf_stmt->expr,
             null,
-            $statements_analyzer
+            $statements_analyzer,
         );
 
         $this->assertCount(6_561, $dnf_clauses->clauses);
@@ -141,16 +141,16 @@ class AlgebraTest extends TestCase
                     '$b' => ['truthy' => new Truthy()],
                 ],
                 1,
-                1
+                1,
             ))->contains(
                 new Clause(
                     [
                         '$a' => ['truthy' => new Truthy()],
                     ],
                     1,
-                    1
-                )
-            )
+                    1,
+                ),
+            ),
         );
 
         $this->assertFalse(
@@ -159,7 +159,7 @@ class AlgebraTest extends TestCase
                     '$a' => ['truthy' => new Truthy()],
                 ],
                 1,
-                1
+                1,
             ))->contains(
                 new Clause(
                     [
@@ -167,9 +167,9 @@ class AlgebraTest extends TestCase
                         '$b' => ['truthy' => new Truthy()],
                     ],
                     1,
-                    1
-                )
-            )
+                    1,
+                ),
+            ),
         );
     }
 
@@ -237,7 +237,7 @@ class AlgebraTest extends TestCase
 
         $clause1 = (new Clause(
             [
-                '$a' => [(string)$a1 => $a1]
+                '$a' => [(string)$a1 => $a1],
             ],
             1,
             2,
@@ -251,7 +251,7 @@ class AlgebraTest extends TestCase
 
         $clause2 = (new Clause(
             [
-                '$b' => [(string)$a2 => $a2]
+                '$b' => [(string)$a2 => $a2],
             ],
             1,
             2,

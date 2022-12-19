@@ -39,11 +39,11 @@ class AndAnalyzer
                 [
                     'stmts' => [
                         new VirtualExpression(
-                            $stmt->right
-                        )
-                    ]
+                            $stmt->right,
+                        ),
+                    ],
                 ],
-                $stmt->getAttributes()
+                $stmt->getAttributes(),
             );
 
             return IfElseAnalyzer::analyze($statements_analyzer, $fake_if_stmt, $context) !== false;
@@ -77,7 +77,7 @@ class AndAnalyzer
             $stmt->left,
             $context->self,
             $statements_analyzer,
-            $codebase
+            $codebase,
         );
 
         foreach ($left_context->vars_in_scope as $var_id => $type) {
@@ -118,7 +118,7 @@ class AndAnalyzer
         $left_type_assertions = $simplified_clauses->getTruthsFromFormula(
             $left_cond_id,
             $left_referenced_var_ids,
-            $active_left_assertions
+            $active_left_assertions,
         );
 
         $changed_var_ids = [];
@@ -138,7 +138,7 @@ class AndAnalyzer
                 $statements_analyzer->getTemplateTypeMap() ?: [],
                 $context->inside_loop,
                 new CodeLocation($statements_analyzer->getSource(), $stmt->left),
-                $context->inside_negation
+                $context->inside_negation,
             );
         } else {
             $right_context = clone $left_context;
@@ -156,7 +156,7 @@ class AndAnalyzer
 
         $context->cond_referenced_var_ids = array_merge(
             $right_context->cond_referenced_var_ids,
-            $left_context->cond_referenced_var_ids
+            $left_context->cond_referenced_var_ids,
         );
 
         if ($context->inside_conditional) {
@@ -164,12 +164,12 @@ class AndAnalyzer
 
             $context->vars_possibly_in_scope = array_merge(
                 $right_context->vars_possibly_in_scope,
-                $left_context->vars_possibly_in_scope
+                $left_context->vars_possibly_in_scope,
             );
 
             $context->assigned_var_ids = array_merge(
                 $left_context->assigned_var_ids,
-                $right_context->assigned_var_ids
+                $right_context->assigned_var_ids,
             );
         }
 
@@ -178,7 +178,7 @@ class AndAnalyzer
             $context->vars_in_scope = $right_context->vars_in_scope;
             $if_body_context->vars_in_scope = array_merge(
                 $if_body_context->vars_in_scope,
-                $context->vars_in_scope
+                $context->vars_in_scope,
             );
 
             $if_body_context->cond_referenced_var_ids = array_merge(

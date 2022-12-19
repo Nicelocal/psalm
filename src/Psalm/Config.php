@@ -245,55 +245,53 @@ class Config
 
     /**
      * The PHP version to assume as declared in the config file
-     *
-     * @var string|null
      */
-    private $configured_php_version;
+    private ?string $configured_php_version = null;
 
     /**
      * @var array<int, string>
      */
-    private $file_extensions = ['php'];
+    private array $file_extensions = ['php'];
 
     /**
      * @var array<string, class-string<FileScanner>>
      */
-    private $filetype_scanners = [];
+    private array $filetype_scanners = [];
 
     /**
      * @var array<string, class-string<FileAnalyzer>>
      */
-    private $filetype_analyzers = [];
+    private array $filetype_analyzers = [];
 
     /**
      * @var array<string, string>
      */
-    private $filetype_scanner_paths = [];
+    private array $filetype_scanner_paths = [];
 
     /**
      * @var array<string, string>
      */
-    private $filetype_analyzer_paths = [];
+    private array $filetype_analyzer_paths = [];
 
     /**
      * @var array<string, IssueHandler>
      */
-    private $issue_handlers = [];
+    private array $issue_handlers = [];
 
     /**
      * @var array<int, string>
      */
-    private $mock_classes = [];
+    private array $mock_classes = [];
 
     /**
      * @var array<string, string>
      */
-    private $preloaded_stub_files = [];
+    private array $preloaded_stub_files = [];
 
     /**
      * @var array<string, string>
      */
-    private $stub_files = [];
+    private array $stub_files = [];
 
     /**
      * @var bool
@@ -503,7 +501,7 @@ class Config
     /**
      * @var array<array{class:string,config:?SimpleXMLElement}>
      */
-    private $plugin_classes = [];
+    private array $plugin_classes = [];
 
     /**
      * @var bool
@@ -516,13 +514,12 @@ class Config
     public $allow_named_arg_calls = true;
 
     /** @var array<string, mixed> */
-    private $predefined_constants = [];
+    private array $predefined_constants = [];
 
     /** @var array<callable-string, bool> */
-    private $predefined_functions = [];
+    private array $predefined_functions = [];
 
-    /** @var ClassLoader|null */
-    private $composer_class_loader;
+    private ?ClassLoader $composer_class_loader = null;
 
     /**
      * @var string
@@ -550,8 +547,7 @@ class Config
      */
     public $max_string_length = 1_000;
 
-    /** @var ?IncludeCollector */
-    private $include_collector;
+    private ?IncludeCollector $include_collector = null;
 
     /**
      * @var TaintAnalysisFileFilter|null
@@ -563,10 +559,7 @@ class Config
      */
     public $debug_emitted_issues = false;
 
-    /**
-     * @var bool
-     */
-    private $report_info = true;
+    private bool $report_info = true;
 
     /**
      * @var EventDispatcher
@@ -590,35 +583,28 @@ class Config
     public $threads;
 
     /**
+     * A list of php extensions supported by Psalm.
+     * Where key - extension name (without ext- prefix), value - whether to load extension’s stub.
+     *
      * @psalm-readonly-allow-private-mutation
-     * @var array{
-     *     decimal: bool,
-     *     dom: bool,
-     *     ds: bool,
-     *     geos: bool,
-     *     gmp: bool,
-     *     mongodb: bool,
-     *     mysqli: bool,
-     *     pdo: bool,
-     *     simplexml: bool,
-     *     soap: bool,
-     *     xdebug: bool,
-     *     ffi: bool,
-     * }
+     * @var array<string, bool>
      */
     public $php_extensions = [
+        "apcu" => false,
         "decimal" => false,
         "dom" => false,
         "ds" => false,
+        "ffi" => false,
         "geos" => false,
         "gmp" => false,
         "mongodb" => false,
         "mysqli" => false,
         "pdo" => false,
+        "random" => false,
+        "redis" => false,
         "simplexml" => false,
         "soap" => false,
         "xdebug" => false,
-        "ffi" => false,
     ];
 
     /**
@@ -631,7 +617,7 @@ class Config
     /**
      * @var array<class-string, PluginInterface>
      */
-    private $plugins = [];
+    private array $plugins = [];
 
     /** @internal */
     protected function __construct()
@@ -1042,7 +1028,6 @@ class Config
         }
         foreach ($required_extensions as $required_ext => $_) {
             if (isset($config->php_extensions[$required_ext])) {
-                /** @psalm-suppress PropertyTypeCoercion isset doesn't narrow $required_ext like it should */
                 $config->php_extensions[$required_ext] = true;
             } else {
                 $config->php_extensions_not_supported[$required_ext] = true;
@@ -2077,6 +2062,16 @@ class Config
             $core_generic_files[] = $stringable_path;
         }
 
+        if (PHP_VERSION_ID < 8_02_00 && $codebase->analysis_php_version_id >= 8_02_00) {
+            $stringable_path = dirname(__DIR__, 2) . '/stubs/Php82.phpstub';
+
+            if (!file_exists($stringable_path)) {
+                throw new UnexpectedValueException('Cannot locate PHP 8.2 classes');
+            }
+
+            $core_generic_files[] = $stringable_path;
+        }
+
         $stub_files = array_merge($core_generic_files, $this->preloaded_stub_files);
 
         if (!$stub_files) {
@@ -2117,38 +2112,39 @@ class Config
             $dir_lvl_2 . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'SPL.phpstub',
         ];
 
-        if (PHP_VERSION_ID >= 8_00_00 && $codebase->analysis_php_version_id >= 8_00_00) {
+        if ($codebase->analysis_php_version_id >= 8_00_00) {
             $stringable_path = $dir_lvl_2 . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'Php80.phpstub';
             $this->internal_stubs[] = $stringable_path;
         }
 
-        if (PHP_VERSION_ID >= 8_01_00 && $codebase->analysis_php_version_id >= 8_01_00) {
+        if ($codebase->analysis_php_version_id >= 8_01_00) {
             $stringable_path = $dir_lvl_2 . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'Php81.phpstub';
             $this->internal_stubs[] = $stringable_path;
         }
 
+        if ($codebase->analysis_php_version_id >= 8_02_00) {
+            $stringable_path = $dir_lvl_2 . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'Php82.phpstub';
+            $this->internal_stubs[] = $stringable_path;
+        }
+
+        $ext_stubs_dir = $dir_lvl_2 . DIRECTORY_SEPARATOR . "stubs" . DIRECTORY_SEPARATOR . "extensions";
         foreach ($this->php_extensions as $ext => $enabled) {
             if ($enabled) {
-                $this->internal_stubs[] = $dir_lvl_2 . DIRECTORY_SEPARATOR . "stubs"
-                    . DIRECTORY_SEPARATOR . "extensions" . DIRECTORY_SEPARATOR . "$ext.phpstub";
+                $this->internal_stubs[] = $ext_stubs_dir . DIRECTORY_SEPARATOR . "$ext.phpstub";
             }
         }
 
-        // phpredis
-        if (extension_loaded('redis')) {
-            $ext_phpredis_path = $dir_lvl_2 . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'phpredis.phpstub';
-            $this->internal_stubs[] = $ext_phpredis_path;
-        }
-
-        if (extension_loaded('apcu')) {
-            $ext_apcu_path = $dir_lvl_2 . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'ext-apcu.phpstub';
-            $this->internal_stubs[] = $ext_apcu_path;
-        }
-
-        if (extension_loaded('random')) {
-            $ext_random_path = $dir_lvl_2 . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR
-                . 'extensions' . DIRECTORY_SEPARATOR . 'ext-random.phpstub';
-            $this->internal_stubs[] = $ext_random_path;
+        /** @deprecated Will be removed in Psalm 6 */
+        $extensions_to_load_stubs_using_deprecated_way = ['apcu', 'random', 'redis'];
+        foreach ($extensions_to_load_stubs_using_deprecated_way as $ext_name) {
+            $ext_stub_path = $ext_stubs_dir . DIRECTORY_SEPARATOR . "$ext_name.phpstub";
+            $is_stub_already_loaded = in_array($ext_stub_path, $this->internal_stubs, true);
+            if (! $is_stub_already_loaded && extension_loaded($ext_name)) {
+                $this->internal_stubs[] = $ext_stub_path;
+                $progress->write("Deprecation: Psalm stubs for ext-$ext_name loaded using legacy way."
+                    . " Instead, please declare ext-$ext_name as dependency in composer.json"
+                    . " or use <enableExtensions> directive in Psalm config.\n");
+            }
         }
 
         foreach ($this->internal_stubs as $stub_path) {

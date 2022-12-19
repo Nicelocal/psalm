@@ -44,7 +44,7 @@ class SwitchAnalyzer
         $switch_var_id = ExpressionIdentifier::getExtendedVarId(
             $stmt->cond,
             null,
-            $statements_analyzer
+            $statements_analyzer,
         );
 
         if (!$switch_var_id
@@ -78,7 +78,7 @@ class SwitchAnalyzer
             $case_actions = $case_action_map[$i] = ScopeAnalyzer::getControlActions(
                 $case->stmts,
                 $statements_analyzer->node_data,
-                ['switch']
+                ['switch'],
             );
 
             if (!in_array(ScopeAnalyzer::ACTION_NONE, $case_actions, true)) {
@@ -130,7 +130,7 @@ class SwitchAnalyzer
                 $case_exit_type,
                 $case_actions,
                 $i === $l - 1,
-                $switch_scope
+                $switch_scope,
             ) === false
             ) {
                 return;
@@ -158,7 +158,7 @@ class SwitchAnalyzer
                         [],
                         $statements_analyzer,
                         [],
-                        $original_context->inside_loop
+                        $original_context->inside_loop,
                     );
 
                 if (isset($case_vars_in_scope_reconciled[$switch_var_id])
@@ -192,7 +192,7 @@ class SwitchAnalyzer
                     ) {
                         $context->vars_in_scope[$var_id] = Type::combineUnionTypes(
                             $type,
-                            $context->vars_in_scope[$var_id]
+                            $context->vars_in_scope[$var_id],
                         );
                     }
                 }
@@ -204,7 +204,7 @@ class SwitchAnalyzer
                 if (isset($context->vars_in_scope[$var_id])) {
                     $context->vars_in_scope[$var_id] = Type::combineUnionTypes(
                         $type,
-                        $context->vars_in_scope[$var_id]
+                        $context->vars_in_scope[$var_id],
                     );
                 }
             }
@@ -216,7 +216,7 @@ class SwitchAnalyzer
 
         $context->vars_possibly_in_scope = array_merge(
             $context->vars_possibly_in_scope,
-            $switch_scope->new_vars_possibly_in_scope
+            $switch_scope->new_vars_possibly_in_scope,
         );
 
         //a switch can't return in all options without a default

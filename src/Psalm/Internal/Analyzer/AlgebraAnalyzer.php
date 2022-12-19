@@ -65,9 +65,9 @@ class AlgebraAnalyzer
                     new RedundantCondition(
                         $formula_2_clause . ' has already been asserted',
                         new CodeLocation($statements_analyzer, $stmt),
-                        'already asserted ' . $formula_2_clause
+                        'already asserted ' . $formula_2_clause,
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
             }
 
@@ -124,9 +124,9 @@ class AlgebraAnalyzer
                     IssueBuffer::maybeAdd(
                         new ParadoxicalCondition(
                             $paradox_message,
-                            new CodeLocation($statements_analyzer, $stmt)
+                            new CodeLocation($statements_analyzer, $stmt),
                         ),
-                        $statements_analyzer->getSuppressedIssues()
+                        $statements_analyzer->getSuppressedIssues(),
                     );
 
                     return;

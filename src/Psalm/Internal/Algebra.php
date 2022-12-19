@@ -14,9 +14,7 @@ class Algebra
 {
     /**
      * @param array<string, non-empty-list<non-empty-list<Assertion>>>  $all_types
-     *
      * @return array<string, non-empty-list<non-empty-list<Assertion>>>
-     *
      * @psalm-pure
      */
     public static function negateTypes(array $all_types): array

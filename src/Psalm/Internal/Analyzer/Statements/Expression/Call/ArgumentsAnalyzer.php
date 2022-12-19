@@ -72,7 +72,6 @@ class ArgumentsAnalyzer
     /**
      * @param   list<PhpParser\Node\Arg>          $args
      * @param   array<int, FunctionLikeParameter>|null  $function_params
-     *
      * @return  false|null
      */
     public static function analyze(
@@ -98,7 +97,7 @@ class ArgumentsAnalyzer
                 $statements_analyzer,
                 $args,
                 $context,
-                $method_id
+                $method_id,
             ) === false
             ) {
                 return false;
@@ -124,7 +123,7 @@ class ArgumentsAnalyzer
                 if (self::evaluateArbitraryParam(
                     $statements_analyzer,
                     $arg,
-                    $context
+                    $context,
                 ) === false) {
                     return false;
                 }
@@ -179,7 +178,7 @@ class ArgumentsAnalyzer
                     $method_id,
                     $argument_offset,
                     $arg,
-                    $context
+                    $context,
                 ) === false) {
                     return false;
                 }
@@ -209,7 +208,7 @@ class ArgumentsAnalyzer
                     $statements_analyzer,
                     $template_result ?? new TemplateResult([], []),
                     $function_storage,
-                    $param
+                    $param,
                 );
             } elseif (($arg->value instanceof PhpParser\Node\Expr\Closure
                     || $arg->value instanceof PhpParser\Node\Expr\ArrowFunction)
@@ -224,7 +223,7 @@ class ArgumentsAnalyzer
                     $template_result ?? new TemplateResult([], []),
                     $argument_offset,
                     $arg,
-                    $param
+                    $param,
                 );
             }
 
@@ -239,7 +238,7 @@ class ArgumentsAnalyzer
                 false,
                 null,
                 false,
-                $high_order_template_result
+                $high_order_template_result,
             ) === false) {
                 $context->inside_call = $was_inside_call;
 
@@ -257,7 +256,7 @@ class ArgumentsAnalyzer
                     $argument_offset,
                     $arg,
                     $context,
-                    $template_result
+                    $template_result,
                 );
             }
 
@@ -274,7 +273,7 @@ class ArgumentsAnalyzer
                     $inferred_arg_type,
                     $argument_offset,
                     $context->self,
-                    $context->calling_method_id ?: $context->calling_function_id
+                    $context->calling_method_id ?: $context->calling_function_id,
                 );
             }
 
@@ -310,7 +309,7 @@ class ArgumentsAnalyzer
 
         $replace_template_result = new TemplateResult(
             $template_types,
-            []
+            [],
         );
 
         $existing_type = $statements_analyzer->node_data->getType($arg->value);
@@ -323,10 +322,10 @@ class ArgumentsAnalyzer
                         new TTemplateParam(
                             'ArrayValue' . $argument_offset,
                             Type::getMixed(),
-                            $method_id
-                        )
-                    ])
-                ])
+                            $method_id,
+                        ),
+                    ]),
+                ]),
             ]),
             $replace_template_result,
             $codebase,
@@ -334,7 +333,7 @@ class ArgumentsAnalyzer
             $existing_type,
             $argument_offset,
             $context->self,
-            $context->calling_method_id ?: $context->calling_function_id
+            $context->calling_method_id ?: $context->calling_function_id,
         );
 
         if ($replace_template_result->lower_bounds) {
@@ -390,7 +389,7 @@ class ArgumentsAnalyzer
 
                 $method_id = new MethodIdentifier(
                     $lhs_type->value,
-                    strtolower((string)$function_like_call->name)
+                    strtolower((string)$function_like_call->name),
                 );
 
                 return $codebase->methods->getStorage($method_id);
@@ -401,7 +400,7 @@ class ArgumentsAnalyzer
             ) {
                 $method_id = new MethodIdentifier(
                     (string)$function_like_call->class->getAttribute('resolvedName'),
-                    strtolower($function_like_call->name->name)
+                    strtolower($function_like_call->name->name),
                 );
 
                 return $codebase->methods->getStorage($method_id);
@@ -458,7 +457,7 @@ class ArgumentsAnalyzer
         ) {
             $callable_from_invokable = CallableTypeComparator::getCallableFromAtomic(
                 $codebase,
-                $input_hof_atomic
+                $input_hof_atomic,
             );
 
             if ($callable_from_invokable) {
@@ -493,7 +492,7 @@ class ArgumentsAnalyzer
         $replaced_container_hof_atomic = TemplateInferredTypeReplacer::replace(
             $replaced_container_hof_atomic,
             $inferred_template_result,
-            $codebase
+            $codebase,
         );
 
         /** @var TClosure|TCallable $container_hof_atomic */
@@ -516,7 +515,7 @@ class ArgumentsAnalyzer
                     $high_order_template_result,
                     $codebase,
                     null,
-                    $container_hof_atomic->params[$offset]->type
+                    $container_hof_atomic->params[$offset]->type,
                 );
             }
         }
@@ -553,22 +552,22 @@ class ArgumentsAnalyzer
                     new TTemplateParam(
                         $template_name,
                         Type::getMixed(),
-                        $method_id
-                    )
+                        $method_id,
+                    ),
                 ]);
                 $function_like_params[] = new FunctionLikeParameter(
                     'function',
                     false,
                     $t,
-                    $t
+                    $t,
                 );
             }
 
             $replaced_type = new Union([
                 new TCallable(
                     'callable',
-                    array_reverse($function_like_params)
-                )
+                    array_reverse($function_like_params),
+                ),
             ]);
         } else {
             $replaced_type = $param->type;
@@ -579,13 +578,13 @@ class ArgumentsAnalyzer
                 static fn(array $template_map): array => array_map(
                     static fn(array $lower_bounds): Union => TemplateStandinTypeReplacer::getMostSpecificTypeFromBounds(
                         $lower_bounds,
-                        $codebase
+                        $codebase,
                     ),
-                    $template_map
+                    $template_map,
                 ),
-                $template_result->lower_bounds
+                $template_result->lower_bounds,
             ),
-            []
+            [],
         );
 
         $replaced_type = TemplateStandinTypeReplacer::replace(
@@ -596,13 +595,13 @@ class ArgumentsAnalyzer
             null,
             null,
             null,
-            $context->calling_method_id ?: $context->calling_function_id
+            $context->calling_method_id ?: $context->calling_function_id,
         );
 
         $replaced_type = TemplateInferredTypeReplacer::replace(
             $replaced_type,
             $replace_template_result,
-            $codebase
+            $codebase,
         );
 
         $closure_id = strtolower($statements_analyzer->getFilePath())
@@ -613,7 +612,7 @@ class ArgumentsAnalyzer
         try {
             $closure_storage = $codebase->getClosureStorage(
                 $statements_analyzer->getFilePath(),
-                $closure_id
+                $closure_id,
             );
         } catch (UnexpectedValueException $e) {
             return;
@@ -650,7 +649,7 @@ class ArgumentsAnalyzer
                                     false,
                                     false,
                                     true,
-                                    true
+                                    true,
                                 );
                             }
 
@@ -658,7 +657,7 @@ class ArgumentsAnalyzer
                                 $type_match_found = UnionTypeComparator::isContainedBy(
                                     $codebase,
                                     $replaced_param_type,
-                                    $param_storage->type
+                                    $param_storage->type,
                                 );
 
                                 if (!$type_match_found) {
@@ -669,7 +668,7 @@ class ArgumentsAnalyzer
                             $newly_inferred_type = Type::combineUnionTypes(
                                 $newly_inferred_type,
                                 $replaced_param_type,
-                                $codebase
+                                $codebase,
                             );
                         }
                     }
@@ -688,7 +687,7 @@ class ArgumentsAnalyzer
                     $args[1 - $argument_offset]->value,
                     null,
                     $param_storage->type,
-                    $temp
+                    $temp,
                 );
             }
         }
@@ -698,9 +697,7 @@ class ArgumentsAnalyzer
      * @param   list<PhpParser\Node\Arg>  $args
      * @param   string|MethodIdentifier|null  $method_id
      * @param   array<int,FunctionLikeParameter>        $function_params
-     *
      * @return  false|null
-     *
      * @psalm-suppress ComplexMethod there's just not much that can be done about this
      */
     public static function checkArgumentsMatch(
@@ -735,7 +732,7 @@ class ArgumentsAnalyzer
                 $is_variadic = Functions::isVariadic(
                     $codebase,
                     strtolower($method_id),
-                    $statements_analyzer->getRootFilePath()
+                    $statements_analyzer->getRootFilePath(),
                 );
             } else {
                 $is_variadic = $codebase->methods->isVariadic($method_id);
@@ -809,7 +806,7 @@ class ArgumentsAnalyzer
                 $template_result,
                 $args,
                 $function_params,
-                $last_param
+                $last_param,
             );
         }
 
@@ -827,7 +824,7 @@ class ArgumentsAnalyzer
                         $default_type_atomic = ConstantTypeResolver::resolve(
                             $codebase->classlikes,
                             $function_params[$i]->default_type,
-                            $statements_analyzer
+                            $statements_analyzer,
                         );
 
                         $default_type = new Union([$default_type_atomic]);
@@ -846,14 +843,14 @@ class ArgumentsAnalyzer
                             $i,
                             $function_storage->allow_named_arg_calls ?? true,
                             new VirtualArg(
-                                StubsGenerator::getExpressionFromType($default_type)
+                                StubsGenerator::getExpressionFromType($default_type),
                             ),
                             $default_type,
                             $context,
                             $class_generic_params,
                             $template_result,
                             $function_storage->specialize_call ?? true,
-                            $in_call_map
+                            $in_call_map,
                         );
                     }
                 }
@@ -874,9 +871,9 @@ class ArgumentsAnalyzer
                     new InvalidNamedArgument(
                         'Cannot use positional argument after named argument',
                         new CodeLocation($statements_analyzer, $arg),
-                        (string)$method_id
+                        (string)$method_id,
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
             }
 
@@ -915,9 +912,9 @@ class ArgumentsAnalyzer
                                                     'Parameter $' . $key_type->value . ' has already been used in '
                                                     . ($cased_method_id ?: $method_id),
                                                     new CodeLocation($statements_analyzer, $arg),
-                                                    (string)$method_id
+                                                    (string)$method_id,
                                                 ),
-                                                $statements_analyzer->getSuppressedIssues()
+                                                $statements_analyzer->getSuppressedIssues(),
                                             );
                                         }
 
@@ -935,9 +932,9 @@ class ArgumentsAnalyzer
                                         'Parameter $' . $key_type->value . ' does not exist on function '
                                         . ($cased_method_id ?: $method_id),
                                         new CodeLocation($statements_analyzer, $arg),
-                                        (string)$method_id
+                                        (string)$method_id,
                                     ),
-                                    $statements_analyzer->getSuppressedIssues()
+                                    $statements_analyzer->getSuppressedIssues(),
                                 );
                             }
                         }
@@ -955,9 +952,9 @@ class ArgumentsAnalyzer
                                         'Parameter $' . $arg->name->name . ' has already been used in '
                                             . ($cased_method_id ?: $method_id),
                                         new CodeLocation($statements_analyzer, $arg->name),
-                                        (string) $method_id
+                                        (string) $method_id,
                                     ),
-                                    $statements_analyzer->getSuppressedIssues()
+                                    $statements_analyzer->getSuppressedIssues(),
                                 );
                             }
 
@@ -975,9 +972,9 @@ class ArgumentsAnalyzer
                             'Parameter $' . $arg->name->name . ' does not exist on function '
                                 . ($cased_method_id ?: $method_id),
                             new CodeLocation($statements_analyzer, $arg->name),
-                            (string) $method_id
+                            (string) $method_id,
                         ),
-                        $statements_analyzer->getSuppressedIssues()
+                        $statements_analyzer->getSuppressedIssues(),
                     );
                 }
             } elseif ($function_param_count > $argument_offset) {
@@ -1007,7 +1004,7 @@ class ArgumentsAnalyzer
                     $argument_offset,
                     $arg,
                     $context,
-                    $template_result
+                    $template_result,
                 ) === false) {
                     return null;
                 }
@@ -1033,7 +1030,7 @@ class ArgumentsAnalyzer
                     $class_generic_params,
                     $template_result,
                     $function_storage->specialize_call ?? true,
-                    $in_call_map
+                    $in_call_map,
                 ) === false) {
                     return false;
                 }
@@ -1056,14 +1053,14 @@ class ArgumentsAnalyzer
                                 $cased_method_id,
                                 $argument_offset,
                                 $function_param->location,
-                                $code_location
+                                $code_location,
                             );
                         } else {
                             $sink = TaintSink::getForMethodArgument(
                                 $cased_method_id,
                                 $cased_method_id,
                                 $argument_offset,
-                                $function_param->location
+                                $function_param->location,
                             );
                         }
 
@@ -1081,18 +1078,18 @@ class ArgumentsAnalyzer
                     new TooFewArguments(
                         'Too few arguments for ' . $method_id,
                         $code_location,
-                        $method_id
+                        $method_id,
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
             } elseif ($method_id === 'array_filter' && count($args) < 1) {
                 IssueBuffer::maybeAdd(
                     new TooFewArguments(
                         'Too few arguments for ' . $method_id,
                         $code_location,
-                        $method_id
+                        $method_id,
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
             }
 
@@ -1101,7 +1098,7 @@ class ArgumentsAnalyzer
                 $context,
                 $args,
                 $method_id,
-                $context->check_functions
+                $context->check_functions,
             );
 
             return null;
@@ -1114,9 +1111,9 @@ class ArgumentsAnalyzer
                     new TooFewArguments(
                         'Cannot call get_class() without argument outside of class scope',
                         $code_location,
-                        $method_id
+                        $method_id,
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
 
                 return null;
@@ -1135,7 +1132,7 @@ class ArgumentsAnalyzer
             $in_call_map,
             $method_id,
             $cased_method_id,
-            $code_location
+            $code_location,
         );
 
         return null;
@@ -1178,9 +1175,9 @@ class ArgumentsAnalyzer
             IssueBuffer::maybeAdd(
                 new InvalidPassByReference(
                     'Parameter ' . ($argument_offset + 1) . ' of ' . $cased_method_id . ' expects a variable',
-                    new CodeLocation($statements_analyzer->getSource(), $arg->value)
+                    new CodeLocation($statements_analyzer->getSource(), $arg->value),
                 ),
-                $statements_analyzer->getSuppressedIssues()
+                $statements_analyzer->getSuppressedIssues(),
             );
 
             return false;
@@ -1193,7 +1190,7 @@ class ArgumentsAnalyzer
                 'reset', 'end', 'next', 'prev', 'array_pop', 'array_shift',
                 'array_push', 'array_unshift', 'socket_select', 'array_splice',
             ],
-            true
+            true,
         )) {
             $by_ref_type = null;
             $by_ref_out_type = null;
@@ -1229,14 +1226,14 @@ class ArgumentsAnalyzer
                         $statements_analyzer->node_data->getType($arg->value),
                         $argument_offset,
                         $context->self,
-                        $context->calling_method_id ?: $context->calling_function_id
+                        $context->calling_method_id ?: $context->calling_function_id,
                     );
 
                     if ($template_result->lower_bounds) {
                         $original_by_ref_type = TemplateInferredTypeReplacer::replace(
                             $original_by_ref_type,
                             $template_result,
-                            $codebase
+                            $codebase,
                         );
 
                         $by_ref_type = $original_by_ref_type;
@@ -1254,14 +1251,14 @@ class ArgumentsAnalyzer
                         $statements_analyzer->node_data->getType($arg->value),
                         $argument_offset,
                         $context->self,
-                        $context->calling_method_id ?: $context->calling_function_id
+                        $context->calling_method_id ?: $context->calling_function_id,
                     );
 
                     if ($template_result->lower_bounds) {
                         $original_by_ref_out_type = TemplateInferredTypeReplacer::replace(
                             $original_by_ref_out_type,
                             $template_result,
-                            $codebase
+                            $codebase,
                         );
 
                         $by_ref_out_type = $original_by_ref_out_type;
@@ -1287,7 +1284,7 @@ class ArgumentsAnalyzer
                 $by_ref_out_type ?: $by_ref_type,
                 $context,
                 $method_id && (strpos($method_id, '::') !== false || !InternalCallMapHandler::inCallMap($method_id)),
-                $check_null_ref
+                $check_null_ref,
             );
         }
 
@@ -1345,7 +1342,7 @@ class ArgumentsAnalyzer
             $var_id = ExpressionIdentifier::getVarId(
                 $arg->value,
                 $statements_analyzer->getFQCLN(),
-                $statements_analyzer
+                $statements_analyzer,
             );
         }
 
@@ -1364,9 +1361,9 @@ class ArgumentsAnalyzer
                         new PossiblyUndefinedVariable(
                             'Variable ' . $var_id
                                 . ' must be defined prior to use within an unknown function or method',
-                            new CodeLocation($statements_analyzer->getSource(), $arg->value)
+                            new CodeLocation($statements_analyzer->getSource(), $arg->value),
                         ),
-                        $statements_analyzer->getSuppressedIssues()
+                        $statements_analyzer->getSuppressedIssues(),
                     );
                 }
 
@@ -1382,7 +1379,7 @@ class ArgumentsAnalyzer
                 $context->removeVarFromConflictingClauses(
                     $var_id,
                     $context->vars_in_scope[$var_id],
-                    $statements_analyzer
+                    $statements_analyzer,
                 );
 
                 $t = $context->vars_in_scope[$var_id]->getBuilder();
@@ -1391,8 +1388,8 @@ class ArgumentsAnalyzer
                         $t->removeType('array');
                         $t->addType(
                             new TArray(
-                                [Type::getArrayKey(), Type::getMixed()]
-                            )
+                                [Type::getArrayKey(), Type::getMixed()],
+                            ),
                         );
                     }
                 }
@@ -1416,7 +1413,7 @@ class ArgumentsAnalyzer
         $var_id = ExpressionIdentifier::getVarId(
             $arg->value,
             $statements_analyzer->getFQCLN(),
-            $statements_analyzer
+            $statements_analyzer,
         );
 
         $builtin_array_functions = [
@@ -1429,7 +1426,7 @@ class ArgumentsAnalyzer
                 && in_array(
                     $method_id,
                     $builtin_array_functions,
-                    true
+                    true,
                 ))
         ) {
             $was_inside_assignment = $context->inside_assignment;
@@ -1440,7 +1437,7 @@ class ArgumentsAnalyzer
             if (ExpressionAnalyzer::analyze(
                 $statements_analyzer,
                 $arg->value,
-                $context
+                $context,
             ) === false) {
                 $context->inside_assignment = $was_inside_assignment;
 
@@ -1456,7 +1453,7 @@ class ArgumentsAnalyzer
             && in_array(
                 $method_id,
                 $builtin_array_functions,
-                true
+                true,
             )
         ) {
             if (in_array($method_id, ['array_pop', 'array_shift'], true)) {
@@ -1464,7 +1461,7 @@ class ArgumentsAnalyzer
                     $statements_analyzer,
                     $arg,
                     $context,
-                    $method_id === 'array_shift'
+                    $method_id === 'array_shift',
                 );
 
                 return null;
@@ -1495,7 +1492,7 @@ class ArgumentsAnalyzer
                     $by_ref_type,
                     $by_ref_type,
                     $context,
-                    false
+                    false,
                 );
 
                 return null;
@@ -1506,7 +1503,7 @@ class ArgumentsAnalyzer
             if (ExpressionAnalyzer::analyze(
                 $statements_analyzer,
                 $arg->value,
-                $context
+                $context,
             ) === false) {
                 return false;
             }
@@ -1556,7 +1553,7 @@ class ArgumentsAnalyzer
             $self_fq_class_name,
             $calling_class_storage,
             $function_storage->template_types ?: [],
-            $class_generic_params
+            $class_generic_params,
         );
 
         if (!$template_types) {
@@ -1607,7 +1604,7 @@ class ArgumentsAnalyzer
                 null,
                 true,
                 false,
-                $calling_class_storage->final ?? false
+                $calling_class_storage->final ?? false,
             );
 
             TemplateStandinTypeReplacer::fillTemplateResult(
@@ -1619,7 +1616,7 @@ class ArgumentsAnalyzer
                 $argument_offset,
                 $context->self,
                 $context->calling_method_id ?: $context->calling_function_id,
-                false
+                false,
             );
         }
 
@@ -1659,9 +1656,9 @@ class ArgumentsAnalyzer
                     'Too many arguments for ' . ($cased_method_id ?: $method_id)
                     . ' - expecting ' . count($function_params) . ' but saw ' . count($args),
                     $code_location,
-                    (string)$method_id
+                    (string)$method_id,
                 ),
-                $statements_analyzer->getSuppressedIssues()
+                $statements_analyzer->getSuppressedIssues(),
             );
 
             return;
@@ -1766,9 +1763,9 @@ class ArgumentsAnalyzer
                             'Too few arguments for ' . $cased_method_id
                             . ' - expecting ' . $param->name . ' to be passed',
                             $code_location,
-                            (string)$method_id
+                            (string)$method_id,
                         ),
-                        $statements_analyzer->getSuppressedIssues()
+                        $statements_analyzer->getSuppressedIssues(),
                     );
                     continue;
                 }
@@ -1784,7 +1781,7 @@ class ArgumentsAnalyzer
                         $default_type_atomic = ConstantTypeResolver::resolve(
                             $codebase->classlikes,
                             $param->default_type,
-                            $statements_analyzer
+                            $statements_analyzer,
                         );
 
                         $default_type = new Union([$default_type_atomic]);
@@ -1799,7 +1796,7 @@ class ArgumentsAnalyzer
                         $i,
                         $context->self,
                         $context->calling_method_id ?: $context->calling_function_id,
-                        true
+                        true,
                     );
                 }
             }

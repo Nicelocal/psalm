@@ -62,7 +62,7 @@ class ElseIfAnalyzer
                 $else_context,
                 $codebase,
                 $if_scope,
-                $branch_point
+                $branch_point,
             );
 
             $elseif_context = $if_conditional_scope->if_context;
@@ -88,7 +88,7 @@ class ElseIfAnalyzer
             $elseif->cond,
             $else_context->self,
             $statements_analyzer,
-            $codebase
+            $codebase,
         );
 
         $elseif_clauses_handled = [];
@@ -142,7 +142,7 @@ class ElseIfAnalyzer
             $elseif_clauses,
             $statements_analyzer,
             $elseif->cond,
-            $assigned_in_conditional_var_ids
+            $assigned_in_conditional_var_ids,
         );
 
         $elseif_context_clauses = $entry_clauses->and($elseif_clauses);
@@ -172,7 +172,7 @@ class ElseIfAnalyzer
                      */
                     static fn(array $carry, Clause $clause): array
                         => array_merge($carry, array_keys($clause->possibilities)),
-                    []
+                    [],
                 );
 
                 $omit_keys = array_combine($omit_keys, $omit_keys);
@@ -180,13 +180,13 @@ class ElseIfAnalyzer
 
                 $cond_referenced_var_ids = array_diff_key(
                     $cond_referenced_var_ids,
-                    $omit_keys
+                    $omit_keys,
                 );
             }
             $reconcilable_elseif_types = $elseif_context->clauses->getTruthsFromFormula(
                 spl_object_id($elseif->cond),
                 $cond_referenced_var_ids,
-                $active_elseif_types
+                $active_elseif_types,
             );
             $negated_elseif_types = $elseif_clauses->getNegation()->getTruthsFromFormula();
         } catch (ComplicatedExpressionException $e) {
@@ -195,7 +195,7 @@ class ElseIfAnalyzer
         }
 
         $all_negated_vars = array_unique(
-            [...array_keys($negated_elseif_types), ...array_keys($if_scope->negated_types)]
+            [...array_keys($negated_elseif_types), ...array_keys($if_scope->negated_types)],
         );
 
         foreach ($all_negated_vars as $var_id) {
@@ -203,7 +203,7 @@ class ElseIfAnalyzer
                 if (isset($if_scope->negated_types[$var_id])) {
                     $if_scope->negated_types[$var_id] = [
                         ...$if_scope->negated_types[$var_id],
-                        ...$negated_elseif_types[$var_id]
+                        ...$negated_elseif_types[$var_id],
                     ];
                 } else {
                     $if_scope->negated_types[$var_id] = $negated_elseif_types[$var_id];
@@ -230,14 +230,14 @@ class ElseIfAnalyzer
                     $elseif->cond instanceof PhpParser\Node\Expr\BooleanNot
                         ? $elseif->cond->expr
                         : $elseif->cond,
-                    $outer_context->include_location
-                )
+                    $outer_context->include_location,
+                ),
             );
 
             if ($newly_reconciled_var_ids) {
                 $elseif_context->clauses = Context::removeReconciledClauses(
                     $elseif_context->clauses,
-                    $newly_reconciled_var_ids
+                    $newly_reconciled_var_ids,
                 )[0];
 
                 foreach ($newly_reconciled_var_ids as $changed_var_id => $_) {
@@ -260,7 +260,7 @@ class ElseIfAnalyzer
 
         if ($statements_analyzer->analyze(
             $elseif->stmts,
-            $elseif_context
+            $elseif_context,
         ) === false
         ) {
             return false;
@@ -286,15 +286,15 @@ class ElseIfAnalyzer
                 && !UnionTypeComparator::isContainedBy(
                     $codebase,
                     $byref_constraint->type,
-                    $outer_constraint_type
+                    $outer_constraint_type,
                 )
             ) {
                 IssueBuffer::maybeAdd(
                     new ConflictingReferenceConstraint(
                         'There is more than one pass-by-reference constraint on ' . $var_id,
-                        new CodeLocation($statements_analyzer, $elseif, $outer_context->include_location, true)
+                        new CodeLocation($statements_analyzer, $elseif, $outer_context->include_location, true),
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
             } else {
                 $outer_context->byref_constraints[$var_id] = $byref_constraint;
@@ -304,7 +304,7 @@ class ElseIfAnalyzer
         $final_actions = ScopeAnalyzer::getControlActions(
             $elseif->stmts,
             $statements_analyzer->node_data,
-            []
+            [],
         );
         // has a return/throw at end
         $has_ending_statements = $final_actions === [ScopeAnalyzer::ACTION_END];
@@ -325,7 +325,7 @@ class ElseIfAnalyzer
                 $outer_context,
                 array_merge($new_stmts_assigned_var_ids, $assigned_in_conditional_var_ids),
                 $new_stmts_possibly_assigned_var_ids,
-                $newly_reconciled_var_ids
+                $newly_reconciled_var_ids,
             );
 
             $reasonable_clause_count = $if_scope->reasonable_clauses->count();
@@ -333,7 +333,7 @@ class ElseIfAnalyzer
             if ($reasonable_clause_count && $reasonable_clause_count < 20_000 && $elseif_clauses->clauses) {
                 $if_scope->reasonable_clauses = $if_scope->reasonable_clauses->combineOrredClauses(
                     $elseif_clauses,
-                    $elseif_cond_id
+                    $elseif_cond_id,
                 );
             } else {
                 $if_scope->reasonable_clauses = ClauseConjunction::empty();
@@ -358,7 +358,7 @@ class ElseIfAnalyzer
                         $statements_analyzer,
                         $statements_analyzer->getTemplateTypeMap() ?: [],
                         $elseif_context->inside_loop,
-                        new CodeLocation($statements_analyzer->getSource(), $elseif, $outer_context->include_location)
+                        new CodeLocation($statements_analyzer->getSource(), $elseif, $outer_context->include_location),
                     );
 
                 $updated_vars = [];
@@ -368,7 +368,7 @@ class ElseIfAnalyzer
                     $implied_outer_context,
                     false,
                     array_keys($negated_elseif_types),
-                    $updated_vars
+                    $updated_vars,
                 );
             }
         }
@@ -376,7 +376,7 @@ class ElseIfAnalyzer
         if (!$has_ending_statements) {
             $vars_possibly_in_scope = array_diff_key(
                 $elseif_context->vars_possibly_in_scope,
-                $outer_context->vars_possibly_in_scope
+                $outer_context->vars_possibly_in_scope,
             );
 
             $possibly_assigned_var_ids = $new_stmts_possibly_assigned_var_ids;
@@ -385,26 +385,26 @@ class ElseIfAnalyzer
                 if (!$has_continue_statement && !$has_break_statement) {
                     $if_scope->new_vars_possibly_in_scope = array_merge(
                         $vars_possibly_in_scope,
-                        $if_scope->new_vars_possibly_in_scope
+                        $if_scope->new_vars_possibly_in_scope,
                     );
                     $if_scope->possibly_assigned_var_ids = array_merge(
                         $possibly_assigned_var_ids,
-                        $if_scope->possibly_assigned_var_ids
+                        $if_scope->possibly_assigned_var_ids,
                     );
                 }
 
                 $elseif_context->loop_scope->vars_possibly_in_scope = array_merge(
                     $vars_possibly_in_scope,
-                    $elseif_context->loop_scope->vars_possibly_in_scope
+                    $elseif_context->loop_scope->vars_possibly_in_scope,
                 );
             } elseif (!$has_leaving_statements) {
                 $if_scope->new_vars_possibly_in_scope = array_merge(
                     $vars_possibly_in_scope,
-                    $if_scope->new_vars_possibly_in_scope
+                    $if_scope->new_vars_possibly_in_scope,
                 );
                 $if_scope->possibly_assigned_var_ids = array_merge(
                     $possibly_assigned_var_ids,
-                    $if_scope->possibly_assigned_var_ids
+                    $if_scope->possibly_assigned_var_ids,
                 );
             }
         }
@@ -424,7 +424,7 @@ class ElseIfAnalyzer
         // Track references set in the elseif to make sure they aren't reused later
         $outer_context->updateReferencesPossiblyFromConfusingScope(
             $elseif_context,
-            $statements_analyzer
+            $statements_analyzer,
         );
 
         return null;

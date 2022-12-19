@@ -148,7 +148,7 @@ class AssertionFinder
                 $codebase,
                 $source,
                 $this_class_name,
-                $inside_negation
+                $inside_negation,
             );
         }
 
@@ -156,7 +156,7 @@ class AssertionFinder
             $var_name = ExpressionIdentifier::getExtendedVarId(
                 $conditional->var,
                 $this_class_name,
-                $source
+                $source,
             );
 
             $candidate_if_types = $inside_conditional
@@ -167,7 +167,7 @@ class AssertionFinder
                     $codebase,
                     $inside_negation,
                     $cache,
-                    $inside_conditional
+                    $inside_conditional,
                 )
                 : [];
 
@@ -185,7 +185,7 @@ class AssertionFinder
         $var_name = ExpressionIdentifier::getExtendedVarId(
             $conditional,
             $this_class_name,
-            $source
+            $source,
         );
 
         if ($var_name) {
@@ -211,7 +211,7 @@ class AssertionFinder
                 $source,
                 $codebase,
                 $cache,
-                $inside_conditional
+                $inside_conditional,
             );
         }
 
@@ -224,7 +224,7 @@ class AssertionFinder
                 $source,
                 $codebase,
                 $cache,
-                $inside_conditional
+                $inside_conditional,
             );
         }
 
@@ -235,7 +235,7 @@ class AssertionFinder
             $var_name = ExpressionIdentifier::getExtendedVarId(
                 $conditional->var,
                 $this_class_name,
-                $source
+                $source,
             );
 
             if ($var_name) {
@@ -253,7 +253,7 @@ class AssertionFinder
             return self::getGreaterAssertions(
                 $conditional,
                 $source,
-                $this_class_name
+                $this_class_name,
             );
         }
 
@@ -263,7 +263,7 @@ class AssertionFinder
             return self::getSmallerAssertions(
                 $conditional,
                 $source,
-                $this_class_name
+                $this_class_name,
             );
         }
 
@@ -273,7 +273,7 @@ class AssertionFinder
                 $this_class_name,
                 $source,
                 $codebase,
-                $inside_negation
+                $inside_negation,
             );
         }
 
@@ -294,7 +294,7 @@ class AssertionFinder
             $var_name = ExpressionIdentifier::getExtendedVarId(
                 $conditional->expr,
                 $this_class_name,
-                $source
+                $source,
             );
 
             if ($var_name) {
@@ -318,7 +318,7 @@ class AssertionFinder
                 $var_name = ExpressionIdentifier::getExtendedVarId(
                     $isset_var,
                     $this_class_name,
-                    $source
+                    $source,
                 );
 
                 if ($var_name) {
@@ -343,7 +343,7 @@ class AssertionFinder
                         $var_name = ExpressionIdentifier::getExtendedVarId(
                             $array_root,
                             $this_class_name,
-                            $source
+                            $source,
                         );
                     }
 
@@ -379,7 +379,7 @@ class AssertionFinder
                 $this_class_name,
                 $source,
                 $codebase,
-                $null_position
+                $null_position,
             );
         }
 
@@ -393,7 +393,7 @@ class AssertionFinder
                 $codebase,
                 $false_position,
                 $cache,
-                $inside_conditional
+                $inside_conditional,
             );
         }
 
@@ -407,7 +407,7 @@ class AssertionFinder
                 $codebase,
                 $true_position,
                 $cache,
-                $inside_conditional
+                $inside_conditional,
             );
         }
 
@@ -419,7 +419,7 @@ class AssertionFinder
                 $this_class_name,
                 $source,
                 $codebase,
-                $empty_array_position
+                $empty_array_position,
             );
         }
 
@@ -430,7 +430,7 @@ class AssertionFinder
                 $conditional,
                 $this_class_name,
                 $source,
-                $gettype_position
+                $gettype_position,
             );
         }
 
@@ -441,7 +441,7 @@ class AssertionFinder
                 $conditional,
                 $this_class_name,
                 $source,
-                $get_debug_type_position
+                $get_debug_type_position,
             );
         }
 
@@ -465,7 +465,7 @@ class AssertionFinder
             $var_name = ExpressionIdentifier::getExtendedVarId(
                 $count_expr->getArgs()[0]->value,
                 $this_class_name,
-                $source
+                $source,
             );
 
             if ($source instanceof StatementsAnalyzer) {
@@ -483,7 +483,7 @@ class AssertionFinder
                         $this_class_name,
                         $other_type,
                         $codebase,
-                        $conditional
+                        $conditional,
                     );
                 }
             }
@@ -510,7 +510,7 @@ class AssertionFinder
                 $conditional,
                 $this_class_name,
                 $source,
-                $getclass_position
+                $getclass_position,
             );
         }
 
@@ -522,7 +522,7 @@ class AssertionFinder
                 $this_class_name,
                 $source,
                 $codebase,
-                $typed_value_position
+                $typed_value_position,
             );
         }
 
@@ -539,9 +539,9 @@ class AssertionFinder
                     new TypeDoesNotContainType(
                         $var_type->getId() . ' cannot be identical to ' . $other_type->getId(),
                         new CodeLocation($source, $conditional),
-                        $var_type->getId() . ' ' . $other_type->getId()
+                        $var_type->getId() . ' ' . $other_type->getId(),
                     ),
-                    $source->getSuppressedIssues()
+                    $source->getSuppressedIssues(),
                 );
             } else {
                 // both side of the Identical can be asserted to the intersection of both
@@ -553,7 +553,7 @@ class AssertionFinder
                     $var_name_left = ExpressionIdentifier::getExtendedVarId(
                         $conditional->left,
                         $this_class_name,
-                        $source
+                        $source,
                     );
 
                     $var_assertion_different = $var_type->getId() !== $intersection_type->getId();
@@ -565,7 +565,7 @@ class AssertionFinder
                     $var_name_right = ExpressionIdentifier::getExtendedVarId(
                         $conditional->right,
                         $this_class_name,
-                        $source
+                        $source,
                     );
 
                     $other_assertion_different = $other_type->getId() !== $intersection_type->getId();
@@ -602,7 +602,7 @@ class AssertionFinder
                 $source,
                 $this_class_name,
                 $codebase,
-                $null_position
+                $null_position,
             );
         }
 
@@ -616,7 +616,7 @@ class AssertionFinder
                 $codebase,
                 $false_position,
                 $cache,
-                $inside_conditional
+                $inside_conditional,
             );
         }
 
@@ -630,7 +630,7 @@ class AssertionFinder
                 $codebase,
                 $true_position,
                 $cache,
-                $inside_conditional
+                $inside_conditional,
             );
         }
 
@@ -642,7 +642,7 @@ class AssertionFinder
                 $this_class_name,
                 $source,
                 $codebase,
-                $empty_array_position
+                $empty_array_position,
             );
         }
 
@@ -653,7 +653,7 @@ class AssertionFinder
                 $conditional,
                 $this_class_name,
                 $source,
-                $gettype_position
+                $gettype_position,
             );
         }
 
@@ -664,7 +664,7 @@ class AssertionFinder
                 $conditional,
                 $this_class_name,
                 $source,
-                $get_debug_type_position
+                $get_debug_type_position,
             );
         }
 
@@ -686,7 +686,7 @@ class AssertionFinder
             $var_name = ExpressionIdentifier::getExtendedVarId(
                 $count_expr->getArgs()[0]->value,
                 $this_class_name,
-                $source
+                $source,
             );
 
             if ($source instanceof StatementsAnalyzer) {
@@ -704,7 +704,7 @@ class AssertionFinder
                         $this_class_name,
                         $other_type,
                         $codebase,
-                        $conditional
+                        $conditional,
                     );
                 }
             }
@@ -731,7 +731,7 @@ class AssertionFinder
                 $conditional,
                 $this_class_name,
                 $source,
-                $getclass_position
+                $getclass_position,
             );
         }
 
@@ -743,7 +743,7 @@ class AssertionFinder
                 $this_class_name,
                 $source,
                 $codebase,
-                $typed_value_position
+                $typed_value_position,
             );
         }
 
@@ -764,7 +764,7 @@ class AssertionFinder
             ? ExpressionIdentifier::getExtendedVarId(
                 $expr->getArgs()[0]->value,
                 $this_class_name,
-                $source
+                $source,
             )
             : null;
 
@@ -782,7 +782,7 @@ class AssertionFinder
             $first_var_name,
             $first_var_type,
             $expr,
-            $negate
+            $negate,
         )) {
             $if_types = $tmp_if_types;
         } elseif ($source instanceof StatementsAnalyzer && self::hasIsACheck($expr, $source)) {
@@ -797,11 +797,11 @@ class AssertionFinder
                 $first_var_name_in_array_argument = ExpressionIdentifier::getExtendedVarId(
                     $expr->getArgs()[0]->value->items[0]->value,
                     $this_class_name,
-                    $source
+                    $source,
                 );
                 if ($first_var_name_in_array_argument) {
                     $if_types[$first_var_name_in_array_argument] = [
-                        [new HasMethod($expr->getArgs()[0]->value->items[1]->value->value)]
+                        [new HasMethod($expr->getArgs()[0]->value->items[1]->value->value)],
                     ];
                 }
             }
@@ -848,7 +848,7 @@ class AssertionFinder
                 $first_var_type,
                 $first_var_name,
                 $source,
-                $this_class_name
+                $this_class_name,
             );
         } elseif (self::hasNonEmptyCountCheck($expr)) {
             if ($first_var_name) {
@@ -876,7 +876,7 @@ class AssertionFinder
         if (!UnionTypeComparator::isContainedBy(
             $codebase,
             $first_var_type,
-            $expected_type
+            $expected_type,
         )) {
             return;
         }
@@ -887,18 +887,18 @@ class AssertionFinder
                     new RedundantConditionGivenDocblockType(
                         'Docblock type ' . $first_var_type . ' always contains ' . $expected_type,
                         new CodeLocation($source, $expr),
-                        $first_var_type . ' ' . $expected_type
+                        $first_var_type . ' ' . $expected_type,
                     ),
-                    $source->getSuppressedIssues()
+                    $source->getSuppressedIssues(),
                 );
             } else {
                 IssueBuffer::maybeAdd(
                     new RedundantCondition(
                         $first_var_type . ' always contains ' . $expected_type,
                         new CodeLocation($source, $expr),
-                        $first_var_type . ' ' . $expected_type
+                        $first_var_type . ' ' . $expected_type,
                     ),
-                    $source->getSuppressedIssues()
+                    $source->getSuppressedIssues(),
                 );
             }
         } else {
@@ -907,18 +907,18 @@ class AssertionFinder
                     new DocblockTypeContradiction(
                         'Docblock type !' . $first_var_type . ' does not contain ' . $expected_type,
                         new CodeLocation($source, $expr),
-                        $first_var_type . ' ' . $expected_type
+                        $first_var_type . ' ' . $expected_type,
                     ),
-                    $source->getSuppressedIssues()
+                    $source->getSuppressedIssues(),
                 );
             } else {
                 IssueBuffer::maybeAdd(
                     new TypeDoesNotContainType(
                         '!' . $first_var_type . ' does not contain ' . $expected_type,
                         new CodeLocation($source, $expr),
-                        $first_var_type . ' ' . $expected_type
+                        $first_var_type . ' ' . $expected_type,
                     ),
-                    $source->getSuppressedIssues()
+                    $source->getSuppressedIssues(),
                 );
             }
         }
@@ -926,7 +926,6 @@ class AssertionFinder
 
     /**
      * @param  PhpParser\Node\Expr\FuncCall|PhpParser\Node\Expr\MethodCall|PhpParser\Node\Expr\StaticCall $expr
-     *
      * @return list<non-empty-array<string, non-empty-list<non-empty-list<Assertion>>>>
      */
     protected static function processCustomAssertion(
@@ -949,7 +948,7 @@ class AssertionFinder
             ? ExpressionIdentifier::getExtendedVarId(
                 $expr->getArgs()[0]->value,
                 $this_class_name,
-                $source
+                $source,
             )
             : null;
 
@@ -973,8 +972,8 @@ class AssertionFinder
                                 $rule_type,
                                 null,
                                 null,
-                                null
-                            )[0]
+                                null,
+                            )[0],
                         );
                     } else {
                         $newRules []= $rule;
@@ -990,7 +989,7 @@ class AssertionFinder
                         $var_name = ExpressionIdentifier::getExtendedVarId(
                             $expr->getArgs()[$assertion->var_id]->value,
                             $this_class_name,
-                            $source
+                            $source,
                         );
                     }
 
@@ -1002,8 +1001,8 @@ class AssertionFinder
                         IssueBuffer::maybeAdd(
                             new InvalidDocblock(
                                 'Assertion of $this can be done only on method of a class',
-                                new CodeLocation($source, $expr)
-                            )
+                                new CodeLocation($source, $expr),
+                            ),
                         );
                         continue;
                     }
@@ -1011,7 +1010,7 @@ class AssertionFinder
                     $var_id = ExpressionIdentifier::getExtendedVarId(
                         $expr->var,
                         $this_class_name,
-                        $source
+                        $source,
                     );
 
                     if ($var_id) {
@@ -1032,8 +1031,8 @@ class AssertionFinder
                             IssueBuffer::maybeAdd(
                                 new InvalidDocblock(
                                     'Variable '.$var_id.' is not an argument so cannot be asserted',
-                                    new CodeLocation($source, $expr)
-                                )
+                                    new CodeLocation($source, $expr),
+                                ),
                             );
                             continue;
                         }
@@ -1048,8 +1047,8 @@ class AssertionFinder
                                 new InvalidDocblock(
                                     'Variable being asserted as argument ' . ($var_id+1) .  ' cannot be found
                                     in local scope',
-                                    new CodeLocation($source, $expr)
-                                )
+                                    new CodeLocation($source, $expr),
+                                ),
                             );
                             continue;
                         }
@@ -1059,12 +1058,12 @@ class AssertionFinder
                                 $property,
                                 $source->getNodeTypeProvider(),
                                 $source->getCodebase()->classlike_storage_provider,
-                                $arg_value
+                                $arg_value,
                             );
 
                             if (null !== $failedMessage) {
                                 IssueBuffer::maybeAdd(
-                                    new InvalidDocblock($failedMessage, new CodeLocation($source, $expr))
+                                    new InvalidDocblock($failedMessage, new CodeLocation($source, $expr)),
                                 );
                                 continue;
                             }
@@ -1081,8 +1080,8 @@ class AssertionFinder
                         IssueBuffer::maybeAdd(
                             new InvalidDocblock(
                                 sprintf('Assertion of variable "%s" cannot be recognized', $assertion->var_id),
-                                new CodeLocation($source, $expr)
-                            )
+                                new CodeLocation($source, $expr),
+                            ),
                         );
                         continue;
                     }
@@ -1113,8 +1112,8 @@ class AssertionFinder
                                 $rule_type,
                                 null,
                                 null,
-                                null
-                            )[0]
+                                null,
+                            )[0],
                         );
                     } else {
                         $newRules []= $rule;
@@ -1130,7 +1129,7 @@ class AssertionFinder
                         $var_name = ExpressionIdentifier::getExtendedVarId(
                             $expr->getArgs()[$assertion->var_id]->value,
                             $this_class_name,
-                            $source
+                            $source,
                         );
                     }
 
@@ -1141,7 +1140,7 @@ class AssertionFinder
                     $var_id = ExpressionIdentifier::getExtendedVarId(
                         $expr->var,
                         $this_class_name,
-                        $source
+                        $source,
                     );
 
                     if ($var_id) {
@@ -1161,8 +1160,8 @@ class AssertionFinder
                             IssueBuffer::maybeAdd(
                                 new InvalidDocblock(
                                     'Variable '.$var_id.' is not an argument so cannot be asserted',
-                                    new CodeLocation($source, $expr)
-                                )
+                                    new CodeLocation($source, $expr),
+                                ),
                             );
                             continue;
                         }
@@ -1176,8 +1175,8 @@ class AssertionFinder
                                 new InvalidDocblock(
                                     'Variable being asserted as argument ' . ($var_id+1) .  ' cannot be found
                                      in local scope',
-                                    new CodeLocation($source, $expr)
-                                )
+                                    new CodeLocation($source, $expr),
+                                ),
                             );
                             continue;
                         }
@@ -1187,12 +1186,12 @@ class AssertionFinder
                                 $property,
                                 $source->getNodeTypeProvider(),
                                 $source->getCodebase()->classlike_storage_provider,
-                                $arg_value
+                                $arg_value,
                             );
 
                             if (null !== $failedMessage) {
                                 IssueBuffer::maybeAdd(
-                                    new InvalidDocblock($failedMessage, new CodeLocation($source, $expr))
+                                    new InvalidDocblock($failedMessage, new CodeLocation($source, $expr)),
                                 );
                                 continue;
                             }
@@ -1213,8 +1212,8 @@ class AssertionFinder
                         IssueBuffer::maybeAdd(
                             new InvalidDocblock(
                                 sprintf('Assertion of variable "%s" cannot be recognized', $assertion->var_id),
-                                new CodeLocation($source, $expr)
-                            )
+                                new CodeLocation($source, $expr),
+                            ),
                         );
                     }
                 }
@@ -1240,7 +1239,7 @@ class AssertionFinder
             if (!in_array(strtolower($stmt->class->parts[0]), ['self', 'static', 'parent'], true)) {
                 $instanceof_class = ClassLikeAnalyzer::getFQCLNFromNameObject(
                     $stmt->class,
-                    $source->getAliases()
+                    $source->getAliases(),
                 );
 
                 if ($source instanceof StatementsAnalyzer) {
@@ -1276,12 +1275,12 @@ class AssertionFinder
                             new TTemplateParam(
                                 $atomic_type->param_name,
                                 new Union([$atomic_type->as_type ?: new TObject()]),
-                                $atomic_type->defining_class
-                            )
+                                $atomic_type->defining_class,
+                            ),
                         );
                     } elseif ($atomic_type instanceof TClassString && $atomic_type->as !== 'object') {
                         $literal_class_strings[] = new IsType(
-                            $atomic_type->as_type ?: new TNamedObject($atomic_type->as)
+                            $atomic_type->as_type ?: new TNamedObject($atomic_type->as),
                         );
                     }
                 }
@@ -1932,7 +1931,7 @@ class AssertionFinder
                 || isset($source->getAliases()->functions[$function_name]) //or it is imported
                 || ($codebase && !$codebase->functions->functionExists(
                     $source,
-                    strtolower($source->getNamespace()."\\".$function_name)
+                    strtolower($source->getNamespace()."\\".$function_name),
                 )) //or this function name does not exist in current namespace
             )
         ) {
@@ -1948,7 +1947,7 @@ class AssertionFinder
                     $expr,
                     $source,
                     $codebase,
-                    $negate
+                    $negate,
                 );
             }
         }
@@ -2080,7 +2079,7 @@ class AssertionFinder
         $var_name = ExpressionIdentifier::getExtendedVarId(
             $base_conditional,
             $this_class_name,
-            $source
+            $source,
         );
 
         if ($var_name) {
@@ -2105,29 +2104,29 @@ class AssertionFinder
                 if (!UnionTypeComparator::isContainedBy(
                     $codebase,
                     $var_type,
-                    $null_type
+                    $null_type,
                 ) && !UnionTypeComparator::isContainedBy(
                     $codebase,
                     $null_type,
-                    $var_type
+                    $var_type,
                 )) {
                     if ($var_type->from_docblock) {
                         IssueBuffer::maybeAdd(
                             new RedundantConditionGivenDocblockType(
                                 'Docblock-defined type ' . $var_type . ' can never contain null',
                                 new CodeLocation($source, $conditional),
-                                $var_type->getId() . ' null'
+                                $var_type->getId() . ' null',
                             ),
-                            $source->getSuppressedIssues()
+                            $source->getSuppressedIssues(),
                         );
                     } else {
                         IssueBuffer::maybeAdd(
                             new RedundantCondition(
                                 $var_type . ' can never contain null',
                                 new CodeLocation($source, $conditional),
-                                $var_type->getId() . ' null'
+                                $var_type->getId() . ' null',
                             ),
-                            $source->getSuppressedIssues()
+                            $source->getSuppressedIssues(),
                         );
                     }
                 }
@@ -2163,7 +2162,7 @@ class AssertionFinder
         $var_name = ExpressionIdentifier::getExtendedVarId(
             $base_conditional,
             $this_class_name,
-            $source
+            $source,
         );
 
         if ($var_name) {
@@ -2189,7 +2188,7 @@ class AssertionFinder
                     $codebase,
                     false,
                     $cache,
-                    $inside_conditional
+                    $inside_conditional,
                 );
 
                 if ($source instanceof StatementsAnalyzer && $cache) {
@@ -2214,9 +2213,9 @@ class AssertionFinder
                 IssueBuffer::maybeAdd(
                     new RedundantIdentityWithTrue(
                         'The "!== false" part of this comparison is redundant',
-                        new CodeLocation($source, $conditional)
+                        new CodeLocation($source, $conditional),
                     ),
-                    $source->getSuppressedIssues()
+                    $source->getSuppressedIssues(),
                 );
             }
 
@@ -2225,29 +2224,29 @@ class AssertionFinder
             if (!UnionTypeComparator::isContainedBy(
                 $codebase,
                 $var_type,
-                $false_type
+                $false_type,
             ) && !UnionTypeComparator::isContainedBy(
                 $codebase,
                 $false_type,
-                $var_type
+                $var_type,
             )) {
                 if ($var_type->from_docblock) {
                     IssueBuffer::maybeAdd(
                         new RedundantConditionGivenDocblockType(
                             'Docblock-defined type ' . $var_type . ' can never contain false',
                             new CodeLocation($source, $conditional),
-                            $var_type->getId() . ' false'
+                            $var_type->getId() . ' false',
                         ),
-                        $source->getSuppressedIssues()
+                        $source->getSuppressedIssues(),
                     );
                 } else {
                     IssueBuffer::maybeAdd(
                         new RedundantCondition(
                             $var_type . ' can never contain false',
                             new CodeLocation($source, $conditional),
-                            $var_type->getId() . ' false'
+                            $var_type->getId() . ' false',
                         ),
-                        $source->getSuppressedIssues()
+                        $source->getSuppressedIssues(),
                     );
                 }
             }
@@ -2285,13 +2284,13 @@ class AssertionFinder
                 $this_class_name,
                 $source,
                 $codebase,
-                true
+                true,
             );
         } else {
             $var_name = ExpressionIdentifier::getExtendedVarId(
                 $base_conditional,
                 $this_class_name,
-                $source
+                $source,
             );
 
             if ($var_name) {
@@ -2317,7 +2316,7 @@ class AssertionFinder
                         $codebase,
                         false,
                         $cache,
-                        $inside_conditional
+                        $inside_conditional,
                     );
 
                     if ($source instanceof StatementsAnalyzer && $cache) {
@@ -2347,29 +2346,29 @@ class AssertionFinder
                 if (!UnionTypeComparator::isContainedBy(
                     $codebase,
                     $var_type,
-                    $true_type
+                    $true_type,
                 ) && !UnionTypeComparator::isContainedBy(
                     $codebase,
                     $true_type,
-                    $var_type
+                    $var_type,
                 )) {
                     if ($var_type->from_docblock) {
                         IssueBuffer::maybeAdd(
                             new RedundantConditionGivenDocblockType(
                                 'Docblock-defined type ' . $var_type . ' can never contain true',
                                 new CodeLocation($source, $conditional),
-                                $var_type->getId() . ' true'
+                                $var_type->getId() . ' true',
                             ),
-                            $source->getSuppressedIssues()
+                            $source->getSuppressedIssues(),
                         );
                     } else {
                         IssueBuffer::maybeAdd(
                             new RedundantCondition(
                                 $var_type . ' can never contain ' . $true_type,
                                 new CodeLocation($source, $conditional),
-                                $var_type->getId() . ' true'
+                                $var_type->getId() . ' true',
                             ),
-                            $source->getSuppressedIssues()
+                            $source->getSuppressedIssues(),
                         );
                     }
                 }
@@ -2403,7 +2402,7 @@ class AssertionFinder
         $var_name = ExpressionIdentifier::getExtendedVarId(
             $base_conditional,
             $this_class_name,
-            $source
+            $source,
         );
 
         if ($var_name) {
@@ -2424,29 +2423,29 @@ class AssertionFinder
                 if (!UnionTypeComparator::isContainedBy(
                     $codebase,
                     $var_type,
-                    $empty_array_type
+                    $empty_array_type,
                 ) && !UnionTypeComparator::isContainedBy(
                     $codebase,
                     $empty_array_type,
-                    $var_type
+                    $var_type,
                 )) {
                     if ($var_type->from_docblock) {
                         IssueBuffer::maybeAdd(
                             new RedundantConditionGivenDocblockType(
                                 'Docblock-defined type ' . $var_type->getId() . ' can never contain null',
                                 new CodeLocation($source, $conditional),
-                                $var_type->getId() . ' null'
+                                $var_type->getId() . ' null',
                             ),
-                            $source->getSuppressedIssues()
+                            $source->getSuppressedIssues(),
                         );
                     } else {
                         IssueBuffer::maybeAdd(
                             new RedundantCondition(
                                 $var_type->getId() . ' can never contain null',
                                 new CodeLocation($source, $conditional),
-                                $var_type->getId() . ' null'
+                                $var_type->getId() . ' null',
                             ),
-                            $source->getSuppressedIssues()
+                            $source->getSuppressedIssues(),
                         );
                     }
                 }
@@ -2482,7 +2481,7 @@ class AssertionFinder
         $var_name = ExpressionIdentifier::getExtendedVarId(
             $gettype_expr->getArgs()[0]->value,
             $this_class_name,
-            $source
+            $source,
         );
 
         if ($whichclass_expr instanceof PhpParser\Node\Scalar\String_) {
@@ -2492,7 +2491,7 @@ class AssertionFinder
         ) {
             $var_type = ClassLikeAnalyzer::getFQCLNFromNameObject(
                 $whichclass_expr->class,
-                $source->getAliases()
+                $source->getAliases(),
             );
         } else {
             throw new UnexpectedValueException('Shouldn’t get here');
@@ -2502,8 +2501,8 @@ class AssertionFinder
             IssueBuffer::maybeAdd(
                 new UnevaluatedCode(
                     'gettype cannot return this value',
-                    new CodeLocation($source, $whichclass_expr)
-                )
+                    new CodeLocation($source, $whichclass_expr),
+                ),
             );
         } else {
             if ($var_name && $var_type) {
@@ -2548,7 +2547,7 @@ class AssertionFinder
         $var_name = ExpressionIdentifier::getExtendedVarId(
             $get_debug_type_expr->getArgs()[0]->value,
             $this_class_name,
-            $source
+            $source,
         );
 
         if ($whichclass_expr instanceof PhpParser\Node\Scalar\String_) {
@@ -2558,7 +2557,7 @@ class AssertionFinder
         ) {
             $var_type = ClassLikeAnalyzer::getFQCLNFromNameObject(
                 $whichclass_expr->class,
-                $source->getAliases()
+                $source->getAliases(),
             );
         } else {
             throw new UnexpectedValueException('Shouldn’t get here');
@@ -2605,7 +2604,7 @@ class AssertionFinder
             $var_name = ExpressionIdentifier::getExtendedVarId(
                 $getclass_expr->getArgs()[0]->value,
                 $this_class_name,
-                $source
+                $source,
             );
         } elseif ($getclass_expr instanceof PhpParser\Node\Expr\ClassConstFetch
             && $getclass_expr->class instanceof PhpParser\Node\Expr
@@ -2613,7 +2612,7 @@ class AssertionFinder
             $var_name = ExpressionIdentifier::getExtendedVarId(
                 $getclass_expr->class,
                 $this_class_name,
-                $source
+                $source,
             );
         } else {
             $var_name = '$this';
@@ -2626,7 +2625,7 @@ class AssertionFinder
         ) {
             $var_type = ClassLikeAnalyzer::getFQCLNFromNameObject(
                 $whichclass_expr->class,
-                $source->getAliases()
+                $source->getAliases(),
             );
 
             if ($var_type === 'self' || $var_type === 'static') {
@@ -2644,8 +2643,8 @@ class AssertionFinder
                             new TTemplateParam(
                                 $type_part->param_name,
                                 new Union([$type_part->as_type ?: new TObject()]),
-                                $type_part->defining_class
-                            )
+                                $type_part->defining_class,
+                            ),
                         )]];
                     }
                 }
@@ -2654,18 +2653,16 @@ class AssertionFinder
             return $if_types ? [$if_types] : [];
         }
 
-        if ($var_type
-            && ClassLikeAnalyzer::checkFullyQualifiedClassLikeName(
+        if (!$var_type
+            || ClassLikeAnalyzer::checkFullyQualifiedClassLikeName(
                 $source,
                 $var_type,
                 new CodeLocation($source, $whichclass_expr),
                 null,
                 null,
-                $source->getSuppressedIssues()
-            ) === false
+                $source->getSuppressedIssues(),
+            ) !== false
         ) {
-            // fall through
-        } else {
             if ($var_name && $var_type) {
                 $if_types[$var_name] = [[new IsClassNotEqual($var_type)]];
             }
@@ -2691,7 +2688,7 @@ class AssertionFinder
             $var_name = ExpressionIdentifier::getExtendedVarId(
                 $conditional->left,
                 $this_class_name,
-                $source
+                $source,
             );
 
             $other_type = $source->node_data->getType($conditional->left);
@@ -2700,7 +2697,7 @@ class AssertionFinder
             $var_name = ExpressionIdentifier::getExtendedVarId(
                 $conditional->right,
                 $this_class_name,
-                $source
+                $source,
             );
 
             $var_type = $source->node_data->getType($conditional->left);
@@ -2740,7 +2737,7 @@ class AssertionFinder
                     $this_class_name,
                     $other_type,
                     $codebase,
-                    $conditional
+                    $conditional,
                 );
             }
         }
@@ -2772,7 +2769,7 @@ class AssertionFinder
         $var_name = ExpressionIdentifier::getExtendedVarId(
             $base_conditional,
             $this_class_name,
-            $source
+            $source,
         );
 
         if ($var_name && $base_conditional instanceof PhpParser\Node\Expr\Assign) {
@@ -2797,29 +2794,29 @@ class AssertionFinder
             if (!UnionTypeComparator::isContainedBy(
                 $codebase,
                 $var_type,
-                $null_type
+                $null_type,
             ) && !UnionTypeComparator::isContainedBy(
                 $codebase,
                 $null_type,
-                $var_type
+                $var_type,
             )) {
                 if ($var_type->from_docblock) {
                     IssueBuffer::maybeAdd(
                         new DocblockTypeContradiction(
                             $var_type . ' does not contain null',
                             new CodeLocation($source, $conditional),
-                            $var_type . ' null'
+                            $var_type . ' null',
                         ),
-                        $source->getSuppressedIssues()
+                        $source->getSuppressedIssues(),
                     );
                 } else {
                     IssueBuffer::maybeAdd(
                         new TypeDoesNotContainNull(
                             $var_type . ' does not contain null',
                             new CodeLocation($source, $conditional),
-                            $var_type->getId()
+                            $var_type->getId(),
                         ),
-                        $source->getSuppressedIssues()
+                        $source->getSuppressedIssues(),
                     );
                 }
             }
@@ -2857,13 +2854,13 @@ class AssertionFinder
                 $this_class_name,
                 $source,
                 $codebase,
-                false
+                false,
             );
         } else {
             $var_name = ExpressionIdentifier::getExtendedVarId(
                 $base_conditional,
                 $this_class_name,
-                $source
+                $source,
             );
 
             if ($var_name) {
@@ -2889,7 +2886,7 @@ class AssertionFinder
                         $codebase,
                         false,
                         $cache,
-                        $inside_conditional
+                        $inside_conditional,
                     );
 
                     if ($source instanceof StatementsAnalyzer && $cache) {
@@ -2917,9 +2914,9 @@ class AssertionFinder
                 IssueBuffer::maybeAdd(
                     new RedundantIdentityWithTrue(
                         'The "=== true" part of this comparison is redundant',
-                        new CodeLocation($source, $conditional)
+                        new CodeLocation($source, $conditional),
                     ),
-                    $source->getSuppressedIssues()
+                    $source->getSuppressedIssues(),
                 );
             }
 
@@ -2928,25 +2925,25 @@ class AssertionFinder
             if (!UnionTypeComparator::canExpressionTypesBeIdentical(
                 $codebase,
                 $true_type,
-                $var_type
+                $var_type,
             )) {
                 if ($var_type->from_docblock) {
                     IssueBuffer::maybeAdd(
                         new DocblockTypeContradiction(
                             $var_type . ' does not contain true',
                             new CodeLocation($source, $conditional),
-                            $var_type . ' true'
+                            $var_type . ' true',
                         ),
-                        $source->getSuppressedIssues()
+                        $source->getSuppressedIssues(),
                     );
                 } else {
                     IssueBuffer::maybeAdd(
                         new TypeDoesNotContainType(
                             $var_type . ' does not contain true',
                             new CodeLocation($source, $conditional),
-                            $var_type . ' true'
+                            $var_type . ' true',
                         ),
-                        $source->getSuppressedIssues()
+                        $source->getSuppressedIssues(),
                     );
                 }
             }
@@ -2984,13 +2981,13 @@ class AssertionFinder
                 $this_class_name,
                 $source,
                 $codebase,
-                true
+                true,
             );
         } else {
             $var_name = ExpressionIdentifier::getExtendedVarId(
                 $base_conditional,
                 $this_class_name,
-                $source
+                $source,
             );
 
             if ($var_name) {
@@ -3016,7 +3013,7 @@ class AssertionFinder
                         $codebase,
                         false,
                         $cache,
-                        $inside_conditional
+                        $inside_conditional,
                     );
 
                     if ($source instanceof StatementsAnalyzer && $cache) {
@@ -3046,25 +3043,25 @@ class AssertionFinder
                 if (!UnionTypeComparator::canExpressionTypesBeIdentical(
                     $codebase,
                     $false_type,
-                    $var_type
+                    $var_type,
                 )) {
                     if ($var_type->from_docblock) {
                         IssueBuffer::maybeAdd(
                             new DocblockTypeContradiction(
                                 $var_type . ' does not contain false',
                                 new CodeLocation($source, $conditional),
-                                $var_type . ' false'
+                                $var_type . ' false',
                             ),
-                            $source->getSuppressedIssues()
+                            $source->getSuppressedIssues(),
                         );
                     } else {
                         IssueBuffer::maybeAdd(
                             new TypeDoesNotContainType(
                                 $var_type . ' does not contain false',
                                 new CodeLocation($source, $conditional),
-                                $var_type . ' false'
+                                $var_type . ' false',
                             ),
-                            $source->getSuppressedIssues()
+                            $source->getSuppressedIssues(),
                         );
                     }
                 }
@@ -3098,7 +3095,7 @@ class AssertionFinder
         $var_name = ExpressionIdentifier::getExtendedVarId(
             $base_conditional,
             $this_class_name,
-            $source
+            $source,
         );
 
         if ($var_name) {
@@ -3119,25 +3116,25 @@ class AssertionFinder
             if (!UnionTypeComparator::canExpressionTypesBeIdentical(
                 $codebase,
                 $empty_array_type,
-                $var_type
+                $var_type,
             )) {
                 if ($var_type->from_docblock) {
                     IssueBuffer::maybeAdd(
                         new DocblockTypeContradiction(
                             $var_type . ' does not contain an empty array',
                             new CodeLocation($source, $conditional),
-                            $var_type . ' !== []'
+                            $var_type . ' !== []',
                         ),
-                        $source->getSuppressedIssues()
+                        $source->getSuppressedIssues(),
                     );
                 } else {
                     IssueBuffer::maybeAdd(
                         new TypeDoesNotContainType(
                             $var_type . ' does not contain empty array',
                             new CodeLocation($source, $conditional),
-                            $var_type . ' !== []'
+                            $var_type . ' !== []',
                         ),
-                        $source->getSuppressedIssues()
+                        $source->getSuppressedIssues(),
                     );
                 }
             }
@@ -3172,7 +3169,7 @@ class AssertionFinder
         $var_name = ExpressionIdentifier::getExtendedVarId(
             $gettype_expr->getArgs()[0]->value,
             $this_class_name,
-            $source
+            $source,
         );
 
         /** @var PhpParser\Node\Scalar\String_ $string_expr */
@@ -3182,8 +3179,8 @@ class AssertionFinder
             IssueBuffer::maybeAdd(
                 new UnevaluatedCode(
                     'gettype cannot return this value',
-                    new CodeLocation($source, $string_expr)
-                )
+                    new CodeLocation($source, $string_expr),
+                ),
             );
         } else {
             if ($var_name && $var_type) {
@@ -3234,7 +3231,7 @@ class AssertionFinder
         $var_name = ExpressionIdentifier::getExtendedVarId(
             $get_debug_type_expr->getArgs()[0]->value,
             $this_class_name,
-            $source
+            $source,
         );
 
         if ($whichclass_expr instanceof PhpParser\Node\Scalar\String_) {
@@ -3244,7 +3241,7 @@ class AssertionFinder
         ) {
             $var_type = ClassLikeAnalyzer::getFQCLNFromNameObject(
                 $whichclass_expr->class,
-                $source->getAliases()
+                $source->getAliases(),
             );
         } else {
             throw new UnexpectedValueException('Shouldn’t get here');
@@ -3297,7 +3294,7 @@ class AssertionFinder
             $var_name = ExpressionIdentifier::getExtendedVarId(
                 $getclass_expr->getArgs()[0]->value,
                 $this_class_name,
-                $source
+                $source,
             );
         } elseif ($getclass_expr instanceof PhpParser\Node\Expr\ClassConstFetch
             && $getclass_expr->class instanceof PhpParser\Node\Expr
@@ -3305,7 +3302,7 @@ class AssertionFinder
             $var_name = ExpressionIdentifier::getExtendedVarId(
                 $getclass_expr->class,
                 $this_class_name,
-                $source
+                $source,
             );
         } else {
             $var_name = '$this';
@@ -3316,7 +3313,7 @@ class AssertionFinder
         ) {
             $var_type = ClassLikeAnalyzer::getFQCLNFromNameObject(
                 $whichclass_expr->class,
-                $source->getAliases()
+                $source->getAliases(),
             );
 
             if ($var_type === 'self' || $var_type === 'static') {
@@ -3333,7 +3330,7 @@ class AssertionFinder
                     null,
                     null,
                     $source->getSuppressedIssues(),
-                    new ClassLikeNameOptions(true)
+                    new ClassLikeNameOptions(true),
                 ) === false
                 ) {
                     return [];
@@ -3355,8 +3352,8 @@ class AssertionFinder
                                 $type_part->as_type
                                     ? new Union([$type_part->as_type])
                                     : Type::getObject(),
-                                $type_part->defining_class
-                            ))
+                                $type_part->defining_class,
+                            )),
                         ]];
                     }
                 }
@@ -3383,13 +3380,13 @@ class AssertionFinder
             $var_name = ExpressionIdentifier::getExtendedVarId(
                 $conditional->left,
                 $this_class_name,
-                $source
+                $source,
             );
 
             $other_var_name = ExpressionIdentifier::getExtendedVarId(
                 $conditional->right,
                 $this_class_name,
-                $source
+                $source,
             );
 
             $other_type = $source->node_data->getType($conditional->left);
@@ -3398,13 +3395,13 @@ class AssertionFinder
             $var_name = ExpressionIdentifier::getExtendedVarId(
                 $conditional->right,
                 $this_class_name,
-                $source
+                $source,
             );
 
             $other_var_name = ExpressionIdentifier::getExtendedVarId(
                 $conditional->left,
                 $this_class_name,
-                $source
+                $source,
             );
 
             $var_type = $source->node_data->getType($conditional->left);
@@ -3469,7 +3466,7 @@ class AssertionFinder
                 $this_class_name,
                 $other_type,
                 $codebase,
-                $conditional
+                $conditional,
             );
         }
 
@@ -3477,8 +3474,6 @@ class AssertionFinder
     }
 
     /**
-     * @param PhpParser\Node\Expr\FuncCall $expr
-     * @param StatementsAnalyzer $source
      * @return list<non-empty-array<string, non-empty-list<non-empty-list<Assertion>>>>
      */
     private static function getIsaAssertions(
@@ -3556,8 +3551,8 @@ class AssertionFinder
                         $object = new TNamedObject(
                             ClassLikeAnalyzer::getFQCLNFromNameObject(
                                 $class_node,
-                                $source->getAliases()
-                            )
+                                $source->getAliases(),
+                            ),
                         );
                         $if_types[$first_var_name] = [[new IsAClass($object, $third_arg_value === 'true')]];
                     }
@@ -3583,9 +3578,6 @@ class AssertionFinder
     }
 
     /**
-     * @param PhpParser\Node\Expr\FuncCall $expr
-     * @param StatementsAnalyzer $source
-     * @param string|null $first_var_name
      * @return list<non-empty-array<string, non-empty-list<non-empty-list<Assertion>>>>
      */
     private static function getInarrayAssertions(
@@ -3663,9 +3655,6 @@ class AssertionFinder
     }
 
     /**
-     * @param PhpParser\Node\Expr\FuncCall $expr
-     * @param Union|null $first_var_type
-     * @param string|null $first_var_name
      * @return list<non-empty-array<string, non-empty-list<non-empty-list<Assertion>>>>
      */
     private static function getArrayKeyExistsAssertions(
@@ -3738,7 +3727,7 @@ class AssertionFinder
                 ? ExpressionIdentifier::getExtendedVarId(
                     $expr->getArgs()[1]->value,
                     $this_class_name,
-                    $source
+                    $source,
                 )
                 : null;
 
@@ -3820,7 +3809,7 @@ class AssertionFinder
         $superior_value_position = self::hasSuperiorNumberCheck(
             $source,
             $conditional,
-            $superior_value_comparison
+            $superior_value_comparison,
         );
 
         if ($count_equality_position) {
@@ -3834,7 +3823,7 @@ class AssertionFinder
             $var_name = ExpressionIdentifier::getExtendedVarId(
                 $counted_expr->getArgs()[0]->value,
                 $this_class_name,
-                $source
+                $source,
             );
 
             if ($var_name) {
@@ -3863,7 +3852,7 @@ class AssertionFinder
             $var_name = ExpressionIdentifier::getExtendedVarId(
                 $count_expr->getArgs()[0]->value,
                 $this_class_name,
-                $source
+                $source,
             );
 
             if ($var_name) {
@@ -3882,13 +3871,13 @@ class AssertionFinder
                 $var_name = ExpressionIdentifier::getExtendedVarId(
                     $conditional->left,
                     $this_class_name,
-                    $source
+                    $source,
                 );
             } else {
                 $var_name = ExpressionIdentifier::getExtendedVarId(
                     $conditional->right,
                     $this_class_name,
-                    $source
+                    $source,
                 );
             }
 
@@ -3932,7 +3921,7 @@ class AssertionFinder
         $inferior_value_position = self::hasInferiorNumberCheck(
             $source,
             $conditional,
-            $inferior_value_comparison
+            $inferior_value_comparison,
         );
 
         if ($count_equality_position) {
@@ -3946,7 +3935,7 @@ class AssertionFinder
             $var_name = ExpressionIdentifier::getExtendedVarId(
                 $count_expr->getArgs()[0]->value,
                 $this_class_name,
-                $source
+                $source,
             );
 
             if ($var_name) {
@@ -3971,7 +3960,7 @@ class AssertionFinder
             $var_name = ExpressionIdentifier::getExtendedVarId(
                 $count_expr->getArgs()[0]->value,
                 $this_class_name,
-                $source
+                $source,
             );
 
             if ($var_name) {
@@ -3990,13 +3979,13 @@ class AssertionFinder
                 $var_name = ExpressionIdentifier::getExtendedVarId(
                     $conditional->left,
                     $this_class_name,
-                    $source
+                    $source,
                 );
             } else {
                 $var_name = ExpressionIdentifier::getExtendedVarId(
                     $conditional->right,
                     $this_class_name,
-                    $source
+                    $source,
                 );
             }
 
@@ -4041,7 +4030,7 @@ class AssertionFinder
             $var_name = ExpressionIdentifier::getExtendedVarId(
                 $conditional->expr,
                 $this_class_name,
-                $source
+                $source,
             );
 
             if ($var_name) {
@@ -4072,7 +4061,7 @@ class AssertionFinder
                         if (!UnionTypeComparator::canExpressionTypesBeIdentical(
                             $codebase,
                             $instanceof_type,
-                            $var_type
+                            $var_type,
                         )) {
                             if ($var_type->from_docblock) {
                                 IssueBuffer::maybeAdd(
@@ -4080,9 +4069,9 @@ class AssertionFinder
                                         $var_type->getId() . ' does not contain '
                                         . $instanceof_type->getId(),
                                         new CodeLocation($source, $conditional),
-                                        $var_type->getId() . ' ' . $instanceof_type->getId()
+                                        $var_type->getId() . ' ' . $instanceof_type->getId(),
                                     ),
-                                    $source->getSuppressedIssues()
+                                    $source->getSuppressedIssues(),
                                 );
                             } else {
                                 IssueBuffer::maybeAdd(
@@ -4090,9 +4079,9 @@ class AssertionFinder
                                         $var_type->getId() . ' cannot be identical to '
                                         . $instanceof_type->getId(),
                                         new CodeLocation($source, $conditional),
-                                        $var_type->getId() . ' ' . $instanceof_type->getId()
+                                        $var_type->getId() . ' ' . $instanceof_type->getId(),
                                     ),
-                                    $source->getSuppressedIssues()
+                                    $source->getSuppressedIssues(),
                                 );
                             }
                         }
@@ -4127,16 +4116,16 @@ class AssertionFinder
         } elseif (!UnionTypeComparator::canExpressionTypesBeIdentical(
             $codebase,
             $other_type,
-            $var_type
+            $var_type,
         )) {
             if ($var_type->from_docblock || $other_type->from_docblock) {
                 IssueBuffer::maybeAdd(
                     new DocblockTypeContradiction(
                         $var_type->getId() . ' does not contain ' . $other_type->getId(),
                         new CodeLocation($source, $conditional),
-                        $var_type->getId() . ' ' . $other_type->getId()
+                        $var_type->getId() . ' ' . $other_type->getId(),
                     ),
-                    $source->getSuppressedIssues()
+                    $source->getSuppressedIssues(),
                 );
             } else {
                 if ($conditional instanceof NotEqual || $conditional instanceof NotIdentical) {
@@ -4144,18 +4133,18 @@ class AssertionFinder
                         new RedundantCondition(
                             $var_type->getId() . ' can never contain ' . $other_type->getId(),
                             new CodeLocation($source, $conditional),
-                            $var_type->getId() . ' ' . $other_type->getId()
+                            $var_type->getId() . ' ' . $other_type->getId(),
                         ),
-                        $source->getSuppressedIssues()
+                        $source->getSuppressedIssues(),
                     );
                 } else {
                     IssueBuffer::maybeAdd(
                         new TypeDoesNotContainType(
                             $var_type->getId() . ' cannot be identical to ' . $other_type->getId(),
                             new CodeLocation($source, $conditional),
-                            $var_type->getId() . ' ' . $other_type->getId()
+                            $var_type->getId() . ' ' . $other_type->getId(),
                         ),
-                        $source->getSuppressedIssues()
+                        $source->getSuppressedIssues(),
                     );
                 }
             }
@@ -4190,7 +4179,7 @@ class AssertionFinder
                     return sprintf(
                         'Property %s is not defined on variable %s so the assertion cannot be applied',
                         $property,
-                        $name
+                        $name,
                     );
                 }
 

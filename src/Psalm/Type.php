@@ -485,9 +485,9 @@ abstract class Type
     }
 
     private static ?Union $listKey = null;
+
     /**
      * @psalm-pure
-     * @param int<1, max>|null $max_count
      */
     public static function getListKey(): Union
     {

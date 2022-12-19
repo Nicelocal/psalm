@@ -120,21 +120,20 @@ class ArrayFunctionArgumentsAnalyzer
                     $min_closure_param_count,
                     $max_closure_param_count,
                     $array_arg_types,
-                    $check_functions
+                    $check_functions,
                 );
                 $new []= $closure_type;
             }
 
             $statements_analyzer->node_data->setType(
                 $closure_arg->value,
-                $closure_arg_type->getBuilder()->setTypes($new)->freeze()
+                $closure_arg_type->getBuilder()->setTypes($new)->freeze(),
             );
         }
     }
 
     /**
      * @param   list<PhpParser\Node\Arg>          $args
-     *
      * @return  false|null
      */
     public static function handleAddition(
@@ -148,7 +147,7 @@ class ArrayFunctionArgumentsAnalyzer
 
         $unpacked_args = array_filter(
             $args,
-            static fn(PhpParser\Node\Arg $arg): bool => $arg->unpack
+            static fn(PhpParser\Node\Arg $arg): bool => $arg->unpack,
         );
 
         if ($method_id === 'array_push' && !$unpacked_args) {
@@ -160,7 +159,7 @@ class ArrayFunctionArgumentsAnalyzer
                 if (ExpressionAnalyzer::analyze(
                     $statements_analyzer,
                     $args[$i]->value,
-                    $context
+                    $context,
                 ) === false) {
                     $context->inside_assignment = $was_inside_assignment;
 
@@ -178,11 +177,11 @@ class ArrayFunctionArgumentsAnalyzer
                     new VirtualArrayDimFetch(
                         $args[0]->value,
                         null,
-                        $args[$i]->value->getAttributes()
+                        $args[$i]->value->getAttributes(),
                     ),
                     $context,
                     $args[$i]->value,
-                    $statements_analyzer->node_data->getType($args[$i]->value) ?? Type::getMixed()
+                    $statements_analyzer->node_data->getType($args[$i]->value) ?? Type::getMixed(),
                 );
 
                 $statements_analyzer->node_data = $old_node_data;
@@ -196,7 +195,7 @@ class ArrayFunctionArgumentsAnalyzer
         if (ExpressionAnalyzer::analyze(
             $statements_analyzer,
             $array_arg,
-            $context
+            $context,
         ) === false) {
             return false;
         }
@@ -205,7 +204,7 @@ class ArrayFunctionArgumentsAnalyzer
             if (ExpressionAnalyzer::analyze(
                 $statements_analyzer,
                 $args[$i]->value,
-                $context
+                $context,
             ) === false) {
                 return false;
             }
@@ -234,7 +233,7 @@ class ArrayFunctionArgumentsAnalyzer
                 if (ExpressionAnalyzer::analyze(
                     $statements_analyzer,
                     $arg->value,
-                    $context
+                    $context,
                 ) === false) {
                     return false;
                 }
@@ -250,7 +249,7 @@ class ArrayFunctionArgumentsAnalyzer
                 ) {
                     $by_ref_type = Type::combineUnionTypes(
                         $by_ref_type,
-                        new Union([new TArray([$new_offset_type, Type::getMixed()])])
+                        new Union([new TArray([$new_offset_type, Type::getMixed()])]),
                     );
                 } elseif ($arg->unpack) {
                     $arg_value_type = $arg_value_type->getBuilder();
@@ -280,7 +279,7 @@ class ArrayFunctionArgumentsAnalyzer
 
                     $by_ref_type = Type::combineUnionTypes(
                         $by_ref_type,
-                        $arg_value_type
+                        $arg_value_type,
                     );
                 } else {
                     if ($objectlike_list) {
@@ -300,13 +299,13 @@ class ArrayFunctionArgumentsAnalyzer
                                     new TNonEmptyArray(
                                         [
                                             $new_offset_type,
-                                            $arg_value_type
-                                        ]
+                                            $arg_value_type,
+                                        ],
                                     ),
-                                ]
+                                ],
                             ),
                             null,
-                            true
+                            true,
                         );
                     }
                 }
@@ -318,7 +317,7 @@ class ArrayFunctionArgumentsAnalyzer
                 $by_ref_type,
                 $by_ref_type,
                 $context,
-                false
+                false,
             );
         }
 
@@ -329,7 +328,6 @@ class ArrayFunctionArgumentsAnalyzer
 
     /**
      * @param   list<PhpParser\Node\Arg>          $args
-     *
      * @return  false|null
      */
     public static function handleSplice(
@@ -343,7 +341,7 @@ class ArrayFunctionArgumentsAnalyzer
         if (ExpressionAnalyzer::analyze(
             $statements_analyzer,
             $array_arg,
-            $context
+            $context,
         ) === false) {
             return false;
         }
@@ -353,7 +351,7 @@ class ArrayFunctionArgumentsAnalyzer
         if (ExpressionAnalyzer::analyze(
             $statements_analyzer,
             $offset_arg,
-            $context
+            $context,
         ) === false) {
             return false;
         }
@@ -367,7 +365,7 @@ class ArrayFunctionArgumentsAnalyzer
         if (ExpressionAnalyzer::analyze(
             $statements_analyzer,
             $length_arg,
-            $context
+            $context,
         ) === false) {
             return false;
         }
@@ -381,7 +379,7 @@ class ArrayFunctionArgumentsAnalyzer
         if (ExpressionAnalyzer::analyze(
             $statements_analyzer,
             $replacement_arg,
-            $context
+            $context,
         ) === false) {
             return false;
         }
@@ -396,7 +394,7 @@ class ArrayFunctionArgumentsAnalyzer
             && $replacement_arg_type->isSingle()
         ) {
             $replacement_arg_type = new Union([
-                new TArray([Type::getInt(), $replacement_arg_type])
+                new TArray([Type::getInt(), $replacement_arg_type]),
             ]);
 
             $statements_analyzer->node_data->setType($replacement_arg, $replacement_arg_type);
@@ -458,7 +456,7 @@ class ArrayFunctionArgumentsAnalyzer
                 $by_ref_type,
                 $by_ref_type,
                 $context,
-                false
+                false,
             );
 
             return null;
@@ -472,7 +470,7 @@ class ArrayFunctionArgumentsAnalyzer
             $array_type,
             $array_type,
             $context,
-            false
+            false,
         );
 
         return null;
@@ -487,7 +485,7 @@ class ArrayFunctionArgumentsAnalyzer
         $var_id = ExpressionIdentifier::getVarId(
             $arg->value,
             $statements_analyzer->getFQCLN(),
-            $statements_analyzer
+            $statements_analyzer,
         );
 
         if ($var_id) {
@@ -545,7 +543,7 @@ class ArrayFunctionArgumentsAnalyzer
                                     [
                                         Type::getNever(),
                                         Type::getNever(),
-                                    ]
+                                    ],
                                 );
                             } else {
                                 $array_atomic_type = $array_atomic_type->setCount($array_atomic_type->count-1);
@@ -623,7 +621,7 @@ class ArrayFunctionArgumentsAnalyzer
 
             $function_ids = CallAnalyzer::getFunctionIdsFromCallableArg(
                 $statements_analyzer,
-                $closure_arg->value
+                $closure_arg->value,
             );
 
             $closure_types = [];
@@ -664,7 +662,7 @@ class ArrayFunctionArgumentsAnalyzer
 
                         $function_id_part = new MethodIdentifier(
                             $callable_fq_class_name,
-                            strtolower($method_name)
+                            strtolower($method_name),
                         );
 
                         try {
@@ -677,7 +675,7 @@ class ArrayFunctionArgumentsAnalyzer
                         $closure_types[] = new TClosure(
                             'Closure',
                             $method_storage->params,
-                            $method_storage->return_type ?: Type::getMixed()
+                            $method_storage->return_type ?: Type::getMixed(),
                         );
                     }
                 } else {
@@ -691,7 +689,7 @@ class ArrayFunctionArgumentsAnalyzer
 
                     $function_storage = $codebase->functions->getStorage(
                         $statements_analyzer,
-                        $function_id
+                        $function_id,
                     );
 
                     if (InternalCallMapHandler::inCallMap($function_id)) {
@@ -730,7 +728,7 @@ class ArrayFunctionArgumentsAnalyzer
                         $closure_types[] = new TClosure(
                             'Closure',
                             $function_storage->params,
-                            $function_storage->return_type ?: Type::getMixed()
+                            $function_storage->return_type ?: Type::getMixed(),
                         );
                     }
                 }
@@ -752,7 +750,7 @@ class ArrayFunctionArgumentsAnalyzer
                 $closure_arg,
                 $min_closure_param_count,
                 $max_closure_param_count,
-                $array_arg_types
+                $array_arg_types,
             );
         }
         unset($closure_type);
@@ -796,9 +794,9 @@ class ArrayFunctionArgumentsAnalyzer
                     'The callable passed to ' . $method_id . ' will be called with ' . $argument_text . ', expecting '
                         . $required_param_count,
                     new CodeLocation($statements_analyzer->getSource(), $closure_arg),
-                    $method_id
+                    $method_id,
                 ),
-                $statements_analyzer->getSuppressedIssues()
+                $statements_analyzer->getSuppressedIssues(),
             );
 
             return;
@@ -812,9 +810,9 @@ class ArrayFunctionArgumentsAnalyzer
                     'The callable passed to ' . $method_id . ' will be called with ' . $argument_text . ', expecting '
                         . $required_param_count,
                     new CodeLocation($statements_analyzer->getSource(), $closure_arg),
-                    $method_id
+                    $method_id,
                 ),
-                $statements_analyzer->getSuppressedIssues()
+                $statements_analyzer->getSuppressedIssues(),
             );
 
             return;
@@ -851,12 +849,12 @@ class ArrayFunctionArgumentsAnalyzer
             ) {
                 $template_result = new TemplateResult(
                     [],
-                    []
+                    [],
                 );
 
                 foreach ($closure_param_type->getTemplateTypes() as $template_type) {
                     $template_result->template_types[$template_type->param_name] = [
-                        ($template_type->defining_class) => $template_type->as
+                        ($template_type->defining_class) => $template_type->as,
                     ];
                 }
 
@@ -868,12 +866,12 @@ class ArrayFunctionArgumentsAnalyzer
                     $input_type,
                     $i,
                     $context->self,
-                    $context->calling_method_id ?: $context->calling_function_id
+                    $context->calling_method_id ?: $context->calling_function_id,
                 );
 
                 $closure_type = $closure_type->replaceTemplateTypesWithArgTypes(
                     $template_result,
-                    $codebase
+                    $codebase,
                 );
             }
 
@@ -882,7 +880,7 @@ class ArrayFunctionArgumentsAnalyzer
                 $closure_param_type,
                 $context->self,
                 null,
-                $statements_analyzer->getParentFQCLN()
+                $statements_analyzer->getParentFQCLN(),
             );
 
             $union_comparison_results = new TypeComparisonResult();
@@ -893,7 +891,7 @@ class ArrayFunctionArgumentsAnalyzer
                 $closure_param_type,
                 $input_type->ignore_nullable_issues,
                 $input_type->ignore_falsable_issues,
-                $union_comparison_results
+                $union_comparison_results,
             );
 
             if ($union_comparison_results->type_coerced) {
@@ -904,9 +902,9 @@ class ArrayFunctionArgumentsAnalyzer
                                 $closure_param_type->getId() .
                                 ', but parent type ' . $input_type->getId() . ' provided',
                             new CodeLocation($statements_analyzer->getSource(), $closure_arg),
-                            $method_id
+                            $method_id,
                         ),
-                        $statements_analyzer->getSuppressedIssues()
+                        $statements_analyzer->getSuppressedIssues(),
                     );
                 } else {
                     IssueBuffer::maybeAdd(
@@ -915,9 +913,9 @@ class ArrayFunctionArgumentsAnalyzer
                                 $closure_param_type->getId() .
                                 ', but parent type ' . $input_type->getId() . ' provided',
                             new CodeLocation($statements_analyzer->getSource(), $closure_arg),
-                            $method_id
+                            $method_id,
                         ),
-                        $statements_analyzer->getSuppressedIssues()
+                        $statements_analyzer->getSuppressedIssues(),
                     );
                 }
             }
@@ -926,7 +924,7 @@ class ArrayFunctionArgumentsAnalyzer
                 $types_can_be_identical = UnionTypeComparator::canExpressionTypesBeIdentical(
                     $codebase,
                     $input_type,
-                    $closure_param_type
+                    $closure_param_type,
                 );
 
                 if ($union_comparison_results->scalar_type_match_found) {
@@ -935,9 +933,9 @@ class ArrayFunctionArgumentsAnalyzer
                             'Parameter ' . ($i + 1) . ' of closure passed to function ' . $method_id . ' expects ' .
                                 $closure_param_type->getId() . ', but ' . $input_type->getId() . ' provided',
                             new CodeLocation($statements_analyzer->getSource(), $closure_arg),
-                            $method_id
+                            $method_id,
                         ),
-                        $statements_analyzer->getSuppressedIssues()
+                        $statements_analyzer->getSuppressedIssues(),
                     );
                 } elseif ($types_can_be_identical) {
                     IssueBuffer::maybeAdd(
@@ -946,20 +944,20 @@ class ArrayFunctionArgumentsAnalyzer
                                 . $closure_param_type->getId() . ', but possibly different type '
                                 . $input_type->getId() . ' provided',
                             new CodeLocation($statements_analyzer->getSource(), $closure_arg),
-                            $method_id
+                            $method_id,
                         ),
-                        $statements_analyzer->getSuppressedIssues()
+                        $statements_analyzer->getSuppressedIssues(),
                     );
-                } elseif (IssueBuffer::accepts(
-                    new InvalidArgument(
-                        'Parameter ' . ($i + 1) . ' of closure passed to function ' . $method_id . ' expects ' .
+                } else {
+                    IssueBuffer::maybeAdd(
+                        new InvalidArgument(
+                            'Parameter ' . ($i + 1) . ' of closure passed to function ' . $method_id . ' expects ' .
                             $closure_param_type->getId() . ', but ' . $input_type->getId() . ' provided',
-                        new CodeLocation($statements_analyzer->getSource(), $closure_arg),
-                        $method_id
-                    ),
-                    $statements_analyzer->getSuppressedIssues()
-                )) {
-                    // fall through
+                            new CodeLocation($statements_analyzer->getSource(), $closure_arg),
+                            $method_id,
+                        ),
+                        $statements_analyzer->getSuppressedIssues(),
+                    );
                 }
             }
         }

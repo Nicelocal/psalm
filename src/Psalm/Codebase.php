@@ -146,10 +146,7 @@ final class Codebase
      */
     public $statements_provider;
 
-    /**
-     * @var Progress
-     */
-    private $progress;
+    private Progress $progress;
 
     /**
      * @var array<string, Union>
@@ -874,7 +871,6 @@ final class Codebase
 
     /**
      * @param  string|MethodIdentifier $method_id
-     * @param  CodeLocation|null       $defined_location
      */
     public function getMethodReturnTypeLocation(
         $method_id,

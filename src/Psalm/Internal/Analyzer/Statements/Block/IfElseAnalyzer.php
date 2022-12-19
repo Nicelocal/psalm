@@ -62,7 +62,6 @@ class IfElseAnalyzer
      *   (x: null)
      *   throw new Exception -- effects: remove null from the type of x
      *
-     *
      * @return null|false
      */
     public static function analyze(
@@ -82,7 +81,7 @@ class IfElseAnalyzer
             $final_actions = ScopeAnalyzer::getControlActions(
                 $stmt->stmts,
                 null,
-                []
+                [],
             );
 
             $has_leaving_statements = $final_actions === [ScopeAnalyzer::ACTION_END]
@@ -100,7 +99,7 @@ class IfElseAnalyzer
                 $context,
                 $codebase,
                 $if_scope,
-                $context->branch_point ?: (int) $stmt->getAttribute('startFilePos')
+                $context->branch_point ?: (int) $stmt->getAttribute('startFilePos'),
             );
 
             // this is the context for stuff that happens within the `if` block
@@ -129,7 +128,7 @@ class IfElseAnalyzer
             $stmt->cond,
             $context->self,
             $statements_analyzer,
-            $codebase
+            $codebase,
         );
 
         if (count($if_clauses->clauses) > 200) {
@@ -169,7 +168,7 @@ class IfElseAnalyzer
             $if_clauses,
             $statements_analyzer,
             $stmt->cond,
-            $assigned_in_conditional_var_ids
+            $assigned_in_conditional_var_ids,
         );
 
         $if_clauses = $if_clauses->simplify();
@@ -206,7 +205,7 @@ class IfElseAnalyzer
                     $context->self,
                     $statements_analyzer,
                     $codebase,
-                    false
+                    false,
                 );
             } catch (ComplicatedExpressionException $e) {
                 $if_scope->negated_clauses = ClauseConjunction::empty();
@@ -239,8 +238,8 @@ class IfElseAnalyzer
                             $stmt->cond instanceof PhpParser\Node\Expr\BooleanNot
                                 ? $stmt->cond->expr
                                 : $stmt->cond,
-                            $context->include_location
-                        ) : null
+                            $context->include_location,
+                        ) : null,
                 );
         }
 
@@ -248,7 +247,7 @@ class IfElseAnalyzer
         // which vars of the if we can safely change
         $pre_assignment_else_redefined_vars = array_intersect_key(
             $temp_else_context->getRedefinedVars($context->vars_in_scope, true),
-            $changed_var_ids
+            $changed_var_ids,
         );
 
         // check the if
@@ -259,7 +258,7 @@ class IfElseAnalyzer
             $if_conditional_scope,
             $if_context,
             $context,
-            $pre_assignment_else_redefined_vars
+            $pre_assignment_else_redefined_vars,
         ) === false) {
             return false;
         }
@@ -277,7 +276,7 @@ class IfElseAnalyzer
                 $else_context,
                 $context,
                 $codebase,
-                $else_context->branch_point ?: (int) $stmt->getAttribute('startFilePos')
+                $else_context->branch_point ?: (int) $stmt->getAttribute('startFilePos'),
             ) === false) {
                 return false;
             }
@@ -295,7 +294,7 @@ class IfElseAnalyzer
             $stmt->else,
             $if_scope,
             $else_context,
-            $context
+            $context,
         ) === false) {
             return false;
         }
@@ -338,7 +337,7 @@ class IfElseAnalyzer
                     IssueBuffer::remove(
                         $statements_analyzer->getFilePath(),
                         'MixedAssignment',
-                        $first_appearance->raw_file_start
+                        $first_appearance->raw_file_start,
                     );
                 }
             }
@@ -348,25 +347,25 @@ class IfElseAnalyzer
             $context->loop_scope->final_actions = array_unique(
                 array_merge(
                     $context->loop_scope->final_actions,
-                    $if_scope->final_actions
-                )
+                    $if_scope->final_actions,
+                ),
             );
         }
 
         $context->vars_possibly_in_scope = array_merge(
             $context->vars_possibly_in_scope,
-            $if_scope->new_vars_possibly_in_scope
+            $if_scope->new_vars_possibly_in_scope,
         );
 
         $context->possibly_assigned_var_ids = array_merge(
             $context->possibly_assigned_var_ids,
-            $if_scope->possibly_assigned_var_ids ?: []
+            $if_scope->possibly_assigned_var_ids ?: [],
         );
 
         // vars can only be defined/redefined if there was an else (defined in every block)
         $context->assigned_var_ids = array_merge(
             $context->assigned_var_ids,
-            $if_scope->assigned_var_ids ?: []
+            $if_scope->assigned_var_ids ?: [],
         );
 
         if ($if_scope->new_vars) {
@@ -375,7 +374,7 @@ class IfElseAnalyzer
                     && $statements_analyzer->data_flow_graph
                 ) {
                     $type = $type->addParentNodes(
-                        $statements_analyzer->getParentNodesForPossiblyUndefinedVariable($var_id)
+                        $statements_analyzer->getParentNodesForPossiblyUndefinedVariable($var_id),
                     );
                 }
 
@@ -394,7 +393,7 @@ class IfElseAnalyzer
                         $var_id,
                         $if_scope->reasonable_clauses,
                         $context->vars_in_scope[$var_id] ?? null,
-                        $statements_analyzer
+                        $statements_analyzer,
                     );
                 }
             }
@@ -415,7 +414,7 @@ class IfElseAnalyzer
                         $combined_type = Type::combineUnionTypes(
                             $context->vars_in_scope[$var_id],
                             $type,
-                            $codebase
+                            $codebase,
                         );
 
                         if (!$combined_type->equals($context->vars_in_scope[$var_id])) {

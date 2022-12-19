@@ -1390,6 +1390,10 @@ class TypeParser
         $type = $parse_tree->value;
 
         $had_optional = false;
+        $had_explicit = false;
+        $had_implicit = false;
+
+        $previous_property_key = -1;
 
         $is_list = true;
 
@@ -1420,7 +1424,8 @@ class TypeParser
                     $from_docblock,
                 );
                 $property_maybe_undefined = false;
-                $property_key = (string)$i;
+                $property_key = $i;
+                $had_implicit = true;
             } elseif (count($property_branch->children) === 1) {
                 $property_type = self::getTypeFromTree(
                     $property_branch->children[0],
@@ -1442,21 +1447,26 @@ class TypeParser
                 } else {
                     $property_key = $property_branch->value;
                 }
-                if (!is_numeric($property_key) || (
-                    $had_optional && !$property_maybe_undefined
-                ) || $type === 'array'
-                  || $type === 'callable-array'
+                if ($is_list && (
+                        !is_numeric($property_key)
+                        || ($had_optional && !$property_maybe_undefined)
+                        || $type === 'array'
+                        || $type === 'callable-array'
+                        || $previous_property_key != ($property_key-1)
+                    )
                 ) {
                     $is_list = false;
+                }
+                $had_explicit = true;
+                $previous_property_key = $property_key;
+
+                if ($property_key[0] === '\'' || $property_key[0] === '"') {
+                    $property_key = stripslashes(substr($property_key, 1, -1));
                 }
             } else {
                 throw new TypeParseTreeException(
                     'Missing property type',
                 );
-            }
-
-            if ($property_key[0] === '\'' || $property_key[0] === '"') {
-                $property_key = stripslashes(substr($property_key, 1, -1));
             }
 
             if (!$property_type instanceof Union) {
@@ -1472,6 +1482,10 @@ class TypeParser
             if ($class_string) {
                 $class_strings[$property_key] = true;
             }
+        }
+
+        if ($had_explicit && $had_implicit) {
+            throw new TypeParseTreeException('Cannot mix explicit and implicit keys!');
         }
 
         if ($type === 'object') {

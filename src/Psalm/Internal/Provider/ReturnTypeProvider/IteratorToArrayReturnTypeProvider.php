@@ -64,7 +64,7 @@ class IteratorToArrayReturnTypeProvider implements FunctionReturnTypeProviderInt
                     && AtomicTypeComparator::isContainedBy(
                         $codebase,
                         $call_arg_atomic_type,
-                        new TIterable([Type::getMixed(), Type::getMixed()])
+                        new TIterable([Type::getMixed(), Type::getMixed()]),
                     )
                 ) {
                     $has_valid_iterator = true;
@@ -76,7 +76,7 @@ class IteratorToArrayReturnTypeProvider implements FunctionReturnTypeProviderInt
                         $context,
                         $key_type,
                         $value_type,
-                        $has_valid_iterator
+                        $has_valid_iterator,
                     );
                 }
             }
@@ -89,9 +89,7 @@ class IteratorToArrayReturnTypeProvider implements FunctionReturnTypeProviderInt
                 if ($second_arg_type
                     && ((string) $second_arg_type === 'false')
                 ) {
-                    return new Union([
-                        Type::getListAtomic($value_type),
-                    ]);
+                    return Type::getList($value_type);
                 }
 
                 $key_type = $key_type

@@ -69,7 +69,7 @@ class ArrayAssignmentAnalyzer
             $stmt->var,
             $statements_analyzer->getFQCLN(),
             $statements_analyzer,
-            $nesting
+            $nesting,
         );
 
         self::updateArrayType(
@@ -77,7 +77,7 @@ class ArrayAssignmentAnalyzer
             $stmt,
             $assign_value,
             $assignment_value_type,
-            $context
+            $context,
         );
 
         if (!$statements_analyzer->node_data->getType($stmt->var) && $var_id) {
@@ -108,37 +108,31 @@ class ArrayAssignmentAnalyzer
         $child_stmts[] = $root_array_expr;
         $root_array_expr = $root_array_expr->var;
 
-        if (ExpressionAnalyzer::analyze(
+        ExpressionAnalyzer::analyze(
             $statements_analyzer,
             $root_array_expr,
             $context,
-            true
-        ) === false) {
-            // fall through
-        }
+            true,
+        );
 
         $codebase = $statements_analyzer->getCodebase();
 
         $root_type = $statements_analyzer->node_data->getType($root_array_expr) ?? Type::getMixed();
 
         if ($root_type->hasMixed()) {
-            if (ExpressionAnalyzer::analyze(
+            ExpressionAnalyzer::analyze(
                 $statements_analyzer,
                 $stmt->var,
                 $context,
-                true
-            ) === false) {
-                // fall through
-            }
+                true,
+            );
 
             if ($stmt->dim) {
-                if (ExpressionAnalyzer::analyze(
+                ExpressionAnalyzer::analyze(
                     $statements_analyzer,
                     $stmt->dim,
-                    $context
-                ) === false) {
-                    // fall through
-                }
+                    $context,
+                );
             }
         }
 
@@ -150,7 +144,7 @@ class ArrayAssignmentAnalyzer
         $root_var_id = ExpressionIdentifier::getExtendedVarId(
             $root_array_expr,
             $statements_analyzer->getFQCLN(),
-            $statements_analyzer
+            $statements_analyzer,
         );
 
         $parent_var_id = null;
@@ -169,7 +163,7 @@ class ArrayAssignmentAnalyzer
             $root_type,
             $current_type,
             $current_dim,
-            $offset_already_existed
+            $offset_already_existed,
         );
 
         $root_is_string = $root_type->isString();
@@ -204,7 +198,7 @@ class ArrayAssignmentAnalyzer
                 $codebase,
                 $root_type,
                 $current_type,
-                $key_values
+                $key_values,
             );
         } elseif (!$root_is_string) {
             $new_child_type = self::updateArrayAssignmentChildType(
@@ -215,7 +209,7 @@ class ArrayAssignmentAnalyzer
                 $current_type,
                 $root_type,
                 $offset_already_existed,
-                $parent_var_id
+                $parent_var_id,
             );
         } else {
             $new_child_type = $root_type;
@@ -240,7 +234,7 @@ class ArrayAssignmentAnalyzer
                     null,
                     $root_type,
                     $context,
-                    false
+                    false,
                 );
             } else {
                 if (ExpressionAnalyzer::analyze($statements_analyzer, $root_array_expr->name, $context) === false) {
@@ -259,7 +253,7 @@ class ArrayAssignmentAnalyzer
                 $root_array_expr,
                 null,
                 $root_type,
-                $context
+                $context,
             ) === false) {
                 return false;
             }
@@ -272,16 +266,13 @@ class ArrayAssignmentAnalyzer
             || $root_array_expr instanceof PhpParser\Node\Expr\FuncCall
         ) {
             if ($root_type->hasArray()) {
-                if (IssueBuffer::accepts(
+                IssueBuffer::maybeAdd(
                     new InvalidArrayAssignment(
                         'Assigning to the output of a function has no effect',
-                        new CodeLocation($statements_analyzer->getSource(), $root_array_expr)
+                        new CodeLocation($statements_analyzer->getSource(), $root_array_expr),
                     ),
-                    $statements_analyzer->getSuppressedIssues()
-                )
-                ) {
-                    // do nothing
-                }
+                    $statements_analyzer->getSuppressedIssues(),
+                );
             }
         }
 
@@ -312,7 +303,7 @@ class ArrayAssignmentAnalyzer
                     $codebase,
                     $type->as,
                     $current_type,
-                    $key_values
+                    $key_values,
                 ));
                 $has_matching_objectlike_property = true;
             } elseif ($type instanceof TKeyedArray) {
@@ -362,7 +353,7 @@ class ArrayAssignmentAnalyzer
                     [$key_value->value => $current_type],
                     $key_value instanceof TLiteralClassString
                         ? [$key_value->value => true]
-                        : null
+                        : null,
                 );
 
                 $array_assignment_type = new Union([
@@ -374,8 +365,8 @@ class ArrayAssignmentAnalyzer
                 $array_assignment_type = new Union([
                     new TNonEmptyArray([
                         new Union($array_assignment_literals),
-                        $current_type
-                    ])
+                        $current_type,
+                    ]),
                 ]);
             }
 
@@ -384,7 +375,7 @@ class ArrayAssignmentAnalyzer
                 $array_assignment_type,
                 $codebase,
                 true,
-                false
+                false,
             );
         }
 
@@ -410,7 +401,7 @@ class ArrayAssignmentAnalyzer
 
             $parent_node = DataFlowNode::getForAssignment(
                 $var_var_id ?: 'assignment',
-                $var_location
+                $var_location,
             );
 
             $statements_analyzer->data_flow_graph->addNode($parent_node);
@@ -423,14 +414,14 @@ class ArrayAssignmentAnalyzer
                 $statements_analyzer->data_flow_graph->addPath(
                     $old_parent_node,
                     $parent_node,
-                    '='
+                    '=',
                 );
 
                 if ($stmt_type->by_ref) {
                     $statements_analyzer->data_flow_graph->addPath(
                         $parent_node,
                         $old_parent_node,
-                        '='
+                        '=',
                     );
                 }
             }
@@ -442,14 +433,14 @@ class ArrayAssignmentAnalyzer
                             $statements_analyzer->data_flow_graph->addPath(
                                 $child_parent_node,
                                 $parent_node,
-                                'arrayvalue-assignment-\'' . $key_value->value . '\''
+                                'arrayvalue-assignment-\'' . $key_value->value . '\'',
                             );
                         }
                     } else {
                         $statements_analyzer->data_flow_graph->addPath(
                             $child_parent_node,
                             $parent_node,
-                            'arrayvalue-assignment'
+                            'arrayvalue-assignment',
                         );
                     }
                 }
@@ -549,23 +540,23 @@ class ArrayAssignmentAnalyzer
                                         $offset_type_part->as_type
                                             ? new Union([$offset_type_part->as_type])
                                             : Type::getObject(),
-                                        'class-string-map'
-                                    )
-                                ])
-                            ]
-                        ]
+                                        'class-string-map',
+                                    ),
+                                ]),
+                            ],
+                        ],
                     );
 
                     $value_type = TemplateInferredTypeReplacer::replace(
                         $value_type,
                         $template_result,
-                        $codebase
+                        $codebase,
                     );
 
                     $array_atomic_type_class_string = new TClassStringMap(
                         $class_string_map->param_name,
                         $class_string_map->as_type,
-                        $value_type
+                        $value_type,
                     );
                 } else {
                     $array_atomic_type_array = [
@@ -708,7 +699,7 @@ class ArrayAssignmentAnalyzer
                     $array_assignment_type,
                     $codebase,
                     true,
-                    true
+                    true,
                 );
             }
         }
@@ -791,7 +782,7 @@ class ArrayAssignmentAnalyzer
                 if (ExpressionAnalyzer::analyze(
                     $statements_analyzer,
                     $child_stmt->dim,
-                    $context
+                    $context,
                 ) === false) {
                     $context->inside_general_use = $was_inside_general_use;
 
@@ -807,7 +798,7 @@ class ArrayAssignmentAnalyzer
                 [$offset_type, $var_id_addition, $full_var_id] = self::getArrayAssignmentOffsetType(
                     $statements_analyzer,
                     $child_stmt,
-                    $child_stmt_dim_type
+                    $child_stmt_dim_type,
                 );
 
                 $var_id_additions[] = $var_id_addition;
@@ -844,18 +835,18 @@ class ArrayAssignmentAnalyzer
                 $extended_var_id,
                 $context,
                 $assign_value,
-                !$is_last ? null : $assignment_type
+                !$is_last ? null : $assignment_type,
             );
             if ($child_stmt->dim) {
                 $statements_analyzer->node_data->setType(
                     $child_stmt->dim,
-                    $child_stmt_dim_type_or_int
+                    $child_stmt_dim_type_or_int,
                 );
             }
 
             $statements_analyzer->node_data->setType(
                 $child_stmt,
-                $child_stmt_type
+                $child_stmt_type,
             );
 
             if ($is_last) {
@@ -877,9 +868,9 @@ class ArrayAssignmentAnalyzer
                         ExpressionIdentifier::getExtendedVarId(
                             $child_stmt->var,
                             $statements_analyzer->getFQCLN(),
-                            $statements_analyzer
+                            $statements_analyzer,
                         ),
-                        $offset_type !== null ? [$offset_type] : []
+                        $offset_type !== null ? [$offset_type] : [],
                     );
                 }
             }
@@ -914,10 +905,10 @@ class ArrayAssignmentAnalyzer
             $statements_analyzer->data_flow_graph->addPath(
                 DataFlowNode::getForAssignment(
                     $root_var_id,
-                    new CodeLocation($statements_analyzer->getSource(), $root_var)
+                    new CodeLocation($statements_analyzer->getSource(), $root_var),
                 ),
                 new DataFlowNode('variable-use', 'variable use', null),
-                'variable-use'
+                'variable-use',
             );
         }
 
@@ -956,7 +947,7 @@ class ArrayAssignmentAnalyzer
                     $codebase,
                     $child_stmt_type,
                     $current_type,
-                    $key_values
+                    $key_values,
                 );
             } else {
                 if (!$current_dim) {
@@ -979,7 +970,7 @@ class ArrayAssignmentAnalyzer
                     $array_assignment_type,
                     $codebase,
                     true,
-                    true
+                    true,
                 );
             }
             if ($new_child_type->hasNull() || $new_child_type->possibly_undefined) {
@@ -1131,7 +1122,7 @@ class ArrayAssignmentAnalyzer
             $object_id = ExpressionIdentifier::getExtendedVarId(
                 $child_stmt->dim->var,
                 $statements_analyzer->getFQCLN(),
-                $statements_analyzer
+                $statements_analyzer,
             );
 
             if ($object_id) {
@@ -1149,7 +1140,7 @@ class ArrayAssignmentAnalyzer
         ) {
             $object_name = ClassLikeAnalyzer::getFQCLNFromNameObject(
                 $child_stmt->dim->class,
-                $statements_analyzer->getAliases()
+                $statements_analyzer->getAliases(),
             );
             $var_id_addition = '[' . $object_name . '::' . $child_stmt->dim->name->name . ']';
 

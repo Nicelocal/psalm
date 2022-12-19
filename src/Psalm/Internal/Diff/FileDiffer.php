@@ -28,9 +28,7 @@ class FileDiffer
     /**
      * @param list<string>    $a
      * @param list<string>    $b
-     *
      * @return array{0:non-empty-list<array<int, int>>, 1: int, 2: int}
-     *
      * @psalm-pure
      */
     private static function calculateTrace(
@@ -72,9 +70,7 @@ class FileDiffer
      * @param list<array<int, int>> $trace
      * @param list<string> $a
      * @param list<string> $b
-     *
      * @return list<DiffElem>
-     *
      * @psalm-pure
      */
     private static function extractDiff(array $trace, int $x, int $y, array $a, array $b): array
@@ -99,7 +95,7 @@ class FileDiffer
                 $result[] = new DiffElem(
                     DiffElem::TYPE_KEEP,
                     $a[$x - 1],
-                    $b[$y - 1]
+                    $b[$y - 1],
                 );
                 --$x;
                 --$y;
@@ -125,7 +121,6 @@ class FileDiffer
 
     /**
      * @return array<int, array{0: int, 1: int, 2: int, 3: int, 4: int, 5: string}>
-     *
      * @psalm-pure
      */
     public static function getDiff(string $a_code, string $b_code): array
@@ -273,9 +268,7 @@ class FileDiffer
      * Coalesce equal-length sequences of remove+add into a replace operation.
      *
      * @param DiffElem[] $diff
-     *
      * @return list<DiffElem>
-     *
      * @psalm-pure
      */
     private static function coalesceReplacements(array $diff): array
@@ -305,7 +298,7 @@ class FileDiffer
                     $newDiff[] = new DiffElem(
                         DiffElem::TYPE_REPLACE,
                         $diff[$i + $n]->old,
-                        $diff[$j + $n]->new
+                        $diff[$j + $n]->new,
                     );
                 }
             } else {

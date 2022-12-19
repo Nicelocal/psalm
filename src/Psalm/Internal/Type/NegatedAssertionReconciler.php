@@ -44,7 +44,6 @@ use function strtolower;
 class NegatedAssertionReconciler extends Reconciler
 {
     /**
-     * @param  array<string, array<string, Union>> $template_type_map
      * @param  string[]   $suppressed_issues
      * @param  Reconciler::RECONCILIATION_*      $failed_reconciliation
      */

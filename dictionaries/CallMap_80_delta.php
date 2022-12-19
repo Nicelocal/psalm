@@ -306,8 +306,8 @@ return [
       'new' => ['bool', 'typelib_name'=>'string', 'case_insensitive='=>'true'],
     ],
     'count' => [
-        'old' => ['int', 'value'=>'Countable|array|SimpleXMLElement', 'mode='=>'int'],
-        'new' => ['int', 'value'=>'Countable|array', 'mode='=>'int'],
+        'old' => ['int<0, max>', 'value'=>'Countable|array|SimpleXMLElement', 'mode='=>'int'],
+        'new' => ['int<0, max>', 'value'=>'Countable|array', 'mode='=>'int'],
     ],
     'count_chars' => [
       'old' => ['array<int,int>|false', 'input'=>'string', 'mode='=>'0|1|2'],
@@ -1813,6 +1813,18 @@ return [
       'old' => ['bool', 'writer'=>'resource', 'content'=>'string'],
       'new' => ['bool', 'writer'=>'XMLWriter', 'content'=>'string'],
     ],
+    'ZipArchive::addEmptyDir' => [
+      'old' => ['bool', 'dirname'=>'string'],
+      'new' => ['bool', 'dirname'=>'string', 'flags='=>'int'],
+    ],
+    'ZipArchive::addFile' => [
+      'old' => ['bool', 'filepath'=>'string', 'entryname='=>'string', 'start='=>'int', 'length='=>'int'],
+      'new' => ['bool', 'filepath'=>'string', 'entryname='=>'string', 'start='=>'int', 'length='=>'int', 'flags='=>'int'],
+    ],
+    'ZipArchive::addFromString' => [
+      'old' => ['bool', 'name'=>'string', 'content'=>'string'],
+      'new' => ['bool', 'name'=>'string', 'content'=>'string', 'flags='=>'int'],
+    ],
   ],
   'removed' => [
     'PDOStatement::setFetchMode\'1' => ['bool', 'fetch_column'=>'int', 'colno'=>'int'],
@@ -1832,6 +1844,17 @@ return [
     'number_format\'1' => ['string', 'num'=>'float|int', 'decimals'=>'int', 'decimal_separator'=>'?string', 'thousands_separator'=>'?string'],
     'png2wbmp' => ['bool', 'pngname'=>'string', 'wbmpname'=>'string', 'dest_height'=>'int', 'dest_width'=>'int', 'threshold'=>'int'],
     'read_exif_data' => ['array', 'filename'=>'string', 'sections_needed='=>'string', 'sub_arrays='=>'bool', 'read_thumbnail='=>'bool'],
+    'Reflection::export' => ['?string', 'r'=>'reflector', 'return='=>'bool'],
+    'ReflectionClass::export' => ['?string', 'argument'=>'string|object', 'return='=>'bool'],
+    'ReflectionClassConstant::export' => ['string', 'class'=>'mixed', 'name'=>'string', 'return='=>'bool'],
+    'ReflectionExtension::export' => ['?string', 'name'=>'string', 'return='=>'bool'],
+    'ReflectionFunction::export' => ['?string', 'name'=>'string', 'return='=>'bool'],
+    'ReflectionFunctionAbstract::export' => ['?string'],
+    'ReflectionMethod::export' => ['?string', 'class'=>'string', 'name'=>'string', 'return='=>'bool'],
+    'ReflectionObject::export' => ['?string', 'argument'=>'object', 'return='=>'bool'],
+    'ReflectionParameter::export' => ['?string', 'function'=>'string', 'parameter'=>'string', 'return='=>'bool'],
+    'ReflectionProperty::export' => ['?string', 'class'=>'mixed', 'name'=>'string', 'return='=>'bool'],
+    'ReflectionZendExtension::export' => ['?string', 'name'=>'string', 'return='=>'bool'],
     'SimpleXMLIterator::rewind' => ['void'],
     'SimpleXMLIterator::valid' => ['bool'],
     'SimpleXMLIterator::current' => ['?SimpleXMLIterator'],
@@ -1839,5 +1862,6 @@ return [
     'SimpleXMLIterator::next' => ['void'],
     'SimpleXMLIterator::hasChildren' => ['bool'],
     'SimpleXMLIterator::getChildren' => ['SimpleXMLIterator'],
+    'SplTempFileObject::fgetss' => ['string', 'allowable_tags='=>'string'],
   ],
 ];

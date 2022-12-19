@@ -1,28 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="dev-master@2b0e979ee9434afdeb9dd59a3219bf4029c62dc8">
+<files psalm-version="dev-master@6eb37b9dc2321e4eaade9d3d2dca1aff6f2c0a8f">
   <file src="examples/TemplateChecker.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$comment_block-&gt;tags['variablesfrom']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="2">
       <code>$comment_block-&gt;tags['variablesfrom'][0]</code>
       <code>$matches[1]</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="examples/TemplateScanner.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$comment_block-&gt;tags['variablesfrom']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="2">
       <code>$comment_block-&gt;tags['variablesfrom'][0]</code>
       <code>$matches[1]</code>
     </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/CodeLocation/ParseErrorLocation.php">
-    <LiteralKeyUnshapedArray occurrences="2">
-      <code>$error-&gt;getAttributes()['endFilePos']</code>
-      <code>$error-&gt;getAttributes()['startFilePos']</code>
-    </LiteralKeyUnshapedArray>
   </file>
   <file src="src/Psalm/Codebase.php">
     <PossiblyUndefinedIntArrayOffset occurrences="6">
@@ -34,138 +22,10 @@
       <code>$symbol_parts[1]</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
-  <file src="src/Psalm/Config.php">
-    <LiteralKeyUnshapedArray occurrences="62">
-      <code>$composer_json["require"]</code>
-      <code>$composer_json['require']</code>
-      <code>$composer_json['require']['php']</code>
-      <code>$config_xml[$xmlName]</code>
-      <code>$config_xml[$xmlName]</code>
-      <code>$config_xml['autoloader']</code>
-      <code>$config_xml['autoloader']</code>
-      <code>$config_xml['cacheDirectory']</code>
-      <code>$config_xml['cacheDirectory']</code>
-      <code>$config_xml['errorBaseline']</code>
-      <code>$config_xml['errorBaseline']</code>
-      <code>$config_xml['errorLevel']</code>
-      <code>$config_xml['errorLevel']</code>
-      <code>$config_xml['errorLevel']</code>
-      <code>$config_xml['findUnusedCode']</code>
-      <code>$config_xml['findUnusedCode']</code>
-      <code>$config_xml['findUnusedCode']</code>
-      <code>$config_xml['findUnusedVariablesAndParams']</code>
-      <code>$config_xml['findUnusedVariablesAndParams']</code>
-      <code>$config_xml['findUnusedVariablesAndParams']</code>
-      <code>$config_xml['inferPropertyTypesFromConstructor']</code>
-      <code>$config_xml['inferPropertyTypesFromConstructor']</code>
-      <code>$config_xml['maxShapedArraySize']</code>
-      <code>$config_xml['maxShapedArraySize']</code>
-      <code>$config_xml['maxStringLength']</code>
-      <code>$config_xml['maxStringLength']</code>
-      <code>$config_xml['phpVersion']</code>
-      <code>$config_xml['phpVersion']</code>
-      <code>$config_xml['serializer']</code>
-      <code>$config_xml['serializer']</code>
-      <code>$config_xml['threads']</code>
-      <code>$config_xml['threads']</code>
-      <code>$config_xml['triggerErrorExits']</code>
-      <code>$config_xml['triggerErrorExits']</code>
-      <code>$defined_functions['internal']</code>
-      <code>$defined_functions['user']</code>
-      <code>$exception_class['name']</code>
-      <code>$exception_class['name']</code>
-      <code>$exception_class['onlyGlobalScope']</code>
-      <code>$exception_class['onlyGlobalScope']</code>
-      <code>$extension["name"]</code>
-      <code>$extension["name"]</code>
-      <code>$extension["name"]</code>
-      <code>$extension["name"]</code>
-      <code>$extension['checker']</code>
-      <code>$extension['checker']</code>
-      <code>$extension['name']</code>
-      <code>$extension['scanner']</code>
-      <code>$extension['scanner']</code>
-      <code>$forbidden_function['name']</code>
-      <code>$issue_handler['name']</code>
-      <code>$mock_class['name']</code>
-      <code>$plugin['class']</code>
-      <code>$plugin['filename']</code>
-      <code>$stub_file['name']</code>
-      <code>$stub_file['name']</code>
-      <code>$stub_file['preloadClasses']</code>
-      <code>$stub_file['preloadClasses']</code>
-      <code>$this-&gt;issue_handlers[$issue_type]</code>
-      <code>$universal_object_crate['name']</code>
-      <code>$var['name']</code>
-      <code>$var['type']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Config/Creator.php">
-    <LiteralKeyUnshapedArray occurrences="6">
-      <code>$composer_json['autoload']</code>
-      <code>$composer_json['autoload']</code>
-      <code>$composer_json['autoload']['psr-0']</code>
-      <code>$composer_json['autoload']['psr-0']</code>
-      <code>$composer_json['autoload']['psr-4']</code>
-      <code>$composer_json['autoload']['psr-4']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Config/ErrorLevelFileFilter.php">
-    <LiteralKeyUnshapedArray occurrences="3">
-      <code>$config['type']</code>
-      <code>$e['type']</code>
-      <code>$e['type']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
   <file src="src/Psalm/Config/FileFilter.php">
-    <LiteralKeyUnshapedArray occurrences="32">
-      <code>$config['allowMissingFiles']</code>
-      <code>$config['directory']</code>
-      <code>$config['file']</code>
-      <code>$config['referencedClass']</code>
-      <code>$config['referencedConstant']</code>
-      <code>$config['referencedFunction']</code>
-      <code>$config['referencedMethod']</code>
-      <code>$config['referencedProperty']</code>
-      <code>$config['referencedVariable']</code>
-      <code>$directory['ignoreTypeStats']</code>
-      <code>$directory['ignoreTypeStats']</code>
-      <code>$directory['name']</code>
-      <code>$directory['name']</code>
-      <code>$directory['resolveSymlinks']</code>
-      <code>$directory['resolveSymlinks']</code>
-      <code>$directory['useStrictTypes']</code>
-      <code>$directory['useStrictTypes']</code>
-      <code>$e['allowMissingFiles']</code>
-      <code>$file['name']</code>
-      <code>$file['name']</code>
-      <code>$referenced_class['name']</code>
-      <code>$referenced_class['name']</code>
-      <code>$referenced_constant['name']</code>
-      <code>$referenced_constant['name']</code>
-      <code>$referenced_function['name']</code>
-      <code>$referenced_function['name']</code>
-      <code>$referenced_method['name']</code>
-      <code>$referenced_method['name']</code>
-      <code>$referenced_property['name']</code>
-      <code>$referenced_property['name']</code>
-      <code>$referenced_variable['name']</code>
-      <code>$referenced_variable['name']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>explode('::', $method_id)[1]</code>
     </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/Config/IssueHandler.php">
-    <LiteralKeyUnshapedArray occurrences="2">
-      <code>$e['errorLevel']</code>
-      <code>$e['errorLevel']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/DocComment.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$matches['issues']</code>
-    </LiteralKeyUnshapedArray>
   </file>
   <file src="src/Psalm/ErrorBaseline.php">
     <PossiblyUndefinedIntArrayOffset occurrences="3">
@@ -174,34 +34,7 @@
       <code>$matches[3]</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
-  <file src="src/Psalm/Internal/Analyzer/AlgebraAnalyzer.php">
-    <PossiblyUndefinedArrayOffset occurrences="1">
-      <code>$mini_formula_2-&gt;clauses[0]</code>
-    </PossiblyUndefinedArrayOffset>
-    <PossiblyUndefinedIntArrayOffset occurrences="1">
-      <code>$mini_formula_2-&gt;clauses[0]</code>
-    </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/AttributesAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$classlike_storage-&gt;methods['__construct']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
   <file src="src/Psalm/Internal/Analyzer/ClassAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="12">
-      <code>$constructor_class_storage-&gt;methods['__construct']</code>
-      <code>$docBlock-&gt;tags['psalm-suppress']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['MissingPropertyType']</code>
-      <code>$storage-&gt;appearing_method_ids['__construct']</code>
-      <code>$storage-&gt;class_implements['iterator']</code>
-      <code>$storage-&gt;class_implements['iteratoraggregate']</code>
-      <code>$storage-&gt;declaring_method_ids['__construct']</code>
-      <code>$storage-&gt;declaring_method_ids['__construct']</code>
-      <code>$storage-&gt;parent_classes['dateperiod']</code>
-      <code>$storage-&gt;parent_classes['domnodelist']</code>
-      <code>$storage-&gt;parent_classes['ds\collection']</code>
-      <code>$storage-&gt;parent_classes['pdostatement']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="4">
       <code>$comments[0]</code>
       <code>$property_name</code>
@@ -214,68 +47,6 @@
       <code>$property_name</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
-  <file src="src/Psalm/Internal/Analyzer/ClosureAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$context-&gt;vars_in_scope['$this']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/CommentAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="19">
-      <code>$parsed_docblock-&gt;combined_tags['var']</code>
-      <code>$parsed_docblock-&gt;tags['deprecated']</code>
-      <code>$parsed_docblock-&gt;tags['deprecated']</code>
-      <code>$parsed_docblock-&gt;tags['internal']</code>
-      <code>$parsed_docblock-&gt;tags['internal']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-allow-private-mutation']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-allow-private-mutation']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-internal']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-readonly']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-readonly']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-readonly-allow-private-mutation']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-readonly-allow-private-mutation']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-readonly-allow-private-mutation']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-suppress']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-suppress']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-taint-escape']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-taint-escape']</code>
-      <code>$parsed_docblock-&gt;tags['readonly']</code>
-      <code>$parsed_docblock-&gt;tags['readonly']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/FileAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$this_context-&gt;vars_in_scope['$this']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/FunctionLike/ReturnTypeAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="10">
-      <code>$project_analyzer-&gt;getIssuesToFix()['InvalidFalsableReturnType']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['InvalidNullableReturnType']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['InvalidReturnType']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['InvalidReturnType']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['InvalidReturnType']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['LessSpecificReturnType']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['MismatchingDocblockReturnType']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['MissingClosureReturnType']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['MissingReturnType']</code>
-      <code>$return_type-&gt;getAtomicTypes()['null']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/FunctionLikeAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="6">
-      <code>$context-&gt;vars_in_scope['$this']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['MismatchingDocblockParamType']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['MissingImmutableAnnotation']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['MissingPureAnnotation']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['MissingPureAnnotation']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['MissingThrowsDocblock']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/MethodComparator.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$project_analyzer-&gt;getIssuesToFix()['ParamNameMismatch']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
   <file src="src/Psalm/Internal/Analyzer/ProjectAnalyzer.php">
     <PossiblyUndefinedIntArrayOffset occurrences="5">
       <code>$destination_parts[1]</code>
@@ -285,21 +56,16 @@
       <code>$source_parts[1]</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
+  <file src="src/Psalm/Internal/Analyzer/Statements/Block/ForAnalyzer.php">
+    <ArgumentTypeCoercion occurrences="1">
+      <code>$stmt-&gt;cond</code>
+    </ArgumentTypeCoercion>
+  </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Block/ForeachAnalyzer.php">
     <ConflictingReferenceConstraint occurrences="2">
       <code>if (AtomicTypeComparator::isContainedBy(</code>
       <code>if (AtomicTypeComparator::isContainedBy(</code>
     </ConflictingReferenceConstraint>
-    <LiteralKeyUnshapedArray occurrences="5">
-      <code>$generic_storage-&gt;template_extended_params['Traversable']</code>
-      <code>$generic_storage-&gt;template_extended_params['Traversable']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['UnnecessaryVarAnnotation']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/Block/LoopAnalyzer.php">
-    <PossiblyUndefinedIntArrayOffset occurrences="1">
-      <code>$pre_conditions[0]</code>
-    </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Block/SwitchAnalyzer.php">
     <InvalidPropertyAssignmentValue occurrences="1">
@@ -313,21 +79,8 @@
       <code>$traverser-&gt;traverse([$switch_condition])[0]</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/EchoAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$codebase-&gt;config-&gt;forbidden_functions['echo']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/Expression/ArrayAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$atomic_key_type-&gt;methods['__tostring']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/AssertionFinder.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$class_definition-&gt;methods['__get']</code>
-    </LiteralKeyUnshapedArray>
-    <PossiblyUndefinedIntArrayOffset occurrences="29">
+    <PossiblyUndefinedIntArrayOffset occurrences="28">
       <code>$assertion-&gt;rule[0]</code>
       <code>$assertion-&gt;rule[0]</code>
       <code>$assertion-&gt;rule[0]</code>
@@ -351,7 +104,6 @@
       <code>$expr-&gt;getArgs()[0]</code>
       <code>$expr-&gt;getArgs()[1]</code>
       <code>$expr-&gt;getArgs()[1]</code>
-      <code>$expr-&gt;getArgs()[1]</code>
       <code>$get_debug_type_expr-&gt;getArgs()[0]</code>
       <code>$get_debug_type_expr-&gt;getArgs()[0]</code>
       <code>$getclass_expr-&gt;getArgs()[0]</code>
@@ -359,32 +111,9 @@
       <code>$gettype_expr-&gt;getArgs()[0]</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Assignment/ArrayAssignmentAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="2">
-      <code>$atomic_root_types['array']</code>
-      <code>$atomic_root_types['array']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Assignment/InstancePropertyAssignmentAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$project_analyzer-&gt;getIssuesToFix()['MissingImmutableAnnotation']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Assignment/StaticPropertyAssignmentAnalyzer.php">
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$new_property_name</code>
-    </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/Expression/AssignmentAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="2">
-      <code>$project_analyzer-&gt;getIssuesToFix()['UnnecessaryVarAnnotation']</code>
-      <code>$statements_analyzer-&gt;getProjectAnalyzer()-&gt;getIssuesToFix()['UnnecessaryVarAnnotation']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/Expression/BinaryOp/AndAnalyzer.php">
-    <PossiblyUndefinedIntArrayOffset occurrences="2">
-      <code>$context_clauses-&gt;clauses[0]</code>
-      <code>$context_clauses-&gt;clauses[0]</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/BinaryOp/ArithmeticOpAnalyzer.php">
@@ -413,9 +142,6 @@
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Call/FunctionCallAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$var_type_part-&gt;methods['__invoke']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedArrayOffset occurrences="1">
       <code>$stmt-&gt;getArgs()[0]</code>
     </PossiblyUndefinedArrayOffset>
@@ -424,9 +150,6 @@
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Call/FunctionCallReturnTypeFetcher.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$atomic_types['array']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$method</code>
     </PossiblyUndefinedIntArrayOffset>
@@ -441,39 +164,16 @@
       <code>$result-&gt;non_existent_magic_method_ids[0]</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Call/StaticCallAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$context-&gt;vars_in_scope['$this']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Call/StaticMethod/AtomicStaticCallAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$context-&gt;vars_in_scope['$this']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Call/StaticMethod/ExistingAtomicStaticCallAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$context-&gt;vars_in_scope['$this']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$new_method_name</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/CallAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$context-&gt;vars_in_scope['$this']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="2">
       <code>$callable_arg-&gt;items[0]</code>
       <code>$callable_arg-&gt;items[1]</code>
     </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/Expression/CastAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="3">
-      <code>$intersection_type-&gt;methods['__tostring']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['RedundantCast']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['RedundantCastGivenDocblockType']</code>
-    </LiteralKeyUnshapedArray>
   </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/ClassConstAnalyzer.php">
     <PossiblyUndefinedIntArrayOffset occurrences="2">
@@ -481,34 +181,12 @@
       <code>$new_const_name</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/Expression/EmptyAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$codebase-&gt;config-&gt;forbidden_functions['empty']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/Expression/EvalAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$codebase-&gt;config-&gt;forbidden_functions['eval']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/Expression/ExitAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="2">
-      <code>$config-&gt;forbidden_functions['die']</code>
-      <code>$config-&gt;forbidden_functions['exit']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Fetch/ArrayFetchAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$atomic_key_type-&gt;methods['__tostring']</code>
-    </LiteralKeyUnshapedArray>
     <ReferenceConstraintViolation occurrences="3">
       <code>$stmt_type</code>
       <code>$stmt_type</code>
       <code>$stmt_type</code>
     </ReferenceConstraintViolation>
-    <UnusedVariable occurrences="1">
-      <code>$exact_keys</code>
-    </UnusedVariable>
   </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Fetch/AtomicPropertyFetchAnalyzer.php">
     <ReferenceConstraintViolation occurrences="1">
@@ -525,22 +203,7 @@
       <code>$new_property_name</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Fetch/VariableFetchAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="3">
-      <code>$context-&gt;vars_in_scope['$this']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['PossiblyUndefinedGlobalVariable']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['PossiblyUndefinedVariable']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Analyzer/Statements/Expression/PrintAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$codebase-&gt;config-&gt;forbidden_functions['print']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/YieldAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$project_analyzer-&gt;getIssuesToFix()['UnnecessaryVarAnnotation']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$atomic_return_type-&gt;type_params[2]</code>
     </PossiblyUndefinedIntArrayOffset>
@@ -561,17 +224,6 @@
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Analyzer/StatementsAnalyzer.php">
-    <LiteralKeyUnshapedArray occurrences="9">
-      <code>$comments-&gt;tags['psalm-scope-this']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['UnusedVariable']</code>
-      <code>$statements_analyzer-&gt;parsed_docblock-&gt;combined_tags['var']</code>
-      <code>$statements_analyzer-&gt;parsed_docblock-&gt;tags['psalm-check-type']</code>
-      <code>$statements_analyzer-&gt;parsed_docblock-&gt;tags['psalm-check-type-exact']</code>
-      <code>$statements_analyzer-&gt;parsed_docblock-&gt;tags['psalm-ignore-variable-method']</code>
-      <code>$statements_analyzer-&gt;parsed_docblock-&gt;tags['psalm-ignore-variable-property']</code>
-      <code>$statements_analyzer-&gt;parsed_docblock-&gt;tags['psalm-suppress']</code>
-      <code>$statements_analyzer-&gt;parsed_docblock-&gt;tags['psalm-trace']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedArrayOffset occurrences="1">
       <code>$stmt-&gt;expr-&gt;getArgs()[0]</code>
     </PossiblyUndefinedArrayOffset>
@@ -579,174 +231,17 @@
       <code>$check_type_string</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
-  <file src="src/Psalm/Internal/ClauseConjunction.php">
-    <ImpureByReferenceAssignment occurrences="1">
-      <code>$active_truths</code>
-    </ImpureByReferenceAssignment>
-    <ImpureFunctionCall occurrences="3">
-      <code>mt_rand</code>
-      <code>mt_rand</code>
-      <code>mt_rand</code>
-    </ImpureFunctionCall>
-    <ImpureMethodCall occurrences="1">
-      <code>empty</code>
-    </ImpureMethodCall>
-    <InaccessibleProperty occurrences="1">
-      <code>$this-&gt;negation</code>
-    </InaccessibleProperty>
-  </file>
-  <file src="src/Psalm/Internal/Cli/LanguageServer.php">
-    <LiteralKeyUnshapedArray occurrences="19">
-      <code>$options['c']</code>
-      <code>$options['clear-cache']</code>
-      <code>$options['config']</code>
-      <code>$options['disable-on-change']</code>
-      <code>$options['enable-autocomplete']</code>
-      <code>$options['find-dead-code']</code>
-      <code>$options['r']</code>
-      <code>$options['r']</code>
-      <code>$options['root']</code>
-      <code>$options['tcp']</code>
-      <code>$options['tcp']</code>
-      <code>$options['tcp-server']</code>
-      <code>$options['use-extended-diagnostic-codes']</code>
-      <code>$options['verbose']</code>
-      <code>array_key_exists('h', $options)</code>
-      <code>array_key_exists('help', $options)</code>
-      <code>array_key_exists('use-ini-defaults', $options)</code>
-      <code>array_key_exists('v', $options)</code>
-      <code>array_key_exists('version', $options)</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Cli/Psalm.php">
-    <LiteralKeyUnshapedArray occurrences="58">
-      <code>$options['alter']</code>
-      <code>$options['c']</code>
-      <code>$options['config']</code>
-      <code>$options['debug']</code>
-      <code>$options['debug']</code>
-      <code>$options['disable-extension']</code>
-      <code>$options['dump-taint-graph']</code>
-      <code>$options['error-level']</code>
-      <code>$options['find-dead-code']</code>
-      <code>$options['find-unused-code']</code>
-      <code>$options['find-unused-psalm-suppress']</code>
-      <code>$options['generate-json-map']</code>
-      <code>$options['generate-stubs']</code>
-      <code>$options['i']</code>
-      <code>$options['i']</code>
-      <code>$options['ignore-baseline']</code>
-      <code>$options['ignore-baseline']</code>
-      <code>$options['include-php-versions']</code>
-      <code>$options['language-server']</code>
-      <code>$options['long-progress']</code>
-      <code>$options['no-cache']</code>
-      <code>$options['no-diff']</code>
-      <code>$options['no-file-cache']</code>
-      <code>$options['no-progress']</code>
-      <code>$options['no-reflection-cache']</code>
-      <code>$options['output-format']</code>
-      <code>$options['pretty-print']</code>
-      <code>$options['r']</code>
-      <code>$options['r']</code>
-      <code>$options['refactor']</code>
-      <code>$options['root']</code>
-      <code>$options['security-analysis']</code>
-      <code>$options['set-baseline']</code>
-      <code>$options['set-baseline']</code>
-      <code>$options['show-info']</code>
-      <code>$options['show-info']</code>
-      <code>$options['show-snippet']</code>
-      <code>$options['taint-analysis']</code>
-      <code>$options['threads']</code>
-      <code>$options['threads']</code>
-      <code>$options['track-tainted-input']</code>
-      <code>$options['update-baseline']</code>
-      <code>$options['update-baseline']</code>
-      <code>$options['use-baseline']</code>
-      <code>array_key_exists('debug', $options)</code>
-      <code>array_key_exists('debug-by-line', $options)</code>
-      <code>array_key_exists('debug-by-line', $options)</code>
-      <code>array_key_exists('debug-performance', $options)</code>
-      <code>array_key_exists('h', $options)</code>
-      <code>array_key_exists('help', $options)</code>
-      <code>array_key_exists('init', $options)</code>
-      <code>array_key_exists('m', $options)</code>
-      <code>array_key_exists('memory-limit', $options)</code>
-      <code>array_key_exists('monochrome', $options)</code>
-      <code>array_key_exists('no-suggestions', $options)</code>
-      <code>array_key_exists('use-ini-defaults', $options)</code>
-      <code>array_key_exists('v', $options)</code>
-      <code>array_key_exists('version', $options)</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Cli/Psalter.php">
-    <LiteralKeyUnshapedArray occurrences="7">
-      <code>$options['c']</code>
-      <code>$options['config']</code>
-      <code>$options['issues']</code>
-      <code>$options['root']</code>
-      <code>array_key_exists('h', $options)</code>
-      <code>array_key_exists('help', $options)</code>
-      <code>array_key_exists('monochrome', $options)</code>
-    </LiteralKeyUnshapedArray>
-  </file>
   <file src="src/Psalm/Internal/Cli/Refactor.php">
-    <LiteralKeyUnshapedArray occurrences="12">
-      <code>$options['c']</code>
-      <code>$options['config']</code>
-      <code>$options['r']</code>
-      <code>$options['r']</code>
-      <code>$options['root']</code>
-      <code>$options['threads']</code>
-      <code>array_key_exists('debug', $options)</code>
-      <code>array_key_exists('debug-by-line', $options)</code>
-      <code>array_key_exists('debug-by-line', $options)</code>
-      <code>array_key_exists('debug-emitted-issues', $options)</code>
-      <code>array_key_exists('h', $options)</code>
-      <code>array_key_exists('help', $options)</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$identifier_name</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
-  <file src="src/Psalm/Internal/CliUtils.php">
-    <LiteralKeyUnshapedArray occurrences="5">
-      <code>$composer_json['config']</code>
-      <code>$composer_json['config']['vendor-dir']</code>
-      <code>$options['c']</code>
-      <code>$options['c']</code>
-      <code>$options['php-version']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
   <file src="src/Psalm/Internal/Codebase/Analyzer.php">
-    <MixedArgument occurrences="1">
-      <code>$times</code>
-    </MixedArgument>
-    <MixedArrayAssignment occurrences="1">
-      <code>$times[$issues[1]]</code>
-    </MixedArrayAssignment>
-    <MixedAssignment occurrences="2">
-      <code>$file</code>
-      <code>$time</code>
-    </MixedAssignment>
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$trait</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Codebase/ClassLikes.php">
-    <LiteralKeyUnshapedArray occurrences="10">
-      <code>$classlike_storage-&gt;declaring_method_ids['__call']</code>
-      <code>$classlike_storage-&gt;declaring_method_ids['__get']</code>
-      <code>$classlike_storage-&gt;declaring_method_ids['__get']</code>
-      <code>$classlike_storage-&gt;methods['__construct']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['MissingImmutableAnnotation']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['MissingParamType']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['PossiblyUnusedMethod']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['PossiblyUnusedProperty']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['UnusedMethod']</code>
-      <code>$project_analyzer-&gt;getIssuesToFix()['UnusedProperty']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="5">
       <code>$destination_name</code>
       <code>$destination_name</code>
@@ -771,11 +266,6 @@
       <code>$function_callables[0]</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
-  <file src="src/Psalm/Internal/Codebase/Populator.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$storage-&gt;methods['__construct']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
   <file src="src/Psalm/Internal/Codebase/Properties.php">
     <PossiblyUndefinedIntArrayOffset occurrences="6">
       <code>$property_name</code>
@@ -785,14 +275,6 @@
       <code>$property_name</code>
       <code>$property_name</code>
     </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/Internal/Codebase/Reflection.php">
-    <MixedArgument occurrences="1">
-      <code>$reflection_type-&gt;getTypes()</code>
-    </MixedArgument>
-    <UnusedMethodCall occurrences="1">
-      <code>queueClassLikesForScanning</code>
-    </UnusedMethodCall>
   </file>
   <file src="src/Psalm/Internal/Diff/ClassStatementsDiffer.php">
     <PossiblyUndefinedIntArrayOffset occurrences="6">
@@ -809,41 +291,10 @@
       <code>$b[$y]</code>
     </InvalidArrayOffset>
   </file>
-  <file src="src/Psalm/Internal/ExecutionEnvironment/BuildInfoCollector.php">
-    <LiteralKeyUnshapedArray occurrences="8">
-      <code>$event_data['head_commit']</code>
-      <code>$event_data['number']</code>
-      <code>$this-&gt;env['APPVEYOR']</code>
-      <code>$this-&gt;env['CIRCLECI']</code>
-      <code>$this-&gt;env['GITHUB_ACTIONS']</code>
-      <code>$this-&gt;env['JENKINS_URL']</code>
-      <code>$this-&gt;env['SCRUTINIZER']</code>
-      <code>$this-&gt;env['TRAVIS']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/FileManipulation/FunctionDocblockManipulator.php">
-    <LiteralKeyUnshapedArray occurrences="6">
-      <code>$parsed_docblock-&gt;tags['param']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-param']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-return']</code>
-      <code>$parsed_docblock-&gt;tags['return']</code>
-      <code>$parsed_docblock-&gt;tags['return']</code>
-      <code>array_key_exists('throws', $parsed_docblock-&gt;tags)</code>
-    </LiteralKeyUnshapedArray>
-  </file>
   <file src="src/Psalm/Internal/FileManipulation/PropertyDocblockManipulator.php">
-    <LiteralKeyUnshapedArray occurrences="2">
-      <code>$parsed_docblock-&gt;tags['psalm-var']</code>
-      <code>$parsed_docblock-&gt;tags['var']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$stmt-&gt;props[0]</code>
     </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/Internal/Fork/Pool.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$err['message']</code>
-    </LiteralKeyUnshapedArray>
   </file>
   <file src="src/Psalm/Internal/LanguageServer/LanguageClient.php">
     <DocblockTypeContradiction occurrences="3">
@@ -853,17 +304,11 @@
     </DocblockTypeContradiction>
   </file>
   <file src="src/Psalm/Internal/LanguageServer/Message.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$headers['Content-Type']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$pair[1]</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/LanguageServer/ProtocolStreamReader.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$this-&gt;headers['Content-Length']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$parts[1]</code>
     </PossiblyUndefinedIntArrayOffset>
@@ -891,39 +336,6 @@
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/PhpVisitor/Reflector/ClassLikeDocblockParser.php">
-    <LiteralKeyUnshapedArray occurrences="31">
-      <code>$parsed_docblock-&gt;combined_tags['extends']</code>
-      <code>$parsed_docblock-&gt;combined_tags['implements']</code>
-      <code>$parsed_docblock-&gt;combined_tags['method']</code>
-      <code>$parsed_docblock-&gt;combined_tags['template']</code>
-      <code>$parsed_docblock-&gt;combined_tags['template-covariant']</code>
-      <code>$parsed_docblock-&gt;tags['deprecated']</code>
-      <code>$parsed_docblock-&gt;tags['final']</code>
-      <code>$parsed_docblock-&gt;tags['internal']</code>
-      <code>$parsed_docblock-&gt;tags['mixin']</code>
-      <code>$parsed_docblock-&gt;tags['phpstan-import-type']</code>
-      <code>$parsed_docblock-&gt;tags['phpstan-template']</code>
-      <code>$parsed_docblock-&gt;tags['phpstan-template-covariant']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-consistent-constructor']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-consistent-templates']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-external-mutation-free']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-immutable']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-import-type']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-mutation-free']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-override-method-visibility']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-override-property-visibility']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-require-extends']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-require-implements']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-seal-methods']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-seal-properties']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-stub-override']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-suppress']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-taint-specialize']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-template']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-template-covariant']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-yield']</code>
-      <code>$template_entries[$source_prefix]</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="4">
       <code>$doc_line_parts[1]</code>
       <code>$matches[0]</code>
@@ -932,19 +344,6 @@
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/PhpVisitor/Reflector/ClassLikeNodeScanner.php">
-    <LiteralKeyUnshapedArray occurrences="11">
-      <code>$class_storage-&gt;methods[$method_name_lc]</code>
-      <code>$comments-&gt;combined_tags['use']</code>
-      <code>$comments-&gt;tags['deprecated']</code>
-      <code>$comments-&gt;tags['deprecated']</code>
-      <code>$comments-&gt;tags['extends']</code>
-      <code>$comments-&gt;tags['implements']</code>
-      <code>$comments-&gt;tags['template-extends']</code>
-      <code>$comments-&gt;tags['template-implements']</code>
-      <code>$parsed_docblock-&gt;tags['phpstan-type']</code>
-      <code>$parsed_docblock-&gt;tags['phpstan-type']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-type']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="2">
       <code>$l[4]</code>
       <code>$r[4]</code>
@@ -957,55 +356,6 @@
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/PhpVisitor/Reflector/FunctionLikeDocblockParser.php">
-    <LiteralKeyUnshapedArray occurrences="47">
-      <code>$parsed_docblock-&gt;combined_tags['param']</code>
-      <code>$parsed_docblock-&gt;combined_tags['param-out']</code>
-      <code>$parsed_docblock-&gt;combined_tags['return']</code>
-      <code>$parsed_docblock-&gt;combined_tags['template']</code>
-      <code>$parsed_docblock-&gt;combined_tags['var']</code>
-      <code>$parsed_docblock-&gt;tags[$alias]</code>
-      <code>$parsed_docblock-&gt;tags[$assert]</code>
-      <code>$parsed_docblock-&gt;tags[$assert]</code>
-      <code>$parsed_docblock-&gt;tags[$assert]</code>
-      <code>$parsed_docblock-&gt;tags['deprecated']</code>
-      <code>$parsed_docblock-&gt;tags['global']</code>
-      <code>$parsed_docblock-&gt;tags['inheritDoc']</code>
-      <code>$parsed_docblock-&gt;tags['inheritdoc']</code>
-      <code>$parsed_docblock-&gt;tags['internal']</code>
-      <code>$parsed_docblock-&gt;tags['no-named-arguments']</code>
-      <code>$parsed_docblock-&gt;tags['param']</code>
-      <code>$parsed_docblock-&gt;tags['param-taint']</code>
-      <code>$parsed_docblock-&gt;tags['phpstan-param']</code>
-      <code>$parsed_docblock-&gt;tags['phpstan-return']</code>
-      <code>$parsed_docblock-&gt;tags['phpstan-template']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-assert-untainted']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-consistent-constructor']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-external-mutation-free']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-flow']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-if-this-is']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-ignore-falsable-return']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-ignore-nullable-return']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-import-type']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-mutation-free']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-param']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-pure']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-return']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-stub-override']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-suppress']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-taint-escape']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-taint-sink']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-taint-source']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-taint-specialize']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-taint-unescape']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-template']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-variadic']</code>
-      <code>$parsed_docblock-&gt;tags['pure']</code>
-      <code>$parsed_docblock-&gt;tags['return']</code>
-      <code>$parsed_docblock-&gt;tags['return-taint']</code>
-      <code>$parsed_docblock-&gt;tags['since']</code>
-      <code>$parsed_docblock-&gt;tags['throws']</code>
-      <code>$template_entries[$source_prefix]</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$since_parts[1]</code>
     </PossiblyUndefinedIntArrayOffset>
@@ -1014,28 +364,14 @@
     </RedundantCondition>
   </file>
   <file src="src/Psalm/Internal/PhpVisitor/Reflector/FunctionLikeDocblockScanner.php">
-    <MixedArgumentTypeCoercion occurrences="1">
-      <code>$new</code>
-    </MixedArgumentTypeCoercion>
-    <MixedAssignment occurrences="3">
-      <code>$new []</code>
-      <code>$t</code>
-      <code>$types</code>
-    </MixedAssignment>
     <PossiblyInvalidArrayOffset occurrences="1">
       <code>$fixed_type_tokens[$i - 1]</code>
     </PossiblyInvalidArrayOffset>
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$source_param_string</code>
     </PossiblyUndefinedIntArrayOffset>
-    <RedundantConditionGivenDocblockType occurrences="2">
-      <code>!$storage-&gt;signature_return_type</code>
-    </RedundantConditionGivenDocblockType>
   </file>
   <file src="src/Psalm/Internal/PhpVisitor/Reflector/FunctionLikeNodeScanner.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$classlike_storage-&gt;methods['__construct']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$stmt-&gt;stmts[0]</code>
     </PossiblyUndefinedIntArrayOffset>
@@ -1045,25 +381,7 @@
       <code>$cs[0]</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
-  <file src="src/Psalm/Internal/PluginManager/ComposerLock.php">
-    <LiteralKeyUnshapedArray occurrences="5">
-      <code>$composer_lock_contents['packages']</code>
-      <code>$package['extra']</code>
-      <code>$package['extra']['psalm']</code>
-      <code>$package['extra']['psalm']['pluginClass']</code>
-      <code>$package['name']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/ArrayFilterReturnTypeProvider.php">
-    <LiteralKeyUnshapedArray occurrences="2">
-      <code>$reconciled_types['$inner_type']</code>
-      <code>$reconciled_types['$inner_type']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
   <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/ArrayMapReturnTypeProvider.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$arg_types['array']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$callable_method_name</code>
     </PossiblyUndefinedIntArrayOffset>
@@ -1072,145 +390,19 @@
     <InvalidArgument occurrences="1">
       <code>$class_strings ?: null</code>
     </InvalidArgument>
+    <RedundantCondition occurrences="2">
+      <code>$is_replace</code>
+    </RedundantCondition>
   </file>
   <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/ArrayReduceReturnTypeProvider.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$array_arg_types['array']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$method_name</code>
     </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/FilterVarReturnTypeProvider.php">
-    <LiteralKeyUnshapedArray occurrences="3">
-      <code>$atomic_type-&gt;properties['flags']</code>
-      <code>$atomic_type-&gt;properties['options']</code>
-      <code>$options_array-&gt;properties['default']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/InArrayReturnTypeProvider.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$types['array']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Provider/ReturnTypeProvider/MbInternalEncodingReturnTypeProvider.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$atomic_type-&gt;methods['__tostring']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Provider/StatementsProvider.php">
-    <MixedArgument occurrences="7">
-      <code>$key-&gt;value</code>
-      <code>$node-&gt;name-&gt;name</code>
-      <code>$prev</code>
-      <code>$prev</code>
-      <code>$var-&gt;value</code>
-      <code>$var-&gt;value</code>
-      <code>array_shift($expr)</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="3">
-      <code>$class</code>
-      <code>$expr []</code>
-      <code>$prev</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="1">
-      <code>enterNode</code>
-    </MixedInferredReturnType>
-    <MixedReturnStatement occurrences="2"/>
-    <UndefinedClass occurrences="1">
-      <code>Helper</code>
-    </UndefinedClass>
-    <UndefinedPropertyFetch occurrences="4">
-      <code>$key-&gt;value</code>
-      <code>$node-&gt;name-&gt;name</code>
-      <code>$var-&gt;value</code>
-      <code>$var-&gt;value</code>
-    </UndefinedPropertyFetch>
-  </file>
-  <file src="src/Psalm/Internal/Scanner/DocblockParser.php">
-    <LiteralKeyUnshapedArray occurrences="67">
-      <code>$docblock-&gt;tags['extends']</code>
-      <code>$docblock-&gt;tags['extends']</code>
-      <code>$docblock-&gt;tags['ignore-var']</code>
-      <code>$docblock-&gt;tags['implements']</code>
-      <code>$docblock-&gt;tags['implements']</code>
-      <code>$docblock-&gt;tags['inherits']</code>
-      <code>$docblock-&gt;tags['inherits']</code>
-      <code>$docblock-&gt;tags['method']</code>
-      <code>$docblock-&gt;tags['method']</code>
-      <code>$docblock-&gt;tags['param']</code>
-      <code>$docblock-&gt;tags['param']</code>
-      <code>$docblock-&gt;tags['param-out']</code>
-      <code>$docblock-&gt;tags['param-out']</code>
-      <code>$docblock-&gt;tags['phpstan-extends']</code>
-      <code>$docblock-&gt;tags['phpstan-extends']</code>
-      <code>$docblock-&gt;tags['phpstan-implements']</code>
-      <code>$docblock-&gt;tags['phpstan-implements']</code>
-      <code>$docblock-&gt;tags['phpstan-param']</code>
-      <code>$docblock-&gt;tags['phpstan-param']</code>
-      <code>$docblock-&gt;tags['phpstan-param-out']</code>
-      <code>$docblock-&gt;tags['phpstan-param-out']</code>
-      <code>$docblock-&gt;tags['phpstan-return']</code>
-      <code>$docblock-&gt;tags['phpstan-return']</code>
-      <code>$docblock-&gt;tags['phpstan-template']</code>
-      <code>$docblock-&gt;tags['phpstan-template']</code>
-      <code>$docblock-&gt;tags['phpstan-template-covariant']</code>
-      <code>$docblock-&gt;tags['phpstan-template-covariant']</code>
-      <code>$docblock-&gt;tags['phpstan-use']</code>
-      <code>$docblock-&gt;tags['phpstan-use']</code>
-      <code>$docblock-&gt;tags['phpstan-var']</code>
-      <code>$docblock-&gt;tags['phpstan-var']</code>
-      <code>$docblock-&gt;tags['psalm-extends']</code>
-      <code>$docblock-&gt;tags['psalm-extends']</code>
-      <code>$docblock-&gt;tags['psalm-ignore-var']</code>
-      <code>$docblock-&gt;tags['psalm-implements']</code>
-      <code>$docblock-&gt;tags['psalm-implements']</code>
-      <code>$docblock-&gt;tags['psalm-method']</code>
-      <code>$docblock-&gt;tags['psalm-param']</code>
-      <code>$docblock-&gt;tags['psalm-param']</code>
-      <code>$docblock-&gt;tags['psalm-param-out']</code>
-      <code>$docblock-&gt;tags['psalm-param-out']</code>
-      <code>$docblock-&gt;tags['psalm-return']</code>
-      <code>$docblock-&gt;tags['psalm-return']</code>
-      <code>$docblock-&gt;tags['psalm-template']</code>
-      <code>$docblock-&gt;tags['psalm-template']</code>
-      <code>$docblock-&gt;tags['psalm-template-covariant']</code>
-      <code>$docblock-&gt;tags['psalm-template-covariant']</code>
-      <code>$docblock-&gt;tags['psalm-use']</code>
-      <code>$docblock-&gt;tags['psalm-use']</code>
-      <code>$docblock-&gt;tags['psalm-var']</code>
-      <code>$docblock-&gt;tags['psalm-var']</code>
-      <code>$docblock-&gt;tags['return']</code>
-      <code>$docblock-&gt;tags['template']</code>
-      <code>$docblock-&gt;tags['template']</code>
-      <code>$docblock-&gt;tags['template-covariant']</code>
-      <code>$docblock-&gt;tags['template-covariant']</code>
-      <code>$docblock-&gt;tags['template-extends']</code>
-      <code>$docblock-&gt;tags['template-extends']</code>
-      <code>$docblock-&gt;tags['template-implements']</code>
-      <code>$docblock-&gt;tags['template-implements']</code>
-      <code>$docblock-&gt;tags['template-use']</code>
-      <code>$docblock-&gt;tags['template-use']</code>
-      <code>$docblock-&gt;tags['use']</code>
-      <code>$docblock-&gt;tags['use']</code>
-      <code>$docblock-&gt;tags['var']</code>
-      <code>$docblock-&gt;tags['var']</code>
-      <code>$parsed_docblock-&gt;tags['psalm-internal']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Scanner/PhpStormMetaScanner.php">
-    <LiteralKeyUnshapedArray occurrences="2">
-      <code>$map['']</code>
-      <code>$map['']</code>
-    </LiteralKeyUnshapedArray>
   </file>
   <file src="src/Psalm/Internal/Type/Comparator/AtomicTypeComparator.php">
     <ComplexMethod occurrences="1">
       <code>isContainedBy</code>
     </ComplexMethod>
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$input_type_part-&gt;methods['__tostring']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="2">
       <code>$array-&gt;properties[0]</code>
       <code>$array-&gt;properties[0]</code>
@@ -1224,50 +416,13 @@
       <code>TCallable|TClosure|null</code>
     </MoreSpecificReturnType>
   </file>
-  <file src="src/Psalm/Internal/Type/Comparator/IntegerRangeComparator.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$container_atomic_types['int']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Internal/Type/NegatedAssertionReconciler.php">
-    <LiteralKeyUnshapedArray occurrences="5">
-      <code>$existing_var_atomic_types['DateTimeInterface']</code>
-      <code>$existing_var_atomic_types['int']</code>
-      <code>$existing_var_atomic_types['iterable']</code>
-      <code>$existing_var_type-&gt;getAtomicTypes()['array-key']</code>
-      <code>$existing_var_type-&gt;getAtomicTypes()['int']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
   <file src="src/Psalm/Internal/Type/SimpleAssertionReconciler.php">
-    <LiteralKeyUnshapedArray occurrences="5">
-      <code>$types['array']</code>
-      <code>$types['bool']</code>
-      <code>$types['mixed']</code>
-      <code>$types['scalar']</code>
-      <code>$types['string']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="4">
       <code>$array_atomic_type-&gt;properties[0]</code>
       <code>$properties[0]</code>
       <code>$properties[0]</code>
       <code>$properties[0]</code>
     </PossiblyUndefinedIntArrayOffset>
-  </file>
-  <file src="src/Psalm/Internal/Type/SimpleNegatedAssertionReconciler.php">
-    <LiteralKeyUnshapedArray occurrences="12">
-      <code>$existing_var_atomic_types['array']</code>
-      <code>$existing_var_type-&gt;getAtomicTypes()['mixed']</code>
-      <code>$existing_var_type-&gt;getAtomicTypes()['scalar']</code>
-      <code>$existing_var_type-&gt;getAtomicTypes()['string']</code>
-      <code>$types['bool']</code>
-      <code>$types['bool']</code>
-      <code>$types['false']</code>
-      <code>$types['null']</code>
-      <code>$types['resource']</code>
-      <code>$types['scalar']</code>
-      <code>$types['scalar']</code>
-      <code>$types['true']</code>
-    </LiteralKeyUnshapedArray>
   </file>
   <file src="src/Psalm/Internal/Type/TemplateStandinTypeReplacer.php">
     <ImpureMethodCall occurrences="2">
@@ -1276,65 +431,6 @@
     </ImpureMethodCall>
   </file>
   <file src="src/Psalm/Internal/Type/TypeCombiner.php">
-    <LiteralKeyUnshapedArray occurrences="57">
-      <code>$combination-&gt;builtin_type_params['Traversable']</code>
-      <code>$combination-&gt;builtin_type_params['Traversable']</code>
-      <code>$combination-&gt;builtin_type_params['Traversable']</code>
-      <code>$combination-&gt;builtin_type_params['Traversable']</code>
-      <code>$combination-&gt;builtin_type_params['Traversable']</code>
-      <code>$combination-&gt;builtin_type_params['Traversable']</code>
-      <code>$combination-&gt;builtin_type_params['iterable']</code>
-      <code>$combination-&gt;builtin_type_params['iterable']</code>
-      <code>$combination-&gt;builtin_type_params['iterable']</code>
-      <code>$combination-&gt;builtin_type_params['iterable']</code>
-      <code>$combination-&gt;builtin_type_params['iterable']</code>
-      <code>$combination-&gt;named_object_types['Traversable']</code>
-      <code>$combination-&gt;named_object_types['Traversable']</code>
-      <code>$combination-&gt;named_object_types['Traversable']</code>
-      <code>$combination-&gt;named_object_types['Traversable']</code>
-      <code>$combination-&gt;value_types['array-key']</code>
-      <code>$combination-&gt;value_types['array-key']</code>
-      <code>$combination-&gt;value_types['bool']</code>
-      <code>$combination-&gt;value_types['bool']</code>
-      <code>$combination-&gt;value_types['callable']</code>
-      <code>$combination-&gt;value_types['callable']</code>
-      <code>$combination-&gt;value_types['callable']</code>
-      <code>$combination-&gt;value_types['callable']</code>
-      <code>$combination-&gt;value_types['callable-object']</code>
-      <code>$combination-&gt;value_types['class-string']</code>
-      <code>$combination-&gt;value_types['false']</code>
-      <code>$combination-&gt;value_types['false']</code>
-      <code>$combination-&gt;value_types['false']</code>
-      <code>$combination-&gt;value_types['float']</code>
-      <code>$combination-&gt;value_types['int']</code>
-      <code>$combination-&gt;value_types['int']</code>
-      <code>$combination-&gt;value_types['int']</code>
-      <code>$combination-&gt;value_types['int']</code>
-      <code>$combination-&gt;value_types['int']</code>
-      <code>$combination-&gt;value_types['int']</code>
-      <code>$combination-&gt;value_types['iterable']</code>
-      <code>$combination-&gt;value_types['iterable']</code>
-      <code>$combination-&gt;value_types['never']</code>
-      <code>$combination-&gt;value_types['null']</code>
-      <code>$combination-&gt;value_types['scalar']</code>
-      <code>$combination-&gt;value_types['string']</code>
-      <code>$combination-&gt;value_types['string']</code>
-      <code>$combination-&gt;value_types['string']</code>
-      <code>$combination-&gt;value_types['string']</code>
-      <code>$combination-&gt;value_types['string']</code>
-      <code>$combination-&gt;value_types['string']</code>
-      <code>$combination-&gt;value_types['string']</code>
-      <code>$combination-&gt;value_types['string']</code>
-      <code>$combination-&gt;value_types['string']</code>
-      <code>$combination-&gt;value_types['string']</code>
-      <code>$combination-&gt;value_types['string']</code>
-      <code>$combination-&gt;value_types['string']</code>
-      <code>$combination-&gt;value_types['true']</code>
-      <code>$combination-&gt;value_types['true']</code>
-      <code>$combination-&gt;value_types['true']</code>
-      <code>$combination-&gt;value_types['true']</code>
-      <code>$combination-&gt;value_types['void']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="7">
       <code>$combination-&gt;array_type_params[1]</code>
       <code>$combination-&gt;array_type_params[1]</code>
@@ -1351,10 +447,6 @@
     </InvalidArgument>
   </file>
   <file src="src/Psalm/Internal/Type/TypeParser.php">
-    <LiteralKeyUnshapedArray occurrences="2">
-      <code>$keyed_intersection_types['static']</code>
-      <code>$offset_template_data['']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedIntArrayOffset occurrences="10">
       <code>$const_name</code>
       <code>$const_name</code>
@@ -1381,23 +473,6 @@
       <code>$type_tokens[$i - 1]</code>
       <code>$type_tokens[$i - 2]</code>
     </PossiblyInvalidArrayOffset>
-  </file>
-  <file src="src/Psalm/Plugin/Shepherd.php">
-    <LiteralKeyUnshapedArray occurrences="3">
-      <code>$build_info['git']</code>
-      <code>$build_info['git']</code>
-      <code>$curl_info['ssl_verify_result']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="src/Psalm/Report/ConsoleReport.php">
-    <RedundantCondition occurrences="1">
-      <code>true</code>
-    </RedundantCondition>
-  </file>
-  <file src="src/Psalm/Report/JsonReport.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$issue_data['dupe_key']</code>
-    </LiteralKeyUnshapedArray>
   </file>
   <file src="src/Psalm/Storage/ClassConstantStorage.php">
     <MutableDependency occurrences="1">
@@ -1569,14 +644,6 @@
     </ImpureMethodCall>
   </file>
   <file src="src/Psalm/Type/MutableUnion.php">
-    <LiteralKeyUnshapedArray occurrences="6">
-      <code>$this-&gt;types['array-key']</code>
-      <code>$this-&gt;types['bool']</code>
-      <code>$this-&gt;types['bool']</code>
-      <code>$this-&gt;types['class-string']</code>
-      <code>$this-&gt;types['iterable']</code>
-      <code>$this-&gt;types['trait-string']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUnusedProperty occurrences="7">
       <code>$allow_mutations</code>
       <code>$by_ref</code>
@@ -1616,64 +683,6 @@
       <code>traverseArray</code>
       <code>traverseArray</code>
     </ImpureMethodCall>
-    <LiteralKeyUnshapedArray occurrences="56">
-      <code>$this-&gt;types['array']</code>
-      <code>$this-&gt;types['array']</code>
-      <code>$this-&gt;types['array']</code>
-      <code>$this-&gt;types['array']</code>
-      <code>$this-&gt;types['array']</code>
-      <code>$this-&gt;types['array']</code>
-      <code>$this-&gt;types['array-key']</code>
-      <code>$this-&gt;types['array-key']</code>
-      <code>$this-&gt;types['array-key']</code>
-      <code>$this-&gt;types['array-key']</code>
-      <code>$this-&gt;types['bool']</code>
-      <code>$this-&gt;types['bool']</code>
-      <code>$this-&gt;types['bool']</code>
-      <code>$this-&gt;types['callable-string']</code>
-      <code>$this-&gt;types['class-string']</code>
-      <code>$this-&gt;types['class-string']</code>
-      <code>$this-&gt;types['false']</code>
-      <code>$this-&gt;types['false']</code>
-      <code>$this-&gt;types['false']</code>
-      <code>$this-&gt;types['false']</code>
-      <code>$this-&gt;types['false']</code>
-      <code>$this-&gt;types['float']</code>
-      <code>$this-&gt;types['float']</code>
-      <code>$this-&gt;types['float']</code>
-      <code>$this-&gt;types['int']</code>
-      <code>$this-&gt;types['int']</code>
-      <code>$this-&gt;types['iterable']</code>
-      <code>$this-&gt;types['mixed']</code>
-      <code>$this-&gt;types['mixed']</code>
-      <code>$this-&gt;types['mixed']</code>
-      <code>$this-&gt;types['mixed']</code>
-      <code>$this-&gt;types['never']</code>
-      <code>$this-&gt;types['null']</code>
-      <code>$this-&gt;types['null']</code>
-      <code>$this-&gt;types['null']</code>
-      <code>$this-&gt;types['null']</code>
-      <code>$this-&gt;types['null']</code>
-      <code>$this-&gt;types['numeric']</code>
-      <code>$this-&gt;types['numeric']</code>
-      <code>$this-&gt;types['numeric-string']</code>
-      <code>$this-&gt;types['numeric-string']</code>
-      <code>$this-&gt;types['object']</code>
-      <code>$this-&gt;types['scalar']</code>
-      <code>$this-&gt;types['string']</code>
-      <code>$this-&gt;types['string']</code>
-      <code>$this-&gt;types['string']</code>
-      <code>$this-&gt;types['trait-string']</code>
-      <code>$this-&gt;types['trait-string']</code>
-      <code>$this-&gt;types['true']</code>
-      <code>$this-&gt;types['true']</code>
-      <code>$this-&gt;types['true']</code>
-      <code>$this-&gt;types['true']</code>
-      <code>$this-&gt;types['void']</code>
-      <code>$types['false']</code>
-      <code>$types['null']</code>
-      <code>$types['null']</code>
-    </LiteralKeyUnshapedArray>
     <MoreSpecificReturnType occurrences="1">
       <code>TArray|TKeyedArray|TClassStringMap</code>
     </MoreSpecificReturnType>
@@ -1685,157 +694,14 @@
       <code>allFloatLiterals</code>
     </PossiblyUnusedMethod>
   </file>
-  <file src="tests/BinaryOperationTest.php">
-    <LiteralKeyUnshapedArray occurrences="3">
-      <code>$context-&gt;vars_in_scope[$var]</code>
-      <code>$context-&gt;vars_in_scope[$var]</code>
-      <code>$context-&gt;vars_in_scope[$var]</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="tests/CodebaseTest.php">
-    <LiteralKeyUnshapedArray occurrences="12">
-      <code>$class_storage-&gt;custom_metadata['a']</code>
-      <code>$class_storage-&gt;custom_metadata['extends']</code>
-      <code>$class_storage-&gt;custom_metadata['fqcn']</code>
-      <code>$class_storage-&gt;custom_metadata['implements']</code>
-      <code>$class_storage-&gt;methods['m']</code>
-      <code>$class_storage-&gt;methods['m']-&gt;custom_metadata['c']</code>
-      <code>$class_storage-&gt;methods['m']-&gt;params[0]-&gt;custom_metadata['g']</code>
-      <code>$class_storage-&gt;properties['prop']</code>
-      <code>$class_storage-&gt;properties['prop']-&gt;custom_metadata['e']</code>
-      <code>$file_storage-&gt;custom_metadata['i']</code>
-      <code>$storage-&gt;methods['m']</code>
-      <code>$storage-&gt;properties['prop']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="tests/ComposerLockTest.php">
-    <LiteralKeyUnshapedArray occurrences="2">
-      <code>$plugins['vendor/package']</code>
-      <code>$plugins['vendor/package']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="tests/Config/Plugin/FileTypeSelfRegisteringPlugin.php">
-    <LiteralKeyUnshapedArray occurrences="6">
-      <code>self::$names['analyzer']</code>
-      <code>self::$names['analyzer']</code>
-      <code>self::$names['extension']</code>
-      <code>self::$names['extension']</code>
-      <code>self::$names['scanner']</code>
-      <code>self::$names['scanner']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
   <file src="tests/Internal/Codebase/InternalCallMapHandlerTest.php">
     <UnusedPsalmSuppress occurrences="1">
       <code>UndefinedMethod</code>
     </UnusedPsalmSuppress>
   </file>
-  <file src="tests/JsonOutputTest.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>IssueBuffer::getIssuesData()['somefile.php']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="tests/MagicMethodAnnotationTest.php">
-    <LiteralKeyUnshapedArray occurrences="1">
-      <code>$context-&gt;vars_in_scope['$child']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="tests/MethodMutationTest.php">
-    <LiteralKeyUnshapedArray occurrences="6">
-      <code>$method_context-&gt;vars_in_scope['$this-&gt;foo']</code>
-      <code>$method_context-&gt;vars_in_scope['$this-&gt;foo']</code>
-      <code>$method_context-&gt;vars_in_scope['$this-&gt;user']</code>
-      <code>$method_context-&gt;vars_in_scope['$this-&gt;user_viewdata']</code>
-      <code>$method_context-&gt;vars_in_scope['$this-&gt;user_viewdata-&gt;name']</code>
-      <code>$method_context-&gt;vars_possibly_in_scope['$this-&gt;title']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
   <file src="vendor/nikic/php-parser/lib/PhpParser/Node/Expr/ArrowFunction.php">
-    <LiteralKeyUnshapedArray occurrences="6">
-      <code>$subNodes['attrGroups']</code>
-      <code>$subNodes['byRef']</code>
-      <code>$subNodes['expr']</code>
-      <code>$subNodes['params']</code>
-      <code>$subNodes['returnType']</code>
-      <code>$subNodes['static']</code>
-    </LiteralKeyUnshapedArray>
     <PossiblyUndefinedStringArrayOffset occurrences="1">
       <code>$subNodes['expr']</code>
     </PossiblyUndefinedStringArrayOffset>
-  </file>
-  <file src="vendor/nikic/php-parser/lib/PhpParser/Node/Expr/Closure.php">
-    <LiteralKeyUnshapedArray occurrences="7">
-      <code>$subNodes['attrGroups']</code>
-      <code>$subNodes['byRef']</code>
-      <code>$subNodes['params']</code>
-      <code>$subNodes['returnType']</code>
-      <code>$subNodes['static']</code>
-      <code>$subNodes['stmts']</code>
-      <code>$subNodes['uses']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/ClassMethod.php">
-    <LiteralKeyUnshapedArray occurrences="7">
-      <code>$subNodes['attrGroups']</code>
-      <code>$subNodes['byRef']</code>
-      <code>$subNodes['flags']</code>
-      <code>$subNodes['params']</code>
-      <code>$subNodes['returnType']</code>
-      <code>$subNodes['type']</code>
-      <code>array_key_exists('stmts', $subNodes)</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Class_.php">
-    <LiteralKeyUnshapedArray occurrences="6">
-      <code>$subNodes['attrGroups']</code>
-      <code>$subNodes['extends']</code>
-      <code>$subNodes['flags']</code>
-      <code>$subNodes['implements']</code>
-      <code>$subNodes['stmts']</code>
-      <code>$subNodes['type']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/For_.php">
-    <LiteralKeyUnshapedArray occurrences="4">
-      <code>$subNodes['cond']</code>
-      <code>$subNodes['init']</code>
-      <code>$subNodes['loop']</code>
-      <code>$subNodes['stmts']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Foreach_.php">
-    <LiteralKeyUnshapedArray occurrences="3">
-      <code>$subNodes['byRef']</code>
-      <code>$subNodes['keyVar']</code>
-      <code>$subNodes['stmts']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Function_.php">
-    <LiteralKeyUnshapedArray occurrences="5">
-      <code>$subNodes['attrGroups']</code>
-      <code>$subNodes['byRef']</code>
-      <code>$subNodes['params']</code>
-      <code>$subNodes['returnType']</code>
-      <code>$subNodes['stmts']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/If_.php">
-    <LiteralKeyUnshapedArray occurrences="3">
-      <code>$subNodes['else']</code>
-      <code>$subNodes['elseifs']</code>
-      <code>$subNodes['stmts']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Interface_.php">
-    <LiteralKeyUnshapedArray occurrences="3">
-      <code>$subNodes['attrGroups']</code>
-      <code>$subNodes['extends']</code>
-      <code>$subNodes['stmts']</code>
-    </LiteralKeyUnshapedArray>
-  </file>
-  <file src="vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Trait_.php">
-    <LiteralKeyUnshapedArray occurrences="2">
-      <code>$subNodes['attrGroups']</code>
-      <code>$subNodes['stmts']</code>
-    </LiteralKeyUnshapedArray>
   </file>
 </files>

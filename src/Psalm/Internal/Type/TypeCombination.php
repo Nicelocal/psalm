@@ -24,7 +24,7 @@ class TypeCombination
     public ?array $named_object_types = [];
 
     /** @var list<Union> */
-    public $array_type_params = [];
+    public array $array_type_params = [];
 
     /** @var array<string, non-empty-list<Union>> */
     public array $builtin_type_params = [];

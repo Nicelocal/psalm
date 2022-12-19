@@ -10,7 +10,7 @@ class ParseTree
     /**
      * @var list<ParseTree>
      */
-    public $children = [];
+    public array $children = [];
 
     public ?ParseTree $parent = null;
 

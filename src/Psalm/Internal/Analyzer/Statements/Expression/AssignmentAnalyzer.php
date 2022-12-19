@@ -100,7 +100,6 @@ class AssignmentAnalyzer
 {
     /**
      * @param  PhpParser\Node\Expr|null $assign_value  This has to be null to support list destructuring
-     *
      * @return false|Union
      */
     public static function analyze(
@@ -116,14 +115,14 @@ class AssignmentAnalyzer
         $var_id = ExpressionIdentifier::getVarId(
             $assign_var,
             $statements_analyzer->getFQCLN(),
-            $statements_analyzer
+            $statements_analyzer,
         );
 
         // gets a variable id that *may* contain array keys
         $extended_var_id = ExpressionIdentifier::getExtendedVarId(
             $assign_var,
             $statements_analyzer->getFQCLN(),
-            $statements_analyzer
+            $statements_analyzer,
         );
 
         $var_comments = [];
@@ -167,21 +166,21 @@ class AssignmentAnalyzer
                         $statements_analyzer->getSource(),
                         $statements_analyzer->getAliases(),
                         $template_type_map,
-                        $file_storage->type_aliases
+                        $file_storage->type_aliases,
                     );
             } catch (IncorrectDocblockException $e) {
                 IssueBuffer::maybeAdd(
                     new MissingDocblockType(
                         $e->getMessage(),
-                        new CodeLocation($statements_analyzer->getSource(), $assign_var)
-                    )
+                        new CodeLocation($statements_analyzer->getSource(), $assign_var),
+                    ),
                 );
             } catch (DocblockParseException $e) {
                 IssueBuffer::maybeAdd(
                     new InvalidDocblock(
                         $e->getMessage(),
-                        new CodeLocation($statements_analyzer->getSource(), $assign_var)
-                    )
+                        new CodeLocation($statements_analyzer->getSource(), $assign_var),
+                    ),
                 );
             }
 
@@ -200,7 +199,7 @@ class AssignmentAnalyzer
                     $comment_type_location,
                     $not_ignored_docblock_var_ids,
                     $var_id === $var_comment->var_id
-                        && $assign_value_type && $comment_type && $assign_value_type->by_ref
+                        && $assign_value_type && $comment_type && $assign_value_type->by_ref,
                 );
             }
         }
@@ -248,7 +247,7 @@ class AssignmentAnalyzer
                         $context->removeDescendents(
                             $extended_var_id,
                             $context->vars_in_scope[$extended_var_id],
-                            $assign_value_type
+                            $assign_value_type,
                         );
                     }
 
@@ -277,16 +276,16 @@ class AssignmentAnalyzer
                     && isset($statements_analyzer->getProjectAnalyzer()->getIssuesToFix()['UnnecessaryVarAnnotation'])
                 ) {
                     FileManipulationBuffer::addVarAnnotationToRemove($comment_type_location);
-                } elseif (IssueBuffer::accepts(
-                    new UnnecessaryVarAnnotation(
-                        'The @var ' . $comment_type . ' annotation for '
+                } else {
+                    IssueBuffer::maybeAdd(
+                        new UnnecessaryVarAnnotation(
+                            'The @var ' . $comment_type . ' annotation for '
                             . $extended_var_id . ' is unnecessary',
-                        $comment_type_location
-                    ),
-                    $statements_analyzer->getSuppressedIssues(),
-                    true
-                )) {
-                    // fall through
+                            $comment_type_location,
+                        ),
+                        $statements_analyzer->getSuppressedIssues(),
+                        true,
+                    );
                 }
             }
 
@@ -315,14 +314,14 @@ class AssignmentAnalyzer
             if ($extended_var_id) {
                 $assignment_node = DataFlowNode::getForAssignment(
                     $extended_var_id,
-                    new CodeLocation($statements_analyzer->getSource(), $assign_var)
+                    new CodeLocation($statements_analyzer->getSource(), $assign_var),
                 );
             } else {
                 $assignment_node = new DataFlowNode('unknown-origin', 'unknown origin', null);
             }
 
             $parent_nodes = [
-                $assignment_node->id => $assignment_node
+                $assignment_node->id => $assignment_node,
             ];
 
             if ($context->inside_try) {
@@ -342,8 +341,8 @@ class AssignmentAnalyzer
                     IssueBuffer::maybeAdd(
                         new ImpureByReferenceAssignment(
                             'Variable ' . $extended_var_id . ' cannot be assigned to as it is passed by reference',
-                            new CodeLocation($statements_analyzer->getSource(), $assign_var)
-                        )
+                            new CodeLocation($statements_analyzer->getSource(), $assign_var),
+                        ),
                     );
                 } elseif ($statements_analyzer->getSource() instanceof FunctionLikeAnalyzer
                     && $statements_analyzer->getSource()->track_mutations
@@ -360,20 +359,20 @@ class AssignmentAnalyzer
                 $extended_var_id,
                 $context->vars_in_scope[$extended_var_id],
                 $assign_value_type,
-                $statements_analyzer
+                $statements_analyzer,
             );
         } else {
             $root_var_id = ExpressionIdentifier::getRootVarId(
                 $assign_var,
                 $statements_analyzer->getFQCLN(),
-                $statements_analyzer
+                $statements_analyzer,
             );
 
             if ($root_var_id && isset($context->vars_in_scope[$root_var_id])) {
                 $context->removeVarFromConflictingClauses(
                     $root_var_id,
                     $context->vars_in_scope[$root_var_id],
-                    $statements_analyzer
+                    $statements_analyzer,
                 );
             }
         }
@@ -384,7 +383,7 @@ class AssignmentAnalyzer
             $root_var_id = ExpressionIdentifier::getRootVarId(
                 $assign_var,
                 $statements_analyzer->getFQCLN(),
-                $statements_analyzer
+                $statements_analyzer,
             );
 
             if (!$context->collect_initializations
@@ -408,7 +407,7 @@ class AssignmentAnalyzer
                     foreach ($assign_value_type->parent_nodes as $parent_node) {
                         $origin_locations = [
                             ...$origin_locations,
-                            ...$statements_analyzer->data_flow_graph->getOriginLocations($parent_node)
+                            ...$statements_analyzer->data_flow_graph->getOriginLocations($parent_node),
                         ];
                     }
                 }
@@ -429,9 +428,9 @@ class AssignmentAnalyzer
                     new MixedAssignment(
                         $message,
                         $issue_location,
-                        $origin_location
+                        $origin_location,
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
             }
         } else {
@@ -454,7 +453,7 @@ class AssignmentAnalyzer
                     $assign_value_type,
                     $outer_constraint_type,
                     $assign_value_type->ignore_nullable_issues,
-                    $assign_value_type->ignore_falsable_issues
+                    $assign_value_type->ignore_falsable_issues,
                 )
                 ) {
                     IssueBuffer::maybeAdd(
@@ -463,9 +462,9 @@ class AssignmentAnalyzer
                                 . $context->byref_constraints[$var_id]->type
                                 . ' because it is passed by reference, '
                                 . $assign_value_type->getId() . ' type found',
-                            new CodeLocation($statements_analyzer->getSource(), $assign_var)
+                            new CodeLocation($statements_analyzer->getSource(), $assign_var),
                         ),
-                        $statements_analyzer->getSuppressedIssues()
+                        $statements_analyzer->getSuppressedIssues(),
                     );
                 }
             }
@@ -474,9 +473,9 @@ class AssignmentAnalyzer
         if ($var_id === '$this' && IssueBuffer::accepts(
             new InvalidScope(
                 'Cannot re-assign ' . $var_id,
-                new CodeLocation($statements_analyzer->getSource(), $assign_var)
+                new CodeLocation($statements_analyzer->getSource(), $assign_var),
             ),
-            $statements_analyzer->getSuppressedIssues()
+            $statements_analyzer->getSuppressedIssues(),
         )) {
             return false;
         }
@@ -487,9 +486,9 @@ class AssignmentAnalyzer
             IssueBuffer::maybeAdd(
                 new LoopInvalidation(
                     'Variable ' . $var_id . ' has already been assigned in a for/foreach loop',
-                    new CodeLocation($statements_analyzer->getSource(), $assign_var)
+                    new CodeLocation($statements_analyzer->getSource(), $assign_var),
                 ),
-                $statements_analyzer->getSuppressedIssues()
+                $statements_analyzer->getSuppressedIssues(),
             );
         }
 
@@ -504,7 +503,7 @@ class AssignmentAnalyzer
             $doc_comment,
             $extended_var_id,
             $var_comments,
-            $removed_taints
+            $removed_taints,
         ) === false
         ) {
             return false;
@@ -515,9 +514,9 @@ class AssignmentAnalyzer
                 IssueBuffer::maybeAdd(
                     new AssignmentToVoid(
                         'Cannot assign ' . $var_id . ' to type void',
-                        new CodeLocation($statements_analyzer->getSource(), $assign_var)
+                        new CodeLocation($statements_analyzer->getSource(), $assign_var),
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
 
                 $context->vars_in_scope[$var_id] = Type::getNull();
@@ -531,9 +530,9 @@ class AssignmentAnalyzer
                 if (IssueBuffer::accepts(
                     new NoValue(
                         'All possible types for this assignment were invalidated - This may be dead code',
-                        new CodeLocation($statements_analyzer->getSource(), $assign_var)
+                        new CodeLocation($statements_analyzer->getSource(), $assign_var),
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 )) {
                     return false;
                 }
@@ -561,7 +560,7 @@ class AssignmentAnalyzer
                         $added_taints = $codebase->config->eventDispatcher->dispatchAddTaints($event);
                         $removed_taints = [
                             ...$removed_taints,
-                            ...$codebase->config->eventDispatcher->dispatchRemoveTaints($event)
+                            ...$codebase->config->eventDispatcher->dispatchRemoveTaints($event),
                         ];
 
                         self::taintAssignment(
@@ -570,14 +569,14 @@ class AssignmentAnalyzer
                             $var_id,
                             $var_location,
                             $removed_taints,
-                            $added_taints
+                            $added_taints,
                         );
                     }
 
                     if ($assign_expr) {
                         $new_parent_node = DataFlowNode::getForAssignment(
                             'assignment_expr',
-                            new CodeLocation($statements_analyzer->getSource(), $assign_expr)
+                            new CodeLocation($statements_analyzer->getSource(), $assign_expr),
                         );
 
                         $data_flow_graph->addNode($new_parent_node);
@@ -591,7 +590,7 @@ class AssignmentAnalyzer
                         }
 
                         $assign_value_type = $assign_value_type->setParentNodes(
-                            [$new_parent_node->id => $new_parent_node]
+                            [$new_parent_node->id => $new_parent_node],
                         );
                     }
                 }
@@ -629,7 +628,7 @@ class AssignmentAnalyzer
                 $assign_value,
                 $assign_value_type,
                 $var_id,
-                $context
+                $context,
             );
         } elseif ($assign_var instanceof PhpParser\Node\Expr\List_
             || $assign_var instanceof PhpParser\Node\Expr\Array_
@@ -644,7 +643,7 @@ class AssignmentAnalyzer
                 $doc_comment,
                 $extended_var_id,
                 $var_comments,
-                $removed_taints
+                $removed_taints,
             );
         } elseif ($assign_var instanceof PhpParser\Node\Expr\ArrayDimFetch) {
             ArrayAssignmentAnalyzer::analyze(
@@ -652,7 +651,7 @@ class AssignmentAnalyzer
                 $assign_var,
                 $context,
                 $assign_value,
-                $assign_value_type
+                $assign_value_type,
             );
         } elseif ($assign_var instanceof PhpParser\Node\Expr\PropertyFetch) {
             self::analyzePropertyAssignment(
@@ -662,7 +661,7 @@ class AssignmentAnalyzer
                 $context,
                 $assign_value,
                 $assign_value_type,
-                $var_id
+                $var_id,
             );
         } elseif ($assign_var instanceof PhpParser\Node\Expr\StaticPropertyFetch &&
             $assign_var->class instanceof PhpParser\Node\Name
@@ -677,7 +676,7 @@ class AssignmentAnalyzer
                     $assign_var,
                     $assign_value,
                     $assign_value_type,
-                    $context
+                    $context,
                 ) === false) {
                     return false;
                 }
@@ -713,12 +712,12 @@ class AssignmentAnalyzer
                 $var_comment->type,
                 $context->self,
                 $context->self,
-                $statements_analyzer->getParentFQCLN()
+                $statements_analyzer->getParentFQCLN(),
             );
 
             $var_comment_type = $var_comment_type->setProperties([
                 'from_docblock' => true,
-                'by_ref' => $by_ref
+                'by_ref' => $by_ref,
             ]);
 
             /** @psalm-suppress UnusedMethodCall This actually has the side effect of generating issues */
@@ -730,7 +729,7 @@ class AssignmentAnalyzer
                 false,
                 false,
                 false,
-                $context->calling_method_id
+                $context->calling_method_id,
             );
 
             $type_location = null;
@@ -743,7 +742,7 @@ class AssignmentAnalyzer
                     $statements_analyzer,
                     $var_comment->type_start,
                     $var_comment->type_end,
-                    $var_comment->line_number
+                    $var_comment->line_number,
                 );
 
                 if ($codebase->alter_code) {
@@ -752,7 +751,7 @@ class AssignmentAnalyzer
                         $statements_analyzer,
                         $var_comment_type,
                         $type_location,
-                        $context->calling_method_id
+                        $context->calling_method_id,
                     );
                 }
             }
@@ -776,16 +775,16 @@ class AssignmentAnalyzer
                     && isset($project_analyzer->getIssuesToFix()['UnnecessaryVarAnnotation'])
                 ) {
                     FileManipulationBuffer::addVarAnnotationToRemove($type_location);
-                } elseif (IssueBuffer::accepts(
-                    new UnnecessaryVarAnnotation(
-                        'The @var ' . $var_comment_type . ' annotation for '
+                } else {
+                    IssueBuffer::maybeAdd(
+                        new UnnecessaryVarAnnotation(
+                            'The @var ' . $var_comment_type . ' annotation for '
                             . $var_comment->var_id . ' is unnecessary',
-                        $type_location
-                    ),
-                    $statements_analyzer->getSuppressedIssues(),
-                    true
-                )) {
-                    // fall through
+                            $type_location,
+                        ),
+                        $statements_analyzer->getSuppressedIssues(),
+                        true,
+                    );
                 }
             }
 
@@ -797,8 +796,8 @@ class AssignmentAnalyzer
             IssueBuffer::maybeAdd(
                 new InvalidDocblock(
                     $e->getMessage(),
-                    new CodeLocation($statements_analyzer->getSource(), $stmt)
-                )
+                    new CodeLocation($statements_analyzer->getSource(), $stmt),
+                ),
             );
         }
     }
@@ -827,7 +826,7 @@ class AssignmentAnalyzer
                 $new_parent_node,
                 '=',
                 $added_taints,
-                $removed_taints
+                $removed_taints,
             );
         }
 
@@ -872,7 +871,7 @@ class AssignmentAnalyzer
         $fake_assignment = new VirtualAssign(
             $stmt->var,
             $operation,
-            $stmt->getAttributes()
+            $stmt->getAttributes(),
         );
 
         $old_node_data = $statements_analyzer->node_data;
@@ -885,7 +884,7 @@ class AssignmentAnalyzer
 
         $old_node_data->setType(
             $stmt,
-            $statements_analyzer->node_data->getType($operation) ?? Type::getMixed()
+            $statements_analyzer->node_data->getType($operation) ?? Type::getMixed(),
         );
 
         $statements_analyzer->node_data = $old_node_data;
@@ -903,13 +902,13 @@ class AssignmentAnalyzer
         $lhs_var_id = ExpressionIdentifier::getExtendedVarId(
             $stmt->var,
             $statements_analyzer->getFQCLN(),
-            $statements_analyzer
+            $statements_analyzer,
         );
 
         $rhs_var_id = ExpressionIdentifier::getExtendedVarId(
             $stmt->expr,
             $statements_analyzer->getFQCLN(),
-            $statements_analyzer
+            $statements_analyzer,
         );
 
         $doc_comment = $stmt->getDocComment();
@@ -924,23 +923,23 @@ class AssignmentAnalyzer
                 IssueBuffer::maybeAdd(
                     new MissingDocblockType(
                         $e->getMessage(),
-                        new CodeLocation($statements_analyzer->getSource(), $stmt)
-                    )
+                        new CodeLocation($statements_analyzer->getSource(), $stmt),
+                    ),
                 );
             } catch (DocblockParseException $e) {
                 IssueBuffer::maybeAdd(
                     new InvalidDocblock(
                         $e->getMessage(),
-                        new CodeLocation($statements_analyzer->getSource(), $stmt)
-                    )
+                        new CodeLocation($statements_analyzer->getSource(), $stmt),
+                    ),
                 );
             }
             if (!empty($var_comments) && $var_comments[0]->type !== null && $var_comments[0]->var_id === null) {
                 IssueBuffer::maybeAdd(
                     new InvalidDocblock(
                         "Docblock type cannot be used for reference assignment",
-                        new CodeLocation($statements_analyzer->getSource(), $stmt)
-                    )
+                        new CodeLocation($statements_analyzer->getSource(), $stmt),
+                    ),
                 );
             }
         }
@@ -992,7 +991,7 @@ class AssignmentAnalyzer
             // so it's not registered as an unused variable (this mirrors behavior for non-references).
             $statements_analyzer->registerVariableAssignment(
                 $lhs_var_id,
-                $lhs_location
+                $lhs_location,
             );
         }
 
@@ -1030,7 +1029,7 @@ class AssignmentAnalyzer
                 $prop_name,
                 null,
                 $by_ref_out_type,
-                $context
+                $context,
             );
 
             return;
@@ -1039,7 +1038,7 @@ class AssignmentAnalyzer
         $var_id = ExpressionIdentifier::getVarId(
             $stmt,
             $statements_analyzer->getFQCLN(),
-            $statements_analyzer
+            $statements_analyzer,
         );
 
         if ($var_id) {
@@ -1065,9 +1064,9 @@ class AssignmentAnalyzer
                         IssueBuffer::maybeAdd(
                             new NullReference(
                                 'Not expecting null argument passed by reference',
-                                $location
+                                $location,
                             ),
-                            $statements_analyzer->getSuppressedIssues()
+                            $statements_analyzer->getSuppressedIssues(),
                         );
                     }
 
@@ -1075,7 +1074,7 @@ class AssignmentAnalyzer
                         $statements_analyzer->registerVariable(
                             $var_id,
                             $location,
-                            $context->branch_point
+                            $context->branch_point,
                         );
 
                         if ($statements_analyzer->data_flow_graph instanceof VariableUseGraph) {
@@ -1084,7 +1083,7 @@ class AssignmentAnalyzer
                             $statements_analyzer->data_flow_graph->addPath(
                                 $byref_node,
                                 new DataFlowNode('variable-use', 'variable use', null),
-                                'variable-use'
+                                'variable-use',
                             );
                         }
                     }
@@ -1104,11 +1103,11 @@ class AssignmentAnalyzer
                     $var_id,
                     $existing_type,
                     $by_ref_type,
-                    $statements_analyzer
+                    $statements_analyzer,
                 );
 
                 $by_ref_out_type = $by_ref_out_type->addParentNodes(
-                    $existing_type->parent_nodes
+                    $existing_type->parent_nodes,
                 );
 
                 if (!$context->inside_conditional) {
@@ -1164,9 +1163,9 @@ class AssignmentAnalyzer
             IssueBuffer::maybeAdd(
                 new InvalidArrayOffset(
                     'Cannot destructure non-array of type ' . $assign_value_type->getId(),
-                    new CodeLocation($statements_analyzer->getSource(), $assign_var)
+                    new CodeLocation($statements_analyzer->getSource(), $assign_var),
                 ),
-                $statements_analyzer->getSuppressedIssues()
+                $statements_analyzer->getSuppressedIssues(),
             );
         }
 
@@ -1189,7 +1188,7 @@ class AssignmentAnalyzer
                     $assign_var_item->value,
                     null,
                     $context,
-                    $doc_comment
+                    $doc_comment,
                 );
 
                 continue;
@@ -1206,7 +1205,7 @@ class AssignmentAnalyzer
             $list_var_id = ExpressionIdentifier::getExtendedVarId(
                 $var,
                 $statements_analyzer->getFQCLN(),
-                $statements_analyzer
+                $statements_analyzer,
             );
 
             $new_assign_type = null;
@@ -1230,9 +1229,9 @@ class AssignmentAnalyzer
                             IssueBuffer::maybeAdd(
                                 new PossiblyUndefinedArrayOffset(
                                     'Possibly undefined array key',
-                                    new CodeLocation($statements_analyzer->getSource(), $var)
+                                    new CodeLocation($statements_analyzer->getSource(), $var),
                                 ),
-                                $statements_analyzer->getSuppressedIssues()
+                                $statements_analyzer->getSuppressedIssues(),
                             );
 
                             $value_type = $value_type->setPossiblyUndefined(false);
@@ -1246,7 +1245,7 @@ class AssignmentAnalyzer
                             $assign_value_id = ExpressionIdentifier::getExtendedVarId(
                                 $assign_value,
                                 $statements_analyzer->getFQCLN(),
-                                $statements_analyzer
+                                $statements_analyzer,
                             );
 
                             $keyed_array_var_id = null;
@@ -1261,7 +1260,7 @@ class AssignmentAnalyzer
                                 $assign_value,
                                 $keyed_array_var_id,
                                 $value_type,
-                                $temp
+                                $temp,
                             );
                         }
 
@@ -1271,7 +1270,7 @@ class AssignmentAnalyzer
                             null,
                             $value_type,
                             $context,
-                            $doc_comment
+                            $doc_comment,
                         );
 
                         $assigned = true;
@@ -1283,9 +1282,9 @@ class AssignmentAnalyzer
                         IssueBuffer::maybeAdd(
                             new InvalidArrayOffset(
                                 'Cannot access value with offset ' . $offset,
-                                new CodeLocation($statements_analyzer->getSource(), $var)
+                                new CodeLocation($statements_analyzer->getSource(), $var),
                             ),
-                            $statements_analyzer->getSuppressedIssues()
+                            $statements_analyzer->getSuppressedIssues(),
                         );
                     }
                 }
@@ -1294,9 +1293,9 @@ class AssignmentAnalyzer
                     IssueBuffer::maybeAdd(
                         new MixedArrayAccess(
                             'Cannot access array value on mixed variable ' . $extended_var_id,
-                            new CodeLocation($statements_analyzer->getSource(), $var)
+                            new CodeLocation($statements_analyzer->getSource(), $var),
                         ),
-                        $statements_analyzer->getSuppressedIssues()
+                        $statements_analyzer->getSuppressedIssues(),
                     );
                 } elseif ($assign_value_atomic_type instanceof TNull) {
                     $has_null = true;
@@ -1307,29 +1306,25 @@ class AssignmentAnalyzer
                     if ($assign_value_type->hasArray()) {
                         if ($assign_value_atomic_type instanceof TFalse && $assign_value_type->ignore_falsable_issues) {
                             // do nothing
-                        } elseif (IssueBuffer::accepts(
-                            new PossiblyInvalidArrayAccess(
-                                'Cannot access array value on non-array variable '
-                                . $extended_var_id . ' of type ' . $assign_value_atomic_type->getId(),
-                                new CodeLocation($statements_analyzer->getSource(), $var)
-                            ),
-                            $statements_analyzer->getSuppressedIssues()
-                        )
-                        ) {
-                            // do nothing
+                        } else {
+                            IssueBuffer::maybeAdd(
+                                new PossiblyInvalidArrayAccess(
+                                    'Cannot access array value on non-array variable '
+                                    . $extended_var_id . ' of type ' . $assign_value_atomic_type->getId(),
+                                    new CodeLocation($statements_analyzer->getSource(), $var),
+                                ),
+                                $statements_analyzer->getSuppressedIssues(),
+                            );
                         }
                     } else {
-                        if (IssueBuffer::accepts(
+                        IssueBuffer::maybeAdd(
                             new InvalidArrayAccess(
                                 'Cannot access array value on non-array variable '
                                 . $extended_var_id . ' of type ' . $assign_value_atomic_type->getId(),
-                                new CodeLocation($statements_analyzer->getSource(), $var)
+                                new CodeLocation($statements_analyzer->getSource(), $var),
                             ),
-                            $statements_analyzer->getSuppressedIssues()
-                        )
-                        ) {
-                            // do nothing
-                        }
+                            $statements_analyzer->getSuppressedIssues(),
+                        );
                     }
                 }
 
@@ -1350,7 +1345,7 @@ class AssignmentAnalyzer
                         null,
                         $array_value_type,
                         $context,
-                        $doc_comment
+                        $doc_comment,
                     );
 
                     continue;
@@ -1370,12 +1365,12 @@ class AssignmentAnalyzer
                             $statements_analyzer->registerVariable(
                                 $list_var_id,
                                 $location,
-                                $context->branch_point
+                                $context->branch_point,
                             );
                         } else {
                             $statements_analyzer->registerVariableAssignment(
                                 $list_var_id,
-                                $location
+                                $location,
                             );
                         }
 
@@ -1396,7 +1391,7 @@ class AssignmentAnalyzer
                                 $assign_value,
                                 null,
                                 $new_assign_type,
-                                $temp
+                                $temp,
                             );
                         }
 
@@ -1413,9 +1408,9 @@ class AssignmentAnalyzer
                                 IssueBuffer::maybeAdd(
                                     new PossiblyUndefinedArrayOffset(
                                         'Possibly undefined array key',
-                                        new CodeLocation($statements_analyzer->getSource(), $var)
+                                        new CodeLocation($statements_analyzer->getSource(), $var),
                                     ),
-                                    $statements_analyzer->getSuppressedIssues()
+                                    $statements_analyzer->getSuppressedIssues(),
                                 );
 
                                 $new_assign_type = $new_assign_type->setPossiblyUndefined(false);
@@ -1447,7 +1442,7 @@ class AssignmentAnalyzer
                                 $assign_value,
                                 null,
                                 $new_assign_type,
-                                $temp
+                                $temp,
                             );
                         }
                     } elseif ($assign_value_atomic_type->hasArrayAccessInterface($codebase)) {
@@ -1455,7 +1450,7 @@ class AssignmentAnalyzer
                             $assign_value_atomic_type,
                             $codebase,
                             $array_access_key_type,
-                            $array_access_value_type
+                            $array_access_value_type,
                         );
 
                         $new_assign_type = $array_access_value_type;
@@ -1467,7 +1462,7 @@ class AssignmentAnalyzer
                             $list_var_id,
                             $context->vars_in_scope[$list_var_id],
                             $new_assign_type,
-                            $statements_analyzer
+                            $statements_analyzer,
                         );
                     }
                 }
@@ -1480,9 +1475,9 @@ class AssignmentAnalyzer
                     IssueBuffer::maybeAdd(
                         new PossiblyNullArrayAccess(
                             'Cannot access array value on null variable ' . $extended_var_id,
-                            new CodeLocation($statements_analyzer->getSource(), $var)
+                            new CodeLocation($statements_analyzer->getSource(), $var),
                         ),
-                        $statements_analyzer->getSuppressedIssues()
+                        $statements_analyzer->getSuppressedIssues(),
                     );
                 }
 
@@ -1498,7 +1493,7 @@ class AssignmentAnalyzer
                                 $var_comment->type,
                                 $context->self,
                                 $context->self,
-                                $statements_analyzer->getParentFQCLN()
+                                $statements_analyzer->getParentFQCLN(),
                             );
 
                             $var_comment_type = $var_comment_type->setFromDocblock();
@@ -1510,8 +1505,8 @@ class AssignmentAnalyzer
                         IssueBuffer::maybeAdd(
                             new InvalidDocblock(
                                 $e->getMessage(),
-                                new CodeLocation($statements_analyzer->getSource(), $assign_var)
-                            )
+                                new CodeLocation($statements_analyzer->getSource(), $assign_var),
+                            ),
                         );
                     }
                 }
@@ -1527,12 +1522,12 @@ class AssignmentAnalyzer
                         if (!$context->vars_in_scope[$list_var_id]->parent_nodes) {
                             $assignment_node = DataFlowNode::getForAssignment(
                                 $list_var_id,
-                                $var_location
+                                $var_location,
                             );
 
                             $context->vars_in_scope[$list_var_id] =
                                 $context->vars_in_scope[$list_var_id]->setParentNodes([
-                                    $assignment_node->id => $assignment_node
+                                    $assignment_node->id => $assignment_node,
                                 ])
                             ;
                         } else {
@@ -1547,7 +1542,7 @@ class AssignmentAnalyzer
                                 $added_taints = $codebase->config->eventDispatcher->dispatchAddTaints($event);
                                 $removed_taints = [
                                     ...$removed_taints,
-                                    ...$codebase->config->eventDispatcher->dispatchRemoveTaints($event)
+                                    ...$codebase->config->eventDispatcher->dispatchRemoveTaints($event),
                                 ];
 
                                 self::taintAssignment(
@@ -1556,7 +1551,7 @@ class AssignmentAnalyzer
                                     $list_var_id,
                                     $var_location,
                                     $removed_taints,
-                                    $added_taints
+                                    $added_taints,
                                 );
                             }
                         }
@@ -1624,7 +1619,7 @@ class AssignmentAnalyzer
                 $prop_name,
                 $assign_value,
                 $assign_value_type,
-                $context
+                $context,
             );
         } else {
             if (ExpressionAnalyzer::analyze($statements_analyzer, $assign_var->var, $context) === false) {
@@ -1641,7 +1636,7 @@ class AssignmentAnalyzer
                         if ($type instanceof TNamedObject) {
                             $codebase->analyzer->addMixedMemberName(
                                 strtolower($type->value) . '::$',
-                                $context->calling_method_id ?: $statements_analyzer->getFileName()
+                                $context->calling_method_id ?: $statements_analyzer->getFileName(),
                             );
                         }
                     }
@@ -1664,9 +1659,9 @@ class AssignmentAnalyzer
                 IssueBuffer::maybeAdd(
                     new ImpurePropertyAssignment(
                         'Cannot assign to a property from a mutation-free context',
-                        new CodeLocation($statements_analyzer, $assign_var)
+                        new CodeLocation($statements_analyzer, $assign_var),
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
             } elseif ($statements_analyzer->getSource() instanceof FunctionLikeAnalyzer
                 && $statements_analyzer->getSource()->track_mutations
@@ -1703,12 +1698,12 @@ class AssignmentAnalyzer
                     $statements_analyzer->registerVariable(
                         $var_id,
                         $location,
-                        $context->branch_point
+                        $context->branch_point,
                     );
                 } elseif (!$context->inside_isset) {
                     $statements_analyzer->registerVariableAssignment(
                         $var_id,
-                        $location
+                        $location,
                     );
                 }
 
@@ -1722,7 +1717,7 @@ class AssignmentAnalyzer
                         $assign_var,
                         $location->raw_file_start
                         . '-' . $location->raw_file_end
-                        . ':' . $assign_value_type->getId()
+                        . ':' . $assign_value_type->getId(),
                     );
                 }
 
@@ -1747,7 +1742,7 @@ class AssignmentAnalyzer
                             $statements_analyzer->data_flow_graph->addPath(
                                 $parent_node,
                                 $assignment_node,
-                                '&=' // Normal assignment to reference/referenced variable
+                                '&=', // Normal assignment to reference/referenced variable
                             );
                         }
 
@@ -1756,7 +1751,7 @@ class AssignmentAnalyzer
                             $statements_analyzer->data_flow_graph->addPath(
                                 $assignment_node,
                                 new DataFlowNode('variable-use', 'variable use', null),
-                                'variable-use'
+                                'variable-use',
                             );
                         }
                     }
@@ -1768,9 +1763,9 @@ class AssignmentAnalyzer
                             "$var_id is possibly a reference defined at"
                                 . " {$context->references_possibly_from_confusing_scope[$var_id]->getShortSummary()}."
                                 . " Reusing this variable may cause the referenced value to change.",
-                            new CodeLocation($statements_analyzer, $assign_var)
+                            new CodeLocation($statements_analyzer, $assign_var),
                         ),
-                        $statements_analyzer->getSuppressedIssues()
+                        $statements_analyzer->getSuppressedIssues(),
                     );
                 }
 
@@ -1788,12 +1783,12 @@ class AssignmentAnalyzer
                         $assign_value,
                         $context->self,
                         $statements_analyzer,
-                        $codebase
+                        $codebase,
                     );
 
                     $right_clauses = Context::filterClauses(
                         $var_id,
-                        $right_clauses
+                        $right_clauses,
                     );
 
                     $assignment_clauses = new ClauseConjunction([
@@ -1801,7 +1796,7 @@ class AssignmentAnalyzer
                     ]);
                     $assignment_clauses = $assignment_clauses->combineOrredClauses(
                         $right_clauses,
-                        $cond_object_id
+                        $cond_object_id,
                     );
 
                     $context->clauses = $context->clauses->and($assignment_clauses);
@@ -1826,7 +1821,7 @@ class AssignmentAnalyzer
                     $statements_analyzer->data_flow_graph->addPath(
                         $parent_node,
                         new DataFlowNode('variable-use', 'variable use', null),
-                        'variable-use'
+                        'variable-use',
                     );
                 }
             }

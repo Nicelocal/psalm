@@ -62,7 +62,7 @@ class FunctionReturnTypeProvider
      *   array<Closure(FunctionReturnTypeProviderEvent): ?Union>
      * >
      */
-    private static $handlers = [];
+    private static array $handlers = [];
 
     public function __construct()
     {
@@ -151,7 +151,7 @@ class FunctionReturnTypeProvider
                 $function_id,
                 $stmt,
                 $context,
-                $code_location
+                $code_location,
             );
             $return_type = $function_handler($event);
 

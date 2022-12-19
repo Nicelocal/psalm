@@ -91,7 +91,7 @@ class CastAnalyzer
                     $statements_analyzer,
                     $maybe_type,
                     $stmt->expr,
-                    true
+                    true,
                 );
             } else {
                 $type = Type::getInt();
@@ -118,7 +118,7 @@ class CastAnalyzer
                     $statements_analyzer,
                     $maybe_type,
                     $stmt->expr,
-                    true
+                    true,
                 );
             } else {
                 $type = Type::getFloat();
@@ -145,7 +145,7 @@ class CastAnalyzer
             if ($statements_analyzer->data_flow_graph instanceof VariableUseGraph
             ) {
                 $type = new Union([new TBool()], [
-                    'parent_nodes' => $maybe_type->parent_nodes ?? []
+                    'parent_nodes' => $maybe_type->parent_nodes ?? [],
                 ]);
             } else {
                 $type = Type::getBool();
@@ -173,7 +173,7 @@ class CastAnalyzer
                     $context,
                     $stmt_expr_type,
                     $stmt->expr,
-                    true
+                    true,
                 );
             } else {
                 $stmt_type = Type::getString();
@@ -259,6 +259,15 @@ class CastAnalyzer
                         || $type instanceof TKeyedArray
                     ) {
                         $permissible_atomic_types[] = $type;
+                    } elseif ($type instanceof TObjectWithProperties) {
+                        $array_type = $type->properties === []
+                            ? new TArray([Type::getArrayKey(), Type::getMixed()])
+                            : new TKeyedArray(
+                                $type->properties,
+                                null,
+                                [Type::getArrayKey(), Type::getMixed()],
+                            );
+                        $permissible_atomic_types[] = $array_type;
                     } else {
                         $all_permissible = false;
                         break;
@@ -296,9 +305,9 @@ class CastAnalyzer
         IssueBuffer::maybeAdd(
             new UnrecognizedExpression(
                 'Psalm does not understand the cast ' . get_class($stmt),
-                new CodeLocation($statements_analyzer->getSource(), $stmt)
+                new CodeLocation($statements_analyzer->getSource(), $stmt),
             ),
-            $statements_analyzer->getSuppressedIssues()
+            $statements_analyzer->getSuppressedIssues(),
         );
 
         return false;
@@ -411,7 +420,7 @@ class CastAnalyzer
                         if (strtolower($intersection_type->value) === strtolower($pseudo_castable_class)
                             || $codebase->classExtends(
                                 $intersection_type->value,
-                                $pseudo_castable_class
+                                $pseudo_castable_class,
                             )
                         ) {
                             $castable_types[] = new TInt();
@@ -460,17 +469,17 @@ class CastAnalyzer
             IssueBuffer::maybeAdd(
                 new InvalidCast(
                     $invalid_casts[0] . ' cannot be cast to int',
-                    new CodeLocation($statements_analyzer->getSource(), $stmt)
+                    new CodeLocation($statements_analyzer->getSource(), $stmt),
                 ),
-                $statements_analyzer->getSuppressedIssues()
+                $statements_analyzer->getSuppressedIssues(),
             );
         } elseif ($risky_cast) {
             IssueBuffer::maybeAdd(
                 new RiskyCast(
                     'Casting ' . $risky_cast[0] . ' to int has possibly unintended value of 0/1',
-                    new CodeLocation($statements_analyzer->getSource(), $stmt)
+                    new CodeLocation($statements_analyzer->getSource(), $stmt),
                 ),
-                $statements_analyzer->getSuppressedIssues()
+                $statements_analyzer->getSuppressedIssues(),
             );
         } elseif ($explicit_cast && !$castable_types) {
             // todo: emit error here
@@ -483,7 +492,7 @@ class CastAnalyzer
         } else {
             $int_type = TypeCombiner::combine(
                 $valid_types,
-                $codebase
+                $codebase,
             );
         }
 
@@ -600,7 +609,7 @@ class CastAnalyzer
                         if (strtolower($intersection_type->value) === strtolower($pseudo_castable_class)
                             || $codebase->classExtends(
                                 $intersection_type->value,
-                                $pseudo_castable_class
+                                $pseudo_castable_class,
                             )
                         ) {
                             $castable_types[] = new TFloat();
@@ -649,17 +658,17 @@ class CastAnalyzer
             IssueBuffer::maybeAdd(
                 new InvalidCast(
                     $invalid_casts[0] . ' cannot be cast to float',
-                    new CodeLocation($statements_analyzer->getSource(), $stmt)
+                    new CodeLocation($statements_analyzer->getSource(), $stmt),
                 ),
-                $statements_analyzer->getSuppressedIssues()
+                $statements_analyzer->getSuppressedIssues(),
             );
         } elseif ($risky_cast) {
             IssueBuffer::maybeAdd(
                 new RiskyCast(
                     'Casting ' . $risky_cast[0] . ' to float has possibly unintended value of 0.0/1.0',
-                    new CodeLocation($statements_analyzer->getSource(), $stmt)
+                    new CodeLocation($statements_analyzer->getSource(), $stmt),
                 ),
-                $statements_analyzer->getSuppressedIssues()
+                $statements_analyzer->getSuppressedIssues(),
             );
         } elseif ($explicit_cast && !$castable_types) {
             // todo: emit error here
@@ -672,7 +681,7 @@ class CastAnalyzer
         } else {
             $float_type = TypeCombiner::combine(
                 $valid_types,
-                $codebase
+                $codebase,
             );
         }
 
@@ -777,17 +786,17 @@ class CastAnalyzer
                     if ($intersection_type instanceof TNamedObject) {
                         $intersection_method_id = new MethodIdentifier(
                             $intersection_type->value,
-                            '__tostring'
+                            '__tostring',
                         );
 
                         if ($codebase->methods->methodExists(
                             $intersection_method_id,
                             $context->calling_method_id,
-                            new CodeLocation($statements_analyzer->getSource(), $stmt)
+                            new CodeLocation($statements_analyzer->getSource(), $stmt),
                         )) {
                             $return_type = $codebase->methods->getMethodReturnType(
                                 $intersection_method_id,
-                                $self_class
+                                $self_class,
                             ) ?? Type::getString();
 
                             $declaring_method_id = $codebase->methods->getDeclaringMethodId($intersection_method_id);
@@ -801,7 +810,7 @@ class CastAnalyzer
                                 $intersection_method_id,
                                 $declaring_method_id,
                                 $intersection_type->value . '::__toString',
-                                $context
+                                $context,
                             );
 
                             if ($statements_analyzer->data_flow_graph) {
@@ -810,7 +819,7 @@ class CastAnalyzer
 
                             $castable_types = array_merge(
                                 $castable_types,
-                                array_values($return_type->getAtomicTypes())
+                                array_values($return_type->getAtomicTypes()),
                             );
 
                             continue 2;
@@ -841,17 +850,17 @@ class CastAnalyzer
                 IssueBuffer::maybeAdd(
                     new PossiblyInvalidCast(
                         $invalid_casts[0] . ' cannot be cast to string',
-                        new CodeLocation($statements_analyzer->getSource(), $stmt)
+                        new CodeLocation($statements_analyzer->getSource(), $stmt),
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
             } else {
                 IssueBuffer::maybeAdd(
                     new InvalidCast(
                         $invalid_casts[0] . ' cannot be cast to string',
-                        new CodeLocation($statements_analyzer->getSource(), $stmt)
+                        new CodeLocation($statements_analyzer->getSource(), $stmt),
                     ),
-                    $statements_analyzer->getSuppressedIssues()
+                    $statements_analyzer->getSuppressedIssues(),
                 );
             }
         } elseif ($explicit_cast && !$castable_types) {
@@ -865,7 +874,7 @@ class CastAnalyzer
         } else {
             $str_type = TypeCombiner::combine(
                 $valid_types,
-                $codebase
+                $codebase,
             );
         }
 
@@ -900,7 +909,7 @@ class CastAnalyzer
         if ($maybe_type->from_docblock) {
             $issue = new RedundantCastGivenDocblockType(
                 'Redundant cast to ' . $maybe_type->getKey() . ' given docblock-provided type',
-                new CodeLocation($statements_analyzer->getSource(), $stmt)
+                new CodeLocation($statements_analyzer->getSource(), $stmt),
             );
 
             if ($codebase->alter_code
@@ -909,13 +918,13 @@ class CastAnalyzer
                 $file_manipulation = new FileManipulation(
                     (int) $stmt->getAttribute('startFilePos'),
                     (int) $stmt->expr->getAttribute('startFilePos'),
-                    ''
+                    '',
                 );
             }
         } else {
             $issue = new RedundantCast(
                 'Redundant cast to ' . $maybe_type->getKey(),
-                new CodeLocation($statements_analyzer->getSource(), $stmt)
+                new CodeLocation($statements_analyzer->getSource(), $stmt),
             );
 
             if ($codebase->alter_code
@@ -924,7 +933,7 @@ class CastAnalyzer
                 $file_manipulation = new FileManipulation(
                     (int) $stmt->getAttribute('startFilePos'),
                     (int) $stmt->expr->getAttribute('startFilePos'),
-                    ''
+                    '',
                 );
             }
         }
@@ -934,8 +943,6 @@ class CastAnalyzer
         }
 
 
-        if (IssueBuffer::accepts($issue, $statements_analyzer->getSuppressedIssues())) {
-            // fall through
-        }
+        IssueBuffer::maybeAdd($issue, $statements_analyzer->getSuppressedIssues());
     }
 }
