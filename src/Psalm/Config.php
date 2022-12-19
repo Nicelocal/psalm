@@ -130,7 +130,7 @@ use const SCANDIR_SORT_NONE;
 class Config
 {
     private const DEFAULT_FILE_NAME = 'psalm.xml';
-    public const CONFIG_NAMESPACE = 'https://getpsalm.org/schema/config';
+    public const CONFIG_NAMESPACE = 'https://raw.githubusercontent.com/zoonru/psalm/fixes/config.xsd';
     public const REPORT_INFO = 'info';
     public const REPORT_ERROR = 'error';
     public const REPORT_SUPPRESS = 'suppress';

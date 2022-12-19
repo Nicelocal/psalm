@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<projectFiles xmlns="https://getpsalm.org/schema/config">
+<projectFiles xmlns="https://raw.githubusercontent.com/zoonru/psalm/fixes/config.xsd">
     <file name="Bar.php" />
     <file name="Bat.php" />
 </projectFiles>

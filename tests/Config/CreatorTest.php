@@ -36,8 +36,8 @@ class CreatorTest extends TestCase
     errorLevel="1"
     resolveFromConfigFile="true"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="https://getpsalm.org/schema/config"
-    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    xmlns="https://raw.githubusercontent.com/zoonru/psalm/fixes/config.xsd"
+    xsi:schemaLocation="https://raw.githubusercontent.com/zoonru/psalm/fixes/config.xsd vendor/vimeo/psalm/config.xsd"
 >
     <projectFiles>
         <directory name="lib" />
