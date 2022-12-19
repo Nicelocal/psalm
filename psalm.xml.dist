@@ -59,6 +59,7 @@
 
     <issueHandlers>
         <PossiblyNullOperand errorLevel="suppress"/>
+        <LiteralKeyUnshapedArray errorLevel="suppress"/>
 
         <DeprecatedMethod>
             <errorLevel type="suppress">

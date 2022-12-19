@@ -4,6 +4,7 @@ namespace Psalm\Internal\Provider;
 
 use PhpParser;
 use PhpParser\ErrorHandler\Collecting;
+use PhpParser\Lexer\Emulative;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -15,6 +16,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
+use PhpParser\Parser;
 use Psalm\CodeLocation\ParseErrorLocation;
 use Psalm\Codebase;
 use Psalm\Config;

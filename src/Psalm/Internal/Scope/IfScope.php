@@ -62,19 +62,14 @@ class IfScope
      */
     public ?array $negatable_if_types = null;
 
-    /**
-     * @var ClauseConjunction
-     */
-    public array $negated_clauses = [];
+    public ClauseConjunction $negated_clauses;
 
     /**
      * These are the set of clauses that could be applied after the `if`
      * statement, if the `if` statement contains branches with leaving statements,
      * and the else leaves too
-     *
-     * @var ClauseConjunction
      */
-    public array $reasonable_clauses = [];
+    public ClauseConjunction $reasonable_clauses;
 
     /**
      * @var string[]

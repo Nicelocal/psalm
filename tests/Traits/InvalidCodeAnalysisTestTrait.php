@@ -47,12 +47,10 @@ trait InvalidCodeAnalysisTestTrait
             $code = str_replace("\n", "\r\n", $code);
         }
 
-        foreach ($error_levels as $error_level) {
-            $issue_name = $error_level;
-            $error_level = Config::REPORT_SUPPRESS;
-
-            Config::getInstance()->setCustomErrorLevel($issue_name, $error_level);
+        foreach ($error_levels as $issue_name) {
+            Config::getInstance()->setCustomErrorLevel($issue_name, Config::REPORT_SUPPRESS);
         }
+        Config::getInstance()->setCustomErrorLevel('LiteralKeyUnshapedArray', Config::REPORT_SUPPRESS);
 
         $this->project_analyzer->setPhpVersion($php_version, 'tests');
 

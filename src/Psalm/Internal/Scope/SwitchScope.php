@@ -38,10 +38,7 @@ class SwitchScope
 
     public ?PhpParser\Node\Expr $leftover_case_equality_expr = null;
 
-    /**
-     * @var ClauseConjunction
-     */
-    public array $negated_clauses = [];
+    public ClauseConjunction $negated_clauses;
 
     /**
      * @var array<string, bool>|null

@@ -1032,6 +1032,7 @@ class FunctionLikeDocblockScanner
                 && !$storage->signature_return_type
             ) {
                 $new = [];
+                /** @var SplQueue<array<Atomic>> */
                 $queue = new SplQueue;
                 $queue->enqueue($storage->return_type->getAtomicTypes());
                 $queue->setIteratorMode(SplDoublyLinkedList::IT_MODE_FIFO | SplDoublyLinkedList::IT_MODE_DELETE);

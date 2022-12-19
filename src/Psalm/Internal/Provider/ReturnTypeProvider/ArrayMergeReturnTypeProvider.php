@@ -101,7 +101,6 @@ class ArrayMergeReturnTypeProvider implements FunctionReturnTypeProviderInterfac
                     } else {
                         return Type::getArray();
                     }
-                    $unpacked_type_parts = $unpacked_type_parts->getAtomicTypes();
                 } else {
                     $unpacked_type_parts = [$type_part];
                 }

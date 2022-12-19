@@ -59,6 +59,8 @@ trait ValidCodeAnalysisTestTrait
             Config::getInstance()->setCustomErrorLevel($issue_name, Config::REPORT_SUPPRESS);
         }
 
+        Config::getInstance()->setCustomErrorLevel('LiteralKeyUnshapedArray', Config::REPORT_SUPPRESS);
+
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             $code = str_replace("\n", "\r\n", $code);
         }
