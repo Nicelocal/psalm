@@ -204,7 +204,7 @@ class FormulaGenerator
                 $this_class_name,
                 $source,
                 $codebase,
-                !$inside_negation
+                !$inside_negation,
             )->getNegation();
         }
 
@@ -228,7 +228,7 @@ class FormulaGenerator
                     $source,
                     $codebase,
                     !$inside_negation,
-                    $cache
+                    $cache,
                 )->getNegation();
             }
 
@@ -246,7 +246,7 @@ class FormulaGenerator
                     $source,
                     $codebase,
                     !$inside_negation,
-                    $cache
+                    $cache,
                 )->getNegation();
             }
 
@@ -307,7 +307,7 @@ class FormulaGenerator
                     $source,
                     $codebase,
                     !$inside_negation,
-                    $cache
+                    $cache,
                 )->getNegation();
             }
 
@@ -325,7 +325,7 @@ class FormulaGenerator
                     $source,
                     $codebase,
                     !$inside_negation,
-                    $cache
+                    $cache,
                 )->getNegation();
             }
 
@@ -442,8 +442,8 @@ class FormulaGenerator
             new Clause(
                 [$conditional_ref => ['truthy' => new Truthy()]],
                 $conditional_object_id,
-                $creating_object_id
-            )
+                $creating_object_id,
+            ),
         ]);
     }
 }

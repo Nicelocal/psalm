@@ -196,8 +196,8 @@ class AndAnalyzer
                 ...array_map(
                     /** @return string|int */
                     static fn(Clause $c) => $c->hash,
-                    $partitioned_clauses[1]->clauses
-                )
+                    $partitioned_clauses[1]->clauses,
+                ),
             ];
 
             $if_body_context->vars_possibly_in_scope = array_merge(

@@ -233,9 +233,9 @@ class ArrayMapReturnTypeProvider implements FunctionReturnTypeProviderInterface
                 $atomic_type = new TKeyedArray(
                     array_map(
                         static fn(Union $in): Union => $mapping_return_type->setPossiblyUndefined(
-                            $in->possibly_undefined
+                            $in->possibly_undefined,
                         ),
-                        $array_arg_atomic_type->properties
+                        $array_arg_atomic_type->properties,
                     ),
                     null,
                     $array_arg_atomic_type->fallback_params === null
@@ -252,12 +252,12 @@ class ArrayMapReturnTypeProvider implements FunctionReturnTypeProviderInterface
             ) {
                 if ($array_arg_atomic_type instanceof TKeyedArray && $array_arg_atomic_type->isNonEmpty()) {
                     return Type::getNonEmptyList(
-                        $mapping_return_type
+                        $mapping_return_type,
                     );
                 }
 
                 return Type::getList(
-                    $mapping_return_type
+                    $mapping_return_type,
                 );
             }
 

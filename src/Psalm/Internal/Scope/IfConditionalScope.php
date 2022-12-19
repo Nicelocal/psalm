@@ -24,8 +24,7 @@ class IfConditionalScope
      */
     public array $assigned_in_conditional_var_ids;
 
-    /** @var ClauseConjunction */
-    public $entry_clauses;
+    public ClauseConjunction $entry_clauses;
 
     /**
      * @param array<string, bool>   $cond_referenced_var_ids

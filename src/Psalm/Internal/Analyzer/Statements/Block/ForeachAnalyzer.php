@@ -475,8 +475,8 @@ class ForeachAnalyzer
                         ExpressionIdentifier::getExtendedVarId(
                             $expr,
                             $statements_analyzer->getFQCLN(),
-                            $statements_analyzer
-                        )
+                            $statements_analyzer,
+                        ),
                     );
                 } elseif (!$iterator_atomic_type instanceof TNonEmptyArray) {
                     $always_non_empty_array = false;

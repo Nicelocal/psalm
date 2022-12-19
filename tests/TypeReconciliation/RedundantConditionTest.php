@@ -910,7 +910,7 @@ class RedundantConditionTest extends TestCase
 
                         if ( count( $report_data ) === 1 ) {
                         }
-                    }'
+                    }',
             ],
             'secondFalsyTwiceWithChange' => [
                 'code' => '<?php

@@ -1115,7 +1115,7 @@ class ArrayAssignmentTest extends TestCase
 
                     takesArray($a);',
                 'assertions' => [
-                    '$a' => 'list{int, int}'
+                    '$a' => 'list{int, int}',
                 ],
             ],
             'listTakesEmptyArray' => [
@@ -2007,7 +2007,7 @@ class ArrayAssignmentTest extends TestCase
                 $currentAction = "";
                 if (\array_key_exists($currentAction, $items)) {
                     $items[$currentAction]["active"] = true;
-                }'
+                }',
             ],
             'listAppendShape' => [
                 'code' => '<?php
@@ -2021,9 +2021,9 @@ class ArrayAssignmentTest extends TestCase
                     $b[]= 2;',
                 'assertions' => [
                     '$a===' => 'list{0, 1, 2}',
-                    '$b===' => 'list{0, 1, 2}'
-                ]
-            ]
+                    '$b===' => 'list{0, 1, 2}',
+                ],
+            ],
         ];
     }
 

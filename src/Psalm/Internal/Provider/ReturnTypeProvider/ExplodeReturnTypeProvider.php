@@ -59,7 +59,7 @@ class ExplodeReturnTypeProvider implements FunctionReturnTypeProviderInterface
                 return new Union([
                     $can_return_empty
                         ? Type::getListAtomic($inner_type)
-                        : Type::getNonEmptyListAtomic($inner_type)
+                        : Type::getNonEmptyListAtomic($inner_type),
                 ]);
             }
 
@@ -80,7 +80,7 @@ class ExplodeReturnTypeProvider implements FunctionReturnTypeProviderInterface
                         $can_return_empty
                             ? Type::getListAtomic($inner_type)
                             : Type::getNonEmptyListAtomic($inner_type),
-                        new TFalse
+                        new TFalse,
                     ], [
                         'ignore_falsable_issues' =>
                             $statements_source->getCodebase()->config->ignore_internal_falsable_issues,

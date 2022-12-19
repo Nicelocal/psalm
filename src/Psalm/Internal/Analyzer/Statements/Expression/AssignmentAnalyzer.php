@@ -1425,9 +1425,9 @@ class AssignmentAnalyzer
                                 IssueBuffer::maybeAdd(
                                     new PossiblyUndefinedIntArrayOffset(
                                         'Possibly undefined array key',
-                                        new CodeLocation($statements_analyzer->getSource(), $var)
+                                        new CodeLocation($statements_analyzer->getSource(), $var),
                                     ),
-                                    $statements_analyzer->getSuppressedIssues()
+                                    $statements_analyzer->getSuppressedIssues(),
                                 );
                             }
 
@@ -1792,7 +1792,7 @@ class AssignmentAnalyzer
                     );
 
                     $assignment_clauses = new ClauseConjunction([
-                        new Clause([$var_id => ['falsy' => new Falsy()]], $var_object_id, $var_object_id)
+                        new Clause([$var_id => ['falsy' => new Falsy()]], $var_object_id, $var_object_id),
                     ]);
                     $assignment_clauses = $assignment_clauses->combineOrredClauses(
                         $right_clauses,

@@ -1707,7 +1707,7 @@ class TypeTest extends TestCase
 
                     if (count($a) < 1) {
                     }',
-                'error_message' => 'DocblockTypeContradiction'
+                'error_message' => 'DocblockTypeContradiction',
             ],
             'invalidSealedArrayAssertion5' => [
                 'code' => '<?php

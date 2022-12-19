@@ -59,7 +59,7 @@ class FunctionCallTest extends TestCase
                     '$fCount===' => '1',
                     '$gCount===' => 'int<1, 2>',
                     '$hCount===' => 'int<1, max>',
-                ]
+                ],
             ],
             'preg_grep' => [
                 'code' => '<?php

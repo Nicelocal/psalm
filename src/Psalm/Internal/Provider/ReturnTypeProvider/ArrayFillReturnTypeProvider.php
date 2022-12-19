@@ -70,7 +70,7 @@ class ArrayFillReturnTypeProvider implements FunctionReturnTypeProviderInterface
                 $result,
                 null,
                 null,
-                $is_list
+                $is_list,
             )]);
         }
         if ($first_arg_type

@@ -73,7 +73,7 @@ class IfAnalyzer
 
         if (array_filter(
             $outer_context->clauses->clauses,
-            static fn(Clause $clause): bool => (bool) $clause->possibilities
+            static fn(Clause $clause): bool => (bool) $clause->possibilities,
         )) {
             $omit_keys = array_reduce(
                 $outer_context->clauses->clauses,

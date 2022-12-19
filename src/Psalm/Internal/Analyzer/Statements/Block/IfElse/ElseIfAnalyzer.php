@@ -162,7 +162,7 @@ class ElseIfAnalyzer
         try {
             if (array_filter(
                 $entry_clauses->clauses,
-                static fn(Clause $clause): bool => (bool) $clause->possibilities
+                static fn(Clause $clause): bool => (bool) $clause->possibilities,
             )) {
                 $omit_keys = array_reduce(
                     $entry_clauses->clauses,
@@ -415,7 +415,7 @@ class ElseIfAnalyzer
 
         try {
             $if_scope->negated_clauses = $if_scope->negated_clauses->andSimplified(
-                $elseif_clauses->getNegation()
+                $elseif_clauses->getNegation(),
             );
         } catch (ComplicatedExpressionException $e) {
             $if_scope->negated_clauses = ClauseConjunction::empty();

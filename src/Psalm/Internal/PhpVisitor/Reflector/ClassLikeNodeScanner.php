@@ -1559,7 +1559,7 @@ class ClassLikeNodeScanner
                     $this->aliases,
                     null,
                     $existing_constants,
-                    $fq_classlike_name
+                    $fq_classlike_name,
                 );
             }
 

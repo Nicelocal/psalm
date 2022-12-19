@@ -847,7 +847,7 @@ class CallAnalyzer
                         $arg_value,
                         $context->self,
                         $statements_analyzer,
-                        $codebase
+                        $codebase,
                     )->getNegation();
                 } elseif ($single_rule instanceof IsType
                     && $single_rule->type instanceof TTrue

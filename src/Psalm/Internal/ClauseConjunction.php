@@ -22,7 +22,6 @@ use function reset;
  * Represents a CNF expression ((A||B) && (C||D) && ...)
  *
  * @psalm-immutable
- *
  * @internal
  */
 final class ClauseConjunction
@@ -104,7 +103,7 @@ final class ClauseConjunction
 
         return new self([
             ...$this->clauses,
-            ...$other->clauses
+            ...$other->clauses,
         ], false);
     }
     /**
@@ -124,7 +123,7 @@ final class ClauseConjunction
 
         return new self(self::simplifyCNF([
             ...$this->clauses,
-            ...$other->clauses
+            ...$other->clauses,
         ]), true);
     }
     /**
@@ -221,7 +220,7 @@ final class ClauseConjunction
                         || $left_clause->generated
                         || count($left_clauses) > 1
                         || count($right_clauses) > 1,
-                    []
+                    [],
                 );
             }
         }
@@ -251,9 +250,7 @@ final class ClauseConjunction
      *     (!$a) && (!$b) && ($a || $b || $c) => $c
      *
      * @param list<Clause>  $clauses
-     *
      * @return list<Clause>
-     *
      * @psalm-pure
      */
     private static function simplifyCNF(array $clauses): array
@@ -384,7 +381,7 @@ final class ClauseConjunction
                         } else {
                             $updated_clause = $clause_b->addPossibilities(
                                 $clause_var,
-                                $clause_var_possibilities
+                                $clause_var_possibilities,
                             );
 
                             $cloned_clauses[$updated_clause->hash] = $updated_clause;
@@ -432,7 +429,7 @@ final class ClauseConjunction
                 for ($k = $i + 1; $k < $clause_count; $k++) {
                     $clause_b = $clauses[$k];
                     $common_keys = array_keys(
-                        array_intersect_key($clause_a->possibilities, $clause_b->possibilities)
+                        array_intersect_key($clause_a->possibilities, $clause_b->possibilities),
                     );
                     if ($common_keys) {
                         $common_negated_keys = [];
@@ -440,7 +437,7 @@ final class ClauseConjunction
                             if (count($clause_a->possibilities[$common_key]) === 1
                                 && count($clause_b->possibilities[$common_key]) === 1
                                 && reset($clause_a->possibilities[$common_key])->isNegationOf(
-                                    reset($clause_b->possibilities[$common_key])
+                                    reset($clause_b->possibilities[$common_key]),
                                 )
                             ) {
                                 $common_negated_keys[] = $common_key;
@@ -488,7 +485,7 @@ final class ClauseConjunction
                                 false,
                                 true,
                                 true,
-                                []
+                                [],
                             ));
 
                             unset($simplified_clauses[$conflict_clause->hash]);
@@ -516,7 +513,7 @@ final class ClauseConjunction
     {
         $clauses = array_filter(
             $this->clauses,
-            static fn(Clause $clause): bool => $clause->reconcilable
+            static fn(Clause $clause): bool => $clause->reconcilable,
         );
 
         if (!$clauses) {
@@ -544,9 +541,7 @@ final class ClauseConjunction
 
     /**
      * @param non-empty-array<Clause>  $clauses
-     *
      * @return list<Clause>
-     *
      * @psalm-pure
      */
     private static function groupImpossibilities(array $clauses): array
@@ -563,7 +558,7 @@ final class ClauseConjunction
                     $seed_clause = new Clause(
                         [$var => [(string)$impossible_type => $impossible_type]],
                         $clause->creating_conditional_id,
-                        $clause->creating_object_id
+                        $clause->creating_object_id,
                     );
 
                     $seed_clauses[] = $seed_clause;
@@ -632,7 +627,7 @@ final class ClauseConjunction
                             false,
                             true,
                             true,
-                            []
+                            [],
                         );
 
                         $new_clauses[] = $new_clause;
@@ -658,7 +653,6 @@ final class ClauseConjunction
      *
      * @param  array<string, bool> $cond_referenced_var_ids
      * @param  array<string, array<int, array<int, Assertion>>> $active_truths
-     *
      * @return array<string, list<list<Assertion>>>
      */
     public function getTruthsFromFormula(

@@ -86,9 +86,6 @@ class IfScope
      */
     public array $final_actions = [];
 
-    /**
-     * @var ?Context
-     */
     public ?Context $post_leaving_if_context = null;
 
     public function __construct()

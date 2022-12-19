@@ -273,7 +273,7 @@ class ArrayFilterReturnTypeProvider implements FunctionReturnTypeProviderInterfa
                         }
 
                         $assertions = $filter_clauses->getTruthsFromFormula(
-                            $cond_object_id
+                            $cond_object_id,
                         );
 
                         if (isset($assertions['$' . $first_param->var->name])) {

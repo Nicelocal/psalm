@@ -611,9 +611,9 @@ class ArrayAnalyzer
                     IssueBuffer::maybeAdd(
                         new DuplicateArrayKey(
                             'String keys are not supported in unpacked arrays',
-                            new CodeLocation($statements_analyzer->getSource(), $item->value)
+                            new CodeLocation($statements_analyzer->getSource(), $item->value),
                         ),
-                        $statements_analyzer->getSuppressedIssues()
+                        $statements_analyzer->getSuppressedIssues(),
                     );
 
                     continue;
@@ -634,11 +634,11 @@ class ArrayAnalyzer
 
             $array_creation_info->item_key_atomic_types = array_merge(
                 $array_creation_info->item_key_atomic_types,
-                array_values($iterable_type->type_params[0]->getAtomicTypes())
+                array_values($iterable_type->type_params[0]->getAtomicTypes()),
             );
             $array_creation_info->item_value_atomic_types = array_merge(
                 $array_creation_info->item_value_atomic_types,
-                array_values($iterable_type->type_params[1]->getAtomicTypes())
+                array_values($iterable_type->type_params[1]->getAtomicTypes()),
             );
         }
 

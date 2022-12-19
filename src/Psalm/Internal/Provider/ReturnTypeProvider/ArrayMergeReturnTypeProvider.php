@@ -22,7 +22,6 @@ use function array_values;
 use function count;
 use function is_string;
 use function max;
-use function substr;
 
 /**
  * @internal

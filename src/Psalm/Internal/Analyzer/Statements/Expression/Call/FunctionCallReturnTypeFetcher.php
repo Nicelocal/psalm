@@ -372,7 +372,7 @@ class FunctionCallReturnTypeFetcher
                                     return new Union([
                                         $atomic_types['array']->count !== null
                                             ? new TLiteralInt($atomic_types['array']->count)
-                                            : new TIntRange(1, null)
+                                            : new TIntRange(1, null),
                                     ]);
                                 }
 
@@ -471,7 +471,7 @@ class FunctionCallReturnTypeFetcher
 
                     $call_map_return_type = new Union([
                         Type::getNonEmptyListAtomic(
-                            $string_type
+                            $string_type,
                         ),
                         new TFalse,
                         new TNull,

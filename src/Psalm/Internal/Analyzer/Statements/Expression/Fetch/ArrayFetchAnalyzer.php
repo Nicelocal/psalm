@@ -526,7 +526,7 @@ class ArrayFetchAnalyzer
                 $statements_analyzer,
                 $stmt,
                 $array_type,
-                $offset_type
+                $offset_type,
             );
         }
 
@@ -1141,7 +1141,7 @@ class ArrayFetchAnalyzer
                         [$replacement_type],
                         null,
                         null,
-                        true
+                        true,
                     );
                     return;
                 }
@@ -1194,7 +1194,7 @@ class ArrayFetchAnalyzer
                 $expected_offset_types,
                 $array_access_type,
                 $original_type,
-                $has_valid_offset
+                $has_valid_offset,
             );
         } elseif ($type instanceof TClassStringMap) {
             self::handleArrayAccessOnClassStringMap(
@@ -1375,7 +1375,7 @@ class ArrayFetchAnalyzer
                     null,
                     null,
                     'non-empty-array',
-                    $type->from_docblock
+                    $type->from_docblock,
                 );
             }
         }
@@ -1666,7 +1666,7 @@ class ArrayFetchAnalyzer
                                 $type->properties,
                                 null,
                                 [$new_key_type, $generic_params],
-                                true
+                                true,
                             );
                         } else {
                             $type = new TNonEmptyArray([
@@ -1749,9 +1749,9 @@ class ArrayFetchAnalyzer
             if (IssueBuffer::accepts(
                 new LiteralKeyUnshapedArray(
                     'Literal offset ' . implode('|', $literal_offsets) . ' was used on unshaped array '.$array_type,
-                    new CodeLocation($statements_analyzer->getSource(), $stmt)
+                    new CodeLocation($statements_analyzer->getSource(), $stmt),
                 ),
-                $statements_analyzer->getSuppressedIssues()
+                $statements_analyzer->getSuppressedIssues(),
             )) {
                 // fall through
             }

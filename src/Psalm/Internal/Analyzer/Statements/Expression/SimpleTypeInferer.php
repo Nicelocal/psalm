@@ -795,8 +795,8 @@ class SimpleTypeInferer
                     $array_creation_info->item_value_atomic_types = array_merge(
                         $array_creation_info->item_value_atomic_types,
                         array_values(
-                            $unpacked_atomic_type->fallback_params[1]->getAtomicTypes()
-                        )
+                            $unpacked_atomic_type->fallback_params[1]->getAtomicTypes(),
+                        ),
                     );
                 }
             } elseif ($unpacked_atomic_type instanceof TArray) {
@@ -818,8 +818,8 @@ class SimpleTypeInferer
                     array_values(
                         isset($unpacked_atomic_type->type_params[1])
                             ? $unpacked_atomic_type->type_params[1]->getAtomicTypes()
-                            : [new TMixed()]
-                    )
+                            : [new TMixed()],
+                    ),
                 );
             }
         }

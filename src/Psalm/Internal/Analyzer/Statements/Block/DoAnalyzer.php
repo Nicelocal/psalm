@@ -82,7 +82,7 @@ class DoAnalyzer
                 }
 
                 return true;
-            }
+            },
         );
 
         if (!$while_clauses->clauses) {

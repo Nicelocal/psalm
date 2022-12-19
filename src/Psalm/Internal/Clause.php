@@ -51,8 +51,7 @@ class Clause
      */
     public array $possibilities;
 
-    /** @var bool */
-    public $wedge;
+    public bool $wedge;
 
     public bool $reconcilable;
 
@@ -235,7 +234,6 @@ class Clause
      * represents the conjunctive formula
      *
      * $a && !$b && $c === null && !is_string($d) && !is_int($d)
-     *
      *
      * @return array<string, non-empty-list<Assertion>>
      */

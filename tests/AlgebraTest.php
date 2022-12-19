@@ -244,7 +244,7 @@ class AlgebraTest extends TestCase
             false,
             true,
             true,
-            []
+            [],
         ));
 
         $a2 = new IsIsset();
@@ -258,7 +258,7 @@ class AlgebraTest extends TestCase
             false,
             true,
             true,
-            []
+            [],
         ));
 
         $result_clauses = (new ClauseConjunction([$clause1, $clause2]))->getNegation()->clauses;

@@ -150,7 +150,7 @@ class GetObjectVarsReturnTypeProvider implements FunctionReturnTypeProviderInter
                 $first_arg_type,
                 $statements_source,
                 $event->getContext(),
-                $event->getCodeLocation()
+                $event->getCodeLocation(),
             )]);
         }
 

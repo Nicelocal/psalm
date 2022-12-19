@@ -402,7 +402,6 @@ class StatementsProvider
     /**
      * @param  list<Stmt> $existing_statements
      * @param  array<int, array{0: int, 1: int, 2: int, 3: int, 4: int, 5: string}> $file_changes
-     *
      * @return list<Stmt>
      */
     public static function parseStatements(
@@ -524,10 +523,10 @@ class StatementsProvider
                 foreach ($args as $key) {
                     $expr []= new FuncCall(
                         new Name('array_key_exists'),
-                        [$key, $var]
+                        [$key, $var],
                     );
                     $var = new Arg(
-                        new ArrayDimFetch($var->value, $key->value)
+                        new ArrayDimFetch($var->value, $key->value),
                     );
                 }
                 if ($func === 'isempty') {
@@ -539,7 +538,7 @@ class StatementsProvider
                     $prev = new BooleanAnd($prev, array_shift($expr));
                 }
                 return $func === 'isempty' ? new BooleanNot(
-                    $prev
+                    $prev,
                 ) : $prev;
             }
         };
@@ -550,7 +549,7 @@ class StatementsProvider
         $resolving_traverser = new PhpParser\NodeTraverser;
         $name_resolver = new SimpleNameResolver(
             $error_handler,
-            $used_cached_statements ? $file_changes : []
+            $used_cached_statements ? $file_changes : [],
         );
         $resolving_traverser->addVisitor($name_resolver);
         $resolving_traverser->traverse($stmts);

@@ -3672,7 +3672,7 @@ class AssertionFinder
                 $source,
                 $expr,
                 $second_var_type,
-                $first_var_type
+                $first_var_type,
             );
         }
         $if_types = [];
@@ -3699,7 +3699,7 @@ class AssertionFinder
                 ) {
                     if ($atomic_type instanceof TKeyedArray) {
                         $key_type = $atomic_type->getGenericKeyType(
-                            !$atomic_type->allShapeKeysAlwaysDefined()
+                            !$atomic_type->allShapeKeysAlwaysDefined(),
                         );
                     } else {
                         $key_type = $atomic_type->type_params[0];
