@@ -105,6 +105,7 @@ HEADING;
 
     /**
      * Copied from ConsoleReport unchanged. We could consider moving to another class to reduce duplication.
+     *
      * @param non-empty-list<DataFlowNodeData|array{label: string, entry_path_type: string}> $taint_trace
      */
     private function getTaintSnippets(array $taint_trace): string
@@ -140,6 +141,7 @@ HEADING;
 
     /**
      * Copied from ConsoleReport unchanged. We could consider moving to another class to reduce duplication.
+     *
      * @param IssueData|DataFlowNodeData $data
      */
     private function getFileReference($data): string
@@ -178,13 +180,10 @@ HEADING;
 
     private function sortIssuesByLevelAndType(): void
     {
-        usort($this->issues_data, function (IssueData $left, IssueData $right): int {
-            // negative error levels go to the top, followed by large positive levels, with level 1 at the bottom.
-            return [$left->error_level > 0, -$left->error_level, $left->type,
+        usort($this->issues_data, fn(IssueData $left, IssueData $right): int => [$left->error_level > 0, -$left->error_level, $left->type,
                     $left->file_path, $left->file_name, $left->line_from]
                 <=>
                 [$right->error_level > 0, -$right->error_level, $right->type,
-                    $right->file_path, $right->file_name, $right->line_from];
-        });
+                    $right->file_path, $right->file_name, $right->line_from]);
     }
 }

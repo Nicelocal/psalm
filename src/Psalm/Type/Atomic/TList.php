@@ -24,7 +24,6 @@ use function get_class;
  * - its keys are integers
  * - they start at 0
  * - they are consecutive and go upwards (no negative int)
- *
  * @psalm-immutable
  */
 class TList extends Atomic
@@ -71,7 +70,6 @@ class TList extends Atomic
 
     /**
      * @param  array<lowercase-string, string> $aliased_classes
-     *
      */
     public function toNamespacedString(
         ?string $namespace,
@@ -85,7 +83,7 @@ class TList extends Atomic
                     $namespace,
                     $aliased_classes,
                     $this_class,
-                    true
+                    true,
                 );
         }
 
@@ -95,7 +93,7 @@ class TList extends Atomic
                 $namespace,
                 $aliased_classes,
                 $this_class,
-                false
+                false,
             )
             . '>';
     }
@@ -176,7 +174,7 @@ class TList extends Atomic
                 $replace,
                 $add_lower_bound,
                 null,
-                $depth + 1
+                $depth + 1,
             );
 
             if ($offset === 1 && ($cloned || $this->type_param !== $type_param)) {
@@ -198,7 +196,7 @@ class TList extends Atomic
         return $this->setTypeParam(TemplateInferredTypeReplacer::replace(
             $this->type_param,
             $template_result,
-            $codebase
+            $codebase,
         ));
     }
 

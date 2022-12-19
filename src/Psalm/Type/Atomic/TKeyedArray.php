@@ -31,6 +31,7 @@ use function str_replace;
 
 /**
  * Represents an 'object-like array' - an array with known keys.
+ *
  * @psalm-immutable
  */
 class TKeyedArray extends Atomic
@@ -88,7 +89,6 @@ class TKeyedArray extends Atomic
 
     /**
      * @param non-empty-array<string|int, Union> $properties
-     *
      * @return static
      */
     public function setProperties(array $properties): self
@@ -171,7 +171,6 @@ class TKeyedArray extends Atomic
 
     /**
      * @param  array<lowercase-string, string> $aliased_classes
-     *
      */
     public function toNamespacedString(
         ?string $namespace,
@@ -184,7 +183,7 @@ class TKeyedArray extends Atomic
                 $namespace,
                 $aliased_classes,
                 $this_class,
-                true
+                true,
             );
         }
 
@@ -215,7 +214,7 @@ class TKeyedArray extends Atomic
                     $namespace,
                     $aliased_classes,
                     $this_class,
-                    false
+                    false,
                 );
                 continue;
             }
@@ -232,7 +231,7 @@ class TKeyedArray extends Atomic
                     $namespace,
                     $aliased_classes,
                     $this_class,
-                    false
+                    false,
                 );
         }
 
@@ -310,7 +309,7 @@ class TKeyedArray extends Atomic
             false,
             true,
             500,
-            $possibly_undefined
+            $possibly_undefined,
         );
     }
 
@@ -416,6 +415,7 @@ class TKeyedArray extends Atomic
 
     /**
      * Returns null if there is no upper limit.
+     *
      * @return int<1, max>|null
      */
     public function getMaxCount(): ?int
@@ -482,7 +482,7 @@ class TKeyedArray extends Atomic
                 $replace,
                 $add_lower_bound,
                 null,
-                $depth
+                $depth,
             );
         }
 
@@ -509,7 +509,7 @@ class TKeyedArray extends Atomic
                 $replace,
                 $add_lower_bound,
                 null,
-                $depth
+                $depth,
             );
         }
 
@@ -536,7 +536,7 @@ class TKeyedArray extends Atomic
             $properties[$offset] = TemplateInferredTypeReplacer::replace(
                 $property,
                 $template_result,
-                $codebase
+                $codebase,
             );
         }
         $fallback_params = $this->fallback_params;
@@ -544,7 +544,7 @@ class TKeyedArray extends Atomic
             $fallback_params[$offset] = TemplateInferredTypeReplacer::replace(
                 $property,
                 $template_result,
-                $codebase
+                $codebase,
             );
         }
         if ($properties !== $this->properties || $fallback_params !== $this->fallback_params) {

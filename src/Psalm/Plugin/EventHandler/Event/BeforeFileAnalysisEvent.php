@@ -28,6 +28,7 @@ final class BeforeFileAnalysisEvent
 
     /**
      * Called before a file has been checked
+     *
      * @internal
      */
     public function __construct(

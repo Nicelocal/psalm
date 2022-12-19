@@ -141,14 +141,13 @@ abstract class Atomic implements TypeNode
         /** @psalm-suppress ImpureMethodCall ClasslikeReplacer will always clone */
         (new ClasslikeReplacer(
             $old,
-            $new
+            $new,
         ))->traverse($type);
         return $type;
     }
 
     /**
      * @psalm-suppress InaccessibleProperty Allowed during construction
-     *
      * @param int $analysis_php_version_id contains php version when the type comes from signature
      * @param array<string, array<string, Union>> $template_type_map
      * @param array<string, TypeAlias> $type_aliases
@@ -172,7 +171,6 @@ abstract class Atomic implements TypeNode
     }
     /**
      * @psalm-suppress InaccessibleProperty Allowed during construction
-     *
      * @param int $analysis_php_version_id contains php version when the type comes from signature
      * @param array<string, array<string, Union>> $template_type_map
      * @param array<string, TypeAlias> $type_aliases
@@ -246,19 +244,19 @@ abstract class Atomic implements TypeNode
             case 'associative-array':
                 return new TArray([
                     new Union([new TArrayKey($from_docblock)]),
-                    new Union([new TMixed(false, $from_docblock)])
+                    new Union([new TMixed(false, $from_docblock)]),
                 ]);
 
             case 'non-empty-array':
                 return new TNonEmptyArray([
                     new Union([new TArrayKey($from_docblock)]),
-                    new Union([new TMixed(false, $from_docblock)])
+                    new Union([new TMixed(false, $from_docblock)]),
                 ]);
 
             case 'callable-array':
                 return new TCallableArray([
                     new Union([new TArrayKey($from_docblock)]),
-                    new Union([new TMixed(false, $from_docblock)])
+                    new Union([new TMixed(false, $from_docblock)]),
                 ]);
 
             case 'list':
@@ -393,7 +391,7 @@ abstract class Atomic implements TypeNode
             return new TTemplateParam(
                 $value,
                 $template_type_map[$value][$first_class],
-                $first_class
+                $first_class,
             );
         }
 
@@ -523,10 +521,10 @@ abstract class Atomic implements TypeNode
                 || ($codebase->classOrInterfaceExists($this->value)
                     && ($codebase->classExtendsOrImplements(
                         $this->value,
-                        'Traversable'
+                        'Traversable',
                     ) || $codebase->interfaceExtends(
                         $this->value,
-                        'Traversable'
+                        'Traversable',
                     )))
                 || (
                     $this->extra_types
@@ -546,10 +544,10 @@ abstract class Atomic implements TypeNode
                 || ($codebase->classOrInterfaceExists($this->value)
                     && ($codebase->classExtendsOrImplements(
                         $this->value,
-                        'Countable'
+                        'Countable',
                     ) || $codebase->interfaceExtends(
                         $this->value,
-                        'Countable'
+                        'Countable',
                     )))
                 || (
                     $this->extra_types
@@ -584,10 +582,10 @@ abstract class Atomic implements TypeNode
                 || ($codebase->classOrInterfaceExists($this->value)
                     && ($codebase->classExtendsOrImplements(
                         $this->value,
-                        'ArrayAccess'
+                        'ArrayAccess',
                     ) || $codebase->interfaceExtends(
                         $this->value,
-                        'ArrayAccess'
+                        'ArrayAccess',
                     )))
                 || (
                     $this->extra_types
