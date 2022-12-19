@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="dev-master@6eb37b9dc2321e4eaade9d3d2dca1aff6f2c0a8f">
+<files psalm-version="dev-master@d90a9a28a53176b4eb329d4c062d37516d3227f3">
   <file src="examples/TemplateChecker.php">
     <PossiblyUndefinedIntArrayOffset occurrences="2">
       <code>$comment_block-&gt;tags['variablesfrom'][0]</code>
@@ -32,6 +32,14 @@
       <code>$matches[1]</code>
       <code>$matches[2]</code>
       <code>$matches[3]</code>
+    </PossiblyUndefinedIntArrayOffset>
+  </file>
+  <file src="src/Psalm/Internal/Analyzer/AlgebraAnalyzer.php">
+    <PossiblyUndefinedArrayOffset occurrences="1">
+      <code>$mini_formula_2-&gt;clauses[0]</code>
+    </PossiblyUndefinedArrayOffset>
+    <PossiblyUndefinedIntArrayOffset occurrences="1">
+      <code>$mini_formula_2-&gt;clauses[0]</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Analyzer/ClassAnalyzer.php">
@@ -80,7 +88,7 @@
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/AssertionFinder.php">
-    <PossiblyUndefinedIntArrayOffset occurrences="28">
+    <PossiblyUndefinedIntArrayOffset occurrences="29">
       <code>$assertion-&gt;rule[0]</code>
       <code>$assertion-&gt;rule[0]</code>
       <code>$assertion-&gt;rule[0]</code>
@@ -104,6 +112,7 @@
       <code>$expr-&gt;getArgs()[0]</code>
       <code>$expr-&gt;getArgs()[1]</code>
       <code>$expr-&gt;getArgs()[1]</code>
+      <code>$expr-&gt;getArgs()[1]</code>
       <code>$get_debug_type_expr-&gt;getArgs()[0]</code>
       <code>$get_debug_type_expr-&gt;getArgs()[0]</code>
       <code>$getclass_expr-&gt;getArgs()[0]</code>
@@ -114,6 +123,12 @@
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Assignment/StaticPropertyAssignmentAnalyzer.php">
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$new_property_name</code>
+    </PossiblyUndefinedIntArrayOffset>
+  </file>
+  <file src="src/Psalm/Internal/Analyzer/Statements/Expression/BinaryOp/AndAnalyzer.php">
+    <PossiblyUndefinedIntArrayOffset occurrences="2">
+      <code>$context_clauses-&gt;clauses[0]</code>
+      <code>$context_clauses-&gt;clauses[0]</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/BinaryOp/ArithmeticOpAnalyzer.php">
@@ -187,6 +202,9 @@
       <code>$stmt_type</code>
       <code>$stmt_type</code>
     </ReferenceConstraintViolation>
+    <UnusedVariable occurrences="1">
+      <code>$exact_keys</code>
+    </UnusedVariable>
   </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/Expression/Fetch/AtomicPropertyFetchAnalyzer.php">
     <ReferenceConstraintViolation occurrences="1">
@@ -231,12 +249,38 @@
       <code>$check_type_string</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
+  <file src="src/Psalm/Internal/ClauseConjunction.php">
+    <ImpureByReferenceAssignment occurrences="1">
+      <code>$active_truths</code>
+    </ImpureByReferenceAssignment>
+    <ImpureFunctionCall occurrences="3">
+      <code>mt_rand</code>
+      <code>mt_rand</code>
+      <code>mt_rand</code>
+    </ImpureFunctionCall>
+    <ImpureMethodCall occurrences="1">
+      <code>empty</code>
+    </ImpureMethodCall>
+    <InaccessibleProperty occurrences="1">
+      <code>$this-&gt;negation</code>
+    </InaccessibleProperty>
+  </file>
   <file src="src/Psalm/Internal/Cli/Refactor.php">
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$identifier_name</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Codebase/Analyzer.php">
+    <MixedArgument occurrences="1">
+      <code>$times</code>
+    </MixedArgument>
+    <MixedArrayAssignment occurrences="1">
+      <code>$times[$issues[1]]</code>
+    </MixedArrayAssignment>
+    <MixedAssignment occurrences="2">
+      <code>$file</code>
+      <code>$time</code>
+    </MixedAssignment>
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$trait</code>
     </PossiblyUndefinedIntArrayOffset>
@@ -275,6 +319,14 @@
       <code>$property_name</code>
       <code>$property_name</code>
     </PossiblyUndefinedIntArrayOffset>
+  </file>
+  <file src="src/Psalm/Internal/Codebase/Reflection.php">
+    <MixedArgument occurrences="1">
+      <code>$reflection_type-&gt;getTypes()</code>
+    </MixedArgument>
+    <UnusedMethodCall occurrences="1">
+      <code>queueClassLikesForScanning</code>
+    </UnusedMethodCall>
   </file>
   <file src="src/Psalm/Internal/Diff/ClassStatementsDiffer.php">
     <PossiblyUndefinedIntArrayOffset occurrences="6">
@@ -364,12 +416,18 @@
     </RedundantCondition>
   </file>
   <file src="src/Psalm/Internal/PhpVisitor/Reflector/FunctionLikeDocblockScanner.php">
+    <ArgumentTypeCoercion occurrences="1">
+      <code>$new</code>
+    </ArgumentTypeCoercion>
     <PossiblyInvalidArrayOffset occurrences="1">
       <code>$fixed_type_tokens[$i - 1]</code>
     </PossiblyInvalidArrayOffset>
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$source_param_string</code>
     </PossiblyUndefinedIntArrayOffset>
+    <RedundantConditionGivenDocblockType occurrences="2">
+      <code>!$storage-&gt;signature_return_type</code>
+    </RedundantConditionGivenDocblockType>
   </file>
   <file src="src/Psalm/Internal/PhpVisitor/Reflector/FunctionLikeNodeScanner.php">
     <PossiblyUndefinedIntArrayOffset occurrences="1">
@@ -398,6 +456,35 @@
     <PossiblyUndefinedIntArrayOffset occurrences="1">
       <code>$method_name</code>
     </PossiblyUndefinedIntArrayOffset>
+  </file>
+  <file src="src/Psalm/Internal/Provider/StatementsProvider.php">
+    <MixedArgument occurrences="7">
+      <code>$key-&gt;value</code>
+      <code>$node-&gt;name-&gt;name</code>
+      <code>$prev</code>
+      <code>$prev</code>
+      <code>$var-&gt;value</code>
+      <code>$var-&gt;value</code>
+      <code>array_shift($expr)</code>
+    </MixedArgument>
+    <MixedAssignment occurrences="3">
+      <code>$class</code>
+      <code>$expr []</code>
+      <code>$prev</code>
+    </MixedAssignment>
+    <MixedInferredReturnType occurrences="1">
+      <code>enterNode</code>
+    </MixedInferredReturnType>
+    <MixedReturnStatement occurrences="2"/>
+    <UndefinedClass occurrences="1">
+      <code>Helper</code>
+    </UndefinedClass>
+    <UndefinedPropertyFetch occurrences="4">
+      <code>$key-&gt;value</code>
+      <code>$node-&gt;name-&gt;name</code>
+      <code>$var-&gt;value</code>
+      <code>$var-&gt;value</code>
+    </UndefinedPropertyFetch>
   </file>
   <file src="src/Psalm/Internal/Type/Comparator/AtomicTypeComparator.php">
     <ComplexMethod occurrences="1">
@@ -461,18 +548,17 @@
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Type/TypeTokenizer.php">
-    <InvalidArrayOffset occurrences="1">
-      <code>$chars[$i - 1]</code>
-    </InvalidArrayOffset>
-    <PossiblyInvalidArrayOffset occurrences="7">
+    <PossiblyInvalidArrayOffset occurrences="4">
       <code>$type_tokens[$i - 1]</code>
       <code>$type_tokens[$i - 1]</code>
       <code>$type_tokens[$i - 1]</code>
       <code>$type_tokens[$i - 1]</code>
-      <code>$type_tokens[$i - 1]</code>
-      <code>$type_tokens[$i - 1]</code>
-      <code>$type_tokens[$i - 2]</code>
     </PossiblyInvalidArrayOffset>
+  </file>
+  <file src="src/Psalm/Report/ConsoleReport.php">
+    <RedundantCondition occurrences="1">
+      <code>true</code>
+    </RedundantCondition>
   </file>
   <file src="src/Psalm/Storage/ClassConstantStorage.php">
     <MutableDependency occurrences="1">
