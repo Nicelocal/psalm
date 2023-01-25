@@ -591,11 +591,15 @@ class FunctionLikeNodeScanner
                 $var_comment_readonly = false;
                 $var_comment_allow_private_mutation = false;
                 if ($doc_comment) {
+                    $template_types = ($this->existing_function_template_types ?: [])
+                        + ($classlike_storage->template_types ?: [])
+                    ;
+
                     $var_comments = CommentAnalyzer::getTypeFromComment(
                         $doc_comment,
                         $this->file_scanner,
                         $this->aliases,
-                        $this->existing_function_template_types ?: [],
+                        $template_types,
                         $this->type_aliases,
                     );
 
@@ -1114,6 +1118,8 @@ class FunctionLikeNodeScanner
                 . ':' . (int)$stmt->getAttribute('startFilePos') . ':-:closure';
 
             $storage = $this->storage = $this->file_storage->functions[$function_id] = new FunctionStorage();
+
+            $storage->is_static = $stmt->static;
 
             if ($stmt instanceof PhpParser\Node\Expr\Closure) {
                 foreach ($stmt->uses as $closure_use) {

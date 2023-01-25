@@ -3,11 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://raw.githubusercontent.com/zoonru/psalm/fixes/config.xsd"
     name="Psalm for Psalm"
-    useDocblockTypes="true"
     errorLevel="1"
-    strictBinaryOperands="false"
-    rememberPropertyAssignmentsAfterCall="true"
-    checkForThrowsDocblock="false"
     throwExceptionOnError="0"
     findUnusedCode="true"
     ensureArrayStringOffsetsExist="true"
@@ -17,6 +13,7 @@
     limitMethodComplexity="true"
     errorBaseline="psalm-baseline.xml"
     findUnusedPsalmSuppress="true"
+    findUnusedBaselineEntry="true"
 >
     <stubs>
         <file name="stubs/phpparser.phpstub"/>
