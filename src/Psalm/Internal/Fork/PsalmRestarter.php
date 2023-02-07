@@ -9,9 +9,11 @@ use function array_splice;
 use function extension_loaded;
 use function file_get_contents;
 use function file_put_contents;
+use function function_exists;
 use function implode;
 use function in_array;
 use function ini_get;
+use function opcache_get_status;
 use function preg_replace;
 
 /**
@@ -43,7 +45,10 @@ class PsalmRestarter extends XdebugHandler
             $this->disabledExtensions,
             static fn(string $extension): bool => extension_loaded($extension)
         );
-        if (!extension_loaded('opcache')) {
+        if (!function_exists('opcache_get_status')
+            || !opcache_get_status(false)
+            || !opcache_get_status(false)['opcache_enabled']
+        ) {
             return true;
         }
         if (!in_array(ini_get('opcache.enable_cli'), ['1', 'true', true, 1])) {
@@ -79,12 +84,21 @@ class PsalmRestarter extends XdebugHandler
             1,
             0,
             [
-                '-dzend_extension=opcache',
                 '-dopcache.enable_cli=true',
                 '-dopcache.jit_buffer_size=512M',
                 '-dopcache.jit=1205',
             ],
         );
+        if (!function_exists('opcache_get_status')) {
+            array_splice(
+                $command,
+                1,
+                0,
+                [
+                    '-dzend_extension=opcache',
+                ],
+            );
+        }
 
         parent::restart($command);
     }

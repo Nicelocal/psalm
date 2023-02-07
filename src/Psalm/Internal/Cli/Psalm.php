@@ -46,6 +46,7 @@ use function chdir;
 use function count;
 use function file_exists;
 use function file_put_contents;
+use function function_exists;
 use function fwrite;
 use function gc_collect_cycles;
 use function gc_disable;
@@ -63,6 +64,7 @@ use function is_string;
 use function json_encode;
 use function max;
 use function microtime;
+use function opcache_get_status;
 use function parse_url;
 use function preg_match;
 use function preg_replace;
@@ -79,6 +81,7 @@ use const DIRECTORY_SEPARATOR;
 use const JSON_THROW_ON_ERROR;
 use const LC_CTYPE;
 use const PHP_EOL;
+use const PHP_MAJOR_VERSION;
 use const PHP_OS;
 use const PHP_URL_SCHEME;
 use const PHP_VERSION;
@@ -904,6 +907,19 @@ final class Psalm
 
         // If Xdebug is enabled, restart without it
         $ini_handler->check();
+
+        if (PHP_MAJOR_VERSION < 8) {
+            fwrite(STDERR, PHP_EOL
+                . 'Run Psalm on PHP 8 to make use of JIT for a 20%+ performance boost!'
+                . PHP_EOL . PHP_EOL);
+        } elseif (!function_exists('opcache_get_status')
+            || !opcache_get_status(false)
+            || !opcache_get_status(false)['opcache_enabled']
+        ) {
+            fwrite(STDERR, PHP_EOL
+                . 'Install the opcache extension to make use of JIT for a 20%+ performance boost!'
+                . PHP_EOL . PHP_EOL);
+        }
     }
 
     private static function detectThreads(array $options, Config $config, bool $in_ci): int
