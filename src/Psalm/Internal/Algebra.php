@@ -3,6 +3,7 @@
 namespace Psalm\Internal;
 
 use Psalm\Storage\Assertion;
+use UnexpectedValueException;
 
 use function assert;
 use function count;

@@ -1845,6 +1845,22 @@ return [
       'old' => ['bool', 'stream'=>'resource', 'enable='=>'bool'],
       'new' => ['bool', 'stream'=>'resource', 'enable='=>'?bool'],
     ],
+    'sem_acquire' => [
+      'old' => ['bool', 'semaphore'=>'resource', 'non_blocking='=>'bool'],
+      'new' => ['bool', 'semaphore'=>'SysvSemaphore', 'non_blocking='=>'bool'],
+    ],
+    'sem_get' => [
+      'old' => ['resource|false', 'key'=>'int', 'max_acquire='=>'int', 'permissions='=>'int', 'auto_release='=>'bool'],
+      'new' => ['SysvSemaphore|false', 'key'=>'int', 'max_acquire='=>'int', 'permissions='=>'int', 'auto_release='=>'bool'],
+    ],
+    'sem_release' => [
+      'old' => ['bool', 'semaphore'=>'resource'],
+      'new' => ['bool', 'semaphore'=>'SysvSemaphore'],
+    ],
+    'sem_remove' => [
+      'old' => ['bool', 'semaphore'=>'resource'],
+      'new' => ['bool', 'semaphore'=>'SysvSemaphore'],
+    ],
     'session_cache_expire' => [
       'old' => ['int', 'value='=>'int'],
       'new' => ['int', 'value='=>'?int'],
@@ -1922,8 +1938,8 @@ return [
       'new' => ['array', 'address'=>'AddressInfo'],
     ],
     'socket_addrinfo_lookup' => [
-      'old' => ['resource[]', 'node'=>'string', 'service='=>'mixed', 'hints='=>'array'],
-      'new' => ['false|AddressInfo[]', 'host='=>'string|null', 'service='=>'mixed', 'hints='=>'array'],
+      'old' => ['resource[]', 'host'=>'string', 'service='=>'string', 'hints='=>'array'],
+      'new' => ['false|AddressInfo[]', 'host'=>'string', 'service='=>'?string', 'hints='=>'array'],
     ],
     'socket_bind' => [
       'old' => ['bool', 'socket'=>'resource', 'addr'=>'string', 'port='=>'int'],
@@ -1950,8 +1966,8 @@ return [
       'new' => ['Socket|false', 'port'=>'int', 'backlog='=>'int'],
     ],
     'socket_create_pair' => [
-      'old' => ['bool', 'domain'=>'int', 'type'=>'int', 'protocol'=>'int', '&w_fd'=>'resource[]'],
-      'new' => ['bool', 'domain'=>'int', 'type'=>'int', 'protocol'=>'int', '&w_fd'=>'Socket[]'],
+      'old' => ['bool', 'domain'=>'int', 'type'=>'int', 'protocol'=>'int', '&w_pair'=>'resource[]'],
+      'new' => ['bool', 'domain'=>'int', 'type'=>'int', 'protocol'=>'int', '&w_pair'=>'Socket[]'],
     ],
     'socket_export_stream' => [
       'old' => ['resource|false', 'socket'=>'resource'],
@@ -2520,5 +2536,19 @@ return [
     'SimpleXMLIterator::hasChildren' => ['bool'],
     'SimpleXMLIterator::getChildren' => ['?SimpleXMLIterator'],
     'SplTempFileObject::fgetss' => ['string', 'allowable_tags='=>'string'],
+    'xmlrpc_decode' => ['mixed', 'xml'=>'string', 'encoding='=>'string'],
+    'xmlrpc_decode_request' => ['?array', 'xml'=>'string', '&w_method'=>'string', 'encoding='=>'string'],
+    'xmlrpc_encode' => ['string', 'value'=>'mixed'],
+    'xmlrpc_encode_request' => ['string', 'method'=>'string', 'params'=>'mixed', 'output_options='=>'array'],
+    'xmlrpc_get_type' => ['string', 'value'=>'mixed'],
+    'xmlrpc_is_fault' => ['bool', 'arg'=>'array'],
+    'xmlrpc_parse_method_descriptions' => ['array', 'xml'=>'string'],
+    'xmlrpc_server_add_introspection_data' => ['int', 'server'=>'resource', 'desc'=>'array'],
+    'xmlrpc_server_call_method' => ['string', 'server'=>'resource', 'xml'=>'string', 'user_data'=>'mixed', 'output_options='=>'array'],
+    'xmlrpc_server_create' => ['resource'],
+    'xmlrpc_server_destroy' => ['int', 'server'=>'resource'],
+    'xmlrpc_server_register_introspection_callback' => ['bool', 'server'=>'resource', 'function'=>'string'],
+    'xmlrpc_server_register_method' => ['bool', 'server'=>'resource', 'method_name'=>'string', 'function'=>'string'],
+    'xmlrpc_set_type' => ['bool', '&rw_value'=>'string|DateTime', 'type'=>'string'],
   ],
 ];
