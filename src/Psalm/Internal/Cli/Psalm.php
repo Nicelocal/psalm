@@ -909,8 +909,9 @@ final class Psalm
         $ini_handler->check();
 
         if (!function_exists('opcache_get_status')
-            || !opcache_get_status(false)
-            || !opcache_get_status(false)['opcache_enabled']
+            || !($opcache_status = opcache_get_status(false))
+            || !isset($opcache_status['opcache_enabled'])
+            || !$opcache_status['opcache_enabled']
         ) {
             $progress->write(PHP_EOL
                 . 'Install the opcache extension to make use of JIT on PHP 8.0+ for a 20%+ performance boost!'

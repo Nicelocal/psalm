@@ -16,6 +16,8 @@ use function ini_get;
 use function opcache_get_status;
 use function preg_replace;
 
+use const PHP_VERSION_ID;
+
 /**
  * @internal
  */
@@ -79,15 +81,34 @@ class PsalmRestarter extends XdebugHandler
 
             file_put_contents($this->tmpIni, $content);
         }
+
+        $additional_options = [];
+
+        // executed in the parent process (before restart)
+        // if it wasn't loaded then we apparently don't have opcache installed and there's no point trying
+        // to tweak it
+        // If we're running on 7.4 there's no JIT available
+        if (PHP_VERSION_ID >= 8_00_00 && (extension_loaded('opcache') || extension_loaded('Zend OPcache'))) {
+            $additional_options = [
+                '-dopcache.enable_cli=true',
+                '-dopcache.jit_buffer_size=512M',
+                '-dopcache.jit=1205',
+            ];
+        }
+
         array_splice(
             $command,
             1,
             0,
+<<<<<<< HEAD
             [
                 '-dopcache.enable_cli=true',
                 '-dopcache.jit_buffer_size=512M',
                 '-dopcache.jit=1205',
             ],
+=======
+            $additional_options,
+>>>>>>> origin/master
         );
         if (!function_exists('opcache_get_status')) {
             array_splice(
