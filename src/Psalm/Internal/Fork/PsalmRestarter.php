@@ -100,15 +100,7 @@ class PsalmRestarter extends XdebugHandler
             $command,
             1,
             0,
-<<<<<<< HEAD
-            [
-                '-dopcache.enable_cli=true',
-                '-dopcache.jit_buffer_size=512M',
-                '-dopcache.jit=1205',
-            ],
-=======
             $additional_options,
->>>>>>> origin/master
         );
         if (!function_exists('opcache_get_status')) {
             array_splice(
