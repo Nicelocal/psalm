@@ -450,7 +450,7 @@ class AssertionFinder
         $count = null;
         $count_equality_position = self::hasCountEqualityCheck($conditional, $count);
         $strlen = null;
-        $strlen_equality_position = self::hasStrlenEqualityCheck($conditional, $strlen);
+        $strlen_equality_position = null; // self::hasStrlenEqualityCheck($conditional, $strlen);
 
         if ($count_equality_position) {
             $if_types = [];
@@ -726,7 +726,7 @@ class AssertionFinder
         $count_inequality_position = self::hasCountEqualityCheck($conditional, $count);
 
         $strlen = null;
-        $strlen_inequality_position = self::hasStrlenEqualityCheck($conditional, $strlen);
+        $strlen_inequality_position = null; //self::hasStrlenEqualityCheck($conditional, $strlen);
 
         if ($count_inequality_position) {
             $if_types = [];
@@ -4015,7 +4015,7 @@ class AssertionFinder
             $superior_value_comparison,
         );
         $min_strlen = null;
-        $strlen_equality_position = self::hasNonEmptyStrlenEqualityCheck($conditional, $min_strlen);
+        $strlen_equality_position = null; // self::hasNonEmptyStrlenEqualityCheck($conditional, $min_strlen);
 
         if ($count_equality_position) {
             if ($count_equality_position === self::ASSIGNMENT_TO_RIGHT) {
@@ -4160,9 +4160,9 @@ class AssertionFinder
         $count_inequality_position = self::hasLessThanCountEqualityCheck($conditional, $max_count);
 
         $min_strlen = null;
-        $strlen_equality_position = self::hasNonEmptyStrlenEqualityCheck($conditional, $min_strlen);
+        $strlen_equality_position = null; // self::hasNonEmptyStrlenEqualityCheck($conditional, $min_strlen);
         $max_strlen = null;
-        $strlen_inequality_position = self::hasLessThanStrlenEqualityCheck($conditional, $max_strlen);
+        $strlen_inequality_position = null; // self::hasLessThanStrlenEqualityCheck($conditional, $max_strlen);
 
         $inferior_value_comparison = null;
         $inferior_value_position = self::hasInferiorNumberCheck(
