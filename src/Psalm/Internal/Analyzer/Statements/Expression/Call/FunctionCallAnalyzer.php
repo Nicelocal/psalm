@@ -470,6 +470,7 @@ class FunctionCallAnalyzer extends CallAnalyzer
             = $function_call_info->is_stubbed || $function_call_info->in_call_map || $namespaced_function_exists;
 
         if ($function_call_info->function_exists
+            && !$stmt->isFirstClassCallable()
             && $codebase->store_node_types
             && !$context->collect_initializations
             && !$context->collect_mutations

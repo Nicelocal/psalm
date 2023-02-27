@@ -484,7 +484,10 @@ class ArrayFetchAnalyzer
         $key_values = [];
 
         if ($stmt->dim instanceof PhpParser\Node\Scalar\String_) {
-            $key_values[] = new TLiteralString($stmt->dim->value);
+            $value_type = Type::getAtomicStringFromLiteral($stmt->dim->value);
+            if ($value_type instanceof TLiteralString) {
+                $key_values[] = $value_type;
+            }
         } elseif ($stmt->dim instanceof PhpParser\Node\Scalar\LNumber) {
             $key_values[] = new TLiteralInt($stmt->dim->value);
         } elseif ($stmt->dim && ($stmt_dim_type = $statements_analyzer->node_data->getType($stmt->dim))) {
@@ -517,7 +520,7 @@ class ArrayFetchAnalyzer
 
             if ($in_assignment) {
                 $offset_type->removeType('null');
-                $offset_type->addType(new TLiteralString(''));
+                $offset_type->addType(Type::getAtomicStringFromLiteral(''));
             }
         }
 
@@ -546,7 +549,7 @@ class ArrayFetchAnalyzer
                 $offset_type->removeType('null');
 
                 if (!$offset_type->ignore_nullable_issues) {
-                    $offset_type->addType(new TLiteralString(''));
+                    $offset_type->addType(Type::getAtomicStringFromLiteral(''));
                 }
             }
         }

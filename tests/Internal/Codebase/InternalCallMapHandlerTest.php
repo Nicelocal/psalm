@@ -44,8 +44,27 @@ use const PHP_MAJOR_VERSION;
 use const PHP_MINOR_VERSION;
 use const PHP_VERSION;
 
+/** @group callmap */
 class InternalCallMapHandlerTest extends TestCase
 {
+    /**
+     * Regex patterns for callmap entries that should be skipped.
+     *
+     * These will not be checked against reflection. This prevents a
+     * large ignore list for extension functions have invalid reflection
+     * or are not maintained.
+     *
+     * @var list<string>
+     */
+    private static array $skippedPatterns = [
+        '/\'\d$/', // skip alternate signatures
+        '/^redis/', // redis extension
+        '/^imagick/', // imagick extension
+        '/^uopz/', // uopz extension
+        '/^memcache[_:]/', // memcache extension
+        '/^memcachepool/', // memcache extension
+    ];
+
     /**
      * Specify a function name as value, or a function name as key and
      * an array containing the PHP versions in which to ignore this function as values.
@@ -53,7 +72,6 @@ class InternalCallMapHandlerTest extends TestCase
      * @var array<int|string, string|list<string>>
      */
     private static array $ignoredFunctions = [
-        'apcu_entry',
         'array_multisort',
         'arrayiterator::asort',
         'arrayiterator::ksort',
@@ -83,10 +101,6 @@ class InternalCallMapHandlerTest extends TestCase
         'cachingiterator::offsetset',
         'cachingiterator::offsetunset',
         'callbackfilteriterator::__construct',
-        'closure::bind',
-        'closure::bindto',
-        'closure::call',
-        'closure::fromcallable',
         'collator::asort',
         'collator::getattribute',
         'collator::setattribute',
@@ -178,11 +192,6 @@ class InternalCallMapHandlerTest extends TestCase
         'filesystemiterator::setfileclass',
         'filesystemiterator::setflags',
         'filesystemiterator::setinfoclass',
-        'finfo::__construct',
-        'finfo::buffer',
-        'finfo::file',
-        'finfo::set_flags',
-        'generator::throw',
         'globiterator::__construct',
         'globiterator::getfileinfo',
         'globiterator::getpathinfo',
@@ -351,12 +360,6 @@ class InternalCallMapHandlerTest extends TestCase
         'jsonexception::__construct',
         'limititerator::__construct',
         'limititerator::seek',
-        'locale::filtermatches',
-        'locale::getdisplaylanguage',
-        'locale::getdisplayname',
-        'locale::getdisplayregion',
-        'locale::getdisplayscript',
-        'locale::getdisplayvariant',
         'lzf_compress',
         'lzf_decompress',
         'mailparse_msg_extract_part',
@@ -368,62 +371,8 @@ class InternalCallMapHandlerTest extends TestCase
         'mailparse_msg_get_structure',
         'mailparse_msg_parse',
         'mailparse_stream_encode',
-        'memcache::add',
-        'memcache::addserver',
-        'memcache::append',
-        'memcache::cas',
-        'memcache::connect',
-        'memcache::decrement',
-        'memcache::delete',
-        'memcache::findserver',
-        'memcache::flush',
-        'memcache::getserverstatus',
-        'memcache::increment',
-        'memcache::pconnect',
-        'memcache::prepend',
-        'memcache::replace',
-        'memcache::set',
-        'memcache::setfailurecallback',
-        'memcache::setserverparams',
-        'memcache_add',
-        'memcache_add_server',
-        'memcache_append',
-        'memcache_cas',
-        'memcache_close',
-        'memcache_connect',
-        'memcache_decrement',
-        'memcache_delete',
-        'memcache_flush',
-        'memcache_get_extended_stats',
-        'memcache_get_server_status',
-        'memcache_get_stats',
-        'memcache_get_version',
-        'memcache_increment',
-        'memcache_pconnect',
-        'memcache_prepend',
-        'memcache_replace',
-        'memcache_set',
-        'memcache_set_compress_threshold',
-        'memcache_set_failure_callback',
-        'memcache_set_server_params',
-        'memcachepool::add',
-        'memcachepool::addserver',
-        'memcachepool::append',
-        'memcachepool::cas',
-        'memcachepool::connect',
-        'memcachepool::decrement',
-        'memcachepool::delete',
-        'memcachepool::findserver',
-        'memcachepool::flush',
-        'memcachepool::get',
-        'memcachepool::getserverstatus',
-        'memcachepool::increment',
-        'memcachepool::prepend',
-        'memcachepool::replace',
-        'memcachepool::set',
-        'memcachepool::setcompressthreshold',
-        'memcachepool::setfailurecallback',
-        'memcachepool::setserverparams',
+        'memcached::cas', // memcached 3.2.0 has incorrect reflection
+        'memcached::casbykey', // memcached 3.2.0 has incorrect reflection
         'messageformatter::format',
         'messageformatter::formatmessage',
         'messageformatter::parse',
@@ -436,10 +385,6 @@ class InternalCallMapHandlerTest extends TestCase
         'mysqli_stmt::__construct',
         'mysqli_stmt::bind_param',
         'mysqli_stmt_bind_param',
-        'normalizer::getrawdecomposition',
-        'normalizer::isnormalized',
-        'normalizer::normalize',
-        'normalizer_get_raw_decomposition',
         'numberformatter::formatcurrency',
         'numberformatter::getattribute',
         'numberformatter::getsymbol',
@@ -498,56 +443,6 @@ class InternalCallMapHandlerTest extends TestCase
         'odbc_procedures',
         'odbc_result',
         'openssl_pkcs7_read',
-        'pdo::__construct',
-        'pdo::exec',
-        'pdo::prepare',
-        'pdo::quote',
-        'pdostatement::bindcolumn',
-        'pdostatement::bindparam',
-        'pdostatement::fetchobject',
-        'pdostatement::getattribute',
-        'phar::__construct',
-        'phar::addemptydir',
-        'phar::addfile',
-        'phar::addfromstring',
-        'phar::buildfromdirectory',
-        'phar::buildfromiterator',
-        'phar::cancompress',
-        'phar::copy',
-        'phar::count',
-        'phar::createdefaultstub',
-        'phar::delete',
-        'phar::extractto',
-        'phar::mapphar',
-        'phar::mount',
-        'phar::mungserver',
-        'phar::offsetexists',
-        'phar::offsetget',
-        'phar::offsetset',
-        'phar::offsetunset',
-        'phar::running',
-        'phar::setdefaultstub',
-        'phar::setsignaturealgorithm',
-        'phar::unlinkarchive',
-        'phar::webphar',
-        'phardata::__construct',
-        'phardata::addemptydir',
-        'phardata::addfile',
-        'phardata::addfromstring',
-        'phardata::buildfromdirectory',
-        'phardata::buildfromiterator',
-        'phardata::copy',
-        'phardata::delete',
-        'phardata::extractto',
-        'phardata::offsetexists',
-        'phardata::offsetget',
-        'phardata::offsetset',
-        'phardata::offsetunset',
-        'phardata::setdefaultstub',
-        'phardata::setsignaturealgorithm',
-        'pharfileinfo::__construct',
-        'pharfileinfo::chmod',
-        'pharfileinfo::iscompressed',
         'recursivearrayiterator::asort',
         'recursivearrayiterator::ksort',
         'recursivearrayiterator::offsetexists',
@@ -618,26 +513,6 @@ class InternalCallMapHandlerTest extends TestCase
         'spldoublylinkedlist::offsetset',
         'spldoublylinkedlist::setiteratormode',
         'spldoublylinkedlist::unserialize',
-        'splfileinfo::__construct',
-        'splfileinfo::getfileinfo',
-        'splfileinfo::getpathinfo',
-        'splfileinfo::openfile',
-        'splfileinfo::setfileclass',
-        'splfileinfo::setinfoclass',
-        'splfileobject::__construct',
-        'splfileobject::fgetcsv',
-        'splfileobject::flock',
-        'splfileobject::fputcsv',
-        'splfileobject::fseek',
-        'splfileobject::fwrite',
-        'splfileobject::getfileinfo',
-        'splfileobject::getpathinfo',
-        'splfileobject::openfile',
-        'splfileobject::seek',
-        'splfileobject::setcsvcontrol',
-        'splfileobject::setfileclass',
-        'splfileobject::setinfoclass',
-        'splfileobject::setmaxlinelen',
         'splfixedarray::fromarray',
         'splfixedarray::offsetset',
         'splmaxheap::compare',
@@ -656,20 +531,6 @@ class InternalCallMapHandlerTest extends TestCase
         'splstack::add',
         'splstack::offsetset',
         'splstack::unserialize',
-        'spltempfileobject::__construct',
-        'spltempfileobject::fgetcsv',
-        'spltempfileobject::flock',
-        'spltempfileobject::fputcsv',
-        'spltempfileobject::fseek',
-        'spltempfileobject::fwrite',
-        'spltempfileobject::getfileinfo',
-        'spltempfileobject::getpathinfo',
-        'spltempfileobject::openfile',
-        'spltempfileobject::seek',
-        'spltempfileobject::setcsvcontrol',
-        'spltempfileobject::setfileclass',
-        'spltempfileobject::setinfoclass',
-        'spltempfileobject::setmaxlinelen',
         'sqlite3::__construct',
         'sqlite3::open',
         'sqlsrv_connect',
@@ -686,15 +547,6 @@ class InternalCallMapHandlerTest extends TestCase
         'uconverter::fromucallback',
         'uconverter::reasontext',
         'uconverter::transcode',
-        'uopz_allow_exit',
-        'uopz_get_mock',
-        'uopz_get_property',
-        'uopz_get_return',
-        'uopz_get_static',
-        'uopz_set_mock',
-        'uopz_set_property',
-        'uopz_set_static',
-        'uopz_unset_mock',
         'xdiff_file_bdiff',
         'xdiff_file_bdiff_size',
         'xdiff_file_diff',
@@ -822,14 +674,6 @@ class InternalCallMapHandlerTest extends TestCase
         'pdo::sqlitecreatefunction',
         'pdostatement::__sleep',
         'pdostatement::__wakeup',
-        'phar::compressallfilesbzip2',
-        'phar::compressallfilesgz',
-        'phar::uncompressallfiles',
-        'pharfileinfo::iscompressedbzip2',
-        'pharfileinfo::iscompressedgz',
-        'pharfileinfo::setcompressedbzip2',
-        'pharfileinfo::setcompressedgz',
-        'pharfileinfo::setuncompressed',
         'simplexmlelement::__get',
         'simplexmlelement::offsetexists',
         'simplexmlelement::offsetget',
@@ -917,6 +761,17 @@ class InternalCallMapHandlerTest extends TestCase
         );
         $callMap = InternalCallMapHandler::getCallMap();
         foreach ($callMap as $function => $entry) {
+            foreach (static::$skippedPatterns as $skipPattern) {
+                if (preg_match($skipPattern, $function)) {
+                    continue 2;
+                }
+            }
+
+            // Skip functions with alternate signatures
+            if (isset($callMap["$function'1"])) {
+                continue;
+            }
+
             $classNameEnd = strpos($function, '::');
             if ($classNameEnd !== false) {
                 $className = substr($function, 0, $classNameEnd);
@@ -927,11 +782,6 @@ class InternalCallMapHandlerTest extends TestCase
                 continue;
             }
 
-            // Skip functions with alternate signatures
-            if (isset($callMap["$function'1"]) || preg_match("/\'\d$/", $function)) {
-                continue;
-            }
-            // if ($function != 'fprintf') continue;
             yield "$function: " . json_encode($entry) => [$function, $entry];
         }
     }

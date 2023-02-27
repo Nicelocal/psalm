@@ -420,6 +420,8 @@ class FunctionLikeDocblockScanner
         if ($docblock_info->description) {
             $storage->description = $docblock_info->description;
         }
+
+        $storage->public_api = $docblock_info->public_api;
     }
 
     /**
@@ -492,7 +494,8 @@ class FunctionLikeDocblockScanner
 
                         // spaces are allowed before $foo in get(string $foo) magic method
                         // definitions, but we want to remove them in this instance
-                        if (isset($fixed_type_tokens[$i - 1])
+                        if ($i > 0
+                            && isset($fixed_type_tokens[$i - 1])
                             && $fixed_type_tokens[$i - 1][0][0] === ' '
                         ) {
                             unset($fixed_type_tokens[$i - 1]);
@@ -911,8 +914,12 @@ class FunctionLikeDocblockScanner
         );
 
         if ($params_without_docblock_type) {
+            /** @psalm-suppress DeprecatedProperty remove in Psalm 6 */
             $storage->unused_docblock_params = $unused_docblock_params;
         }
+
+        $storage->has_undertyped_native_parameters = $params_without_docblock_type !== [];
+        $storage->unused_docblock_parameters = $unused_docblock_params;
     }
 
     /**

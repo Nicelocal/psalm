@@ -1521,6 +1521,24 @@ class ConstantTest extends TestCase
                 'ignored_issues' => [],
                 'php_version' => '8.1',
             ],
+            'constantTypeRespectsLiteralStringLimit' => [
+                'code' => <<<'PHP'
+                    <?php
+
+                    class A {
+                        const T = 'TEXT';
+                    }
+
+                    class B
+                    {
+                        const ARRAY = [
+                            'a' => A::T,
+                            'b' => 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+                        ];
+                    }
+                    $z = B::ARRAY['b'];
+                    PHP,
+            ],
         ];
     }
 
@@ -2029,6 +2047,18 @@ class ConstantTest extends TestCase
                 'error_message' => 'ParseError - src' . DIRECTORY_SEPARATOR . 'somefile.php:5:44',
                 'ignored_issues' => [],
                 'php_version' => '8.0',
+            ],
+            'classStringIsRequiredToAccessClassConstant' => [
+                'code' => '<?php
+                    class Foo {
+                        public const BAR = "bar";
+                    }
+
+                    $class = "Foo";
+
+                    $class::BAR;
+                ',
+                'error_message' => 'InvalidStringClass',
             ],
         ];
     }

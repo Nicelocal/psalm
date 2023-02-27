@@ -55,6 +55,7 @@
     </plugins>
 
     <issueHandlers>
+        <Trace errorLevel="error"/>
         <PossiblyNullOperand errorLevel="suppress"/>
         <LiteralKeyUnshapedArray errorLevel="suppress"/>
 
