@@ -2,11 +2,13 @@
 
 namespace Psalm\Tests;
 
+use Psalm\Tests\Traits\InvalidCodeAnalysisTestTrait;
 use Psalm\Tests\Traits\ValidCodeAnalysisTestTrait;
 
 class CoreStubsTest extends TestCase
 {
     use ValidCodeAnalysisTestTrait;
+    use InvalidCodeAnalysisTestTrait;
 
     public function providerValidCodeParse(): iterable
     {
@@ -122,6 +124,183 @@ class CoreStubsTest extends TestCase
             'assertions' => [
                 '$a===' => 'string',
             ],
+        ];
+        yield 'json_encode returns a non-empty-string provided JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE' => [
+            'code' => '<?php
+                $a = json_encode([], JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+            ',
+            'assertions' => [
+                '$a===' => 'non-empty-string',
+            ],
+        ];
+        yield 'json_encode returns a non-empty-string with JSON_THROW_ON_ERROR' => [
+            'code' => '<?php
+                $a = json_encode([], JSON_THROW_ON_ERROR | JSON_HEX_TAG);
+                $b = json_encode([], JSON_THROW_ON_ERROR | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+                $c = json_encode([], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                $d = json_encode([], JSON_THROW_ON_ERROR | JSON_PRESERVE_ZERO_FRACTION);
+                $e = json_encode([], JSON_PRESERVE_ZERO_FRACTION);
+                $f = json_encode([], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            ',
+            'assertions' => [
+                '$a===' => 'non-empty-string',
+                '$b===' => 'non-empty-string',
+                '$c===' => 'non-empty-string',
+                '$d===' => 'non-empty-string',
+                '$e===' => 'false|non-empty-string',
+                '$f===' => 'false|non-empty-string',
+            ],
+        ];
+        yield 'str_starts_with/str_ends_with/str_contains redundant condition detection' => [
+            'code' => '<?php
+                $a1 = str_starts_with(uniqid(), "");
+                /** @psalm-suppress InvalidLiteralArgument */
+                $b1 = str_starts_with("", "random string");
+                $c1 = str_starts_with(uniqid(), "random string");
+
+                $a2 = str_ends_with(uniqid(), "");
+                /** @psalm-suppress InvalidLiteralArgument */
+                $b2 = str_ends_with("", "random string");
+                $c2 = str_ends_with(uniqid(), "random string");
+
+                $a3 = str_contains(uniqid(), "");
+                /** @psalm-suppress InvalidLiteralArgument */
+                $b3 = str_contains("", "random string");
+                $c3 = str_contains(uniqid(), "random string");
+            ',
+            'assertions' => [
+                '$a1===' => 'true',
+                '$b1===' => 'false',
+                '$c1===' => 'bool',
+                '$a2===' => 'true',
+                '$b2===' => 'false',
+                '$c2===' => 'bool',
+                '$a3===' => 'true',
+                '$b3===' => 'false',
+                '$c3===' => 'bool',
+            ],
+        ];
+        yield 'PHP8 str_* function assert non-empty-string' => [
+            'code' => '<?php
+                /** @return non-empty-string */
+                function after_str_contains(): string
+                {
+                    $string = file_get_contents("");
+                    if (str_contains($string, "foo")) {
+                        return $string;
+                    }
+                    throw new RuntimeException();
+                }
+
+                /** @return non-empty-string */
+                function after_str_starts_with(): string
+                {
+                    $string = file_get_contents("");
+                    if (str_starts_with($string, "foo")) {
+                        return $string;
+                    }
+                    throw new RuntimeException();
+                }
+
+                /** @return non-empty-string */
+                function after_str_ends_with(): string
+                {
+                    $string = file_get_contents("");
+                    if (str_ends_with($string, "foo")) {
+                        return $string;
+                    }
+                    throw new RuntimeException();
+                }
+                $a = after_str_contains();
+                $b = after_str_starts_with();
+                $c = after_str_ends_with();
+            ',
+            'assertions' => [
+                '$a===' => 'non-empty-string',
+                '$b===' => 'non-empty-string',
+                '$c===' => 'non-empty-string',
+            ],
+        ];
+        yield "PHP8 str_* function doesn't subtract string after assertion" => [
+            'code' => '<?php
+                /** @return false|string */
+                function after_str_contains()
+                {
+                    $string = file_get_contents("");
+                    if (!str_contains($string, "foo")) {
+                        return $string;
+                    }
+                    throw new RuntimeException();
+                }
+
+                /** @return false|string */
+                function after_str_starts_with()
+                {
+                    $string = file_get_contents("");
+                    if (!str_starts_with($string, "foo")) {
+                        return $string;
+                    }
+                    throw new RuntimeException();
+                }
+
+                /** @return false|string */
+                function after_str_ends_with()
+                {
+                    $string = file_get_contents("");
+                    if (!str_ends_with($string, "foo")) {
+                        return $string;
+                    }
+                    throw new RuntimeException();
+                }
+                $a = after_str_contains();
+                $b = after_str_starts_with();
+                $c = after_str_ends_with();
+            ',
+            'assertions' => [
+                '$a===' => 'false|string',
+                '$b===' => 'false|string',
+                '$c===' => 'false|string',
+            ],
+        ];
+        yield "str_contains doesn't yield InvalidLiteralArgument for __DIR__" => [
+            'code' => '<?php
+                $d = __DIR__;
+                echo str_contains($d, "psalm");
+            ',
+        ];
+    }
+
+    public function providerInvalidCodeParse(): iterable
+    {
+        yield 'json_decode invalid depth' => [
+            'code' => '<?php
+                json_decode("true", depth: -1);
+            ',
+            'error_message' => 'InvalidArgument',
+        ];
+        yield 'json_encode invalid depth' => [
+            'code' => '<?php
+                json_encode([], depth: 439877348953739);
+            ',
+            'error_message' => 'InvalidArgument',
+        ];
+        yield 'str_contains literal haystack' => [
+            'code' => '<?php
+                str_contains("literal", "");
+            ',
+            'error_message' => 'InvalidLiteralArgument',
+        ];
+        yield 'str_starts_with literal haystack' => [
+            'code' => '<?php
+                str_starts_with("literal", "");
+            ',
+            'error_message' => 'InvalidLiteralArgument',
+        ];
+        yield 'str_ends_with literal haystack' => [
+            'code' => '<?php
+                str_ends_with("literal", "");
+            ',
+            'error_message' => 'InvalidLiteralArgument',
         ];
     }
 }

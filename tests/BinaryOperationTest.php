@@ -489,6 +489,30 @@ class BinaryOperationTest extends TestCase
                     foobar($foo . $bar);
                 ',
             ],
+            'concatenateNonFalsyStringWithUndefinedConstant' => [
+                'code' => '<?php
+                    /**
+                     * @param non-falsy-string $arg
+                     * @return non-falsy-string
+                     */
+                    function foo( $arg ) {
+                        /** @psalm-suppress UndefinedConstant */
+                        return FOO . $arg;
+                    }
+                ',
+            ],
+            'concatenateNonEmptyStringWithUndefinedConstant' => [
+                'code' => '<?php
+                    /**
+                     * @param non-empty-string $arg
+                     * @return non-empty-string
+                     */
+                    function foo( $arg ) {
+                        /** @psalm-suppress UndefinedConstant */
+                        return FOO . $arg;
+                    }
+                ',
+            ],
             'possiblyInvalidAdditionOnBothSides' => [
                 'code' => '<?php
                     function foo(string $s) : int {
@@ -987,6 +1011,15 @@ class BinaryOperationTest extends TestCase
                 'assertions' => [
                     '$a===' => 'non-falsy-string',
                     '$b===' => 'non-falsy-string',
+                ],
+            ],
+            'unaryMinusOverflows' => [
+                'code' => <<<'PHP'
+                    <?php
+                    $a = -(1 << 63);
+                    PHP,
+                'assertions' => [
+                    '$a===' => 'float(9.2233720368548E+18)',
                 ],
             ],
         ];

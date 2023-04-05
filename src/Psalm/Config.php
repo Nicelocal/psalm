@@ -195,6 +195,13 @@ class Config
     public $use_docblock_property_types = false;
 
     /**
+     * Whether using property annotations in docblocks should implicitly seal properties
+     *
+     * @var bool
+     */
+    public $docblock_property_types_seal_properties = true;
+
+    /**
      * Whether or not to throw an exception on first error
      *
      * @var bool
@@ -600,27 +607,31 @@ class Config
     /**
      * A list of php extensions supported by Psalm.
      * Where key - extension name (without ext- prefix), value - whether to load extension’s stub.
+     * Values:
+     *  - true: ext enabled explicitly or bundled with PHP (should load stubs)
+     *  - false: ext disabled explicitly (should not load stubs)
+     *  - null: state is unknown (e.g. config not processed yet) or ext neither explicitly enabled or disabled.
      *
      * @psalm-readonly-allow-private-mutation
-     * @var array<string, bool>
+     * @var array<string, bool|null>
      */
     public $php_extensions = [
-        "apcu" => false,
-        "decimal" => false,
-        "dom" => false,
-        "ds" => false,
-        "ffi" => false,
-        "geos" => false,
-        "gmp" => false,
-        "ibm_db2" => false,
-        "mongodb" => false,
-        "mysqli" => false,
-        "pdo" => false,
-        "random" => false,
-        "redis" => false,
-        "simplexml" => false,
-        "soap" => false,
-        "xdebug" => false,
+        "apcu" => null,
+        "decimal" => null,
+        "dom" => null,
+        "ds" => null,
+        "ffi" => null,
+        "geos" => null,
+        "gmp" => null,
+        "ibm_db2" => null,
+        "mongodb" => null,
+        "mysqli" => null,
+        "pdo" => null,
+        "random" => null,
+        "redis" => null,
+        "simplexml" => null,
+        "soap" => null,
+        "xdebug" => null,
     ];
 
     /**
@@ -1045,6 +1056,7 @@ class Config
         $booleanAttributes = [
             'useDocblockTypes' => 'use_docblock_types',
             'useDocblockPropertyTypes' => 'use_docblock_property_types',
+            'docblockPropertyTypesSealProperties' => 'docblock_property_types_seal_properties',
             'throwExceptionOnError' => 'throw_exception',
             'hideExternalErrors' => 'hide_external_errors',
             'hideAllErrorsExceptPassedFiles' => 'hide_all_errors_except_passed_files',
@@ -1115,7 +1127,7 @@ class Config
             }
         }
         foreach ($required_extensions as $required_ext => $_) {
-            if (isset($config->php_extensions[$required_ext])) {
+            if (array_key_exists($required_ext, $config->php_extensions)) {
                 $config->php_extensions[$required_ext] = true;
             } else {
                 $config->php_extensions_not_supported[$required_ext] = true;
@@ -2242,7 +2254,8 @@ class Config
         foreach ($extensions_to_load_stubs_using_deprecated_way as $ext_name) {
             $ext_stub_path = $ext_stubs_dir . DIRECTORY_SEPARATOR . "$ext_name.phpstub";
             $is_stub_already_loaded = in_array($ext_stub_path, $this->internal_stubs, true);
-            if (! $is_stub_already_loaded && extension_loaded($ext_name)) {
+            $is_ext_explicitly_disabled = ($this->php_extensions[$ext_name] ?? null) === false;
+            if (! $is_stub_already_loaded && ! $is_ext_explicitly_disabled && extension_loaded($ext_name)) {
                 $this->internal_stubs[] = $ext_stub_path;
                 $this->config_warnings[] = "Psalm 6 will not automatically load stubs for ext-$ext_name."
                     . " You should explicitly enable or disable this ext in composer.json or Psalm config.";

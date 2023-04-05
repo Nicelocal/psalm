@@ -362,16 +362,6 @@ class ClassAnalyzer extends ClassLikeAnalyzer
             return;
         }
 
-        if ($this->leftover_stmts) {
-            (new StatementsAnalyzer(
-                $this,
-                new NodeDataProvider(),
-            ))->analyze(
-                $this->leftover_stmts,
-                $class_context,
-            );
-        }
-
         if (!$storage->abstract) {
             foreach ($storage->declaring_method_ids as $declaring_method_id) {
                 $method_storage = $codebase->methods->getStorage($declaring_method_id);
@@ -2353,6 +2343,18 @@ class ClassAnalyzer extends ClassLikeAnalyzer
                 IssueBuffer::maybeAdd(
                     new InvalidExtendClass(
                         'Class ' . $fq_class_name . ' may not inherit from final class ' . $parent_fq_class_name,
+                        $code_location,
+                        $fq_class_name,
+                    ),
+                    $storage->suppressed_issues + $this->getSuppressedIssues(),
+                );
+            }
+
+            if ($parent_class_storage->readonly && !$storage->readonly) {
+                IssueBuffer::maybeAdd(
+                    new InvalidExtendClass(
+                        'Non-readonly class ' . $fq_class_name . ' may not inherit from '
+                        . 'readonly class ' . $parent_fq_class_name,
                         $code_location,
                         $fq_class_name,
                     ),

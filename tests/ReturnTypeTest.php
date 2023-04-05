@@ -1227,6 +1227,43 @@ class ReturnTypeTest extends TestCase
                 'ignored_issues' => [],
                 'php_version' => '8.2',
             ],
+            'returnListMixedVsListStringIsAMixedError' => [
+                'code' => '<?php
+
+                    /**
+                     * @psalm-suppress MixedReturnTypeCoercion
+                     * @return list<string>
+                     */
+                    function foo(){
+                        /**
+                         * @var list<mixed>
+                         * @psalm-suppress MixedReturnTypeCoercion
+                         */
+                        return [];
+                    }
+                    ',
+            ],
+            'MixedErrorInArrayShouldBeReportedAsMixedError' => [
+                'code' => '<?php
+                    /**
+                     * @param mixed $configuration
+                     * @return array{a?: string, b?: int}
+                     * @psalm-suppress MixedReturnTypeCoercion
+                     */
+                    function produceParameters(array $configuration): array
+                    {
+                        $parameters = [];
+
+                        foreach (["a", "b"] as $parameter) {
+                            /** @psalm-suppress MixedAssignment */
+                            $parameters[$parameter] = $configuration;
+                        }
+
+                        /** @psalm-suppress MixedReturnTypeCoercion */
+                        return $parameters;
+                    }
+                    ',
+            ],
         ];
     }
 
@@ -1720,6 +1757,18 @@ class ReturnTypeTest extends TestCase
                         }
                     }',
                 'error_message' => 'InvalidClass',
+            ],
+            'listItems' => [
+                'code' => <<<'PHP'
+                    <?php
+
+                    /** @return list<int> */
+                    function f(): array
+                    {
+                        return[ 1, new stdClass, "zzz"];
+                    }
+                    PHP,
+                'error_message' => 'InvalidReturnStatement',
             ],
         ];
     }

@@ -709,6 +709,10 @@ class UnusedCodeTest extends TestCase
                         return $i;
                     }',
             ],
+            'usedFunctionCallInEval' => [
+                'code' => '<?php
+                    eval(str_repeat("a", 10));',
+            ],
             'usedFunctionCallInsideSwitchWithTernary' => [
                 'code' => '<?php
                     function getArg(string $method) : void {
@@ -1268,6 +1272,23 @@ class UnusedCodeTest extends TestCase
                     <?php
                     class A {
                         /** @psalm-api */
+                        public function b(): void {}
+                    }
+                    new A;
+                    PHP,
+            ],
+            'api with unused class' => [
+                'code' => <<<'PHP'
+                    <?php
+                    /** @api */
+                    class A {}
+                    PHP,
+            ],
+            'api on unused public method' => [
+                'code' => <<<'PHP'
+                    <?php
+                    class A {
+                        /** @api */
                         public function b(): void {}
                     }
                     new A;

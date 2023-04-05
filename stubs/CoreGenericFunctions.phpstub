@@ -131,6 +131,20 @@ function array_flip(array $array)
 
 /**
  * @psalm-template TKey as array-key
+ * @psalm-template TValue
+ * @psalm-template TArray as array<TKey, TValue>
+ *
+ * @param TArray $array
+ *
+ * @return (TArray is non-empty-array ? non-empty-array<TKey, TValue> : array<TKey, TValue>)
+ * @psalm-pure
+ */
+function array_unique(array $array, int $flags = 0)
+{
+}
+
+/**
+ * @psalm-template TKey as array-key
  * @psalm-template TArray as array<TKey, mixed>
  *
  * @param TArray $array
@@ -1050,11 +1064,39 @@ function str_shuffle(string $string): string {}
 
 /**
  * @psalm-pure
- * @return ($length is positive-int ? list<string> : false)
+ * @param positive-int $length
+ * @return non-empty-list<string>
  *
  * @psalm-flow ($string) -> return
  */
 function str_split(string $string, int $length = 1) {}
+
+/**
+ * @psalm-pure
+ * @template T as string
+ * @param T $needle
+ * @psalm-assert-if-true =(T is '' ? string : non-empty-string) $haystack
+ * @return ($needle is '' ? true : ($haystack is '' ? false : bool))
+ */
+function str_starts_with(string $haystack, string $needle): bool {}
+
+/**
+ * @psalm-pure
+ * @template T as string
+ * @param T $needle
+ * @psalm-assert-if-true =(T is '' ? string : non-empty-string) $haystack
+ * @return ($needle is '' ? true : ($haystack is '' ? false : bool))
+ */
+function str_ends_with(string $haystack, string $needle): bool {}
+
+/**
+ * @psalm-pure
+ * @template T as string
+ * @param T $needle
+ * @psalm-assert-if-true =(T is '' ? string : non-empty-string) $haystack
+ * @return ($needle is '' ? true : ($haystack is '' ? false : bool))
+ */
+function str_contains(string $haystack, string $needle): bool {}
 
 /**
  * @psalm-pure
@@ -1459,15 +1501,19 @@ function ldap_escape(string $value, string $ignore = "", int $flags = 0) : strin
 /**
  * @psalm-pure
  *
+ * @param int<1, 2147483647> $depth
  * @return mixed
  * @psalm-flow ($json) -> return
  */
 function json_decode(string $json, ?bool $associative = null, int $depth = 512, int $flags = 0) {}
 
 /**
+ * The conditional return type below relies on the fact that JSON_THROW_ON_ERROR is 
+ * the highest-valued of JSON constants
  * @psalm-pure
  *
- * @return ($flags is 4194304 ? non-empty-string : non-empty-string|false)
+ * @param int<1, 2147483647> $depth
+ * @return ($flags is int<4194304, 8388607> ? non-empty-string : non-empty-string|false)
  *
  * @psalm-flow ($value) -> return
  * @psalm-ignore-falsable-return

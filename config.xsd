@@ -62,6 +62,7 @@
         <xs:attribute name="reportMixedIssues" type="xs:boolean" default="true" />
         <xs:attribute name="useDocblockTypes" type="xs:boolean" default="true" />
         <xs:attribute name="useDocblockPropertyTypes" type="xs:boolean" default="false" />
+        <xs:attribute name="docblockPropertyTypesSealProperties" type="xs:boolean" default="true" />
         <xs:attribute name="usePhpDocMethodsWithoutMagicCall" type="xs:boolean" default="false" />
         <xs:attribute name="usePhpDocPropertiesWithoutMagicCall" type="xs:boolean" default="false" />
         <xs:attribute name="skipChecksOnUnresolvableIncludes" type="xs:boolean" default="false" />
@@ -408,6 +409,7 @@
             <xs:element name="PossiblyUnusedParam" type="IssueHandlerType" minOccurs="0" />
             <xs:element name="PossiblyUnusedProperty" type="PropertyIssueHandlerType" minOccurs="0" />
             <xs:element name="PossiblyUnusedReturnValue" type="IssueHandlerType" minOccurs="0" />
+            <xs:element name="PrivateFinalMethod" type="MethodIssueHandlerType" minOccurs="0" />
             <xs:element name="PropertyNotSetInConstructor" type="PropertyIssueHandlerType" minOccurs="0" />
             <xs:element name="PropertyTypeCoercion" type="PropertyIssueHandlerType" minOccurs="0" />
             <xs:element name="RawObjectIteration" type="IssueHandlerType" minOccurs="0" />

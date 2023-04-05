@@ -527,6 +527,53 @@ class EnumTest extends TestCase
                 'ignored_issues' => [],
                 'php_version' => '8.1',
             ],
+            'reconcileCaseWithInterface' => [
+                'code' => <<<'PHP'
+                    <?php
+                    interface I {}
+                    enum E implements I { case A; }
+                    function f(I $i): void {
+                        if ($i === E::A) {
+                        } else {
+                        }
+                    }
+                    PHP,
+                'assertions' => [],
+                'ignored_issues' => [],
+                'php_version' => '8.1',
+            ],
+            'valueOfBackedEnum' => [
+                'code' => <<<'PHP'
+                    <?php
+                    enum StringEnum: string {
+                        case FOO = 'foo';
+                        case BAR = 'bar';
+                    }
+
+                    enum IntEnum: int {
+                        case FOO = 1;
+                        case BAR = 2;
+                    }
+
+                    /** @var value-of<StringEnum::FOO> $string */
+                    $string = '';
+                    /** @var value-of<StringEnum::*> $anyString */
+                    $anyString = '';
+
+                    /** @var value-of<IntEnum::FOO> $int */
+                    $int = 0;
+                    /** @var value-of<IntEnum::*> $anyInt */
+                    $anyInt = 0;
+                    PHP,
+                'assertions' => [
+                    '$string===' => '\'foo\'',
+                    '$anyString===' => '\'bar\'|\'foo\'',
+                    '$int===' => '1',
+                    '$anyInt===' => '1|2',
+                ],
+                'ignored_issues' => [],
+                'php_version' => '8.1',
+            ],
         ];
     }
 
