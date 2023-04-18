@@ -52,6 +52,7 @@ use Psalm\Type\Atomic\TObject;
 use Psalm\Type\Atomic\TString;
 use Psalm\Type\Atomic\TTemplateParam;
 use Psalm\Type\Atomic\TTemplateParamClass;
+use Psalm\Type\Atomic\TUnknownClassString;
 use Psalm\Type\TaintKind;
 use Psalm\Type\Union;
 
@@ -74,7 +75,8 @@ class NewAnalyzer extends CallAnalyzer
     public static function analyze(
         StatementsAnalyzer $statements_analyzer,
         PhpParser\Node\Expr\New_ $stmt,
-        Context $context
+        Context $context,
+        TemplateResult $template_result = null
     ): bool {
         $fq_class_name = null;
 
@@ -256,6 +258,7 @@ class NewAnalyzer extends CallAnalyzer
                     $fq_class_name,
                     $from_static,
                     $can_extend,
+                    $template_result,
                 );
             } else {
                 ArgumentsAnalyzer::analyze(
@@ -291,7 +294,8 @@ class NewAnalyzer extends CallAnalyzer
         Context $context,
         string $fq_class_name,
         bool $from_static,
-        bool $can_extend
+        bool $can_extend,
+        TemplateResult $template_result = null
     ): void {
         $storage = $codebase->classlike_storage_provider->get($fq_class_name);
 
@@ -392,7 +396,7 @@ class NewAnalyzer extends CallAnalyzer
                 );
             }
 
-            $template_result = new TemplateResult([], []);
+            $template_result ??= new TemplateResult([], []);
 
             if (self::checkMethodArgs(
                 $method_id,
@@ -777,9 +781,10 @@ class NewAnalyzer extends CallAnalyzer
             ) {
                 if (!$statements_analyzer->node_data->getType($stmt)) {
                     if ($lhs_type_part instanceof TClassString) {
-                        $generated_type = $lhs_type_part->as_type
-                            ? $lhs_type_part->as_type
-                            : new TObject();
+                        $generated_type = $lhs_type_part->as_type ?? new TObject();
+                        if ($lhs_type_part instanceof TUnknownClassString) {
+                            $generated_type = $lhs_type_part->as_unknown_type ?? $generated_type;
+                        }
 
                         if ($lhs_type_part->as_type
                             && $codebase->classlikes->classExists($lhs_type_part->as_type->value)

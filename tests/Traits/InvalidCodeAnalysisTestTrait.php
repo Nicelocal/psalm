@@ -16,17 +16,26 @@ use function version_compare;
 use const PHP_OS;
 use const PHP_VERSION;
 
+/**
+ * @psalm-type DeprecatedDataProviderArrayNotation = array{
+ *     code: string,
+ *     error_message: string,
+ *     ignored_issues?: list<string>,
+ *     php_version?: string
+ * }
+ * @psalm-type NamedArgumentsDataProviderArrayNotation = array{
+ *     code: string,
+ *     error_message: string,
+ *     error_levels?: list<string>,
+ *     php_version?: string
+ * }
+ */
 trait InvalidCodeAnalysisTestTrait
 {
     /**
      * @return iterable<
      *     string,
-     *     array{
-     *         code: string,
-     *         error_message: string,
-     *         ignored_issues?: list<string>,
-     *         php_version?: string,
-     *     }
+     *     DeprecatedDataProviderArrayNotation|NamedArgumentsDataProviderArrayNotation
      * >
      */
     abstract public function providerInvalidCodeParse(): iterable;
@@ -40,7 +49,7 @@ trait InvalidCodeAnalysisTestTrait
         string $code,
         string $error_message,
         array  $error_levels = [],
-        string $php_version = '7.3'
+        string $php_version = '7.4'
     ): void {
         $test_name = $this->getTestName();
         if (strpos($test_name, 'PHP80-') !== false) {

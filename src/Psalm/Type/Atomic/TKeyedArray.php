@@ -10,10 +10,6 @@ use Psalm\Internal\Type\TemplateStandinTypeReplacer;
 use Psalm\Internal\Type\TypeCombiner;
 use Psalm\Type;
 use Psalm\Type\Atomic;
-use Psalm\Type\Atomic\TArray;
-use Psalm\Type\Atomic\TLiteralClassString;
-use Psalm\Type\Atomic\TLiteralInt;
-use Psalm\Type\Atomic\TNonEmptyArray;
 use Psalm\Type\Union;
 use UnexpectedValueException;
 
@@ -49,7 +45,7 @@ class TKeyedArray extends Atomic
     /**
      * If the shape has fallback params then they are here
      *
-     * @var ?list{Union, Union}
+     * @var array{Union, Union}|null
      */
     public $fallback_params;
 
@@ -67,7 +63,7 @@ class TKeyedArray extends Atomic
      * Constructs a new instance of a generic type
      *
      * @param non-empty-array<string|int, Union> $properties
-     * @param ?list{Union, Union} $fallback_params
+     * @param array{Union, Union}|null $fallback_params
      * @param array<string, bool> $class_strings
      */
     public function __construct(
@@ -144,15 +140,29 @@ class TKeyedArray extends Atomic
         return $cloned;
     }
 
+    public function isSealed(): bool
+    {
+        return $this->fallback_params === null;
+    }
+
+    /**
+     * @psalm-assert-if-true list{Union} $this->properties
+     * @psalm-assert-if-true list{Union, Union} $this->fallback_params
+     */
+    public function isGenericList(): bool
+    {
+        return $this->is_list
+            && count($this->properties) === 1
+            && $this->fallback_params
+            && $this->properties[0]->equals($this->fallback_params[1], true, true, false);
+    }
+
     public function getId(bool $exact = true, bool $nested = false): string
     {
         $property_strings = [];
 
         if ($this->is_list) {
-            if (count($this->properties) === 1
-                && $this->fallback_params
-                && $this->properties[0]->equals($this->fallback_params[1], true, true, false)
-            ) {
+            if ($this->isGenericList()) {
                 $t = $this->properties[0]->possibly_undefined ? 'list' : 'non-empty-list';
                 return "$t<".$this->fallback_params[1]->getId($exact).'>';
             }
@@ -410,7 +420,7 @@ class TKeyedArray extends Atomic
 
     public function isNonEmpty(): bool
     {
-        if ($this->is_list) {
+        if ($this->isGenericList()) {
             return !$this->properties[0]->possibly_undefined;
         }
         foreach ($this->properties as $property) {
@@ -498,6 +508,35 @@ class TKeyedArray extends Atomic
         bool $add_lower_bound = false,
         int $depth = 0
     ): self {
+        if ($input_type instanceof TKeyedArray
+            && $input_type->is_list
+            && $input_type->isSealed()
+            && $this->isGenericList()
+        ) {
+            $replaced_list_type = $this
+                ->getGenericArrayType()
+                ->replaceTemplateTypesWithStandins(
+                    $template_result,
+                    $codebase,
+                    $statements_analyzer,
+                    $input_type->getGenericArrayType(),
+                    $input_arg_offset,
+                    $calling_class,
+                    $calling_function,
+                    $replace,
+                    $add_lower_bound,
+                    $depth,
+                )
+                ->type_params[1]
+                ->setPossiblyUndefined(!$this->isNonEmpty());
+
+            $cloned = clone $this;
+            $cloned->properties = [$replaced_list_type];
+            $cloned->fallback_params = [$this->fallback_params[1], $replaced_list_type];
+
+            return $cloned;
+        }
+
         $properties = $this->properties;
 
         foreach ($properties as $offset => $property) {

@@ -17,6 +17,197 @@ class FunctionCallTest extends TestCase
     public function providerValidCodeParse(): iterable
     {
         return [
+            'inferGenericListFromTuple' => [
+                'code' => '<?php
+                    /**
+                     * @template A
+                     * @param list<A> $list
+                     * @return list<A>
+                     */
+                    function testList(array $list): array { return $list; }
+                    /**
+                     * @template A
+                     * @param non-empty-list<A> $list
+                     * @return non-empty-list<A>
+                     */
+                    function testNonEmptyList(array $list): array { return $list; }
+                    /**
+                     * @template A of list<mixed>
+                     * @param A $list
+                     * @return A
+                     */
+                    function testGenericList(array $list): array { return $list; }
+                    $list = testList([1, 2, 3]);
+                    $nonEmptyList = testNonEmptyList([1, 2, 3]);
+                    $genericList = testGenericList([1, 2, 3]);',
+                'assertions' => [
+                    '$list===' => 'list<1|2|3>',
+                    '$nonEmptyList===' => 'non-empty-list<1|2|3>',
+                    '$genericList===' => 'list{1, 2, 3}',
+                ],
+            ],
+            'inferIterableFromTraversable' => [
+                'code' => '<?php
+                    /**
+                     * @return SplFixedArray<string>
+                     */
+                    function getStrings(): SplFixedArray
+                    {
+                        return SplFixedArray::fromArray(["fst", "snd", "thr"]);
+                    }
+                    /**
+                     * @return SplFixedArray<int>
+                     */
+                    function getIntegers(): SplFixedArray
+                    {
+                        return SplFixedArray::fromArray([1, 2, 3]);
+                    }
+                    /**
+                     * @template K
+                     * @template A
+                     * @template B
+                     * @param iterable<K, A> $lhs
+                     * @param iterable<K, B> $rhs
+                     * @return iterable<K, A|B>
+                     */
+                    function mergeIterable(iterable $lhs, iterable $rhs): iterable
+                    {
+                        foreach ($lhs as $k => $v) { yield $k => $v; }
+                        foreach ($rhs as $k => $v) { yield $k => $v; }
+                    }
+                    $iterable = mergeIterable(getStrings(), getIntegers());',
+                'assertions' => [
+                    '$iterable===' => 'iterable<int, int|string>',
+                ],
+            ],
+            'inferTypeFromAnonymousObjectWithTemplatedProperty' => [
+                'code' => '<?php
+                    /** @template T */
+                    final class Value
+                    {
+                        /** @param T $value */
+                        public function __construct(public readonly mixed $value) {}
+                    }
+                    /**
+                     * @template T
+                     * @param object{value: T} $object
+                     * @return T
+                     */
+                    function getValue(object $object): mixed
+                    {
+                        return $object->value;
+                    }
+                    /**
+                     * @template T
+                     * @param object{value: object{value: T}} $object
+                     * @return T
+                     */
+                    function getNestedValue(object $object): mixed
+                    {
+                        return $object->value->value;
+                    }
+                    $object = new Value(new Value(42));
+                    $value = getValue($object);
+                    $nestedValue = getNestedValue($object);',
+                'assertions' => [
+                    '$value===' => 'Value<42>',
+                    '$nestedValue===' => '42',
+                ],
+                'ignored_issues' => [],
+                'php_version' => '8.1',
+            ],
+            'inferTypeFromAnonymousObjectWithTemplatedPropertyFromTemplatedAncestor' => [
+                'code' => '<?php
+                    /** @template T */
+                    abstract class AbstractValue
+                    {
+                        /** @param T $value */
+                        public function __construct(public readonly mixed $value) {}
+                    }
+                    /**
+                     * @template TValue
+                     * @extends AbstractValue<TValue>
+                     */
+                    final class ConcreteValue extends AbstractValue
+                    {
+                        /**
+                         * @param TValue $value
+                         */
+                        public function __construct(mixed $value)
+                        {
+                            parent::__construct($value);
+                        }
+                    }
+                    /**
+                     * @template T
+                     * @param object{value: T} $object
+                     * @return T
+                     */
+                    function getValue(object $object): mixed
+                    {
+                        return $object->value;
+                    }
+                    /**
+                     * @template T
+                     * @param object{value: object{value: T}} $object
+                     * @return T
+                     */
+                    function getNestedValue(object $object): mixed
+                    {
+                        return $object->value->value;
+                    }
+                    $object = new ConcreteValue(new ConcreteValue(42));
+                    $value = getValue($object);
+                    $nestedValue = getNestedValue($object);',
+                'assertions' => [
+                    '$value===' => 'ConcreteValue<42>',
+                    '$nestedValue===' => '42',
+                ],
+                'ignored_issues' => [],
+                'php_version' => '8.1',
+            ],
+            'inferTypeFromAnonymousObjectWithTemplatedPropertyFromConcreteAncestor' => [
+                'code' => '<?php
+                    /** @template T */
+                    abstract class AbstractValue
+                    {
+                        /** @param T $value */
+                        public function __construct(public readonly mixed $value) {}
+                    }
+                    /** @extends AbstractValue<int> */
+                    final class IntValue extends AbstractValue {}
+                    final class Nested
+                    {
+                        public function __construct(public readonly IntValue $value) {}
+                    }
+                    /**
+                     * @template T
+                     * @param object{value: T} $object
+                     * @return T
+                     */
+                    function getValue(object $object): mixed
+                    {
+                        return $object->value;
+                    }
+                    /**
+                     * @template T
+                     * @param object{value: object{value: T}} $object
+                     * @return T
+                     */
+                    function getNestedValue(object $object): mixed
+                    {
+                        return $object->value->value;
+                    }
+                    $object = new Nested(new IntValue(42));
+                    $value = getValue($object);
+                    $nestedValue = getNestedValue($object);',
+                'assertions' => [
+                    '$value===' => 'IntValue',
+                    '$nestedValue===' => 'int',
+                ],
+                'ignored_issues' => [],
+                'php_version' => '8.1',
+            ],
             'countShapedArrays' => [
                 'code' => '<?php
                     /** @var array{a?: int} */

@@ -466,7 +466,6 @@
   <file src="src/Psalm/Internal/Type/TemplateStandinTypeReplacer.php">
     <ImpureMethodCall>
       <code>getClassTemplateTypes</code>
-      <code>has</code>
     </ImpureMethodCall>
   </file>
   <file src="src/Psalm/Internal/Type/TypeCombiner.php">
@@ -488,7 +487,6 @@
     <PossiblyUndefinedIntArrayOffset>
       <code>$const_name</code>
       <code>$const_name</code>
-      <code>$intersection_types[0]</code>
       <code><![CDATA[$parse_tree->children[0]]]></code>
       <code><![CDATA[$parse_tree->condition->children[0]]]></code>
       <code>array_keys($offset_template_data)[0]</code>
@@ -641,7 +639,6 @@
       <code><![CDATA[$key_type->possibly_undefined]]></code>
     </ImpurePropertyAssignment>
     <PossiblyUndefinedIntArrayOffset>
-      <code><![CDATA[$this->properties[0]]]></code>
       <code><![CDATA[$this->properties[0]]]></code>
       <code><![CDATA[$this->properties[0]]]></code>
     </PossiblyUndefinedIntArrayOffset>

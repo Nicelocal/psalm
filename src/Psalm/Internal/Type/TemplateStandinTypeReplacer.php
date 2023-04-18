@@ -7,6 +7,7 @@ use Psalm\Codebase;
 use Psalm\Internal\Analyzer\StatementsAnalyzer;
 use Psalm\Internal\Codebase\Methods;
 use Psalm\Internal\Type\Comparator\CallableTypeComparator;
+use Psalm\Internal\Type\Comparator\KeyedArrayComparator;
 use Psalm\Internal\Type\Comparator\UnionTypeComparator;
 use Psalm\Type;
 use Psalm\Type\Atomic;
@@ -33,7 +34,6 @@ use Psalm\Type\Atomic\TTemplateParamClass;
 use Psalm\Type\Atomic\TTemplatePropertiesOf;
 use Psalm\Type\Atomic\TTemplateValueOf;
 use Psalm\Type\Union;
-use Throwable;
 
 use function array_fill;
 use function array_keys;
@@ -580,6 +580,22 @@ class TemplateStandinTypeReplacer
                 } catch (InvalidArgumentException $e) {
                     // do nothing
                 }
+            }
+
+            if ($atomic_input_type instanceof TNamedObject
+                && $base_type instanceof TObjectWithProperties
+            ) {
+                $object_with_keys = KeyedArrayComparator::coerceToObjectWithProperties(
+                    $codebase,
+                    $atomic_input_type,
+                    $base_type,
+                );
+
+                if ($object_with_keys) {
+                    $matching_atomic_types[$object_with_keys->getId()] = $object_with_keys;
+                }
+
+                continue;
             }
 
             if ($atomic_input_type instanceof TTemplateParam) {
@@ -1233,13 +1249,13 @@ class TemplateStandinTypeReplacer
             $input_type_params = [];
         }
 
-        try {
-            $input_class_storage = $codebase->classlike_storage_provider->get($input_type_part->value);
-            $container_class_storage = $codebase->classlike_storage_provider->get($container_type_part->value);
-            $container_type_params_covariant = $container_class_storage->template_covariants;
-        } catch (Throwable $e) {
-            $input_class_storage = null;
-        }
+        $input_class_storage = $codebase->classlike_storage_provider->has($input_type_part->value)
+            ? $codebase->classlike_storage_provider->get($input_type_part->value)
+            : null;
+
+        $container_type_params_covariant = $codebase->classlike_storage_provider->has($container_type_part->value)
+            ? $codebase->classlike_storage_provider->get($container_type_part->value)->template_covariants
+            : null;
 
         if ($input_type_part->value !== $container_type_part->value
             && $input_class_storage
@@ -1266,8 +1282,12 @@ class TemplateStandinTypeReplacer
 
             $template_extends = $input_class_storage->template_extended_params;
 
-            if (isset($template_extends[$container_type_part->value])) {
-                $params = $template_extends[$container_type_part->value];
+            $container_type_part_value = $container_type_part->value === 'iterable'
+                ? 'Traversable'
+                : $container_type_part->value;
+
+            if (isset($template_extends[$container_type_part_value])) {
+                $params = $template_extends[$container_type_part_value];
 
                 $new_input_params = [];
 
