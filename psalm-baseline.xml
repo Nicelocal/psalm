@@ -533,11 +533,6 @@
       <code>traverse</code>
     </ImpureMethodCall>
   </file>
-  <file src="src/Psalm/Type.php">
-    <ImpureStaticProperty>
-      <code>self::$listKey</code>
-    </ImpureStaticProperty>
-  </file>
   <file src="src/Psalm/Type/Atomic.php">
     <ImpureMethodCall>
       <code>classExtendsOrImplements</code>

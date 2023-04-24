@@ -308,8 +308,8 @@ class ArrayFunctionCallTest extends TestCase
                 'assertions' => [
                     // todo: this first type is not entirely correct
                     //'$c===' => "list{int|string, ...<int<0, max>, int|string>}",
-                    '$c===' => "list{string, ...<int<0, max>, int|string>}",
-                    '$d===' => "list{string, ...<int<0, max>, int|string>}",
+                    '$c===' => "list{string, ...<int|string>}",
+                    '$d===' => "list{string, ...<int|string>}",
                 ],
             ],
             'arrayMergeEmpty' => [
@@ -1826,6 +1826,40 @@ class ArrayFunctionCallTest extends TestCase
                     $_b = array_splice( $a, 0, 1, [] );',
                 'assertions' => [
                     '$a' => 'array<never, never>',
+                ],
+            ],
+            'arraySpliceWithBothMultipleLiterals' => [
+                'code' => '<?php
+                    $a = array( "hello" );
+                    /** @var 1|2|0 **/
+                    $b = 1;
+                    /** @var 4|5 **/
+                    $c = 4;
+                    $_d = array_splice( $a, $b, $c );',
+                'assertions' => [
+                    '$a' => 'list<string>',
+                ],
+            ],
+            'arraySpliceWithLengthMultipleLiterals' => [
+                'code' => '<?php
+                    $a = array( "hello", "world" );
+                    $b = 0;
+                    /** @var 2|3 **/
+                    $c = 3;
+                    array_splice( $a, $b, $c );',
+                'assertions' => [
+                    '$a' => 'array<never, never>',
+                ],
+            ],
+            'arraySpliceWithLengthMultipleLiteralsIntersect' => [
+                'code' => '<?php
+                    $a = array( "hello", "world", "world" );
+                    $b = 0;
+                    /** @var 2|6 **/
+                    $c = 3;
+                    array_splice( $a, $b, $c );',
+                'assertions' => [
+                    '$a' => 'list<string>',
                 ],
             ],
             'ksortPreserveShape' => [

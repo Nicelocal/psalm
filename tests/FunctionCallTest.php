@@ -624,7 +624,7 @@ class FunctionCallTest extends TestCase
                      */
                     $elements = explode(" ", $string, $limit);',
                 'assertions' => [
-                    '$elements' => 'list{0?: string, 1?: string, 2?: string, ...<int<0, max>, string>}',
+                    '$elements' => 'list{0?: string, 1?: string, 2?: string, ...<string>}',
                 ],
             ],
             'explodeWithDynamicDelimiter' => [
@@ -680,7 +680,7 @@ class FunctionCallTest extends TestCase
                      */
                     $elements = explode($delim, $string, $limit);',
                 'assertions' => [
-                    '$elements' => 'list{0?: string, 1?: string, 2?: string, ...<int<0, max>, string>}',
+                    '$elements' => 'list{0?: string, 1?: string, 2?: string, ...<string>}',
                 ],
             ],
             'explodeWithDynamicNonEmptyDelimiter' => [
@@ -1731,19 +1731,36 @@ class FunctionCallTest extends TestCase
             'dateTest' => [
                 'code' => '<?php
                     $y = date("Y");
+                    $ym = date("Ym");
                     $m = date("m");
                     $F = date("F");
                     $y2 = date("Y", 10000);
                     $F2 = date("F", 10000);
                     /** @psalm-suppress MixedArgument */
-                    $F3 = date("F", $GLOBALS["F3"]);',
+                    $F3 = date("F", $GLOBALS["F3"]);
+                    $gm_y = gmdate("Y");
+                    $gm_ym = gmdate("Ym");
+                    $gm_m = gmdate("m");
+                    $gm_F = gmdate("F");
+                    $gm_y2 = gmdate("Y", 10000);
+                    $gm_F2 = gmdate("F", 10000);
+                    /** @psalm-suppress MixedArgument */
+                    $gm_F3 = gmdate("F", $GLOBALS["F3"]);',
                 'assertions' => [
                     '$y===' => 'numeric-string',
+                    '$ym===' => 'numeric-string',
                     '$m===' => 'numeric-string',
                     '$F===' => 'string',
                     '$y2===' => 'numeric-string',
                     '$F2===' => 'string',
                     '$F3===' => 'false|string',
+                    '$gm_y===' => 'numeric-string',
+                    '$gm_ym===' => 'numeric-string',
+                    '$gm_m===' => 'numeric-string',
+                    '$gm_F===' => 'string',
+                    '$gm_y2===' => 'numeric-string',
+                    '$gm_F2===' => 'string',
+                    '$gm_F3===' => 'false|string',
                 ],
             ],
             'sscanfReturnTypeWithTwoParameters' => [
@@ -2026,20 +2043,46 @@ class FunctionCallTest extends TestCase
             ],
             'mb_strtolowerProducesStringWithSecondArgument' => [
                 'code' => '<?php
-                    $r = mb_strtolower("École", "BASE64");
+                    /** @var non-empty-string $a */
+                    $a = "École";
+                    $r = mb_strtolower($a, "BASE64");
+                    /** @var string $b */
+                    $b = "";
+                    $s = mb_strtolower($b, "BASE64");
+                    $t = mb_strtolower("ABC", "BASE64");
+                    $u = mb_strtolower("", "BASE64");
                 ',
                 'assertions' => [
-                    '$r===' => 'string',
+                    '$r===' => 'non-empty-string',
+                    '$s===' => 'string',
+                    '$t===' => 'non-empty-string',
+                    '$u===' => 'string',
                 ],
             ],
             'mb_strtolowerProducesLowercaseStringWithNullOrAbsentEncoding' => [
                 'code' => '<?php
-                    $a = mb_strtolower("AAA");
-                    $b = mb_strtolower("AAA", null);
+                    /** @var non-empty-string $i */
+                    $i = "École";
+                    /** @var string $j */
+                    $j = "";
+                    $a = mb_strtolower($i);
+                    $b = mb_strtolower($i, null);
+                    $c = mb_strtolower($j);
+                    $d = mb_strtolower($j, null);
+                    $e = mb_strtolower("AAA");
+                    $f = mb_strtolower("AAA", null);
+                    $g = mb_strtolower("");
+                    $h = mb_strtolower("", null);
                 ',
                 'assertions' => [
-                    '$a===' => 'lowercase-string',
-                    '$b===' => 'lowercase-string',
+                    '$a===' => 'non-empty-lowercase-string',
+                    '$b===' => 'non-empty-lowercase-string',
+                    '$c===' => 'lowercase-string',
+                    '$d===' => 'lowercase-string',
+                    '$e===' => 'non-empty-lowercase-string',
+                    '$f===' => 'non-empty-lowercase-string',
+                    '$g===' => 'lowercase-string',
+                    '$h===' => 'lowercase-string',
                 ],
                 'ignored_issues' => [],
                 'php_version' => '8.1',
