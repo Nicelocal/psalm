@@ -13,6 +13,7 @@
     limitMethodComplexity="true"
     errorBaseline="psalm-baseline.xml"
     findUnusedPsalmSuppress="true"
+    findUnusedBaselineEntry="true"
 >
     <stubs>
         <file name="stubs/phpparser.phpstub"/>
