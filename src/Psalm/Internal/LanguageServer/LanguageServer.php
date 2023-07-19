@@ -210,6 +210,7 @@ class LanguageServer extends Dispatcher
                     $this->protocolWriter->write(new Message($responseBody));
                 }
             },
+        ),
         );
 
         $this->protocolReader->on(
@@ -408,27 +409,27 @@ class LanguageServer extends Dispatcher
             );
         }
 
-                $serverCapabilities = new ServerCapabilities();
+        $serverCapabilities = new ServerCapabilities();
 
-                //The server provides execute command support.
-                $serverCapabilities->executeCommandProvider = new ExecuteCommandOptions(['test']);
+        //The server provides execute command support.
+        $serverCapabilities->executeCommandProvider = new ExecuteCommandOptions(['test']);
 
-                $textDocumentSyncOptions = new TextDocumentSyncOptions();
+        $textDocumentSyncOptions = new TextDocumentSyncOptions();
 
-                //Open and close notifications are sent to the server.
-                $textDocumentSyncOptions->openClose = true;
+        //Open and close notifications are sent to the server.
+        $textDocumentSyncOptions->openClose = true;
 
-                $saveOptions = new SaveOptions();
-                //The client is supposed to include the content on save.
-                $saveOptions->includeText = true;
-                $textDocumentSyncOptions->save = $saveOptions;
+        $saveOptions = new SaveOptions();
+        //The client is supposed to include the content on save.
+        $saveOptions->includeText = true;
+        $textDocumentSyncOptions->save = $saveOptions;
 
-                /**
-                 * Change notifications are sent to the server. See
-                 * TextDocumentSyncKind.None, TextDocumentSyncKind.Full and
-                 * TextDocumentSyncKind.Incremental. If omitted it defaults to
-                 * TextDocumentSyncKind.None.
-                 */
+        /**
+         * Change notifications are sent to the server. See
+         * TextDocumentSyncKind.None, TextDocumentSyncKind.Full and
+         * TextDocumentSyncKind.Incremental. If omitted it defaults to
+         * TextDocumentSyncKind.None.
+         */
         if ($this->project_analyzer->onchange_line_limit === 0) {
             /**
              * Documents should not be synced at all.
@@ -442,44 +443,44 @@ class LanguageServer extends Dispatcher
             $textDocumentSyncOptions->change = TextDocumentSyncKind::FULL;
         }
 
-                /**
-                 * Defines how text documents are synced. Is either a detailed structure
-                 * defining each notification or for backwards compatibility the
-                 * TextDocumentSyncKind number. If omitted it defaults to
-                 * `TextDocumentSyncKind.None`.
-                 */
-                $serverCapabilities->textDocumentSync = $textDocumentSyncOptions;
+        /**
+         * Defines how text documents are synced. Is either a detailed structure
+         * defining each notification or for backwards compatibility the
+         * TextDocumentSyncKind number. If omitted it defaults to
+         * `TextDocumentSyncKind.None`.
+         */
+        $serverCapabilities->textDocumentSync = $textDocumentSyncOptions;
 
-                /**
-                 * The server provides document symbol support.
-                 * Support "Find all symbols"
-                 */
-                $serverCapabilities->documentSymbolProvider = false;
-                /**
-                 * The server provides workspace symbol support.
-                 * Support "Find all symbols in workspace"
-                 */
-                $serverCapabilities->workspaceSymbolProvider = false;
-                /**
-                 * The server provides goto definition support.
-                 * Support "Go to definition"
-                 */
-                $serverCapabilities->definitionProvider = true;
-                /**
-                 * The server provides find references support.
-                 * Support "Find all references"
-                 */
-                $serverCapabilities->referencesProvider = false;
-                /**
-                 * The server provides hover support.
-                 * Support "Hover"
-                 */
-                $serverCapabilities->hoverProvider = true;
+        /**
+         * The server provides document symbol support.
+         * Support "Find all symbols"
+         */
+        $serverCapabilities->documentSymbolProvider = false;
+        /**
+         * The server provides workspace symbol support.
+         * Support "Find all symbols in workspace"
+         */
+        $serverCapabilities->workspaceSymbolProvider = false;
+        /**
+         * The server provides goto definition support.
+         * Support "Go to definition"
+         */
+        $serverCapabilities->definitionProvider = true;
+        /**
+         * The server provides find references support.
+         * Support "Find all references"
+         */
+        $serverCapabilities->referencesProvider = false;
+        /**
+         * The server provides hover support.
+         * Support "Hover"
+         */
+        $serverCapabilities->hoverProvider = true;
 
-                /**
-                 * The server provides completion support.
-                 * Support "Completion"
-                 */
+        /**
+         * The server provides completion support.
+         * Support "Completion"
+         */
         if ($this->project_analyzer->provide_completion) {
             $serverCapabilities->completionProvider = new CompletionOptions();
             /**
@@ -502,27 +503,23 @@ class LanguageServer extends Dispatcher
             $serverCapabilities->completionProvider->triggerCharacters = ['$', '>', ':',"[", "(", ",", " "];
         }
 
-                /**
-                 * Whether code action supports the `data` property which is
-                 * preserved between a `textDocument/codeAction` and a
-                 * `codeAction/resolve` request.
-                 *
-                 * Support "Code Actions" if we support data
-                 *
-                 * @since LSP 3.16.0
-                 */
-        if ($this->clientCapabilities &&
-                    $this->clientCapabilities->textDocument &&
-                    $this->clientCapabilities->textDocument->publishDiagnostics &&
-                    $this->clientCapabilities->textDocument->publishDiagnostics->dataSupport
-                ) {
+        /**
+         * Whether code action supports the `data` property which is
+         * preserved between a `textDocument/codeAction` and a
+         * `codeAction/resolve` request.
+         *
+         * Support "Code Actions" if we support data
+         *
+         * @since LSP 3.16.0
+         */
+        if ($this->clientCapabilities->textDocument->publishDiagnostics->dataSupport ?? false) {
             $serverCapabilities->codeActionProvider = true;
         }
 
-                /**
-                 * The server provides signature help support.
-                 */
-                $serverCapabilities->signatureHelpProvider = new SignatureHelpOptions(['(', ',']);
+        /**
+         * The server provides signature help support.
+         */
+        $serverCapabilities->signatureHelpProvider = new SignatureHelpOptions(['(', ',']);
 
         if ($this->client->clientConfiguration->baseline !== null) {
             $this->logInfo('Utilizing Baseline: '.$this->client->clientConfiguration->baseline);
@@ -532,17 +529,17 @@ class LanguageServer extends Dispatcher
             );
         }
 
-                $this->logInfo("Initializing: Complete.");
-                $this->clientStatus('initialized');
+        $this->logInfo("Initializing: Complete.");
+        $this->clientStatus('initialized');
 
-                /**
-                 * Information about the server.
-                 *
-                 * @since LSP 3.15.0
-                 */
-                $initializeResultServerInfo = new InitializeResultServerInfo('Psalm Language Server', PSALM_VERSION);
+        /**
+         * Information about the server.
+         *
+         * @since LSP 3.15.0
+         */
+        $initializeResultServerInfo = new InitializeResultServerInfo('Psalm Language Server', PSALM_VERSION);
 
-                return new InitializeResult($serverCapabilities, $initializeResultServerInfo);
+        return new InitializeResult($serverCapabilities, $initializeResultServerInfo);
     }
 
     /**
