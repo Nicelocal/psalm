@@ -122,7 +122,7 @@ class ConstantTest extends TestCase
                     $a = __LINE__;
                     $b = __file__;',
                 'assertions' => [
-                    '$a' => 'int',
+                    '$a' => 'int<1, max>',
                     '$b' => 'string',
                 ],
             ],
@@ -1184,7 +1184,7 @@ class ConstantTest extends TestCase
                     $line = C::LINE;
                 ',
                 'assertions' => [
-                    '$line' => 'int',
+                    '$line' => 'int<1, max>',
                 ],
             ],
             'classMethodTraitAndFunctionInConstInitializersAreStrings' => [
@@ -1655,6 +1655,22 @@ class ConstantTest extends TestCase
                 'ignored_issues' => [],
                 'php_version' => '8.2',
             ],
+            'constantEnumSelfReference' => [
+                'code' => '<?php
+                    enum Bar: string {
+                        case A = "a";
+                        case B = "b";
+                        public const STR = self::A->value . self::B->value;
+                    }
+
+                    class Foo {
+                        public const CONCAT_STR = "a" . Bar::STR . "e";
+                    }
+                ',
+                'assertions' => [],
+                'ignored_issues' => [],
+                'php_version' => '8.2',
+            ],
             'classConstWithParamOut' => [
                 'code' => '<?php
 
@@ -1891,6 +1907,19 @@ class ConstantTest extends TestCase
                 'assertions' => [
                     '$s===' => 'array{9223372036854775806: 0, 9223372036854775807: 1}',
                 ],
+            ],
+            'inheritedConstantIsNotAmbiguous' => [
+                'code' => <<<'PHP'
+                    <?php
+                    interface MainInterface {
+                        public const TEST = 'test';
+                    }
+
+                    interface FooInterface extends MainInterface {}
+                    interface BarInterface extends MainInterface {}
+
+                    class FooBar implements FooInterface, BarInterface {}
+                    PHP,
             ],
         ];
     }

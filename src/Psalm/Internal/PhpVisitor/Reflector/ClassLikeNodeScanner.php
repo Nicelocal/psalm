@@ -539,6 +539,31 @@ class ClassLikeNodeScanner
             $storage->sealed_properties = $docblock_info->sealed_properties;
             $storage->sealed_methods = $docblock_info->sealed_methods;
 
+
+            if ($docblock_info->inheritors) {
+                try {
+                    $storage->inheritors = TypeParser::parseTokens(
+                        TypeTokenizer::getFullyQualifiedTokens(
+                            $docblock_info->inheritors,
+                            $storage->aliases,
+                            $storage->template_types ?? [],
+                            $storage->type_aliases,
+                            $fq_classlike_name,
+                        ),
+                        null,
+                        $storage->template_types ?? [],
+                        $storage->type_aliases,
+                        true,
+                    );
+                } catch (TypeParseTreeException $e) {
+                    $storage->docblock_issues[] = new InvalidDocblock(
+                        '@psalm-inheritors contains invalid reference:' . $e->getMessage(),
+                        $name_location ?? $class_location,
+                    );
+                }
+            }
+
+
             if ($docblock_info->properties) {
                 foreach ($docblock_info->properties as $property) {
                     $pseudo_property_type_tokens = TypeTokenizer::getFullyQualifiedTokens(
@@ -577,10 +602,6 @@ class ClassLikeNodeScanner
                         );
                     }
                 }
-
-                if ($this->config->docblock_property_types_seal_properties) {
-                    $storage->sealed_properties = true;
-                }
             }
 
             foreach ($docblock_info->methods as $method) {
@@ -607,8 +628,6 @@ class ClassLikeNodeScanner
                         $lc_method_name,
                     );
                 }
-
-                $storage->sealed_methods = true;
             }
 
 
@@ -820,9 +839,14 @@ class ClassLikeNodeScanner
                     $classlike_storage->properties[$property_name] = new PropertyStorage();
                 }
 
-                $classlike_storage->properties[$property_name]->type = $property_type;
-
                 $property_id = $fq_classlike_name . '::$' . $property_name;
+
+                if ($property_id === 'DateInterval::$days') {
+                    /** @psalm-suppress InaccessibleProperty We just parsed this type */
+                    $property_type->ignore_falsable_issues = true;
+                }
+
+                $classlike_storage->properties[$property_name]->type = $property_type;
 
                 $classlike_storage->declaring_property_ids[$property_name] = $fq_classlike_name;
                 $classlike_storage->appearing_property_ids[$property_name] = $property_id;

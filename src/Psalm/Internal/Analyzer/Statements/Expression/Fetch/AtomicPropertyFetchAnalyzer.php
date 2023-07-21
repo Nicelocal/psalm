@@ -713,7 +713,7 @@ class AtomicPropertyFetchAnalyzer
              * If we have an explicit list of all allowed magic properties on the class, and we're
              * not in that list, fall through
              */
-            if (!($class_storage->sealed_properties || $codebase->config->seal_all_properties)
+            if (!($class_storage->hasSealedProperties($codebase->config))
                 && !$override_property_visibility
             ) {
                 return false;
@@ -1197,7 +1197,8 @@ class AtomicPropertyFetchAnalyzer
         ?string $var_id,
         bool &$has_valid_fetch_type
     ): void {
-        if ($config->use_phpdoc_property_without_magic_or_parent
+        if (($config->use_phpdoc_property_without_magic_or_parent
+            || $class_storage->hasAttributeIncludingParents('AllowDynamicProperties', $codebase))
             && isset($class_storage->pseudo_property_get_types['$' . $prop_name])
         ) {
             $stmt_type = $class_storage->pseudo_property_get_types['$' . $prop_name];

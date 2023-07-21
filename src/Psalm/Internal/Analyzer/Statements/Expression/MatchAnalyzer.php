@@ -78,11 +78,11 @@ class MatchAnalyzer
         if (!$switch_var_id) {
             if ($stmt->cond instanceof PhpParser\Node\Expr\FuncCall
                 && $stmt->cond->name instanceof PhpParser\Node\Name
-                && ($stmt->cond->name->parts === ['get_class']
-                    || $stmt->cond->name->parts === ['gettype']
-                    || $stmt->cond->name->parts === ['get_debug_type']
-                    || $stmt->cond->name->parts === ['count']
-                    || $stmt->cond->name->parts === ['sizeof'])
+                && ($stmt->cond->name->getParts() === ['get_class']
+                    || $stmt->cond->name->getParts() === ['gettype']
+                    || $stmt->cond->name->getParts() === ['get_debug_type']
+                    || $stmt->cond->name->getParts() === ['count']
+                    || $stmt->cond->name->getParts() === ['sizeof'])
                 && $stmt->cond->getArgs()
             ) {
                 $first_arg = $stmt->cond->getArgs()[0];
@@ -110,10 +110,16 @@ class MatchAnalyzer
                         $stmt->cond->getAttributes(),
                     );
                 }
-            } elseif ($stmt->cond instanceof PhpParser\Node\Expr\FuncCall
-                || $stmt->cond instanceof PhpParser\Node\Expr\MethodCall
-                || $stmt->cond instanceof PhpParser\Node\Expr\StaticCall
+            } elseif ($stmt->cond instanceof PhpParser\Node\Expr\ClassConstFetch
+                && $stmt->cond->name instanceof PhpParser\Node\Identifier
+                && $stmt->cond->name->toString() === 'class'
             ) {
+                // do nothing
+            } elseif ($stmt->cond instanceof PhpParser\Node\Expr\ConstFetch
+                && $stmt->cond->name->toString() === 'true'
+            ) {
+                // do nothing
+            } else {
                 $switch_var_id = '$__tmp_switch__' . (int) $stmt->cond->getAttribute('startFilePos');
 
                 $condition_type = $statements_analyzer->node_data->getType($stmt->cond) ?? Type::getMixed();

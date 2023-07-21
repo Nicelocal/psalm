@@ -702,6 +702,16 @@ class Analyzer
             }
         }
 
+        // This could be optimized by storing method references to files
+        foreach ($file_reference_provider->getDeletedReferencedFiles() as $deleted_file) {
+            foreach ($file_reference_provider->getFilesReferencingFile($deleted_file) as $file_referencing_deleted) {
+                $methods_referencing_deleted = $this->analyzed_methods[$file_referencing_deleted] ?? [];
+                foreach ($methods_referencing_deleted as $method_referencing_deleted => $_) {
+                    $newly_invalidated_methods[$method_referencing_deleted] = true;
+                }
+            }
+        }
+
         foreach ($newly_invalidated_methods as $method_id => $_) {
             foreach ($method_references_to_class_members as $i => $_) {
                 unset($method_references_to_class_members[$i][$method_id]);
@@ -1559,7 +1569,29 @@ class Analyzer
     }
 
     /**
-     * @return array{0: float, 1: string}
+     * @param list<IssueData> $issues
+     */
+    private function taskDoneClosure(array $issues): void
+    {
+        $has_error = false;
+        $has_info = false;
+
+        foreach ($issues as $issue) {
+            switch ($issue->severity) {
+                case IssueData::SEVERITY_INFO:
+                    $has_info = true;
+                    break;
+                default:
+                    $has_error = true;
+                    break;
+            }
+        }
+
+        $this->progress->taskDone($has_error ? 2 : ($has_info ? 1 : 0));
+    }
+
+    /**
+     * @return list<IssueData>
      */
     private function analysisWorker(int $_, string $file_path): array
     {

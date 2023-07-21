@@ -39,6 +39,7 @@ class CreatorTest extends TestCase
     xmlns="https://raw.githubusercontent.com/zoonru/psalm/fixes/config.xsd"
     xsi:schemaLocation="https://raw.githubusercontent.com/zoonru/psalm/fixes/config.xsd vendor/vimeo/psalm/config.xsd"
     findUnusedBaselineEntry="true"
+    findUnusedCode="true"
 >
     <projectFiles>
         <directory name="lib" />

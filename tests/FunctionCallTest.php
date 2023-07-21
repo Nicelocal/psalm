@@ -17,6 +17,42 @@ class FunctionCallTest extends TestCase
     public function providerValidCodeParse(): iterable
     {
         return [
+            'callTemplatedFunctionWithUnionArgument' => [
+                'code' => '<?php
+                    /** @template T */
+                    interface Message {}
+
+                    /** @implements Message<int> */
+                    final class FirstMessage implements Message {}
+
+                    /** @implements Message<int> */
+                    final class SecondMessage implements Message {}
+
+                    /**
+                     * @template T
+                     * @param Message<T> $msg
+                     */
+                    function test(Message $msg): void {}
+
+                    /** @var FirstMessage|SecondMessage $message */;
+                    test($message);',
+                'assertions' => [],
+                'ignored_issues' => [],
+                'php_version' => '8.0',
+            ],
+            'callFunctionWithTemplateClassStringWillNotFail' => [
+                'code' => '<?php
+                    /** @param class-string<SplFixedArray<string>> $classString */
+                    function acceptTemplatedClassString(string $classString): void
+                    {
+                    }
+
+                    /** @param class-string<SplFixedArray<string>> $classString */
+                    function app(string $classString): void
+                    {
+                        acceptTemplatedClassString($classString);
+                    }',
+            ],
             'inferGenericListFromTuple' => [
                 'code' => '<?php
                     /**
@@ -437,7 +473,7 @@ class FunctionCallTest extends TestCase
                      */
                     function route($callback) {
                       if (!is_callable($callback)) {  }
-                      $a = preg_match("", "", $b);
+                      $a = preg_match("//", "", $b);
                       if ($b[0]) {}
                     }',
                 'assertions' => [],
@@ -463,6 +499,16 @@ class FunctionCallTest extends TestCase
                     function bat(string $s): ?string {
                         $s = preg_replace("/hello/", "", $s);
                         return $s;
+                    }',
+            ],
+            'pregReplaceArrayValueType' => [
+                'code' => '<?php
+                    /**
+                     * @param string[] $s
+                     * @return string[]
+                     */
+                    function foo($s): array {
+                        return preg_replace("/hello/", "", $s);
                     }',
             ],
             'extractVarCheck' => [
@@ -560,12 +606,6 @@ class FunctionCallTest extends TestCase
                         $bTime = strtotime($b);
 
                         return $aTime - $bTime;
-                    }',
-            ],
-            'strposIntSecondParam' => [
-                'code' => '<?php
-                    function hasZeroByteOffset(string $s) : bool {
-                        return strpos($s, 0) !== false;
                     }',
             ],
             'functionCallInGlobalScope' => [
@@ -1649,7 +1689,7 @@ class FunctionCallTest extends TestCase
                      */
                     function(array $ids): array {
                         return \preg_replace_callback(
-                            "",
+                            "//",
                             fn (array $matches) => $matches[4],
                             $ids
                         );
@@ -1755,14 +1795,14 @@ class FunctionCallTest extends TestCase
                     '$F===' => 'string',
                     '$y2===' => 'numeric-string',
                     '$F2===' => 'string',
-                    '$F3===' => 'false|string',
+                    '$F3===' => 'string',
                     '$gm_y===' => 'numeric-string',
                     '$gm_ym===' => 'numeric-string',
                     '$gm_m===' => 'numeric-string',
                     '$gm_F===' => 'string',
                     '$gm_y2===' => 'numeric-string',
                     '$gm_F2===' => 'string',
-                    '$gm_F3===' => 'false|string',
+                    '$gm_F3===' => 'string',
                 ],
             ],
             'sscanfReturnTypeWithTwoParameters' => [
@@ -1784,6 +1824,7 @@ class FunctionCallTest extends TestCase
             'writeArgsAllowed' => [
                 'code' => '<?php
                     /**
+                     * @param non-empty-string $pattern
                      * @param 0|256|512|768 $flags
                      * @return false|int
                      */
@@ -2982,6 +3023,13 @@ class FunctionCallTest extends TestCase
                     function foo(callable $_a = "strlen"): void {}
                 ',
                 'error_message' => 'InvalidParamDefault',
+            ],
+            'disallowStrposIntSecondParam' => [
+                'code' => '<?php
+                    function hasZeroByteOffset(string $s) : bool {
+                        return strpos($s, 0) !== false;
+                    }',
+                'error_message' => 'InvalidScalarArgument',
             ],
         ];
     }

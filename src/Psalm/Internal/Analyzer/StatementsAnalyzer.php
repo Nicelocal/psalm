@@ -304,7 +304,7 @@ class StatementsAnalyzer extends SourceAnalyzer
             } elseif ($stmt instanceof PhpParser\Node\Stmt\Expression
                 && $stmt->expr instanceof PhpParser\Node\Expr\FuncCall
                 && $stmt->expr->name instanceof PhpParser\Node\Name
-                && $stmt->expr->name->parts === ['define']
+                && $stmt->expr->name->getParts() === ['define']
                 && isset($stmt->expr->getArgs()[1])
             ) {
                 $const_name = ConstFetchAnalyzer::getConstName(
@@ -496,6 +496,7 @@ class StatementsAnalyzer extends SourceAnalyzer
             && !($stmt instanceof PhpParser\Node\Stmt\Interface_)
             && !($stmt instanceof PhpParser\Node\Stmt\Trait_)
             && !($stmt instanceof PhpParser\Node\Stmt\HaltCompiler)
+            && !($stmt instanceof PhpParser\Node\Stmt\Declare_)
         ) {
             if ($codebase->find_unused_variables) {
                 IssueBuffer::maybeAdd(
