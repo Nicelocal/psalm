@@ -183,7 +183,7 @@ class IfElseAnalyzer
                 array_filter(
                     $if_context->clauses,
                     static fn(Clause $c): bool => !in_array($c->hash, $reconciled_expression_clauses)
-                )
+                ),
             );
 
             if (count($if_context->clauses) === 1
@@ -218,8 +218,8 @@ class IfElseAnalyzer
 
         $if_scope->negated_types = Algebra::getTruthsFromFormula(
             Algebra::simplifyCNF(
-                [...$context->clauses, ...$if_scope->negated_clauses]
-            )
+                [...$context->clauses, ...$if_scope->negated_clauses],
+            ),
         );
 
         $temp_else_context = clone $post_if_context;
@@ -272,7 +272,9 @@ class IfElseAnalyzer
         // this has to go on a separate line because the phar compactor messes with precedence
         $scope_to_clone = $if_scope->post_leaving_if_context ?? $post_if_context;
         $else_context = clone $scope_to_clone;
-        $else_context->clauses = $else_context->clauses->andSimplified($if_scope->negated_clauses);
+        $else_context->clauses = Algebra::simplifyCNF(
+            [...$else_context->clauses, ...$if_scope->negated_clauses],
+        );
 
         // check the elseifs
         foreach ($stmt->elseifs as $elseif) {
@@ -410,7 +412,7 @@ class IfElseAnalyzer
             && (count($if_scope->reasonable_clauses) > 1 || !$if_scope->reasonable_clauses[0]->wedge)
         ) {
             $context->clauses = Algebra::simplifyCNF(
-                [...$if_scope->reasonable_clauses, ...$context->clauses]
+                [...$if_scope->reasonable_clauses, ...$context->clauses],
             );
         }
 

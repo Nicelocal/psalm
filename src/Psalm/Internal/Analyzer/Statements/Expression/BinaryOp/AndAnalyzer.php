@@ -106,7 +106,7 @@ class AndAnalyzer
                 array_filter(
                     $context_clauses,
                     static fn(Clause $c): bool => !in_array($c->hash, $reconciled_expression_clauses, true)
-                )
+                ),
             );
 
             if (count($context_clauses) === 1
@@ -152,7 +152,7 @@ class AndAnalyzer
         }
 
         $partitioned_clauses = Context::removeReconciledClauses(
-            $left_context->clauses->and($left_clauses),
+            [...$left_context->clauses, ...$left_clauses],
             $changed_var_ids,
         );
 
@@ -206,8 +206,8 @@ class AndAnalyzer
                 ...array_map(
                     /** @return string|int */
                     static fn(Clause $c) => $c->hash,
-                    $partitioned_clauses[1]
-                )
+                    $partitioned_clauses[1],
+                ),
             ];
 
             $if_body_context->vars_possibly_in_scope = array_merge(
