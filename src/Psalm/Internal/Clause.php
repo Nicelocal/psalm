@@ -43,7 +43,7 @@ class Clause
      *     '$d' => ['string', 'int']
      * ]
      *
-     * representing the disjunctive formula
+     * representing the formula
      *
      * !$a || $b || $c !== null || is_string($d) || is_int($d)
      *
@@ -51,7 +51,24 @@ class Clause
      */
     public array $possibilities;
 
-    public bool $wedge;
+    /**
+     * An array of things that are not true
+     * [
+     *     '$a' => ['!falsy'],
+     *     '$b' => ['falsy'],
+     *     '$c' => ['null'],
+     *     '$d' => ['!string', '!int']
+     * ]
+     * represents the formula
+     *
+     * $a && !$b && $c === null && !is_string($d) && !is_int($d)
+     *
+     * @var array<string, non-empty-list<Assertion>>|null
+     */
+    public $impossibilities;
+
+    /** @var bool */
+    public $wedge;
 
     public bool $reconcilable;
 
@@ -221,24 +238,12 @@ class Clause
         );
     }
 
-    /**
-     * Returns conjunction (!) of negated clauses.
-     *
-     * An array of things that are not true
-     * [
-     *     '$a' => ['!falsy'],
-     *     '$b' => ['falsy'],
-     *     '$c' => ['null'],
-     *     '$d' => ['!string', '!int']
-     * ]
-     * represents the conjunctive formula
-     *
-     * $a && !$b && $c === null && !is_string($d) && !is_int($d)
-     *
-     * @return array<string, non-empty-list<Assertion>>
-     */
-    public function getNegation(): array
+    public function calculateNegation(): self
     {
+        if ($this->impossibilities !== null) {
+            return $this;
+        }
+
         $impossibilities = [];
 
         foreach ($this->possibilities as $var_id => $possibility) {
@@ -262,6 +267,10 @@ class Clause
             }
         }
 
-        return $impossibilities;
+        $clause = clone $this;
+
+        $clause->impossibilities = $impossibilities;
+
+        return $clause;
     }
 }

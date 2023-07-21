@@ -9,7 +9,6 @@ use Psalm\Internal\Analyzer\ClassLikeAnalyzer;
 use Psalm\Internal\Analyzer\ClassLikeNameOptions;
 use Psalm\Internal\Analyzer\ScopeAnalyzer;
 use Psalm\Internal\Analyzer\StatementsAnalyzer;
-use Psalm\Internal\ClauseConjunction;
 use Psalm\Internal\Codebase\VariableUseGraph;
 use Psalm\Internal\DataFlow\DataFlowNode;
 use Psalm\Internal\Scope\FinallyScope;
@@ -257,7 +256,7 @@ class TryAnalyzer
             }
 
             // discard all clauses because crazy stuff may have happened in try block
-            $catch_context->clauses = ClauseConjunction::empty();
+            $catch_context->clauses = [];
 
             if ($catch->var && is_string($catch->var->name)) {
                 $catch_var_id = '$' . $catch->var->name;

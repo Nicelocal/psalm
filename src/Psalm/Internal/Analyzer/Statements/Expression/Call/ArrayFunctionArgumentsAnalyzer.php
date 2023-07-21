@@ -83,7 +83,8 @@ class ArrayFunctionArgumentsAnalyzer
             }
 
             /**
-             * @var TKeyedArray|TArray|null
+             * @psalm-suppress PossiblyUndefinedStringArrayOffset
+             * @var TKeyedArray|TArray|TList|null
              */
             $array_arg_type = ($arg_value_type = $statements_analyzer->node_data->getType($arg->value))
                     && $arg_value_type->hasArray()

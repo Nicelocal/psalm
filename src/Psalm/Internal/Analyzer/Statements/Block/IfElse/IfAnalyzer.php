@@ -6,11 +6,11 @@ use PhpParser;
 use Psalm\CodeLocation;
 use Psalm\Codebase;
 use Psalm\Context;
+use Psalm\Internal\Algebra;
 use Psalm\Internal\Analyzer\ScopeAnalyzer;
 use Psalm\Internal\Analyzer\Statements\ExpressionAnalyzer;
 use Psalm\Internal\Analyzer\StatementsAnalyzer;
 use Psalm\Internal\Clause;
-use Psalm\Internal\ClauseConjunction;
 use Psalm\Internal\Scope\IfConditionalScope;
 use Psalm\Internal\Scope\IfScope;
 use Psalm\Internal\Type\Comparator\UnionTypeComparator;
@@ -65,18 +65,19 @@ class IfAnalyzer
 
         $active_if_types = [];
 
-        $reconcilable_if_types = $if_context->clauses->getTruthsFromFormula(
+        $reconcilable_if_types = Algebra::getTruthsFromFormula(
+            $if_context->clauses,
             spl_object_id($stmt->cond),
             $cond_referenced_var_ids,
             $active_if_types,
         );
 
         if (array_filter(
-            $outer_context->clauses->clauses,
-            static fn(Clause $clause): bool => (bool) $clause->possibilities,
+            $outer_context->clauses,
+            static fn(Clause $clause): bool => (bool) $clause->possibilities
         )) {
             $omit_keys = array_reduce(
-                $outer_context->clauses->clauses,
+                $outer_context->clauses,
                 /**
                  * @param array<string> $carry
                  * @return array<string>
@@ -87,7 +88,7 @@ class IfAnalyzer
             );
 
             $omit_keys = array_combine($omit_keys, $omit_keys);
-            $omit_keys = array_diff_key($omit_keys, $outer_context->clauses->getTruthsFromFormula());
+            $omit_keys = array_diff_key($omit_keys, Algebra::getTruthsFromFormula($outer_context->clauses));
 
             $cond_referenced_var_ids = array_diff_key(
                 $cond_referenced_var_ids,
@@ -232,7 +233,7 @@ class IfAnalyzer
                 $if_scope->if_cond_changed_var_ids,
             );
 
-            if ($if_scope->reasonable_clauses->clauses) {
+            if ($if_scope->reasonable_clauses) {
                 // remove all reasonable clauses that would be negated by the if stmts
                 foreach ($new_assigned_var_ids as $var_id => $_) {
                     $if_scope->reasonable_clauses = Context::filterClauses(
@@ -245,7 +246,7 @@ class IfAnalyzer
             }
         } else {
             if (!$has_break_statement) {
-                $if_scope->reasonable_clauses = ClauseConjunction::empty();
+                $if_scope->reasonable_clauses = [];
 
                 // If we're assigning inside
                 if ($if_conditional_scope->assigned_in_conditional_var_ids

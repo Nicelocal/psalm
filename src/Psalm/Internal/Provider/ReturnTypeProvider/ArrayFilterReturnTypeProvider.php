@@ -5,11 +5,11 @@ namespace Psalm\Internal\Provider\ReturnTypeProvider;
 use PhpParser;
 use Psalm\CodeLocation;
 use Psalm\Exception\ComplicatedExpressionException;
+use Psalm\Internal\Algebra;
 use Psalm\Internal\Algebra\FormulaGenerator;
 use Psalm\Internal\Analyzer\Statements\Expression\CallAnalyzer;
 use Psalm\Internal\Analyzer\Statements\Expression\ExpressionIdentifier;
 use Psalm\Internal\Analyzer\StatementsAnalyzer;
-use Psalm\Internal\ClauseConjunction;
 use Psalm\Internal\Type\AssertionReconciler;
 use Psalm\Issue\InvalidReturnType;
 use Psalm\IssueBuffer;
@@ -269,11 +269,12 @@ class ArrayFilterReturnTypeProvider implements FunctionReturnTypeProviderInterfa
                                 $codebase,
                             );
                         } catch (ComplicatedExpressionException $e) {
-                            $filter_clauses = ClauseConjunction::empty();
+                            $filter_clauses = [];
                         }
 
-                        $assertions = $filter_clauses->getTruthsFromFormula(
-                            $cond_object_id,
+                        $assertions = Algebra::getTruthsFromFormula(
+                            $filter_clauses,
+                            $cond_object_id
                         );
 
                         if (isset($assertions['$' . $first_param->var->name])) {

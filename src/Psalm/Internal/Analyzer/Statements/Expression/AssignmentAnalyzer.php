@@ -13,6 +13,7 @@ use Psalm\Codebase;
 use Psalm\Context;
 use Psalm\Exception\DocblockParseException;
 use Psalm\Exception\IncorrectDocblockException;
+use Psalm\Internal\Algebra;
 use Psalm\Internal\Algebra\FormulaGenerator;
 use Psalm\Internal\Analyzer\CommentAnalyzer;
 use Psalm\Internal\Analyzer\FunctionLikeAnalyzer;
@@ -26,7 +27,6 @@ use Psalm\Internal\Analyzer\Statements\ExpressionAnalyzer;
 use Psalm\Internal\Analyzer\StatementsAnalyzer;
 use Psalm\Internal\Analyzer\TraitAnalyzer;
 use Psalm\Internal\Clause;
-use Psalm\Internal\ClauseConjunction;
 use Psalm\Internal\Codebase\DataFlowGraph;
 use Psalm\Internal\Codebase\TaintFlowGraph;
 use Psalm\Internal\Codebase\VariableUseGraph;
@@ -1791,15 +1791,13 @@ class AssignmentAnalyzer
                         $right_clauses,
                     );
 
-                    $assignment_clauses = new ClauseConjunction([
-                        new Clause([$var_id => ['falsy' => new Falsy()]], $var_object_id, $var_object_id),
-                    ]);
-                    $assignment_clauses = $assignment_clauses->combineOrredClauses(
+                    $assignment_clauses = Algebra::combineOredClauses(
+                        [new Clause([$var_id => ['falsy' => new Falsy()]], $var_object_id, $var_object_id)],
                         $right_clauses,
                         $cond_object_id,
                     );
 
-                    $context->clauses = $context->clauses->and($assignment_clauses);
+                    $context->clauses = [...$context->clauses, ...$assignment_clauses];
                 }
             }
         } else {

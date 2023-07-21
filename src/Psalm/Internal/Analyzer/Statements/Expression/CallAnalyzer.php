@@ -9,13 +9,13 @@ use Psalm\CodeLocation;
 use Psalm\Codebase;
 use Psalm\Context;
 use Psalm\FileSource;
+use Psalm\Internal\Algebra;
 use Psalm\Internal\Algebra\FormulaGenerator;
 use Psalm\Internal\Analyzer\ClassLikeAnalyzer;
 use Psalm\Internal\Analyzer\FunctionLikeAnalyzer;
 use Psalm\Internal\Analyzer\Statements\Expression\Call\ArgumentsAnalyzer;
 use Psalm\Internal\Analyzer\StatementsAnalyzer;
 use Psalm\Internal\Analyzer\TraitAnalyzer;
-use Psalm\Internal\ClauseConjunction;
 use Psalm\Internal\MethodIdentifier;
 use Psalm\Internal\Type\Comparator\TypeComparisonResult;
 use Psalm\Internal\Type\Comparator\UnionTypeComparator;
@@ -829,7 +829,7 @@ class CallAnalyzer
             } elseif ($arg_value
                 && count($var_possibilities->rule) === 1
             ) {
-                $assert_clauses = ClauseConjunction::empty();
+                $assert_clauses = [];
 
                 $single_rule = $var_possibilities->rule[0];
 
@@ -843,14 +843,16 @@ class CallAnalyzer
                         $statements_analyzer->getCodebase(),
                     );
                 } elseif ($single_rule instanceof Falsy) {
-                    $assert_clauses = FormulaGenerator::getFormula(
-                        spl_object_id($arg_value),
-                        spl_object_id($arg_value),
-                        $arg_value,
-                        $context->self,
-                        $statements_analyzer,
-                        $codebase,
-                    )->getNegation();
+                    $assert_clauses = Algebra::negateFormula(
+                        FormulaGenerator::getFormula(
+                            spl_object_id($arg_value),
+                            spl_object_id($arg_value),
+                            $arg_value,
+                            $context->self,
+                            $statements_analyzer,
+                            $codebase
+                        )
+                    );
                 } elseif ($single_rule instanceof IsType
                     && $single_rule->type instanceof TTrue
                 ) {
@@ -869,9 +871,13 @@ class CallAnalyzer
                     );
                 }
 
-                $simplified_clauses = $context->clauses->andSimplified($assert_clauses);
+                $simplified_clauses = Algebra::simplifyCNF(
+                    [...$context->clauses, ...$assert_clauses]
+                );
 
-                $assert_type_assertions = $simplified_clauses->getTruthsFromFormula();
+                $assert_type_assertions = Algebra::getTruthsFromFormula(
+                    $simplified_clauses
+                );
 
                 $type_assertions = array_merge($type_assertions, $assert_type_assertions);
             }

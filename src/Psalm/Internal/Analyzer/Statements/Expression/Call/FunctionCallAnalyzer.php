@@ -6,6 +6,7 @@ use PhpParser;
 use Psalm\CodeLocation;
 use Psalm\Codebase;
 use Psalm\Context;
+use Psalm\Internal\Algebra;
 use Psalm\Internal\Algebra\FormulaGenerator;
 use Psalm\Internal\Analyzer\AlgebraAnalyzer;
 use Psalm\Internal\Analyzer\FunctionLikeAnalyzer;
@@ -960,9 +961,9 @@ class FunctionCallAnalyzer extends CallAnalyzer
             [],
         );
 
-        $simplified_clauses = $context->clauses->andSimplified($assert_clauses);
+        $simplified_clauses = Algebra::simplifyCNF([...$context->clauses, ...$assert_clauses]);
 
-        $assert_type_assertions = $simplified_clauses->getTruthsFromFormula();
+        $assert_type_assertions = Algebra::getTruthsFromFormula($simplified_clauses);
 
         $changed_var_ids = [];
 

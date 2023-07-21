@@ -3,7 +3,7 @@
 namespace Psalm\Internal\Scope;
 
 use PhpParser;
-use Psalm\Internal\ClauseConjunction;
+use Psalm\Internal\Clause;
 use Psalm\Type\Union;
 
 /**
@@ -38,15 +38,13 @@ class SwitchScope
 
     public ?PhpParser\Node\Expr $leftover_case_equality_expr = null;
 
-    public ClauseConjunction $negated_clauses;
+    /**
+     * @var list<Clause>
+     */
+    public $negated_clauses = [];
 
     /**
      * @var array<string, bool>|null
      */
-    public ?array $new_assigned_var_ids = null;
-
-    public function __construct()
-    {
-        $this->negated_clauses = ClauseConjunction::empty();
-    }
+    public $new_assigned_var_ids;
 }
