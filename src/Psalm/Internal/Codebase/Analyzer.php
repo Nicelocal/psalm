@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Psalm\Internal\Codebase;
 
 use Closure;
@@ -191,7 +193,7 @@ class Analyzer
         Config $config,
         FileProvider $file_provider,
         FileStorageProvider $file_storage_provider,
-        Progress $progress
+        Progress $progress,
     ) {
         $this->config = $config;
         $this->file_provider = $file_provider;
@@ -235,7 +237,7 @@ class Analyzer
     private function getFileAnalyzer(
         ProjectAnalyzer $project_analyzer,
         string $file_path,
-        array $filetype_analyzers
+        array $filetype_analyzers,
     ): FileAnalyzer {
         $extension = pathinfo($file_path, PATHINFO_EXTENSION);
 
@@ -256,7 +258,7 @@ class Analyzer
         ProjectAnalyzer $project_analyzer,
         int $pool_size,
         bool $alter_code,
-        bool $consolidate_analyzed_data = false
+        bool $consolidate_analyzed_data = false,
     ): void {
         $this->loadCachedResults($project_analyzer);
 
@@ -1203,7 +1205,7 @@ class Analyzer
         string $file_path,
         PhpParser\Node $node,
         string $node_type,
-        PhpParser\Node $parent_node = null
+        PhpParser\Node $parent_node = null,
     ): void {
         if ($node_type === '') {
             throw new UnexpectedValueException('non-empty node_type expected');
@@ -1220,7 +1222,7 @@ class Analyzer
         int $start_position,
         int $end_position,
         string $reference,
-        int $argument_number
+        int $argument_number,
     ): void {
         if ($reference === '') {
             throw new UnexpectedValueException('non-empty reference expected');

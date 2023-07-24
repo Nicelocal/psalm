@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Psalm\Internal\PhpVisitor\Reflector;
 
 use AssertionError;
@@ -91,7 +93,7 @@ class FunctionLikeDocblockScanner
         FunctionDocblockComment $docblock_info,
         bool $is_functionlike_override,
         bool $fake_method,
-        string $cased_function_id
+        string $cased_function_id,
     ): void {
         self::handleUnexpectedTags($docblock_info, $storage, $stmt, $file_scanner, $cased_function_id);
 
@@ -444,7 +446,7 @@ class FunctionLikeDocblockScanner
         FunctionLikeStorage $storage,
         ?ClassLikeStorage $classlike_storage,
         string $cased_function_id,
-        array $function_template_types
+        array $function_template_types,
     ): array {
         $fixed_type_tokens = TypeTokenizer::getFullyQualifiedTokens(
             $docblock_return_type,
@@ -571,7 +573,7 @@ class FunctionLikeDocblockScanner
         array $class_template_types,
         array $function_template_types,
         array $type_aliases,
-        ?string $self_fqcln
+        ?string $self_fqcln,
     ): ?array {
         $is_negation = false;
         $is_loose_equality = false;
@@ -706,7 +708,7 @@ class FunctionLikeDocblockScanner
         array $docblock_params,
         PhpParser\Node\FunctionLike $function,
         bool $fake_method,
-        ?string $fq_classlike_name
+        ?string $fq_classlike_name,
     ): void {
         $base = $classlike_storage ? $classlike_storage->name . '::' : '';
 
@@ -939,7 +941,7 @@ class FunctionLikeDocblockScanner
         array $type_aliases,
         ?ClassLikeStorage $classlike_storage,
         string $cased_function_id,
-        FileStorage $file_storage
+        FileStorage $file_storage,
     ): void {
         if (!$fake_method
             && $docblock_info->return_type_line_number
@@ -1095,7 +1097,7 @@ class FunctionLikeDocblockScanner
 
     private static function handleTaintFlow(
         FunctionDocblockComment $docblock_info,
-        FunctionLikeStorage $storage
+        FunctionLikeStorage $storage,
     ): void {
         if ($docblock_info->flows) {
             foreach ($docblock_info->flows as $flow) {
@@ -1183,7 +1185,7 @@ class FunctionLikeDocblockScanner
         ?ClassLikeStorage $classlike_storage,
         string $cased_function_id,
         FileStorage $file_storage,
-        FileScanner $file_scanner
+        FileScanner $file_scanner,
     ): void {
         try {
             [$fixed_type_tokens, $function_template_types] = self::getConditionalSanitizedTypeTokens(
@@ -1238,7 +1240,7 @@ class FunctionLikeDocblockScanner
         array $class_template_types,
         array $function_template_types,
         array $type_aliases,
-        ?ClassLikeStorage $classlike_storage
+        ?ClassLikeStorage $classlike_storage,
     ): void {
         if ($docblock_info->assertions) {
             $storage->assertions = [];
@@ -1399,7 +1401,7 @@ class FunctionLikeDocblockScanner
         PhpParser\Node\FunctionLike $stmt,
         FunctionLikeStorage $storage,
         Codebase $codebase,
-        FileStorage $file_storage
+        FileStorage $file_storage,
     ): void {
         $param_name = substr($docblock_param_out['name'], 1);
 
@@ -1451,7 +1453,7 @@ class FunctionLikeDocblockScanner
         array $type_aliases,
         FileScanner $file_scanner,
         PhpParser\Node\FunctionLike $stmt,
-        string $cased_function_id
+        string $cased_function_id,
     ): array {
         $storage->template_types = [];
 
@@ -1520,7 +1522,7 @@ class FunctionLikeDocblockScanner
         FunctionLikeStorage $storage,
         PhpParser\Node\FunctionLike $stmt,
         FileScanner $file_scanner,
-        string $cased_function_id
+        string $cased_function_id,
     ): void {
         foreach ($docblock_info->unexpected_tags as $tag => $details) {
             foreach ($details['lines'] as $line) {

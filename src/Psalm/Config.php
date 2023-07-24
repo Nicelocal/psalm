@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Psalm;
 
 use Composer\Autoload\ClassLoader;
@@ -817,7 +819,7 @@ class Config
         string $base_dir,
         string $file_contents,
         ?string $current_dir = null,
-        ?string $file_path = null
+        ?string $file_path = null,
     ): Config {
         if ($current_dir === null) {
             $current_dir = $base_dir;
@@ -932,7 +934,7 @@ class Config
         DOMAttr $attribute,
         string $file_contents,
         self $config,
-        string $config_path
+        string $config_path,
     ): void {
         $line = $attribute->getLineNo();
         assert($line > 0); // getLineNo() always returns non-zero for nodes loaded from file
@@ -958,7 +960,7 @@ class Config
         DOMElement $deprecated_element_xml,
         string $file_contents,
         self $config,
-        string $config_path
+        string $config_path,
     ): void {
         $line = $deprecated_element_xml->getLineNo();
         assert($line > 0);
@@ -984,7 +986,7 @@ class Config
         self $config,
         DOMDocument $dom_document,
         string $file_contents,
-        string $config_path
+        string $config_path,
     ): void {
         $config->config_issues = [];
 
@@ -1028,7 +1030,7 @@ class Config
         string $base_dir,
         string $file_contents,
         string $current_dir,
-        ?string $config_path
+        ?string $config_path,
     ): self {
         $config = new static();
 
@@ -1308,8 +1310,7 @@ class Config
         if (isset($config_xml->universalObjectCrates) && isset($config_xml->universalObjectCrates->class)) {
             /** @var SimpleXMLElement $universal_object_crate */
             foreach ($config_xml->universalObjectCrates->class as $universal_object_crate) {
-                /** @var string $classString */
-                $classString = $universal_object_crate['name'];
+                $classString = (string) $universal_object_crate['name'];
                 $config->addUniversalObjectCrate($classString);
             }
         }
@@ -2448,10 +2449,7 @@ class Config
         }
     }
 
-    /**
-     * @return string|false
-     */
-    public function getComposerFilePathForClassLike(string $fq_classlike_name)
+    public function getComposerFilePathForClassLike(string $fq_classlike_name): string|false
     {
         if (!$this->composer_class_loader) {
             return false;

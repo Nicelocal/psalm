@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Psalm\Internal\Analyzer\Statements\Block;
 
 use PhpParser;
@@ -81,7 +83,7 @@ class ForeachAnalyzer
     public static function analyze(
         StatementsAnalyzer $statements_analyzer,
         PhpParser\Node\Stmt\Foreach_ $stmt,
-        Context $context
+        Context $context,
     ): ?bool {
         $var_comments = [];
 
@@ -409,7 +411,7 @@ class ForeachAnalyzer
         Context $context,
         ?Union &$key_type,
         ?Union &$value_type,
-        bool &$always_non_empty_array
+        bool &$always_non_empty_array,
     ): ?bool {
         if ($iterator_type->isNull()) {
             IssueBuffer::maybeAdd(
@@ -728,7 +730,7 @@ class ForeachAnalyzer
         Context $context,
         ?Union &$key_type,
         ?Union &$value_type,
-        bool &$has_valid_iterator
+        bool &$has_valid_iterator,
     ): void {
         if ($iterator_atomic_type->extra_types) {
             $iterator_atomic_types = array_merge(
@@ -965,7 +967,7 @@ class ForeachAnalyzer
         Atomic $iterator_atomic_type,
         Codebase $codebase,
         ?Union &$key_type,
-        ?Union &$value_type
+        ?Union &$value_type,
     ): void {
         if ($iterator_atomic_type instanceof TIterable
             || ($iterator_atomic_type instanceof TGenericObject
@@ -1042,7 +1044,7 @@ class ForeachAnalyzer
         StatementsAnalyzer $statements_analyzer,
         PhpParser\Node\Expr $foreach_expr,
         Context $context,
-        string $method_name
+        string $method_name,
     ): ?Union {
         $old_data_provider = $statements_analyzer->node_data;
 
@@ -1101,7 +1103,7 @@ class ForeachAnalyzer
         string $calling_class,
         array $template_extended_params,
         ?array $class_template_types = null,
-        ?array $calling_type_params = null
+        ?array $calling_type_params = null,
     ): ?Union {
         if ($calling_class === $template_class) {
             if (isset($class_template_types[$template_name]) && $calling_type_params) {

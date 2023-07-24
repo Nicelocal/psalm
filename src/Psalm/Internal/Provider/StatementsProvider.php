@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Psalm\Internal\Provider;
 
 use PhpParser;
@@ -58,10 +60,7 @@ class StatementsProvider
 
     public ?ParserCacheProvider $parser_cache_provider = null;
 
-    /**
-     * @var int|bool
-     */
-    private $this_modified_time;
+    private int|bool $this_modified_time;
 
     private ?FileStorageCacheProvider $file_storage_cache_provider = null;
 
@@ -102,7 +101,7 @@ class StatementsProvider
     public function __construct(
         FileProvider $file_provider,
         ?ParserCacheProvider $parser_cache_provider = null,
-        ?FileStorageCacheProvider $file_storage_cache_provider = null
+        ?FileStorageCacheProvider $file_storage_cache_provider = null,
     ) {
         $this->file_provider = $file_provider;
         $this->parser_cache_provider = $parser_cache_provider;
@@ -116,7 +115,7 @@ class StatementsProvider
     public function getStatementsForFile(
         string $file_path,
         int $analysis_php_version_id,
-        ?Progress $progress = null
+        ?Progress $progress = null,
     ): array {
         unset($this->errors[$file_path]);
 
@@ -401,7 +400,7 @@ class StatementsProvider
         ?string $file_path = null,
         ?string $existing_file_contents = null,
         ?array  $existing_statements = null,
-        ?array  $file_changes = null
+        ?array  $file_changes = null,
     ): array {
         $attributes = [
             'comments', 'startLine', 'startFilePos', 'endFilePos',

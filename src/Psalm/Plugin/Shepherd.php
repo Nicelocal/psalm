@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Psalm\Plugin;
 
 use BadMethodCallException;
@@ -46,7 +48,7 @@ final class Shepherd implements AfterAnalysisInterface
      * Called after analysis is complete
      */
     public static function afterAnalysis(
-        AfterAnalysisEvent $event
+        AfterAnalysisEvent $event,
     ): void {
         if (!function_exists('curl_init')) {
             fwrite(STDERR, "No curl found, cannot send data to shepherd server.\n");

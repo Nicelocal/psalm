@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Psalm\Internal;
 
 use RuntimeException;
@@ -70,7 +72,7 @@ final class ErrorHandler
             int $error_code,
             string $error_message,
             string $error_filename = 'unknown',
-            int $error_line = -1
+            int $error_line = -1,
         ): bool {
             if (str_contains($error_filename, 'vendor/zoon') && !str_contains($error_filename, 'vendor/zoon/check')) {
                 return false;

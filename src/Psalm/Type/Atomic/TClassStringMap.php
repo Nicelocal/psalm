@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Psalm\Type\Atomic;
 
 use Psalm\Codebase;
@@ -40,7 +42,7 @@ final class TClassStringMap extends Atomic
         string $param_name,
         ?TNamedObject $as_type,
         Union $value_param,
-        bool $from_docblock = false
+        bool $from_docblock = false,
     ) {
         $this->param_name = $param_name;
         $this->as_type = $as_type;
@@ -67,7 +69,7 @@ final class TClassStringMap extends Atomic
         ?string $namespace,
         array $aliased_classes,
         ?string $this_class,
-        bool $use_phpdoc_format
+        bool $use_phpdoc_format,
     ): string {
         if ($use_phpdoc_format) {
             return (new TArray([Type::getString(), $this->value_param]))
@@ -100,7 +102,7 @@ final class TClassStringMap extends Atomic
         ?string $namespace,
         array $aliased_classes,
         ?string $this_class,
-        int $analysis_php_version_id
+        int $analysis_php_version_id,
     ): string {
         return 'array';
     }
@@ -129,7 +131,7 @@ final class TClassStringMap extends Atomic
         ?string $calling_function = null,
         bool $replace = true,
         bool $add_lower_bound = false,
-        int $depth = 0
+        int $depth = 0,
     ): self {
         $cloned = null;
 
@@ -183,7 +185,7 @@ final class TClassStringMap extends Atomic
      */
     public function replaceTemplateTypesWithArgTypes(
         TemplateResult $template_result,
-        ?Codebase $codebase
+        ?Codebase $codebase,
     ): self {
         $value_param = TemplateInferredTypeReplacer::replace(
             $this->value_param,

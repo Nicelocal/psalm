@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Psalm\Type;
 
 use InvalidArgumentException;
@@ -158,7 +160,7 @@ abstract class Atomic implements TypeNode
         ?int   $offset_start = null,
         ?int   $offset_end = null,
         ?string $text = null,
-        bool    $from_docblock = false
+        bool    $from_docblock = false,
     ): Atomic {
         $result = self::createInner(
             $value,
@@ -184,7 +186,7 @@ abstract class Atomic implements TypeNode
         ?int   $analysis_php_version_id = null,
         array  $template_type_map = [],
         array  $type_aliases = [],
-        bool   $from_docblock = false
+        bool   $from_docblock = false,
     ): Atomic {
         switch ($value) {
             case 'int':
@@ -718,7 +720,7 @@ abstract class Atomic implements TypeNode
         ?string $namespace,
         array $aliased_classes,
         ?string $this_class,
-        bool $use_phpdoc_format
+        bool $use_phpdoc_format,
     ): string {
         return $this->getKey();
     }
@@ -733,7 +735,7 @@ abstract class Atomic implements TypeNode
         ?string $namespace,
         array $aliased_classes,
         ?string $this_class,
-        int $analysis_php_version_id
+        int $analysis_php_version_id,
     ): ?string;
 
     abstract public function canBeFullyExpressedInPhp(int $analysis_php_version_id): bool;
@@ -751,7 +753,7 @@ abstract class Atomic implements TypeNode
         ?string $calling_function = null,
         bool $replace = true,
         bool $add_lower_bound = false,
-        int $depth = 0
+        int $depth = 0,
     ): self {
         // do nothing
         return $this;
@@ -762,7 +764,7 @@ abstract class Atomic implements TypeNode
      */
     public function replaceTemplateTypesWithArgTypes(
         TemplateResult $template_result,
-        ?Codebase $codebase
+        ?Codebase $codebase,
     ): self {
         // do nothing
         return $this;
