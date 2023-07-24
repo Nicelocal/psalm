@@ -990,12 +990,21 @@ class Config
     ): void {
         $config->config_issues = [];
 
+        // Attributes to be removed in Psalm 6
+        $deprecated_attributes = [];
+
         /** @var list<string> */
         $deprecated_elements = [];
 
         $psalm_element_item = $dom_document->getElementsByTagName('psalm')->item(0);
         assert($psalm_element_item !== null);
         $attributes = $psalm_element_item->attributes;
+
+        foreach ($attributes as $attribute) {
+            if (in_array($attribute->name, $deprecated_attributes, true)) {
+                self::processDeprecatedAttribute($attribute, $file_contents, $config, $config_path);
+            }
+        }
 
         foreach ($deprecated_elements as $deprecated_element) {
             $deprecated_elements_xml = $dom_document->getElementsByTagNameNS(
