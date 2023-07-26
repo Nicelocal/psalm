@@ -16,6 +16,21 @@
 - [BC] All parameters and return typehints are now strictly typed.
 
 - [BC] `strict_types` is now applied to all files of the Psalm codebase.
+- [BC] Property `Config::$shepherd_host` was replaced with `Config::$shepherd_endpoint`
+
+- [BC] Methods `Codebase::getSymbolLocation()` and `Codebase::getSymbolInformation()` were replaced with `Codebase::getSymbolLocationByReference()`
+
+- [BC] Method `Psalm\Type\Atomic\TKeyedArray::getList()` was removed
+
+- [BC] Method `Psalm\Storage\FunctionLikeStorage::getSignature()` was replaced with `FunctionLikeStorage::getCompletionSignature()`
+
+- [BC] Property `Psalm\Storage\FunctionLikeStorage::$unused_docblock_params` was replaced with `FunctionLikeStorage::$unused_docblock_parameters`
+
+- [BC] Method `Plugin\Shepherd::getCurlErrorMessage()` was removed
+
+- [BC] Property `Config::$find_unused_code` changed default value from false to true
+
+- [BC] Property `Config::$find_unused_baseline_entry` changed default value from false to true
 
 # Upgrading from Psalm 4 to Psalm 5
 ## Changed
