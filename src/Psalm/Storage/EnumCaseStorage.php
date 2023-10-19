@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Psalm\Storage;
 
 use Psalm\CodeLocation;
+use Psalm\Type\Atomic\TLiteralInt;
+use Psalm\Type\Atomic\TLiteralString;
 
 final class EnumCaseStorage
 {
     /**
-     * @var int|string|null
+     * @var TLiteralString|TLiteralInt|null
      */
     public $value;
 

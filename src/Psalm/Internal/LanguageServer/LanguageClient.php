@@ -7,6 +7,9 @@ namespace Psalm\Internal\LanguageServer;
 use JsonMapper;
 use LanguageServerProtocol\LogMessage;
 use LanguageServerProtocol\LogTrace;
+use Psalm\Internal\LanguageServer\Client\Progress\LegacyProgress;
+use Psalm\Internal\LanguageServer\Client\Progress\Progress;
+use Psalm\Internal\LanguageServer\Client\Progress\ProgressInterface;
 use Psalm\Internal\LanguageServer\Client\TextDocument as ClientTextDocument;
 use Psalm\Internal\LanguageServer\Client\Workspace as ClientWorkspace;
 use Revolt\EventLoop;
@@ -133,6 +136,15 @@ class LanguageClient
         );
     }
 
+    public function makeProgress(string $token): ProgressInterface
+    {
+        if ($this->server->clientCapabilities->window->workDoneProgress ?? false) {
+            return new Progress($this->handler, $token);
+        } else {
+            return new LegacyProgress($this->handler);
+        }
+    }
+
     /**
      * Configuration Refreshed from Client
      *
@@ -147,7 +159,7 @@ class LanguageClient
         }
 
         /** @var array */
-        $array = json_decode(json_encode($config), true);
+        $array = json_decode((string) json_encode($config), true);
 
         if (isset($array['hideWarnings'])) {
             $this->clientConfiguration->hideWarnings = (bool) $array['hideWarnings'];

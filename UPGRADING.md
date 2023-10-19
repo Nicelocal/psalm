@@ -3,6 +3,8 @@
 
 - The minimum PHP version was raised to PHP 8.1.17.
 
+- [BC] The configuration settings `ignoreInternalFunctionFalseReturn` and `ignoreInternalFunctionNullReturn` are now defaulted to `false`
+
 - [BC] Switched the internal representation of `list<T>` and `non-empty-list<T>` from the TList and TNonEmptyList classes to an unsealed list shape: the TList, TNonEmptyList and TCallableList classes were removed.
   Nothing will change for users: the `list<T>` and `non-empty-list<T>` syntax will remain supported and its semantics unchanged.
   Psalm 5 already deprecates the `TList`, `TNonEmptyList` and `TCallableList` classes: use `\Psalm\Type::getListAtomic`, `\Psalm\Type::getNonEmptyListAtomic` and `\Psalm\Type::getCallableListAtomic` to instantiate list atomics, or directly instantiate TKeyedArray objects with `is_list=true` where appropriate.
@@ -10,12 +12,10 @@
 - [BC] The only optional boolean parameter of `TKeyedArray::getGenericArrayType` was removed, and was replaced with a string parameter with a different meaning.
 
 - [BC] The `TDependentListKey` type was removed and replaced with an optional property of the `TIntRange` type.
+- [BC] `TCallableArray` and `TCallableList` removed and replaced with `TCallableKeyedArray`.
 
-- [BC] The return type of `Psalm\Internal\LanguageServer\ProtocolWriter#write() changed from `Amp\Promise` to `void` due to the switch to Amp v3
+- [BC] Value of constant `Psalm\Type\TaintKindGroup::ALL_INPUT` changed to reflect new `TaintKind::INPUT_SLEEP` and `TaintKind::INPUT_XPATH` have been added. Accordingly, default values for `$taint` parameters of `Psalm\Codebase::addTaintSource()` and `Psalm\Codebase::addTaintSink()` have been changed as well.
 
-- [BC] All parameters and return typehints are now strictly typed.
-
-- [BC] `strict_types` is now applied to all files of the Psalm codebase.
 - [BC] Property `Config::$shepherd_host` was replaced with `Config::$shepherd_endpoint`
 
 - [BC] Methods `Codebase::getSymbolLocation()` and `Codebase::getSymbolInformation()` were replaced with `Codebase::getSymbolLocationByReference()`
@@ -31,6 +31,12 @@
 - [BC] Property `Config::$find_unused_code` changed default value from false to true
 
 - [BC] Property `Config::$find_unused_baseline_entry` changed default value from false to true
+
+- [BC] The return type of `Psalm\Internal\LanguageServer\ProtocolWriter#write() changed from `Amp\Promise` to `void` due to the switch to Amp v3
+
+- [BC] Properties `Psalm\Type\Atomic\TLiteralFloat::$value` and `Psalm\Type\Atomic\TLiteralInt::$value` became typed (`float` and `int` respectively)
+
+- [BC] Property `Psalm\Storage\EnumCaseStorage::$value` changed from `int|string|null` to `TLiteralInt|TLiteralString|null`
 
 # Upgrading from Psalm 4 to Psalm 5
 ## Changed

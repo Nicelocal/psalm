@@ -389,10 +389,8 @@ class TextDocument
      * The code action request is sent from the client to the server to compute commands
      * for a given text document and range. These commands are typically code fixes to
      * either fix problems or to beautify/refactor code.
-     *
-     * @psalm-suppress PossiblyUnusedParam
      */
-    public function codeAction(TextDocumentIdentifier $textDocument, Range $range, CodeActionContext $context): ?array
+    public function codeAction(TextDocumentIdentifier $textDocument, CodeActionContext $context): ?array
     {
         if (!$this->server->client->clientConfiguration->provideCodeActions) {
             return null;
@@ -448,25 +446,6 @@ class TextDocument
                     ],
                 ]),
             );
-
-            /*
-            $fixers["fixAll.{$diagnostic->data->type}"] = new CodeAction(
-                "FixAll {$diagnostic->data->type} for this file",
-                CodeActionKind::QUICK_FIX,
-                null,
-                null,
-                null,
-                null,
-                new Command(
-                    "Fix All",
-                    "psalm.fixall",
-                    [
-                        'uri' => $textDocument->uri,
-                        'type' => $diagnostic->data->type
-                    ]
-                )
-            );
-            */
         }
 
         if (empty($fixers)) {
