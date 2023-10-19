@@ -68,7 +68,7 @@ use function strtolower;
 /**
  * @internal
  */
-class FunctionLikeNodeScanner
+final class FunctionLikeNodeScanner
 {
     private FileScanner $file_scanner;
 
@@ -123,8 +123,10 @@ class FunctionLikeNodeScanner
     /**
      * @param  bool $fake_method in the case of @method annotations we do something a little strange
      */
-    public function start(PhpParser\Node\FunctionLike $stmt, bool $fake_method = false): FunctionStorage|MethodStorage|false
-    {
+    public function start(
+        PhpParser\Node\FunctionLike $stmt,
+        bool $fake_method = false,
+    ): FunctionStorage|MethodStorage|false {
         if ($stmt instanceof PhpParser\Node\Expr\Closure
             || $stmt instanceof PhpParser\Node\Expr\ArrowFunction
         ) {
@@ -244,6 +246,7 @@ class FunctionLikeNodeScanner
         if ($stmt instanceof PhpParser\Node\Stmt\Function_
             || $stmt instanceof PhpParser\Node\Stmt\ClassMethod
         ) {
+            /** @psalm-suppress RedundantCondition See https://github.com/vimeo/psalm/issues/10296 */
             if ($stmt instanceof PhpParser\Node\Stmt\ClassMethod
                 && $storage instanceof MethodStorage
                 && $classlike_storage

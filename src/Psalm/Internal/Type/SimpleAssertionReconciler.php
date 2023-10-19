@@ -97,7 +97,7 @@ use function strtolower;
  *
  * @internal
  */
-class SimpleAssertionReconciler extends Reconciler
+final class SimpleAssertionReconciler extends Reconciler
 {
     /**
      * @param   string[]  $suppressed_issues
@@ -2943,7 +2943,7 @@ class SimpleAssertionReconciler extends Reconciler
     private static function reconcileValueOf(
         Codebase $codebase,
         TValueOf $assertion_type,
-        int &$failed_reconciliation
+        int &$failed_reconciliation,
     ): ?Union {
         $reconciled_types = [];
 

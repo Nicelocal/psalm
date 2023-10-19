@@ -75,7 +75,7 @@ use const ARRAY_FILTER_USE_KEY;
 /**
  * @internal
  */
-class AtomicPropertyFetchAnalyzer
+final class AtomicPropertyFetchAnalyzer
 {
     /**
      * @param array<string> $invalid_fetch_types $invalid_fetch_types
@@ -979,7 +979,7 @@ class AtomicPropertyFetchAnalyzer
         StatementsAnalyzer $statements_analyzer,
         PropertyFetch $stmt,
         Union $stmt_var_type,
-        ClassLikeStorage $class_storage
+        ClassLikeStorage $class_storage,
     ): void {
         $relevant_enum_cases = array_filter(
             $stmt_var_type->getAtomicTypes(),

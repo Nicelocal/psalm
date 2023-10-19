@@ -55,7 +55,7 @@ use function strtolower;
  *
  * Handles information about class methods
  */
-class Methods
+final class Methods
 {
     private ClassLikeStorageProvider $classlike_storage_provider;
 
@@ -560,7 +560,7 @@ class Methods
         ?string &$self_class,
         ?SourceAnalyzer $source_analyzer = null,
         ?array $args = null,
-        ?TemplateResult $template_result = null
+        ?TemplateResult $template_result = null,
     ): ?Union {
         $original_fq_class_name = $method_id->fq_class_name;
         $original_method_name = $method_id->method_name;

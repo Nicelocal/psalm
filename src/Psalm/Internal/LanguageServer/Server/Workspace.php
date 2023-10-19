@@ -23,7 +23,7 @@ use function realpath;
  *
  * @internal
  */
-class Workspace
+final class Workspace
 {
     protected LanguageServer $server;
 
@@ -106,9 +106,9 @@ class Workspace
     /**
      * A notification sent from the client to the server to signal the change of configuration settings.
      *
-     * @psalm-suppress PossiblyUnusedMethod
+     * @psalm-suppress PossiblyUnusedMethod, UnusedParam
      */
-    public function didChangeConfiguration(): void
+    public function didChangeConfiguration(mixed $settings): void
     {
         $this->server->logDebug(
             'workspace/didChangeConfiguration',
