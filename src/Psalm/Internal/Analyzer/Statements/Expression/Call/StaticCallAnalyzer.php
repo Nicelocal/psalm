@@ -105,7 +105,7 @@ class StaticCallAnalyzer extends CallAnalyzer
                 if ($context->isPhantomClass($fq_class_name)) {
                     return true;
                 }
-            } elseif ($context->check_classes) {
+            } else {
                 $aliases = $statements_analyzer->getAliases();
 
                 if ($context->calling_method_id
@@ -155,6 +155,7 @@ class StaticCallAnalyzer extends CallAnalyzer
                             : null,
                         $statements_analyzer->getSuppressedIssues(),
                         new ClassLikeNameOptions(false, false, false, true),
+                        $context->check_classes,
                     );
                 }
 
