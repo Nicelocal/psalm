@@ -43,6 +43,8 @@ use function microtime;
 use function number_format;
 use function pathinfo;
 use function preg_replace;
+use function str_ends_with;
+use function str_starts_with;
 use function strlen;
 use function strpos;
 use function strtolower;
@@ -101,14 +103,6 @@ use const PHP_INT_MAX;
  */
 final class Analyzer
 {
-    private Config $config;
-
-    private FileProvider $file_provider;
-
-    private FileStorageProvider $file_storage_provider;
-
-    private Progress $progress;
-
     /**
      * Used to store counts of mixed vs non-mixed variables
      *
@@ -190,15 +184,11 @@ final class Analyzer
     public array $mutable_classes = [];
 
     public function __construct(
-        Config $config,
-        FileProvider $file_provider,
-        FileStorageProvider $file_storage_provider,
-        Progress $progress,
+        private readonly Config $config,
+        private readonly FileProvider $file_provider,
+        private readonly FileStorageProvider $file_storage_provider,
+        private readonly Progress $progress,
     ) {
-        $this->config = $config;
-        $this->file_provider = $file_provider;
-        $this->file_storage_provider = $file_storage_provider;
-        $this->progress = $progress;
     }
 
     /**
@@ -270,7 +260,7 @@ final class Analyzer
 
         $this->files_to_analyze = array_filter(
             $this->files_to_analyze,
-            [$this->file_provider, 'fileExists'],
+            $this->file_provider->fileExists(...),
         );
 
         $this->doAnalysis($project_analyzer, $pool_size);
@@ -335,7 +325,7 @@ final class Analyzer
 
         $codebase = $project_analyzer->getCodebase();
 
-        $analysis_worker = Closure::fromCallable([$this, 'analysisWorker']);
+        $analysis_worker = Closure::fromCallable($this->analysisWorker(...));
 
         $task_done_closure =
             /**
@@ -406,7 +396,7 @@ final class Analyzer
                     $file_reference_provider->setMethodParamUses([]);
                 },
                 $analysis_worker,
-                Closure::fromCallable([$this, 'getWorkerData']),
+                Closure::fromCallable($this->getWorkerData(...)),
                 $task_done_closure,
             );
 
@@ -617,7 +607,7 @@ final class Analyzer
                 [$base_class, $trait] = explode('&', $changed_member);
 
                 foreach ($all_referencing_methods as $member_id => $_) {
-                    if (strpos($member_id, $base_class . '::') !== 0) {
+                    if (!str_starts_with($member_id, $base_class . '::')) {
                         continue;
                     }
 
@@ -639,7 +629,7 @@ final class Analyzer
                 // also check for things that might invalidate constructor property initialisation
                 if (isset($all_referencing_methods[$unchanged_signature_member_id])) {
                     foreach ($all_referencing_methods[$unchanged_signature_member_id] as $referencing_method_id => $_) {
-                        if (substr($referencing_method_id, -13) === '::__construct') {
+                        if (str_ends_with($referencing_method_id, '::__construct')) {
                             $referencing_base_classlike = explode('::', $referencing_method_id)[0];
                             $unchanged_signature_classlike = explode('::', $unchanged_signature_member_id)[0];
 
@@ -650,7 +640,7 @@ final class Analyzer
                                     $referencing_storage = $codebase->classlike_storage_provider->get(
                                         $referencing_base_classlike,
                                     );
-                                } catch (InvalidArgumentException $_) {
+                                } catch (InvalidArgumentException) {
                                     // Workaround for #3671
                                     $newly_invalidated_methods[$referencing_method_id] = true;
                                     $referencing_storage = null;
