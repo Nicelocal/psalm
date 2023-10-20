@@ -325,7 +325,7 @@ final class Analyzer
 
         $codebase = $project_analyzer->getCodebase();
 
-        $analysis_worker = Closure::fromCallable($this->analysisWorker(...));
+        $analysis_worker = $this->analysisWorker(...);
 
         $task_done_closure =
             /**
@@ -396,7 +396,7 @@ final class Analyzer
                     $file_reference_provider->setMethodParamUses([]);
                 },
                 $analysis_worker,
-                Closure::fromCallable($this->getWorkerData(...)),
+                $this->getWorkerData(...),
                 $task_done_closure,
             );
 
