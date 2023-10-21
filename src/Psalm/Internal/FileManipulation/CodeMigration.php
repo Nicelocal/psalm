@@ -14,7 +14,12 @@ final class CodeMigration
 {
     use ImmutableNonCloneableTrait;
 
-    public function __construct(public string $source_file_path, public int $source_start, public int $source_end, public string $destination_file_path, public int $destination_start)
-    {
+    public function __construct(
+        public readonly string $source_file_path,
+        public readonly int $source_start,
+        public readonly int $source_end,
+        public readonly string $destination_file_path,
+        public readonly int $destination_start,
+    ) {
     }
 }

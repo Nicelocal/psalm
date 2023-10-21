@@ -385,7 +385,10 @@ final class ForeachAnalyzer
 
         $foreach_context->loop_scope = null;
 
-        $context->vars_possibly_in_scope = [...$foreach_context->vars_possibly_in_scope, ...$context->vars_possibly_in_scope];
+        $context->vars_possibly_in_scope = [
+            ...$foreach_context->vars_possibly_in_scope,
+            ...$context->vars_possibly_in_scope,
+        ];
 
         if ($context->collect_exceptions) {
             $context->mergeExceptions($foreach_context);
@@ -545,7 +548,10 @@ final class ForeachAnalyzer
                 }
             } elseif ($iterator_atomic_type instanceof TIterable) {
                 if ($iterator_atomic_type->extra_types) {
-                    $iterator_atomic_types = [$iterator_atomic_type->setIntersectionTypes([]), ...$iterator_atomic_type->extra_types];
+                    $iterator_atomic_types = [
+                        $iterator_atomic_type->setIntersectionTypes([]),
+                        ...$iterator_atomic_type->extra_types,
+                    ];
                 } else {
                     $iterator_atomic_types = [$iterator_atomic_type];
                 }
@@ -725,7 +731,10 @@ final class ForeachAnalyzer
         bool &$has_valid_iterator,
     ): void {
         if ($iterator_atomic_type->extra_types) {
-            $iterator_atomic_types = [$iterator_atomic_type->setIntersectionTypes([]), ...$iterator_atomic_type->extra_types];
+            $iterator_atomic_types = [
+                $iterator_atomic_type->setIntersectionTypes([]),
+                ...$iterator_atomic_type->extra_types,
+            ];
         } else {
             $iterator_atomic_types = [$iterator_atomic_type];
         }

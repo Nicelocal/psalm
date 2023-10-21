@@ -134,8 +134,11 @@ abstract class FunctionLikeAnalyzer extends SourceAnalyzer
     /**
      * @param TFunction $function
      */
-    public function __construct(protected Closure|Function_|ClassMethod|ArrowFunction $function, SourceAnalyzer $source, protected FunctionLikeStorage $storage)
-    {
+    public function __construct(
+        protected Closure|Function_|ClassMethod|ArrowFunction $function,
+        SourceAnalyzer $source,
+        protected FunctionLikeStorage $storage,
+    ) {
         $this->source = $source;
         $this->suppressed_issues = $source->getSuppressedIssues();
         $this->codebase = $source->getCodebase();
@@ -796,7 +799,10 @@ abstract class FunctionLikeAnalyzer extends SourceAnalyzer
             }
 
             if ($this->return_vars_possibly_in_scope !== null) {
-                $context->vars_possibly_in_scope = [...$context->vars_possibly_in_scope, ...$this->return_vars_possibly_in_scope];
+                $context->vars_possibly_in_scope = [
+                    ...$context->vars_possibly_in_scope,
+                    ...$this->return_vars_possibly_in_scope,
+                ];
             }
 
             foreach ($context->vars_in_scope as $var => $_) {
@@ -1534,7 +1540,10 @@ abstract class FunctionLikeAnalyzer extends SourceAnalyzer
         }
 
         if ($this->return_vars_possibly_in_scope !== null) {
-            $this->return_vars_possibly_in_scope = [...$context->vars_possibly_in_scope, ...$this->return_vars_possibly_in_scope];
+            $this->return_vars_possibly_in_scope = [
+                ...$context->vars_possibly_in_scope,
+                ...$this->return_vars_possibly_in_scope,
+            ];
         } else {
             $this->return_vars_possibly_in_scope = $context->vars_possibly_in_scope;
         }

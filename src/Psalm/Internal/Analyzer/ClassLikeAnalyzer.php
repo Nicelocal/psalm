@@ -91,8 +91,11 @@ abstract class ClassLikeAnalyzer extends SourceAnalyzer
 
     protected ClassLikeStorage $storage;
 
-    public function __construct(protected PhpParser\Node\Stmt\ClassLike $class, SourceAnalyzer $source, protected string $fq_class_name)
-    {
+    public function __construct(
+        protected PhpParser\Node\Stmt\ClassLike $class,
+        SourceAnalyzer $source,
+        protected string $fq_class_name,
+    ) {
         $this->source = $source;
         $this->file_analyzer = $source->getFileAnalyzer();
         $codebase = $source->getCodebase();
@@ -200,7 +203,7 @@ abstract class ClassLikeAnalyzer extends SourceAnalyzer
         ?string $calling_method_id,
         array $suppressed_issues,
         ?ClassLikeNameOptions $options = null,
-        bool $check_classes = true
+        bool $check_classes = true,
     ): ?bool {
         if ($options === null) {
             $options = new ClassLikeNameOptions();

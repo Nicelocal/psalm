@@ -29,15 +29,15 @@ final class PsalmRestarter extends XdebugHandler
 {
     private const REQUIRED_OPCACHE_SETTINGS = [
         'enable_cli' => 1,
-        'jit' => 1254,
+        'jit' => 1205,
         'validate_timestamps' => 0,
         'file_update_protection' => 0,
         'jit_buffer_size' => 512 * 1024 * 1024,
-        'max_accelerated_files' => 1000000,
+        'max_accelerated_files' => 1_000_000,
         'interned_strings_buffer' => 64,
-        'jit_max_root_traces' => 30000000,
-        'jit_max_side_traces' => 30000000,
-        'jit_max_exit_counters' => 30000000,
+        'jit_max_root_traces' => 30_000_000,
+        'jit_max_side_traces' => 30_000_000,
+        'jit_max_exit_counters' => 30_000_000,
         'jit_hot_loop' => 1,
         'jit_hot_func' => 1,
         'jit_hot_return' => 1,
@@ -89,9 +89,9 @@ final class PsalmRestarter extends XdebugHandler
                 if ($ini_name === 'jit_buffer_size') {
                     $value = self::toBytes($value);
                 } elseif ($ini_name === 'enable_cli') {
-                    $value = in_array($value, ['1', 'true', true, 1]);
+                    $value = in_array($value, ['1', 'true', true, 1]) ? 1 : 0;
                 } elseif (is_int($required_value)) {
-                    $required_value = (int) $required_value;
+                    $value = (int) $value;
                 }
                 if ($value !== $required_value) {
                     return true;

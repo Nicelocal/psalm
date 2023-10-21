@@ -56,8 +56,6 @@ final class StaticCallAnalyzer extends CallAnalyzer
         $config = $codebase->config;
 
         if ($stmt->class instanceof PhpParser\Node\Name) {
-            $fq_class_name = null;
-
             if (count($stmt->class->getParts()) === 1
                 && in_array(strtolower($stmt->class->getFirst()), ['self', 'static', 'parent'], true)
             ) {
