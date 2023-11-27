@@ -400,6 +400,15 @@ class MethodSignatureTest extends TestCase
                     '$b' => 'B',
                 ],
             ],
+            'returnIgnoresInlineComments' => [
+                'code' => '<?php
+                    class A {
+                        /** @return bool {@see true}*/
+                        public static function foo():bool {
+                            return true;
+                        }
+                    }',
+            ],
             'allowSomeCovariance' => [
                 'code' => '<?php
                     interface I1 {
@@ -501,22 +510,22 @@ class MethodSignatureTest extends TestCase
 
                     class Observer implements \SplObserver
                     {
-                        public function update(SplSubject $subject)
+                        public function update(SplSubject $subject): void
                         {
                         }
                     }
 
                     class Subject implements \SplSubject
                     {
-                        public function attach(SplObserver $observer)
+                        public function attach(SplObserver $observer): void
                         {
                         }
 
-                        public function detach(SplObserver $observer)
+                        public function detach(SplObserver $observer): void
                         {
                         }
 
-                        public function notify()
+                        public function notify(): void
                         {
                         }
                     }',
@@ -917,6 +926,9 @@ class MethodSignatureTest extends TestCase
                     {
                         public function a(mixed $a): void {}
                     }',
+                'assertions' => [],
+                'ignored_issues' => [],
+                'php_version' => '8.0',
             ],
             'doesNotRequireInterfaceDestructorsToHaveReturnType' => [
                 'code' => '<?php
@@ -1629,6 +1641,28 @@ class MethodSignatureTest extends TestCase
                     }
                 ',
                 'error_message' => 'MethodSignatureMismatch',
+            ],
+            'methodAnnotationReturnMismatch' => [
+                'code' => '<?php
+                /**
+                * @method array bar()
+                */
+                interface Foo
+                {
+                    public function bar(): string;
+                }',
+                'error_message' => 'MismatchingDocblockReturnType',
+            ],
+            'methodAnnotationParamMismatch' => [
+                'code' => '<?php
+                /**
+                * @method string bar(string $i)
+                */
+                interface Foo
+                {
+                    public function bar(int $i): string;
+                }',
+                'error_message' => 'MismatchingDocblockParamType',
             ],
         ];
     }

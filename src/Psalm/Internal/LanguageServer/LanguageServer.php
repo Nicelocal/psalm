@@ -200,7 +200,7 @@ final class LanguageServer extends Dispatcher
 
         $this->protocolReader->on(
             'readMessageGroup',
-            function (): void {
+            static function (): void {
                 //$this->verboseLog('Received message group');
                 //$this->doAnalysis();
             },
@@ -486,6 +486,36 @@ final class LanguageServer extends Dispatcher
              */
             $serverCapabilities->completionProvider->triggerCharacters = ['$', '>', ':',"[", "(", ",", " "];
         }
+                /**
+                 * The server provides document symbol support.
+                 * Support "Find all symbols"
+                 */
+                $serverCapabilities->documentSymbolProvider = false;
+                /**
+                 * The server provides workspace symbol support.
+                 * Support "Find all symbols in workspace"
+                 */
+                $serverCapabilities->workspaceSymbolProvider = false;
+                /**
+                 * The server provides goto definition support.
+                 * Support "Go to definition"
+                 */
+                $serverCapabilities->definitionProvider = true;
+                /**
+                 * The server provides find references support.
+                 * Support "Find all references"
+                 */
+                $serverCapabilities->referencesProvider = false;
+                /**
+                 * The server provides hover support.
+                 * Support "Hover"
+                 */
+                $serverCapabilities->hoverProvider = true;
+                /**
+                 * The server does not support documentHighlight-ing
+                 * Ref: https://github.com/vimeo/psalm/issues/10397
+                 */
+                $serverCapabilities->documentHighlightProvider = false;
 
         /**
          * Whether code action supports the `data` property which is
@@ -712,7 +742,7 @@ final class LanguageServer extends Dispatcher
                     return $diagnostic;
                 },
                 array_filter(
-                    array_map(function (IssueData $issue_data) use (&$issue_baseline) {
+                    array_map(static function (IssueData $issue_data) use (&$issue_baseline) {
                         if (empty($issue_baseline)) {
                             return $issue_data;
                         }

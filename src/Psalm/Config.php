@@ -23,6 +23,7 @@ use Psalm\Exception\ConfigNotFoundException;
 use Psalm\Internal\Analyzer\ClassLikeAnalyzer;
 use Psalm\Internal\Analyzer\FileAnalyzer;
 use Psalm\Internal\Analyzer\ProjectAnalyzer;
+use Psalm\Internal\CliUtils;
 use Psalm\Internal\Composer;
 use Psalm\Internal\EventDispatcher;
 use Psalm\Internal\IncludeCollector;
@@ -156,7 +157,6 @@ final class Config
         'MixedArrayTypeCoercion',
         'MixedAssignment',
         'MixedFunctionCall',
-        'MixedInferredReturnType',
         'MixedMethodCall',
         'MixedOperand',
         'MixedPropertyFetch',
@@ -229,6 +229,8 @@ final class Config
      * The base directory of this config file
      */
     public string $base_dir;
+
+    public ?string $source_filename = null;
 
     /**
      * The PHP version to assume as declared in the config file
@@ -369,6 +371,8 @@ final class Config
 
     public bool $find_unused_baseline_entry = true;
 
+    public bool $find_unused_issue_handler_suppression = true;
+
     public bool $run_taint_analysis = false;
 
     public bool $use_phpstorm_meta_path = true;
@@ -477,6 +481,7 @@ final class Config
         "mysqli" => null,
         "pdo" => null,
         "random" => null,
+        "rdkafka" => null,
         "redis" => null,
         "simplexml" => null,
         "soap" => null,
@@ -935,6 +940,7 @@ final class Config
             'allowNamedArgumentCalls' => 'allow_named_arg_calls',
             'findUnusedPsalmSuppress' => 'find_unused_psalm_suppress',
             'findUnusedBaselineEntry' => 'find_unused_baseline_entry',
+            'findUnusedIssueHandlerSuppression' => 'find_unused_issue_handler_suppression',
             'reportInfo' => 'report_info',
             'restrictReturnTypes' => 'restrict_return_types',
             'limitMethodComplexity' => 'limit_method_complexity',
@@ -950,6 +956,7 @@ final class Config
             }
         }
 
+        $config->source_filename = $config_path;
         if ($config->resolve_from_config_file) {
             $config->base_dir = $base_dir;
         } else {
@@ -1137,6 +1144,66 @@ final class Config
             $config->project_files = ProjectFileFilter::loadFromXMLElement($config_xml->projectFiles, $base_dir, true);
         }
 
+        // any paths passed via CLI should be added to the projectFiles
+        // as they're getting analyzed like if they are part of the project
+        // ProjectAnalyzer::getInstance()->check_paths_files is not populated at this point in time
+        $paths_to_check = CliUtils::getPathsToCheck(null);
+        if ($paths_to_check !== null) {
+            $paths_to_add_to_project_files = array();
+            foreach ($paths_to_check as $path) {
+                // if we have an .xml arg here, the files passed are invalid
+                // valid cases (in which we don't want to add CLI passed files to projectFiles though)
+                // are e.g. if running phpunit tests for psalm itself
+                if (substr($path, -4) === '.xml') {
+                    $paths_to_add_to_project_files = array();
+                    break;
+                }
+
+                // we need an absolute path for checks
+                if ($path[0] !== '/' && DIRECTORY_SEPARATOR === '/') {
+                    $prospective_path = $base_dir . DIRECTORY_SEPARATOR . $path;
+                } else {
+                    $prospective_path = $path;
+                }
+
+                // will report an error when config is loaded anyway
+                if (!file_exists($prospective_path)) {
+                    continue;
+                }
+
+                if ($config->isInProjectDirs($prospective_path)) {
+                    continue;
+                }
+
+                $paths_to_add_to_project_files[] = $prospective_path;
+            }
+
+            if ($paths_to_add_to_project_files !== array() && !isset($config_xml->projectFiles)) {
+                if ($config_xml === null) {
+                    $config_xml = new SimpleXMLElement('<psalm/>');
+                }
+                $config_xml->addChild('projectFiles');
+            }
+
+            if ($paths_to_add_to_project_files !== array() && isset($config_xml->projectFiles)) {
+                foreach ($paths_to_add_to_project_files as $path) {
+                    if (is_dir($path)) {
+                        $child = $config_xml->projectFiles->addChild('directory');
+                    } else {
+                        $child = $config_xml->projectFiles->addChild('file');
+                    }
+
+                    $child->addAttribute('name', $path);
+                }
+
+                $config->project_files = ProjectFileFilter::loadFromXMLElement(
+                    $config_xml->projectFiles,
+                    $base_dir,
+                    true,
+                );
+            }
+        }
+
         if (isset($config_xml->extraFiles)) {
             $config->extra_files = ProjectFileFilter::loadFromXMLElement($config_xml->extraFiles, $base_dir, true);
         }
@@ -1309,6 +1376,12 @@ final class Config
     public function setComposerClassLoader(?ClassLoader $loader = null): void
     {
         $this->composer_class_loader = $loader;
+    }
+
+    /** @return array<string, IssueHandler> */
+    public function getIssueHandlers(): array
+    {
+        return $this->issue_handlers;
     }
 
     public function setAdvancedErrorLevel(string $issue_key, array $config, ?string $default_error_level = null): void
@@ -1856,6 +1929,30 @@ final class Config
         }
 
         return null;
+    }
+
+    /** @return array{type: string, index: int, count: int}[] */
+    public function getIssueHandlerSuppressions(): array
+    {
+        $suppressions = [];
+        foreach ($this->issue_handlers as $key => $handler) {
+            foreach ($handler->getFilters() as $index => $filter) {
+                $suppressions[] = [
+                    'type' => $key,
+                    'index' => $index,
+                    'count' => $filter->suppressions,
+                ];
+            }
+        }
+        return $suppressions;
+    }
+
+    /** @param array{type: string, index: int, count: int}[] $filters */
+    public function combineIssueHandlerSuppressions(array $filters): void
+    {
+        foreach ($filters as $filter) {
+            $this->issue_handlers[$filter['type']]->getFilters()[$filter['index']]->suppressions += $filter['count'];
+        }
     }
 
     public function getReportingLevelForFile(string $issue_type, string $file_path): string

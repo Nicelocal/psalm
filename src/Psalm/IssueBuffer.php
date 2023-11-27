@@ -17,6 +17,7 @@ use Psalm\Issue\ConfigIssue;
 use Psalm\Issue\MixedIssue;
 use Psalm\Issue\TaintedInput;
 use Psalm\Issue\UnusedBaselineEntry;
+use Psalm\Issue\UnusedIssueHandlerSuppression;
 use Psalm\Issue\UnusedPsalmSuppress;
 use Psalm\Plugin\EventHandler\Event\AfterAnalysisEvent;
 use Psalm\Plugin\EventHandler\Event\BeforeAddIssueEvent;
@@ -187,7 +188,7 @@ final class IssueBuffer
             return true;
         }
 
-        $suppressed_issue_position = array_search($issue_type, $suppressed_issues);
+        $suppressed_issue_position = array_search($issue_type, $suppressed_issues, true);
 
         if ($suppressed_issue_position !== false) {
             if (is_int($suppressed_issue_position)) {
@@ -200,7 +201,7 @@ final class IssueBuffer
         $parent_issue_type = Config::getParentIssueType($issue_type);
 
         if ($parent_issue_type) {
-            $suppressed_issue_position = array_search($parent_issue_type, $suppressed_issues);
+            $suppressed_issue_position = array_search($parent_issue_type, $suppressed_issues, true);
 
             if ($suppressed_issue_position !== false) {
                 if (is_int($suppressed_issue_position)) {
@@ -213,7 +214,7 @@ final class IssueBuffer
 
         $suppress_all_position = $config->disable_suppress_all
             ? false
-            : array_search('all', $suppressed_issues);
+            : array_search('all', $suppressed_issues, true);
 
         if ($suppress_all_position !== false) {
             if (is_int($suppress_all_position)) {
@@ -644,6 +645,43 @@ final class IssueBuffer
             }
         }
 
+        if ($codebase->config->find_unused_issue_handler_suppression) {
+            foreach ($codebase->config->getIssueHandlers() as $type => $handler) {
+                foreach ($handler->getFilters() as $filter) {
+                    if ($filter->suppressions > 0 && $filter->getErrorLevel() == Config::REPORT_SUPPRESS) {
+                        continue;
+                    }
+                    $issues_data['config'][] = new IssueData(
+                        IssueData::SEVERITY_ERROR,
+                        0,
+                        0,
+                        UnusedIssueHandlerSuppression::getIssueType(),
+                        sprintf(
+                            'Suppressed issue type "%s" for %s was not thrown.',
+                            $type,
+                            str_replace(
+                                $codebase->config->base_dir,
+                                '',
+                                implode(', ', [...$filter->getFiles(), ...$filter->getDirectories()]),
+                            ),
+                        ),
+                        $codebase->config->source_filename ?? '',
+                        '',
+                        '',
+                        '',
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        UnusedIssueHandlerSuppression::SHORTCODE,
+                        UnusedIssueHandlerSuppression::ERROR_LEVEL,
+                    );
+                }
+            }
+        }
+
         echo self::getOutput(
             $issues_data,
             $project_analyzer->stdout_report_options,
@@ -950,7 +988,7 @@ final class IssueBuffer
         return $output->create();
     }
 
-    private static function alreadyEmitted(string $message): bool
+    public static function alreadyEmitted(string $message): bool
     {
         $sham = sha1($message);
 

@@ -1352,7 +1352,6 @@ class UnusedVariableTest extends TestCase
             'usedInUndefinedFunction' => [
                 'code' => '<?php
                     /**
-                     * @psalm-suppress MixedInferredReturnType
                      * @psalm-suppress MixedReturnStatement
                      */
                     function test(): string {
@@ -2144,12 +2143,19 @@ class UnusedVariableTest extends TestCase
                      * @param bool $b
                      */
                     function validate($b, string $source) : void {
-                        /**
-                         * @psalm-suppress DocblockTypeContradiction
-                         * @psalm-suppress MixedAssignment
-                         */
+                        /** @var bool|string $b */
                         if (!is_bool($b)) {
                             $source = $b;
+                            $b = false;
+                        }
+
+                        /**
+                         * test to ensure $b is only type bool and not bool|string anymore
+                         * after we set $b = false; inside the condition above
+                         * @psalm-suppress TypeDoesNotContainType
+                         */
+                        if (!is_bool($b)) {
+                            echo "this should not happen";
                         }
 
                         print_r($source);
@@ -2231,7 +2237,6 @@ class UnusedVariableTest extends TestCase
                 'code' => '<?php
                     /**
                      * @psalm-suppress MixedReturnStatement
-                     * @psalm-suppress MixedInferredReturnType
                      */
                     function foo(array $data) : array {
                         $output = [];

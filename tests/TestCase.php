@@ -34,10 +34,23 @@ class TestCase extends BaseTestCase
 {
     protected static string $src_dir_path;
 
+    /**
+     * caused by phpunit using setUp() instead of __construct
+     * could perhaps use psalm-plugin-phpunit once https://github.com/psalm/psalm-plugin-phpunit/issues/129
+     * to remove this suppression
+     *
+     * @psalm-suppress PropertyNotSetInConstructor
+     */
     protected ProjectAnalyzer $project_analyzer;
 
+    /**
+     * @psalm-suppress PropertyNotSetInConstructor
+     */
     protected FakeFileProvider $file_provider;
 
+    /**
+     * @psalm-suppress PropertyNotSetInConstructor
+     */
     protected Config $testConfig;
 
     public static function setUpBeforeClass(): void
@@ -151,7 +164,7 @@ class TestCase extends BaseTestCase
 
     public static function assertArrayKeysAreZeroOrString(array $array, string $message = ''): void
     {
-        $isZeroOrString = /** @param mixed $key */ fn($key): bool => $key === 0 || is_string($key);
+        $isZeroOrString = /** @param mixed $key */ static fn($key): bool => $key === 0 || is_string($key);
         $validKeys = array_filter($array, $isZeroOrString, ARRAY_FILTER_USE_KEY);
         self::assertTrue(count($array) === count($validKeys), $message);
     }

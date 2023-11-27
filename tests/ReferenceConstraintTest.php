@@ -81,7 +81,6 @@ class ReferenceConstraintTest extends TestCase
                     'MixedAssignment',
                     'MixedArrayAccess',
                     'MixedReturnStatement',
-                    'MixedInferredReturnType',
                     'MixedOperand',
                 ],
             ],
@@ -194,6 +193,24 @@ class ReferenceConstraintTest extends TestCase
                     } else {}
 
                     if ($a) {}',
+            ],
+            'PHP80-paramOutChangeTypeWithNamedArgument' => [
+                'code' => '<?php
+                    /**
+                     * @param-out int $s
+                     */
+                    function addFoo(bool $five = true, ?string &$s = null) : void {
+                        if ($five) {
+                            $s = 5;
+                            return;
+                        }
+                        $s = 4;
+                    }
+
+                    addFoo(s: $a);',
+                'assertions' => [
+                    '$a' => 'int',
+                ],
             ],
         ];
     }

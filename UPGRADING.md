@@ -12,7 +12,10 @@
 - [BC] The only optional boolean parameter of `TKeyedArray::getGenericArrayType` was removed, and was replaced with a string parameter with a different meaning.
 
 - [BC] The `TDependentListKey` type was removed and replaced with an optional property of the `TIntRange` type.
+- 
 - [BC] `TCallableArray` and `TCallableList` removed and replaced with `TCallableKeyedArray`.
+
+- [BC] Class `Psalm\Issue\MixedInferredReturnType` was removed
 
 - [BC] Value of constant `Psalm\Type\TaintKindGroup::ALL_INPUT` changed to reflect new `TaintKind::INPUT_SLEEP` and `TaintKind::INPUT_XPATH` have been added. Accordingly, default values for `$taint` parameters of `Psalm\Codebase::addTaintSource()` and `Psalm\Codebase::addTaintSink()` have been changed as well.
 
@@ -46,6 +49,14 @@
 - [BC] Property `Psalm\Storage\EnumCaseStorage::$value` changed from `int|string|null` to `TLiteralInt|TLiteralString|null`
 
 - [BC] `Psalm\CodeLocation\Raw`, `Psalm\CodeLocation\ParseErrorLocation`, `Psalm\CodeLocation\DocblockTypeLocation`, `Psalm\Report\CountReport`, `Psalm\Type\Atomic\TNonEmptyArray` are now all final.
+
+- [BC] `Psalm\Config` is now final.
+
+- [BC] The return type of `Psalm\Plugin\ArgTypeInferer::infer` changed from `Union|false` to `Union|null`
+
+- [BC] The `extra_types` property and `setIntersectionTypes` method of `Psalm\Type\Atomic\TTypeAlias` were removed.
+
+- [BC] Methods `convertSeverity` and `calculateFingerprint` of `Psalm\Report\CodeClimateReport` were removed.
 
 # Upgrading from Psalm 4 to Psalm 5
 ## Changed

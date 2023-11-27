@@ -2331,6 +2331,14 @@ class TaintTest extends TestCase
                     ',
                 'error_message' => 'TaintedShell',
             ],
+            'shellExecBacktickConcat' => [
+                'code' => '<?php
+
+                    $input = $_GET["input"];
+                    $x = `ls $input`;
+                    ',
+                'error_message' => 'TaintedShell',
+            ],
             /*
             // TODO: Stubs do not support this type of inference even with $this->message = $message.
             // Most uses of getMessage() would be with caught exceptions, so this is not representative of real code.
@@ -2602,7 +2610,7 @@ class TaintTest extends TestCase
         $this->analyzeFile($filePath, new Context(), false);
 
         $actualIssueTypes = array_map(
-            fn(IssueData $issue): string => $issue->type . '{ ' . trim($issue->snippet) . ' }',
+            static fn(IssueData $issue): string => $issue->type . '{ ' . trim($issue->snippet) . ' }',
             IssueBuffer::getIssuesDataForFile($filePath),
         );
         self::assertSame($expectedIssuesTypes, $actualIssueTypes);

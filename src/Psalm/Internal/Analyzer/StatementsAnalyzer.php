@@ -677,7 +677,7 @@ final class StatementsAnalyzer extends SourceAnalyzer
                             $check_type_string,
                             $statements_analyzer->getAliases(),
                         );
-                        $check_type = Type::parseString($fq_check_type_string);
+                        $check_type = Type::parseString(CommentAnalyzer::sanitizeDocblockType($fq_check_type_string));
                         /** @psalm-suppress InaccessibleProperty We just created this type */
                         $check_type->possibly_undefined = $possibly_undefined;
 
@@ -865,7 +865,7 @@ final class StatementsAnalyzer extends SourceAnalyzer
             }
 
             if ($function_storage) {
-                $param_index = array_search(substr($var_id, 1), array_keys($function_storage->param_lookup));
+                $param_index = array_search(substr($var_id, 1), array_keys($function_storage->param_lookup), true);
                 if ($param_index !== false) {
                     $param = $function_storage->params[$param_index];
 

@@ -82,7 +82,7 @@ class ConditionalTest extends TestCase
                         }
                     }',
                 'assertions' => [],
-                'ignored_issues' => ['DocblockTypeContradiction'],
+                'ignored_issues' => ['DocblockTypeContradiction', 'TypeDoesNotContainType'],
             ],
             'notInstanceof' => [
                 'code' => '<?php
@@ -1352,7 +1352,6 @@ class ConditionalTest extends TestCase
                     function takes_int(int $int) : void {}
 
                     if ($int == $string) {
-                        /** @psalm-suppress MixedArgument */
                         takes_int($int);
                     }',
             ],
@@ -1383,7 +1382,6 @@ class ConditionalTest extends TestCase
                 'code' => '<?php
                     /**
                      * @psalm-suppress MixedReturnStatement
-                     * @psalm-suppress MixedInferredReturnType
                      */
                     function foo() : array {
                         return filter_input(INPUT_POST, "some_var") ?? [];
@@ -1727,7 +1725,6 @@ class ConditionalTest extends TestCase
                         /**
                          * @psalm-suppress MixedArrayAccess
                          * @psalm-suppress MixedReturnStatement
-                         * @psalm-suppress MixedInferredReturnType
                          * @psalm-suppress MixedArrayAssignment
                          */
                         public function foo() : stdClass {
@@ -2112,7 +2109,6 @@ class ConditionalTest extends TestCase
 
                         /**
                          * @psalm-suppress MixedReturnStatement
-                         * @psalm-suppress MixedInferredReturnType
                          * @psalm-suppress MixedArrayAccess
                          */
                         public static function get(string $k1, string $k2) : ?string {

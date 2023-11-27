@@ -18,6 +18,7 @@ use Psalm\Internal\Provider\FakeFileProvider;
 use Psalm\Internal\Provider\Providers;
 use Psalm\Internal\RuntimeCaches;
 use Psalm\Issue\UnusedBaselineEntry;
+use Psalm\Issue\UnusedIssueHandlerSuppression;
 use Psalm\Tests\Internal\Provider\FakeParserCacheProvider;
 use UnexpectedValueException;
 
@@ -270,6 +271,7 @@ class DocumentationTest extends TestCase
                 case 'TraitMethodSignatureMismatch':
                 case 'UncaughtThrowInGlobalScope':
                 case UnusedBaselineEntry::getIssueType():
+                case UnusedIssueHandlerSuppression::getIssueType():
                     continue 2;
 
                 /** @todo reinstate this test when the issue is restored */
@@ -286,10 +288,6 @@ class DocumentationTest extends TestCase
 
                 case 'InvalidReturnType':
                     $ignored_issues = ['InvalidReturnStatement'];
-                    break;
-
-                case 'MixedInferredReturnType':
-                    $ignored_issues = ['MixedReturnStatement'];
                     break;
 
                 case 'MixedStringOffsetAssignment':
@@ -348,7 +346,7 @@ class DocumentationTest extends TestCase
 
         $duplicate_shortcodes = array_filter(
             $all_shortcodes,
-            fn($issues): bool => count($issues) > 1
+            static fn($issues): bool => count($issues) > 1
         );
 
         $this->assertEquals(

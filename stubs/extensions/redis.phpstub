@@ -275,9 +275,15 @@ class Redis {
 
     public function move(string $key, int $index): bool {}
 
-    public function mset(array $key_values): bool {}
+    /**
+     * @param array<int|string, string>
+     */
+    public function mset($key_values): Redis|bool {}
 
-    public function msetnx(array $key_values): bool {}
+    /**
+     * @param array<int|string, string>
+     */
+    public function msetnx($key_values): Redis|bool {}
 
     public function multi(int $value = Redis::MULTI): bool|Redis {}
 
