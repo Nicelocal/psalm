@@ -155,6 +155,7 @@ abstract class FunctionLikeAnalyzer extends SourceAnalyzer
      * @param-out array<string, Union> $byref_vars
      * @return false|null
      * @psalm-suppress PossiblyUnusedReturnValue unused but seems important
+     * @psalm-suppress ComplexMethod Unavoidably complex
      */
     public function analyze(
         Context $context,
