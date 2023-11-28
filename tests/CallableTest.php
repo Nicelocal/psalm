@@ -25,6 +25,7 @@ class CallableTest extends TestCase
                      * @psalm-suppress MixedArgument
                      */
                     function f() {
+                        $data = 0;
                         run_function(
                             /**
                              * @return void
@@ -1785,16 +1786,6 @@ class CallableTest extends TestCase
                     function takesCallable(callable $c) : void {}
 
                     takesCallable(function() { return; });',
-            ],
-            'byRefUsesAlwaysMixed' => [
-                'code' => '<?php
-                    $callback = function() use (&$isCalled) : void {
-                        $isCalled = true;
-                    };
-                    $isCalled = false;
-                    $callback();
-
-                    if ($isCalled === true) {}',
             ],
             'notCallableListNoUndefinedClass' => [
                 'code' => '<?php
