@@ -144,7 +144,7 @@ final class SwitchAnalyzer
 
         if (!$has_default && $switch_scope->negated_clauses && $switch_var_id) {
             $entry_clauses = Algebra::simplifyCNF(
-                [...$original_context->clauses, ...$switch_scope->negated_clauses]
+                [...$original_context->clauses, ...$switch_scope->negated_clauses],
             );
 
             $reconcilable_if_types = Algebra::getTruthsFromFormula($entry_clauses);

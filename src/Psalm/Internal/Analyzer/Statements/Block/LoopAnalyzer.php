@@ -564,7 +564,6 @@ final class LoopAnalyzer
 
     /**
      * @param  list<Clause>  $pre_condition_clauses
-     *
      * @return list<string>
      */
     private static function applyPreConditionToLoopContext(
@@ -596,7 +595,7 @@ final class LoopAnalyzer
         $always_assigned_before_loop_body_vars = Context::getNewOrUpdatedVarIds($outer_context, $loop_context);
 
         $loop_context->clauses = Algebra::simplifyCNF(
-            [...$outer_context->clauses, ...$pre_condition_clauses]
+            [...$outer_context->clauses, ...$pre_condition_clauses],
         );
 
         $active_while_types = [];

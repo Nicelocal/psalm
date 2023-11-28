@@ -848,8 +848,8 @@ abstract class CallAnalyzer
                             $arg_value,
                             $context->self,
                             $statements_analyzer,
-                            $codebase
-                        )
+                            $codebase,
+                        ),
                     );
                 } elseif ($single_rule instanceof IsType
                     && $single_rule->type instanceof TTrue
@@ -870,11 +870,11 @@ abstract class CallAnalyzer
                 }
 
                 $simplified_clauses = Algebra::simplifyCNF(
-                    [...$context->clauses, ...$assert_clauses]
+                    [...$context->clauses, ...$assert_clauses],
                 );
 
                 $assert_type_assertions = Algebra::getTruthsFromFormula(
-                    $simplified_clauses
+                    $simplified_clauses,
                 );
 
                 $type_assertions = [...$type_assertions, ...$assert_type_assertions];

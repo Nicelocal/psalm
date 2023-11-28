@@ -67,7 +67,7 @@ final class IfScope
     /**
      * @var list<Clause>
      */
-    public $negated_clauses = [];
+    public array $negated_clauses = [];
 
     /**
      * These are the set of clauses that could be applied after the `if`
@@ -76,7 +76,7 @@ final class IfScope
      *
      * @var list<Clause>
      */
-    public $reasonable_clauses = [];
+    public array $reasonable_clauses = [];
 
     /**
      * @var string[]
@@ -88,8 +88,5 @@ final class IfScope
      */
     public array $final_actions = [];
 
-    /**
-     * @var ?Context
-     */
-    public $post_leaving_if_context;
+    public ?Context $post_leaving_if_context = null;
 }

@@ -65,10 +65,9 @@ final class Clause implements Stringable
      *
      * @var array<string, non-empty-list<Assertion>>|null
      */
-    public $impossibilities;
+    public ?array $impossibilities = null;
 
-    /** @var bool */
-    public $wedge;
+    public bool $wedge;
 
     public bool $reconcilable;
 

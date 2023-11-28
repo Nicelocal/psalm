@@ -299,7 +299,7 @@ final class ArrayFilterReturnTypeProvider implements FunctionReturnTypeProviderI
 
                         $assertions = Algebra::getTruthsFromFormula(
                             $filter_clauses,
-                            $cond_object_id
+                            $cond_object_id,
                         );
 
                         if (isset($assertions['$' . $first_param->var->name])) {

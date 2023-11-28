@@ -262,7 +262,7 @@ final class MatchAnalyzer
             );
 
             $reconcilable_types = Algebra::getTruthsFromFormula(
-                Algebra::negateFormula($clauses)
+                Algebra::negateFormula($clauses),
             );
 
             // if the if has an || in the conditional, we cannot easily reason about it

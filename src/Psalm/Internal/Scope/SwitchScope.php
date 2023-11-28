@@ -43,10 +43,10 @@ final class SwitchScope
     /**
      * @var list<Clause>
      */
-    public $negated_clauses = [];
+    public array $negated_clauses = [];
 
     /**
      * @var array<string, bool>|null
      */
-    public $new_assigned_var_ids;
+    public ?array $new_assigned_var_ids = null;
 }

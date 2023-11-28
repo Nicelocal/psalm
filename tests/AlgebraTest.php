@@ -241,7 +241,7 @@ class AlgebraTest extends TestCase
             false,
             true,
             true,
-            []
+            [],
         ))->calculateNegation();
 
         $a2 = new IsIsset();
@@ -255,7 +255,7 @@ class AlgebraTest extends TestCase
             false,
             true,
             true,
-            []
+            [],
         ))->calculateNegation();
 
         $result_clauses = Algebra::groupImpossibilities([$clause1, $clause2]);

@@ -81,7 +81,7 @@ final class IfConditionalAnalyzer
                             static fn(Clause $c): bool => count($c->possibilities) > 1
                                 || $c->wedge
                                 || !isset($changed_var_ids[array_keys($c->possibilities)[0]])
-                        )
+                        ),
                     );
                 }
             }

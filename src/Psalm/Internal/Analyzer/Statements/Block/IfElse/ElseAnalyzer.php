@@ -53,7 +53,7 @@ final class ElseAnalyzer
         }
 
         $else_context->clauses = Algebra::simplifyCNF(
-            [...$else_context->clauses, ...$if_scope->negated_clauses]
+            [...$else_context->clauses, ...$if_scope->negated_clauses],
         );
 
         $else_types = Algebra::getTruthsFromFormula($else_context->clauses);

@@ -182,7 +182,7 @@ final class OrAnalyzer
                 array_filter(
                     $negated_left_clauses,
                     static fn(Clause $c): bool => !in_array($c->hash, $reconciled_expression_clauses)
-                )
+                ),
             );
 
             if (count($negated_left_clauses) === 1
@@ -194,7 +194,7 @@ final class OrAnalyzer
         }
 
         $clauses_for_right_analysis = Algebra::simplifyCNF(
-            [...$context->clauses, ...$negated_left_clauses]
+            [...$context->clauses, ...$negated_left_clauses],
         );
 
         $active_negated_type_assertions = [];
@@ -297,7 +297,7 @@ final class OrAnalyzer
         )[0];
 
         $combined_right_clauses = Algebra::simplifyCNF(
-            [...$clauses_for_right_analysis, ...$right_clauses]
+            [...$clauses_for_right_analysis, ...$right_clauses],
         );
 
         $active_right_type_assertions = [];

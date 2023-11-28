@@ -114,7 +114,7 @@ final class TernaryAnalyzer
 
                 return $c;
             },
-            $if_clauses
+            $if_clauses,
         );
 
         $entry_clauses = $context->clauses;
@@ -141,7 +141,7 @@ final class TernaryAnalyzer
                 array_filter(
                     $ternary_context_clauses,
                     static fn(Clause $c): bool => !in_array($c->hash, $reconciled_expression_clauses)
-                )
+                ),
             );
 
             if (count($if_context->clauses) === 1
@@ -173,8 +173,8 @@ final class TernaryAnalyzer
 
         $if_scope->negated_types = Algebra::getTruthsFromFormula(
             Algebra::simplifyCNF(
-                [...$context->clauses, ...$if_scope->negated_clauses]
-            )
+                [...$context->clauses, ...$if_scope->negated_clauses],
+            ),
         );
 
         $active_if_types = [];
@@ -217,7 +217,7 @@ final class TernaryAnalyzer
         }
 
         $t_else_context->clauses = Algebra::simplifyCNF(
-            [...$t_else_context->clauses, ...$if_scope->negated_clauses]
+            [...$t_else_context->clauses, ...$if_scope->negated_clauses],
         );
 
         $changed_var_ids = [];

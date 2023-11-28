@@ -87,8 +87,8 @@ final class DoAnalyzer
                     }
 
                     return true;
-                }
-            )
+                },
+            ),
         );
 
         if (!$while_clauses) {
@@ -117,8 +117,8 @@ final class DoAnalyzer
 
         $negated_while_types = Algebra::getTruthsFromFormula(
             Algebra::simplifyCNF(
-                [...$context->clauses, ...$negated_while_clauses]
-            )
+                [...$context->clauses, ...$negated_while_clauses],
+            ),
         );
 
         if ($negated_while_types) {

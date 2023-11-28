@@ -358,7 +358,7 @@ final class SwitchCaseAnalyzer
 
         if ($switch_scope->negated_clauses && count($switch_scope->negated_clauses) < 50) {
             $entry_clauses = Algebra::simplifyCNF(
-                [...$original_context->clauses, ...$switch_scope->negated_clauses]
+                [...$original_context->clauses, ...$switch_scope->negated_clauses],
             );
         } else {
             $entry_clauses = $original_context->clauses;

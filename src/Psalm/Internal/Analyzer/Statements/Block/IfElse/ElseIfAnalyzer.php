@@ -147,7 +147,7 @@ final class ElseIfAnalyzer
                 array_filter(
                     $elseif_context_clauses,
                     static fn(Clause $c): bool => !in_array($c->hash, $reconciled_expression_clauses, true)
-                )
+                ),
             );
         }
 
@@ -158,7 +158,7 @@ final class ElseIfAnalyzer
         try {
             if (array_filter(
                 $entry_clauses,
-                static fn(Clause $clause): bool => (bool) $clause->possibilities
+                static fn(Clause $clause): bool => (bool) $clause->possibilities,
             )) {
                 $omit_keys = array_reduce(
                     $entry_clauses,
@@ -186,7 +186,7 @@ final class ElseIfAnalyzer
                 $active_elseif_types,
             );
             $negated_elseif_types = Algebra::getTruthsFromFormula(
-                Algebra::negateFormula($elseif_clauses)
+                Algebra::negateFormula($elseif_clauses),
             );
         } catch (ComplicatedExpressionException) {
             $reconcilable_elseif_types = [];
@@ -405,7 +405,7 @@ final class ElseIfAnalyzer
 
         try {
             $if_scope->negated_clauses = Algebra::simplifyCNF(
-                [...$if_scope->negated_clauses, ...Algebra::negateFormula($elseif_clauses)]
+                [...$if_scope->negated_clauses, ...Algebra::negateFormula($elseif_clauses)],
             );
         } catch (ComplicatedExpressionException) {
             $if_scope->negated_clauses = [];
