@@ -24,7 +24,6 @@ class CallableTest extends TestCase
 
                     /**
                      * @return void
-                     * @psalm-suppress MixedArgument
                      */
                     function f() {
                         $data = 0;
