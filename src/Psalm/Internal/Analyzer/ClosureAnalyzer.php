@@ -151,6 +151,12 @@ final class ClosureAnalyzer extends FunctionLikeAnalyzer
                     ? $context->vars_in_scope[$use_var_id]
                     : Type::getMixed();
 
+                if ($use->byRef) {
+                    $use_context->vars_in_scope[$use_var_id] =
+                        $use_context->vars_in_scope[$use_var_id]->setProperties(['by_ref' => true]);
+                    $use_context->references_to_external_scope[$use_var_id] = true;
+                }
+
                 $use_context->vars_possibly_in_scope[$use_var_id] = true;
 
                 foreach ($context->vars_in_scope as $var_id => $type) {
