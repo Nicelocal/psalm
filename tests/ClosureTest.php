@@ -17,28 +17,44 @@ class ClosureTest extends TestCase
         return [
             'byRefUseVar' => [
                 'code' => '<?php
-                    /** @return void */
-                    function run_function(\Closure $fnc) {
-                        $fnc();
-                    }
+                    $doNotContaminate = 123;
 
-                    /**
-                     * @return void
-                     * @psalm-suppress MixedArgument
-                     */
-                    function f() {
-                        run_function(
-                            /**
-                             * @return void
-                             */
-                            function() use(&$data) {
-                                $data = 1;
-                            }
-                        );
-                        echo $data;
-                    }
+                    $test = 123;
+                    
+                    $testBefore = $test;
 
-                    f();',
+                    $testInsideBefore = null;
+                    $testInsideAfter = null;
+
+                    $v = function () use (&$test, &$testInsideBefore, &$testInsideAfter, $doNotContaminate): void {
+                        $testInsideBefore = $test;
+                        $test = "test";
+                        $testInsideAfter = $test;
+
+                        $doNotContaminate = "test";
+                    };
+                ',
+                'assertions' => [
+                    '$testBefore===' => '123',
+                    '$testInsideBefore===' => "'test'|123|null",
+                    '$testInsideAfter===' => "'test'|null",
+                    '$test===' => "'test'|123",
+
+                    '$doNotContaminate===' => '123',
+                ],
+            ],
+            'byRefUseSelf' => [
+                'code' => '<?php
+                    $external = random_int(0, 1);
+                    
+                    $v = function (bool $callMe) use (&$v, $external): void {
+                        echo($external.PHP_EOL);
+                        if ($callMe) {
+                            $v(false);
+                        }
+                    };
+                    
+                    $v(true);',
             ],
             'inferredArg' => [
                 'code' => '<?php
@@ -1267,19 +1283,6 @@ class ClosureTest extends TestCase
                     takesA($getAButReallyB());
                     takesB($getAButReallyB());',
                 'error_message' => 'ArgumentTypeCoercion - src' . DIRECTORY_SEPARATOR . 'somefile.php:13:28 - Argument 1 of takesB expects B, but parent type A provided',
-            ],
-            'closureByRefUseToMixed' => [
-                'code' => '<?php
-                    function assertInt(int $int): int {
-                        $s = static function() use(&$int): void {
-                            $int = "42";
-                        };
-
-                        $s();
-
-                        return $int;
-                    }',
-                'error_message' => 'MixedReturnStatement',
             ],
             'noCrashWhenComparingIllegitimateCallable' => [
                 'code' => '<?php
