@@ -28,6 +28,7 @@ use function strtolower;
 final class PsalmRestarter extends XdebugHandler
 {
     private const REQUIRED_OPCACHE_SETTINGS = [
+        'enable' => 1,
         'enable_cli' => 1,
         'jit' => 1205,
         'validate_timestamps' => 0,
