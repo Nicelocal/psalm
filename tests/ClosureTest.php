@@ -76,7 +76,7 @@ class ClosureTest extends TestCase
                     }
 
                     a("test");',
-            ]
+            ],
             'inferredArg' => [
                 'code' => '<?php
                     $bar = ["foo", "bar"];
