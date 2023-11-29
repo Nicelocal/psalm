@@ -369,6 +369,7 @@ abstract class FunctionLikeAnalyzer extends SourceAnalyzer
 
             foreach ($byref_uses as $var_id => $_) {
                 $byref_vars[$var_id] = $ref_context->vars_in_scope[$var_id];
+                $context->vars_in_scope[$var_id] = $ref_context->vars_in_scope[$var_id];
             }
         }
 
