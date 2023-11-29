@@ -902,6 +902,10 @@ final class Psalm
             $progress->write(PHP_EOL
                 . 'Install the opcache extension to make use of JIT for a 20%+ performance boost!'
                 . PHP_EOL . PHP_EOL);
+        } elseif (!opcache_get_status(false)['jit']['on']) {
+            $progress->write(PHP_EOL
+                . 'The opcache extension could not be enabled, please report this issue to the Psalm repo!'
+                . PHP_EOL . PHP_EOL);
         }
     }
 
