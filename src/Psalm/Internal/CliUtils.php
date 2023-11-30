@@ -323,7 +323,8 @@ final class CliUtils
             }
 
             if (!file_exists($path_to_check)) {
-                continue;
+                fwrite(STDERR, 'Cannot locate ' . $path_to_check . PHP_EOL);
+                exit(1);
             }
 
             $path_to_check = realpath($path_to_check);
