@@ -83,20 +83,22 @@ final class PsalmRestarter extends XdebugHandler
 
         $opcache_loaded = extension_loaded('opcache') || extension_loaded('Zend OPcache');
 
-        if ($opcache_loaded) {
-            // restart to enable JIT if it's not configured in the optimal way
-            foreach (self::REQUIRED_OPCACHE_SETTINGS as $ini_name => $required_value) {
-                $value = (string) ini_get("opcache.$ini_name");
-                if ($ini_name === 'jit_buffer_size') {
-                    $value = self::toBytes($value);
-                } elseif ($ini_name === 'enable_cli') {
-                    $value = in_array($value, ['1', 'true', true, 1]) ? 1 : 0;
-                } elseif (is_int($required_value)) {
-                    $value = (int) $value;
-                }
-                if ($value !== $required_value) {
-                    return true;
-                }
+        if (!$opcache_loaded) {
+            return true;
+        }
+
+        // restart to enable JIT if it's not configured in the optimal way
+        foreach (self::REQUIRED_OPCACHE_SETTINGS as $ini_name => $required_value) {
+            $value = (string) ini_get("opcache.$ini_name");
+            if ($ini_name === 'jit_buffer_size') {
+                $value = self::toBytes($value);
+            } elseif ($ini_name === 'enable_cli') {
+                $value = in_array($value, ['1', 'true', true, 1]) ? 1 : 0;
+            } elseif (is_int($required_value)) {
+                $value = (int) $value;
+            }
+            if ($value !== $required_value) {
+                return true;
             }
         }
 
@@ -151,17 +153,9 @@ final class PsalmRestarter extends XdebugHandler
             file_put_contents($this->tmpIni, $content);
         }
 
-        $additional_options = [];
-        $opcache_loaded = extension_loaded('opcache') || extension_loaded('Zend OPcache');
-
-        // executed in the parent process (before restart)
-        // if it wasn't loaded then we apparently don't have opcache installed and there's no point trying
-        // to tweak it
-        if ($opcache_loaded) {
             $additional_options = [];
-            foreach (self::REQUIRED_OPCACHE_SETTINGS as $key => $value) {
-                $additional_options []= "-dopcache.{$key}={$value}";
-            }
+        foreach (self::REQUIRED_OPCACHE_SETTINGS as $key => $value) {
+            $additional_options []= "-dopcache.{$key}={$value}";
         }
 
         array_splice(

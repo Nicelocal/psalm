@@ -69,6 +69,7 @@ use function parse_url;
 use function preg_match;
 use function preg_replace;
 use function realpath;
+use function register_shutdown_function;
 use function setlocale;
 use function str_repeat;
 use function str_starts_with;
@@ -899,12 +900,30 @@ final class Psalm
         // If Xdebug is enabled, restart without it
         $ini_handler->check();
 
-        if (!function_exists('opcache_get_status')) {
-            $progress->write(PHP_EOL
-                . 'Install the opcache extension to make use of JIT for a 20%+ performance boost!'
-                . PHP_EOL . PHP_EOL);
-        } elseif (!opcache_get_status(false)['jit']['on']) {
-            throw new AssertionError('The opcache extension could not be enabled!');
+        if (!getenv('PSALM_ALLOW_XDEBUG')) {
+            if (!function_exists('opcache_get_status')
+                || !opcache_get_status(false)
+                || !opcache_get_status(false)['jit']['on']
+            ) {
+                throw new AssertionError('The opcache extension could not be enabled!');
+            }
+
+            register_shutdown_function(function (): void {
+                $status = opcache_get_status(false);
+            
+                if ($status["memory_usage"]["free_memory"] < 10*1024*1024) {
+                    throw new AssertionError("Not enough free opcache memory!");
+                }
+                if ($status["interned_strings_usage"]["free_memory"] < 1*1024*1024) {
+                    throw new AssertionError("Not enough free interned strings memory!");
+                }
+                if ($status["jit"]["buffer_free"] < 10*1024*1024) {
+                    throw new AssertionError("Not enough free JIT memory!");
+                }
+                if (!$status["jit"]["on"]) {
+                    throw new AssertionError("JIT is not enabled!");
+                }
+            });
         }
     }
 
