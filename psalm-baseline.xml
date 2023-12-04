@@ -228,19 +228,26 @@
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Analyzer/Statements/UnusedAssignmentRemover.php">
+    <PossiblyUndefinedArrayOffset>
+      <code>$token_list[$iter]</code>
+    </PossiblyUndefinedArrayOffset>
     <PossiblyUndefinedIntArrayOffset>
       <code>$token_list[$iter]</code>
       <code>$token_list[$iter]</code>
       <code>$token_list[$iter]</code>
       <code>$token_list[$iter]</code>
       <code>$token_list[0]</code>
-      <code>$token_list[1]</code>
     </PossiblyUndefinedIntArrayOffset>
   </file>
   <file src="src/Psalm/Internal/Analyzer/StatementsAnalyzer.php">
     <PossiblyUndefinedArrayOffset>
       <code><![CDATA[$stmt->expr->getArgs()[0]]]></code>
     </PossiblyUndefinedArrayOffset>
+  </file>
+  <file src="src/Psalm/Internal/Cli/Psalm.php">
+    <PossiblyInvalidArgument>
+      <code><![CDATA[$options['f'] ?? null]]></code>
+    </PossiblyInvalidArgument>
   </file>
   <file src="src/Psalm/Internal/Cli/Refactor.php">
     <PossiblyUndefinedIntArrayOffset>
