@@ -99,7 +99,7 @@ final class Workspace
      *
      * @psalm-suppress PossiblyUnusedMethod, UnusedParam
      */
-    public function didChangeConfiguration(mixed $settings): void
+    public function didChangeConfiguration($settings): void
     {
         $this->server->logDebug(
             'workspace/didChangeConfiguration',
@@ -113,7 +113,7 @@ final class Workspace
      *
      * @psalm-suppress PossiblyUnusedMethod
      */
-    public function executeCommand(string $command, mixed $arguments): void
+    public function executeCommand(string $command, $arguments): void
     {
         $this->server->logDebug(
             'workspace/executeCommand',
