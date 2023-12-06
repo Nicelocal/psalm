@@ -47,7 +47,6 @@ use Psalm\Type\Atomic\TClassStringMap;
 use Psalm\Type\Atomic\TFalse;
 use Psalm\Type\Atomic\TInt;
 use Psalm\Type\Atomic\TKeyedArray;
-use Psalm\Type\Atomic\TList;
 use Psalm\Type\Atomic\TLiteralInt;
 use Psalm\Type\Atomic\TLiteralString;
 use Psalm\Type\Atomic\TMixed;
@@ -1130,7 +1129,7 @@ class Reconciler
         $base_key = implode($key_parts);
 
         $result_type = $result_type->setPossiblyUndefined(
-            $result_type->possibly_undefined || count($array_key_offsets) > 1
+            $result_type->possibly_undefined || count($array_key_offsets) > 1,
         );
 
         foreach ($array_key_offsets as $array_key_offset) {
