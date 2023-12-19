@@ -1867,7 +1867,7 @@ class ArrayAssignmentTest extends TestCase
                 'code' => '<?php
                     /**
                      * @param array<string, mixed> $array
-                     * @return non-empty-array<string, mixed>
+                     * @return array<string, mixed>
                      */
                     function getArray(array $array): array {
                         if (rand(0, 1)) {
